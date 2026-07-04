@@ -80,9 +80,12 @@ async function main() {
     }
   }, "server /health");
 
-  // 3. tunnel
+  // 3. tunnel — spawn WITHOUT a shell: the cloudflared path contains spaces and
+  // shell:true would mangle it. spawn passes the exe path to CreateProcess as-is.
   console.log("▸ opening public tunnel…");
-  const cf = run(cloudflaredPath(), ["tunnel", "--url", `http://localhost:${PORT}`, "--no-autoupdate"], {
+  const cf = spawn(cloudflaredPath(), ["tunnel", "--url", `http://localhost:${PORT}`, "--no-autoupdate"], {
+    cwd: root,
+    shell: false,
     stdio: ["ignore", "pipe", "pipe"],
   });
   children.push(cf);
