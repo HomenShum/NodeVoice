@@ -9,13 +9,15 @@ const OPENAI = "https://api.openai.com/v1";
 const ELEVEN = "https://api.elevenlabs.io/v1";
 
 const STT_MODEL = process.env.STT_MODEL ?? "whisper-1";
-// gpt-4.1-nano: cheaper ($0.10/$0.40 vs gpt-4o-mini $0.15/$0.60), newer, more
-// capable, and fast (non-reasoning) — ideal for the real-time voice loop.
-// Override with OPENAI_MODEL (e.g. gpt-5-mini for smarter turns; note gpt-5
-// reasoning models may need max_completion_tokens/temperature=1).
-const LLM_MODEL = process.env.OPENAI_MODEL ?? "gpt-4.1-nano";
-// gpt-5.x / o-series reasoning models use a different param shape.
+// gpt-5.4-mini: latest, smartest mini, and — measured — as fast as gpt-4.1-nano
+// (~1.4s/turn, 0 reasoning tokens on short conversational turns). Output price is
+// higher but at ~70 tokens/turn it is dwarfed by STT/TTS cost. For the cheapest
+// option instead, set OPENAI_MODEL=gpt-4.1-nano.
+const LLM_MODEL = process.env.OPENAI_MODEL ?? "gpt-5.4-mini";
+// gpt-5.x / o-series reasoning models use a different param shape and take a
+// reasoning_effort. Keep it low so the voice loop stays snappy.
 const NEXTGEN_MODEL = /^(gpt-5|o[1-9])/.test(LLM_MODEL);
+const REASONING_EFFORT = process.env.REASONING_EFFORT ?? "low";
 const TTS_PROVIDER = (process.env.TTS_PROVIDER ?? "openai").toLowerCase(); // "openai" | "elevenlabs"
 const OPENAI_TTS_MODEL = process.env.OPENAI_TTS_MODEL ?? "gpt-4o-mini-tts";
 const ELEVEN_TTS_MODEL = process.env.ELEVENLABS_MODEL ?? "eleven_flash_v2_5";
@@ -119,7 +121,9 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
         ],
         // gpt-5 / o-series reasoning models reject custom temperature and rename
         // max_tokens -> max_completion_tokens (which also budgets reasoning tokens).
-        ...(NEXTGEN_MODEL ? { max_completion_tokens: 1500 } : { temperature: 0.8, max_tokens: 200 }),
+        ...(NEXTGEN_MODEL
+          ? { max_completion_tokens: 1500, reasoning_effort: REASONING_EFFORT }
+          : { temperature: 0.8, max_tokens: 200 }),
       }),
       signal,
     });
