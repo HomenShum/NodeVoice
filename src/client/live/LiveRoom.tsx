@@ -8,7 +8,8 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Users,
+  Cpu,
+  ChevronDown,
   Send,
   Sparkles,
   ArrowRight,
@@ -202,6 +203,7 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
       <header className="z-20 flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border bg-card/80 px-4 py-2.5 backdrop-blur">
         <Brand tag={`room ${room.id}`} />
         <div className="ml-auto flex items-center gap-2">
+          <ModelSelect rm={rm} />
           <span
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium",
@@ -341,6 +343,31 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
         {rm.error && <p className="mx-auto mt-2 max-w-3xl text-[11px] text-destructive">{rm.error}</p>}
       </div>
     </Shell>
+  );
+}
+
+function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
+  const room = rm.room!;
+  const cur = room.models.find((m) => m.id === room.state.model);
+  return (
+    <label
+      title={cur ? `${cur.tier} — ${cur.note}` : "router model"}
+      className="group relative flex h-8 items-center gap-1.5 rounded-md border border-border bg-elevated/70 pl-2 pr-6 text-xs transition-colors hover:border-border-strong focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/40"
+    >
+      <Cpu className="size-3.5 shrink-0 text-primary" />
+      <select
+        value={room.state.model}
+        onChange={(e) => rm.setModel(e.target.value)}
+        className="peer h-full max-w-[9rem] cursor-pointer appearance-none bg-transparent text-xs font-semibold text-foreground outline-none sm:max-w-[13rem]"
+      >
+        {room.models.map((m) => (
+          <option key={m.id} value={m.id}>
+            {m.label} · {m.tier}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-1.5 size-3.5 text-muted-foreground transition-colors group-focus-within:text-foreground" />
+    </label>
   );
 }
 

@@ -16,7 +16,6 @@ const STT_MODEL = process.env.STT_MODEL ?? "whisper-1";
 const LLM_MODEL = process.env.OPENAI_MODEL ?? "gpt-5.4-mini";
 // gpt-5.x / o-series reasoning models use a different param shape and take a
 // reasoning_effort. Keep it low so the voice loop stays snappy.
-const NEXTGEN_MODEL = /^(gpt-5|o[1-9])/.test(LLM_MODEL);
 const REASONING_EFFORT = process.env.REASONING_EFFORT ?? "low";
 const TTS_PROVIDER = (process.env.TTS_PROVIDER ?? "openai").toLowerCase(); // "openai" | "elevenlabs"
 const OPENAI_TTS_MODEL = process.env.OPENAI_TTS_MODEL ?? "gpt-4o-mini-tts";
@@ -33,7 +32,21 @@ export interface AgentTurnInput {
   transcript: { name: string; text: string }[];
   humanNote?: string;
   recentActs: string[];
+  model?: string;
 }
+
+/** Curated router models (backed by scripts/model-eval.mjs measurements). */
+export const ROUTER_MODELS = [
+  { id: "gpt-5.4-mini", label: "GPT-5.4 mini", tier: "smart + fast", note: "default · smartest mini that stays ~1.3s" },
+  { id: "gpt-4.1-nano", label: "GPT-4.1 nano", tier: "cheapest", note: "fastest (~0.7s) + cheapest" },
+  { id: "gpt-4.1-mini", label: "GPT-4.1 mini", tier: "balanced", note: "fast, mid capability" },
+  { id: "gpt-4o-mini", label: "GPT-4o mini", tier: "legacy", note: "older baseline" },
+  { id: "gpt-5-nano", label: "GPT-5 nano", tier: "cheap + smart", note: "smart but ~3s (reasoning)" },
+  { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning)" },
+] as const;
+
+export const DEFAULT_LLM_MODEL = LLM_MODEL;
+export const isNextGenModel = (m: string) => /^(gpt-5|o[1-9])/.test(m);
 
 export interface AgentTurnResult {
   text: string;
@@ -83,6 +96,8 @@ export async function transcribeAudio(buf: Buffer, mime: string): Promise<string
 /** Ask the LLM for this agent's next utterance in the room, as structured JSON. */
 export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTurnResult> {
   const key = keyOrThrow("OPENAI_API_KEY");
+  const model = input.model || LLM_MODEL;
+  const nextgen = isNextGenModel(model);
   const backchannelRun = input.recentActs.slice(-2).filter((a) => a === "backchannel").length >= 2;
 
   const system = [
@@ -113,7 +128,7 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
       method: "POST",
       headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
       body: JSON.stringify({
-        model: LLM_MODEL,
+        model,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: system },
@@ -121,7 +136,7 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
         ],
         // gpt-5 / o-series reasoning models reject custom temperature and rename
         // max_tokens -> max_completion_tokens (which also budgets reasoning tokens).
-        ...(NEXTGEN_MODEL
+        ...(nextgen
           ? { max_completion_tokens: 1500, reasoning_effort: REASONING_EFFORT }
           : { temperature: 0.8, max_tokens: 200 }),
       }),

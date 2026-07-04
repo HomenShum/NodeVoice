@@ -46,6 +46,59 @@ plus [`cloudflared`](https://developers.cloudflare.com/cloudflare-one/connection
 
 ---
 
+## Model router — measured, not guessed
+
+The room's coordinator LLM is **swappable live** — a dropdown in the room header, or
+`OPENAI_MODEL` at launch. The default (`gpt-5.4-mini`) and the ranking below come from an
+empirical **proofloop** (`scripts/model-eval.mjs`): 6 models × 4 room scenarios
+(planning-with-constraints, loop-trap, human-steer, convergence), each reply judged by
+`gpt-5.4` on specificity / progress / non-looping / instruction-following / naturalness,
+with latency + token cost measured per call.
+
+![Model quality vs latency](docs/model-chart.svg)
+
+| Model | Proofloop quality (1–5) | Latency (single turn) | $ / turn | Best for |
+|---|---|---|---|---|
+| **gpt-5.4-mini** · default | **4.75** | **1.3s** | $0.00072 | smartest mini that stays fast |
+| gpt-4.1-nano | 4.15 | **0.7s** | **$0.000033** | cheapest + fastest |
+| gpt-4.1-mini | 4.1 | 0.7s | $0.00014 | fast, balanced |
+| gpt-4o-mini | 4.5 | 1.0s | $0.000051 | legacy baseline |
+| gpt-5-nano | 4.6 | 3.2s | $0.00013 | cheap + smart, but slow |
+| gpt-5-mini | 5.0 | 3.0s | $0.00079 | top quality — too slow for live voice |
+
+**Takeaways:** these are all capable models, so quality clusters tightly (4.1–5.0) — the
+decisive axes are **latency** and **cost**. `gpt-5-mini`/`nano` reason before answering
+(~3s, 250-300 reasoning tokens); `gpt-5.4-mini` adaptively *skips* reasoning on simple turns
+(~60 tokens, 1.3s) so it's the only "smartest-tier" model fast enough for a live loop.
+Reproduce anytime: `node scripts/model-eval.mjs` → writes `docs/model-eval-results.json`.
+
+## Realtime vs. this STT → LLM → TTS pipeline
+
+Your key can run the **Realtime API** (`gpt-realtime`, `gpt-realtime-mini`) — speech-to-speech
+over WebRTC. It's lower-latency and supports natural barge-in, but it's the wrong fit *here*:
+
+| Dimension | Chained pipeline (this app) | OpenAI Realtime |
+|---|---|---|
+| Latency / turn | ~1.5–3s (STT + LLM + TTS) | ~0.3–0.8s (streamed) ✅ |
+| Barge-in / interruption | turn-based | native ✅ |
+| **Cost / minute** | **~$0.03–0.04** ✅ | **~$0.30** (`gpt-realtime`) |
+| Intermediate text / room-state control | full ✅ (that's the whole thesis) | hidden inside the audio session |
+| Loop-prevention + visible `roomState` | trivial ✅ | hard |
+| Implementation | plain HTTP, no WebRTC ✅ | WebRTC + ephemeral tokens |
+
+**Cost math** — `gpt-realtime` bills audio at **$32/1M in + $64/1M out** (~$0.06 + $0.24 per
+minute ≈ **$0.30/min**). The pipeline's dominant cost is TTS (`gpt-4o-mini-tts` ~$12/1M audio
+tokens ≈ **~$0.006/spoken turn**); STT (`whisper-1` $0.006/min, or `gpt-4o-mini-transcribe`
+**$0.003/min**) only runs when *you* press-to-talk — the agents' words are generated text, never
+transcribed. So the pipeline lands around **$0.03–0.04/min of conversation, ~8–10× cheaper**
+than Realtime, while keeping the intermediate text the shared-room thesis depends on.
+
+**Verdict:** stay on the chained pipeline for this turn-based, room-state-visible, cost-sensitive
+demo. Realtime earns its price in a future *fluid, interruptible 1:1 voice* mode — not a
+two-agent room you watch and steer.
+
+---
+
 ## The UI
 
 A dark **“observability console”** for watching the failure and the fix, side by side, live.

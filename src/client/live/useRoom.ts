@@ -19,11 +19,18 @@ export interface RoomUtterance {
   ts: number;
   audioId?: string;
 }
+export interface RouterModel {
+  id: string;
+  label: string;
+  tier: string;
+  note: string;
+}
 export interface PublicRoom {
   id: string;
   agents: { a: RoomAgent; b: RoomAgent };
   state: {
     goal: string;
+    model: string;
     floorOwner: Slot;
     nextSpeaker: Slot;
     turn: number;
@@ -33,6 +40,7 @@ export interface PublicRoom {
     nextRequiredAct: string;
     suppressAcknowledgements: boolean;
   };
+  models: RouterModel[];
   participants: { slot: string; kind: string }[];
   utterances: RoomUtterance[];
 }
@@ -145,10 +153,10 @@ export function useRoom() {
     el.currentTime = 0;
   }, []);
 
-  const createRoom = React.useCallback(async (goal: string) => {
+  const createRoom = React.useCallback(async (goal: string, model?: string) => {
     setError(null);
     try {
-      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal });
+      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal, model });
       await post(`/live/rooms/${r.roomId}/join`, { slot: "a", kind: "creator" });
       setMySlot("a");
       setRoom(r.room);
@@ -176,6 +184,10 @@ export function useRoom() {
 
   const setGoal = React.useCallback((goal: string) => {
     if (room) void post(`/live/rooms/${room.id}/goal`, { goal }).catch(() => {});
+  }, [room]);
+
+  const setModel = React.useCallback((model: string) => {
+    if (room) void post(`/live/rooms/${room.id}/model`, { model }).catch((e) => setError(String(e)));
   }, [room]);
 
   const setRunning = React.useCallback((running: boolean) => {
@@ -242,6 +254,7 @@ export function useRoom() {
     createRoom,
     joinRoom,
     setGoal,
+    setModel,
     setRunning,
     step,
     sendText,

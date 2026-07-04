@@ -11,7 +11,11 @@
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
-import { generateAgentTurn, synthesizeSpeech, transcribeAudio, type AgentVoice } from "./pipeline.js";
+import { generateAgentTurn, synthesizeSpeech, transcribeAudio, ROUTER_MODELS, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
+
+function validModel(m?: string): string {
+  return m && ROUTER_MODELS.some((x) => x.id === m) ? m : DEFAULT_LLM_MODEL;
+}
 
 type Slot = "a" | "b";
 
@@ -58,6 +62,7 @@ interface Utterance {
 
 interface RoomState {
   goal: string;
+  model: string;
   floorOwner: Slot;
   turn: number;
   running: boolean;
@@ -113,14 +118,14 @@ function evictIfNeeded() {
   }
 }
 
-function createRoom(goal: string): Room {
+function createRoom(goal: string, model?: string): Room {
   evictIfNeeded();
   const id = shortId();
   const room: Room = {
     id,
     createdAt: Date.now(),
     lastActivity: Date.now(),
-    state: { goal: goal || DEFAULT_GOAL, floorOwner: "a", turn: 0, running: false, done: false, loopRisk: false, recentActs: [] },
+    state: { goal: goal || DEFAULT_GOAL, model: validModel(model), floorOwner: "a", turn: 0, running: false, done: false, loopRisk: false, recentActs: [] },
     utterances: [],
     audio: new Map(),
     participants: new Map(),
@@ -147,6 +152,7 @@ function publicRoom(room: Room) {
     },
     state: {
       goal: room.state.goal,
+      model: room.state.model,
       floorOwner: room.state.floorOwner,
       nextSpeaker: room.state.floorOwner,
       turn: room.state.turn,
@@ -156,6 +162,7 @@ function publicRoom(room: Room) {
       nextRequiredAct: "task_action",
       suppressAcknowledgements: true,
     },
+    models: ROUTER_MODELS,
     participants: [...room.participants.values()].map((p) => ({ slot: p.slot, kind: p.kind })),
     utterances: room.utterances,
   };
@@ -219,6 +226,7 @@ async function runOneTurn(room: Room, slot: Slot): Promise<AgentTurnOutcome> {
     transcript: room.utterances.map((u) => ({ name: u.name, text: u.text })),
     humanNote,
     recentActs: room.state.recentActs,
+    model: room.state.model,
   });
 
   let audioId: string | undefined;
@@ -337,8 +345,8 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
 
   // POST /live/rooms
   if (method === "POST" && path === "/live/rooms") {
-    const body = await readJson<{ goal?: string }>(req);
-    const room = createRoom((body.goal ?? "").trim());
+    const body = await readJson<{ goal?: string; model?: string }>(req);
+    const room = createRoom((body.goal ?? "").trim(), body.model);
     json(res, 200, { ok: true, roomId: room.id, room: publicRoom(room) });
     return true;
   }
@@ -421,6 +429,15 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
     room.participants.set(pid, { slot, kind: body.kind ?? "device", lastSeen: Date.now() });
     broadcastState(room);
     json(res, 200, { ok: true, participantId: pid, slot, room: publicRoom(room) });
+    return true;
+  }
+
+  // POST /live/rooms/:id/model  { model }
+  if (method === "POST" && sub === "model") {
+    const body = await readJson<{ model?: string }>(req);
+    room.state.model = validModel(body.model);
+    broadcastState(room);
+    json(res, 200, { ok: true, room: publicRoom(room) });
     return true;
   }
 
