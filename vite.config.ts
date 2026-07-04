@@ -22,6 +22,7 @@ export default defineConfig({
       "/voice": "http://localhost:8787",
       "/nodeagents": "http://localhost:8787",
       "/health": "http://localhost:8787",
+      "/live": "http://localhost:8787",
     },
   },
 });

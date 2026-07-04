@@ -12,6 +12,40 @@ The one line that matters:
 
 ---
 
+## Live voice room (real devices) 🎙️
+
+The demo simulates the room. `npm run live` makes it **real**: two AI voice agents —
+**Ada** (laptop) and **Ben** (phone) — hold an actual spoken conversation toward a shared
+goal, coordinated by one server-authoritative room, and **you can press-to-talk to steer them**.
+
+```bash
+npm run live         # build + start server + open a public HTTPS tunnel, prints a URL
+```
+
+- Open the printed URL on your **laptop** → *Create room* → a QR appears.
+- **Scan the QR with your phone** → join as Ben → *Join & enable sound*.
+- Press **Start** — the agents talk it out; hold **🎤 Hold to talk** to jump in by voice.
+
+**Pipeline (your keys, server-side only):** phone mic → **Whisper** (STT) → **chat LLM** →
+**TTS** → audio. This sidesteps iOS Safari (which has no browser speech-to-text) and keeps
+every key out of the browser. Voice defaults to **OpenAI TTS** (`nova`/`onyx`); set
+`TTS_PROVIDER=elevenlabs` to use ElevenLabs instead. The deterministic room reducer still
+owns the floor and suppresses acknowledgement loops — the whole thesis, but on real devices.
+
+```
+phone/laptop mic ─▶ /live (SSE + POST) ─▶ Whisper ─▶ LLM (room-aware) ─▶ TTS ─▶ audio
+                          │
+                          └── one shared roomState: goal · floor · turn · loopRisk
+```
+
+> The tunnel URL is **ephemeral** — it works only while `npm run live` and your laptop stay
+> awake, and changes on restart. For a permanent host, point it at Convex + Vercel (roadmap).
+
+Requires a gitignored `.env.local` with `OPENAI_API_KEY` (and optionally `ELEVENLABS_API_KEY`),
+plus [`cloudflared`](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).
+
+---
+
 ## The UI
 
 A dark **“observability console”** for watching the failure and the fix, side by side, live.

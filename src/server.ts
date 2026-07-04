@@ -9,6 +9,16 @@ import { runVoiceStep } from "./voice/voiceAgent.js";
 import { runLocalNodeAgentLoop } from "./nodeagents/nodeAgentLocalMvp.js";
 import { CLOUD_ONLY_REFERENCE_MODELS, DEFAULT_NODEAGENT_MODEL_ID, DEFAULT_VOICE_MODEL_ID, LOCAL_MODEL_OPTIONS, MODEL_CATALOG_REFRESHED_AT, getModelsFor, getOllamaModelName } from "./providers/localModels.js";
 import { runSideBySideComparison } from "./compare/badGoodDemo.js";
+import { handleLive } from "./live/roomServer.js";
+
+// Load server-side API keys (OpenAI / ElevenLabs) from a gitignored .env.local.
+const envPath = resolve(fileURLToPath(new URL("../.env.local", import.meta.url)));
+const loadEnvFile = (process as unknown as { loadEnvFile?: (p: string) => void }).loadEnvFile;
+try {
+  loadEnvFile?.(envPath);
+} catch {
+  /* .env.local is optional (live voice room disabled without keys) */
+}
 
 const port = Number(process.env.PORT ?? "8787");
 const distDir = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
@@ -24,8 +34,15 @@ const server = createServer(async (req, res) => {
       return empty(res, 204);
     }
 
+    // Live multi-device voice room (SSE + POST). Handles its own responses.
+    if (await handleLive(req, res, path)) return;
+
     if (req.method === "GET" && path === "/health") {
-      return json(res, 200, { ok: true, service: "local-collab-mvp" });
+      return json(res, 200, {
+        ok: true,
+        service: "local-collab-mvp",
+        live: { openai: Boolean(process.env.OPENAI_API_KEY), elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY) },
+      });
     }
 
     if (req.method === "GET" && path === "/api/models") {
@@ -103,6 +120,7 @@ server.listen(port, () => {
   console.log("POST /compare/demo   { target, turns, useOllama, model }");
   console.log("POST /voice/demo     { target, turns, useOllama, model }");
   console.log("POST /nodeagents/run { goal, useOllama, model }");
+  console.log(`LIVE /live/*         voice room (openai:${Boolean(process.env.OPENAI_API_KEY)} elevenlabs:${Boolean(process.env.ELEVENLABS_API_KEY)})`);
 });
 
 async function serveStatic(path: string, res: ServerResponse): Promise<void> {

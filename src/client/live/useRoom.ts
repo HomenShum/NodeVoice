@@ -1,0 +1,252 @@
+import * as React from "react";
+
+export type Slot = "a" | "b";
+export type MySlot = Slot | "spectator";
+
+export interface RoomAgent {
+  slot: Slot;
+  name: string;
+  device: string;
+  color: string;
+  persona: string;
+}
+export interface RoomUtterance {
+  id: string;
+  slot: Slot | "human" | "system";
+  name: string;
+  text: string;
+  speechAct: string;
+  ts: number;
+  audioId?: string;
+}
+export interface PublicRoom {
+  id: string;
+  agents: { a: RoomAgent; b: RoomAgent };
+  state: {
+    goal: string;
+    floorOwner: Slot;
+    nextSpeaker: Slot;
+    turn: number;
+    running: boolean;
+    done: boolean;
+    loopRisk: boolean;
+    nextRequiredAct: string;
+    suppressAcknowledgements: boolean;
+  };
+  participants: { slot: string; kind: string }[];
+  utterances: RoomUtterance[];
+}
+
+async function post<T>(path: string, body?: unknown): Promise<T> {
+  const res = await fetch(path, {
+    method: "POST",
+    headers: body ? { "content-type": "application/json" } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error(`${path} → ${res.status}`);
+  return (await res.json()) as T;
+}
+
+function pickRecorderMime(): string {
+  const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"];
+  for (const c of candidates) {
+    if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported?.(c)) return c;
+  }
+  return "";
+}
+
+export function useRoom() {
+  const [room, setRoom] = React.useState<PublicRoom | null>(null);
+  const [connected, setConnected] = React.useState(false);
+  const [mySlot, setMySlot] = React.useState<MySlot>("spectator");
+  const [error, setError] = React.useState<string | null>(null);
+  const [recording, setRecording] = React.useState(false);
+  const [playAll, setPlayAll] = React.useState(false);
+
+  const esRef = React.useRef<EventSource | null>(null);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const queueRef = React.useRef<string[]>([]);
+  const playingRef = React.useRef(false);
+  const mySlotRef = React.useRef<MySlot>("spectator");
+  const playAllRef = React.useRef(false);
+  const recorderRef = React.useRef<MediaRecorder | null>(null);
+  const chunksRef = React.useRef<Blob[]>([]);
+
+  React.useEffect(() => {
+    mySlotRef.current = mySlot;
+  }, [mySlot]);
+  React.useEffect(() => {
+    playAllRef.current = playAll;
+  }, [playAll]);
+
+  const drainQueue = React.useCallback(() => {
+    if (playingRef.current) return;
+    const next = queueRef.current.shift();
+    if (!next) return;
+    const el = audioRef.current ?? new Audio();
+    audioRef.current = el;
+    playingRef.current = true;
+    el.src = `/live/audio/${next}`;
+    el.onended = () => {
+      playingRef.current = false;
+      drainQueue();
+    };
+    el.onerror = () => {
+      playingRef.current = false;
+      drainQueue();
+    };
+    el.play().catch(() => {
+      playingRef.current = false;
+    });
+  }, []);
+
+  const enqueueAudio = React.useCallback(
+    (audioId: string) => {
+      queueRef.current.push(audioId);
+      drainQueue();
+    },
+    [drainQueue],
+  );
+
+  const connect = React.useCallback((id: string) => {
+    esRef.current?.close();
+    const es = new EventSource(`/live/rooms/${id}/events`);
+    esRef.current = es;
+    es.onopen = () => setConnected(true);
+    es.onerror = () => setConnected(false);
+    es.onmessage = (ev) => {
+      let msg: { type: string; room?: PublicRoom; audioId?: string; slot?: Slot };
+      try {
+        msg = JSON.parse(ev.data);
+      } catch {
+        return;
+      }
+      if (msg.type === "state" && msg.room) setRoom(msg.room);
+      else if (msg.type === "utterance" && (msg as { utterance?: RoomUtterance }).utterance) {
+        const u = (msg as { utterance: RoomUtterance }).utterance;
+        setRoom((prev) => (prev && !prev.utterances.some((x) => x.id === u.id) ? { ...prev, utterances: [...prev.utterances, u] } : prev));
+      } else if (msg.type === "speak" && msg.audioId) {
+        const forMe = playAllRef.current || msg.slot === mySlotRef.current;
+        if (forMe) enqueueAudio(msg.audioId);
+      }
+    };
+  }, [enqueueAudio]);
+
+  React.useEffect(() => () => esRef.current?.close(), []);
+
+  /** Unlock audio playback on iOS with a user gesture (call from a click). */
+  const unlockAudio = React.useCallback(() => {
+    const el = audioRef.current ?? new Audio();
+    audioRef.current = el;
+    el.muted = true;
+    el.play().catch(() => {});
+    el.pause();
+    el.muted = false;
+    el.currentTime = 0;
+  }, []);
+
+  const createRoom = React.useCallback(async (goal: string) => {
+    setError(null);
+    try {
+      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal });
+      await post(`/live/rooms/${r.roomId}/join`, { slot: "a", kind: "creator" });
+      setMySlot("a");
+      setRoom(r.room);
+      connect(r.roomId);
+      return r.roomId;
+    } catch (e) {
+      setError(`Could not create room: ${String(e)}`);
+      return null;
+    }
+  }, [connect]);
+
+  const joinRoom = React.useCallback(async (id: string, slot: MySlot) => {
+    setError(null);
+    try {
+      const r = await post<{ room: PublicRoom; slot: MySlot }>(`/live/rooms/${id}/join`, { slot, kind: "device" });
+      setMySlot(slot);
+      setRoom(r.room);
+      connect(id);
+      return true;
+    } catch (e) {
+      setError(`Could not join room ${id}: ${String(e)}`);
+      return false;
+    }
+  }, [connect]);
+
+  const setGoal = React.useCallback((goal: string) => {
+    if (room) void post(`/live/rooms/${room.id}/goal`, { goal }).catch(() => {});
+  }, [room]);
+
+  const setRunning = React.useCallback((running: boolean) => {
+    if (room) void post(`/live/rooms/${room.id}/run`, { running }).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const step = React.useCallback(() => {
+    if (room) void post(`/live/rooms/${room.id}/step`).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const sendText = React.useCallback((text: string) => {
+    if (room && text.trim()) void post(`/live/rooms/${room.id}/human`, { text: text.trim() }).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const beginTalk = React.useCallback(async () => {
+    if (!room || recording) return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mime = pickRecorderMime();
+      const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      chunksRef.current = [];
+      rec.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      rec.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(chunksRef.current, { type: rec.mimeType || "audio/webm" });
+        if (blob.size < 800) return; // ignore accidental taps
+        try {
+          const res = await fetch(`/live/rooms/${room.id}/human`, {
+            method: "POST",
+            headers: { "content-type": rec.mimeType || "audio/webm" },
+            body: blob,
+          });
+          if (!res.ok) setError(`transcription failed (${res.status})`);
+        } catch (e) {
+          setError(String(e));
+        }
+      };
+      recorderRef.current = rec;
+      rec.start();
+      setRecording(true);
+    } catch (e) {
+      setError(`Mic unavailable: ${String(e)}`);
+    }
+  }, [room, recording]);
+
+  const endTalk = React.useCallback(() => {
+    const rec = recorderRef.current;
+    if (rec && rec.state !== "inactive") rec.stop();
+    setRecording(false);
+  }, []);
+
+  return {
+    room,
+    connected,
+    mySlot,
+    setMySlot,
+    error,
+    setError,
+    recording,
+    playAll,
+    setPlayAll,
+    createRoom,
+    joinRoom,
+    setGoal,
+    setRunning,
+    step,
+    sendText,
+    beginTalk,
+    endTalk,
+    unlockAudio,
+  };
+}
