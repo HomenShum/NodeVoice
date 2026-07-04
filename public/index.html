@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-astryx-theme="neutral">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Local Collab MVP</title>
+    <link rel="stylesheet" href="/astryx/reset.css" />
+    <link rel="stylesheet" href="/astryx/astryx.css" />
+    <link rel="stylesheet" href="/astryx/theme.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-astryx-theme="neutral">
+    <div class="app">
+      <header class="topbar">
+        <span class="status-dot"></span>
+        <h1>Room OS</h1>
+        <div class="topbar-controls">
+          <select id="voice-model" title="Voice model"></select>
+          <select id="node-model" title="NodeAgent model"></select>
+          <label class="num-label">N <input id="target" type="number" min="3" max="100" value="12" /></label>
+          <label class="num-label">Turns <input id="turns" type="number" min="3" max="30" value="9" /></label>
+          <label class="checkbox"><input id="use-ollama" type="checkbox" /> Ollama</label>
+          <button id="run-compare" class="btn-secondary">Compare</button>
+        </div>
+      </header>
+
+      <div class="traces" id="traces"></div>
+
+      <footer class="intake">
+        <div class="intake-row">
+          <span class="mode-toggle">
+            <button id="mode-compare" class="mode-btn active" data-mode="compare">Compare</button>
+            <button id="mode-node" class="mode-btn" data-mode="node">NodeAgent</button>
+          </span>
+          <input id="intake-input" type="text" placeholder="Type a goal for NodeAgent, or press Compare to run the demo…" />
+          <button id="intake-send" class="btn-primary">Run</button>
+        </div>
+        <div class="intake-meta">
+          <span id="voice-model-note" class="muted"></span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
