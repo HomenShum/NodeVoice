@@ -8,7 +8,7 @@ import { VOICE_AGENT_IDS } from "./core/types.js";
 import { runVoiceStep } from "./voice/voiceAgent.js";
 import { runLocalNodeAgentLoop } from "./nodeagents/nodeAgentLocalMvp.js";
 import { CLOUD_ONLY_REFERENCE_MODELS, DEFAULT_NODEAGENT_MODEL_ID, DEFAULT_VOICE_MODEL_ID, LOCAL_MODEL_OPTIONS, MODEL_CATALOG_REFRESHED_AT, getModelsFor, getOllamaModelName } from "./providers/localModels.js";
-import { runSideBySideComparison } from "./compare/badGoodDemo.js";
+import { runSideBySideComparison, type ComparisonSource } from "./compare/badGoodDemo.js";
 import { handleLive } from "./live/roomServer.js";
 
 // Load server-side API keys (OpenAI / ElevenLabs) from a gitignored .env.local.
@@ -64,13 +64,34 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && path === "/compare/demo") {
-      const body = await readJson<{ target?: number; turns?: number; useOllama?: boolean; model?: string }>(req);
+      const body = await readJson<{
+        target?: number;
+        turns?: number;
+        useOllama?: boolean;
+        model?: string;
+        source?: string;
+        openaiModel?: string;
+      }>(req);
+      const source: ComparisonSource =
+        body.source === "openai" || body.source === "ollama" || body.source === "deterministic"
+          ? body.source
+          : body.useOllama
+            ? "ollama"
+            : "deterministic";
+      if (source === "openai" && !process.env.OPENAI_API_KEY) {
+        return json(res, 400, {
+          ok: false,
+          error: "openai source requested but OPENAI_API_KEY is not set in .env.local on the server",
+        });
+      }
       const model = getOllamaModelName(body.model, DEFAULT_VOICE_MODEL_ID);
       const result = await runSideBySideComparison({
         target: body.target,
         turns: body.turns,
-        useOllama: body.useOllama ?? false,
+        source,
+        useOllama: source === "ollama",
         model,
+        openaiModel: body.openaiModel,
       });
       return json(res, 200, result);
     }
@@ -117,7 +138,7 @@ server.listen(port, () => {
   console.log(`local-collab-mvp server running on http://localhost:${port}`);
   console.log("GET  /               tiny browser UI");
   console.log("GET  /api/models     local model dropdown data");
-  console.log("POST /compare/demo   { target, turns, useOllama, model }");
+  console.log("POST /compare/demo   { target, turns, source, model, openaiModel }");
   console.log("POST /voice/demo     { target, turns, useOllama, model }");
   console.log("POST /nodeagents/run { goal, useOllama, model }");
   console.log(`LIVE /live/*         voice room (openai:${Boolean(process.env.OPENAI_API_KEY)} elevenlabs:${Boolean(process.env.ELEVENLABS_API_KEY)})`);

@@ -325,13 +325,24 @@ USE_OLLAMA=1 OLLAMA_MODEL=gemma4:12b npm run demo:node
 
 The deterministic state reducer keeps authority. The LLM phrases utterances/memos but cannot decide whether acknowledgement loops are valid.
 
+## Optional OpenAI mode (compare demo)
+
+With `OPENAI_API_KEY` in `.env.local` (server-side only — the key never reaches the browser), the compare demo can generate every utterance with a real model. Both sides go live: the bad side reacts to raw transcripts from private-state-driven prompts (no room state), the good side generates under the room's constraints. Whatever comes back is classified truthfully — the left panel is honest even if the model does not loop.
+
+```bash
+SOURCE=openai npm run demo:compare                       # CLI (default model: gpt-5.4-mini, override with OPENAI_MODEL)
+curl -X POST http://localhost:8787/compare/demo -H 'content-type: application/json' -d '{"target":12,"turns":9,"source":"openai"}'
+```
+
+Every run discloses its provenance (scripted sim vs. live model + model id) in the UI panels and CLI output.
+
 ## Local HTTP API
 
 ```bash
 npm run start
 
 curl http://localhost:8787/api/models
-curl -X POST http://localhost:8787/compare/demo    -H 'content-type: application/json' -d '{"target":100,"turns":100}'
+curl -X POST http://localhost:8787/compare/demo    -H 'content-type: application/json' -d '{"target":100,"turns":100,"source":"deterministic"}'
 curl -X POST http://localhost:8787/voice/demo      -H 'content-type: application/json' -d '{"target":100,"turns":100}'
 curl -X POST http://localhost:8787/nodeagents/run  -H 'content-type: application/json' -d '{"goal":"Build local room OS","model":"gemma4_12b"}'
 ```
