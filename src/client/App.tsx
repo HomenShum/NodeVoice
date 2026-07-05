@@ -35,12 +35,31 @@ interface ModelOption {
   notes: string;
 }
 
+type CompareSource = "deterministic" | "ollama" | "openai";
+
+interface BadAgentPrivateState {
+  agentId: string;
+  heardCount: number;
+  spokeCount: number;
+  believesCurrent: number;
+  lastClassifiedAs: string;
+  nextIntent: string;
+}
+
+interface CompareProvenance {
+  mode: CompareSource;
+  modelId: string | null;
+  bad: string;
+  good: string;
+}
+
 interface CompareStep {
   turn: number;
   actorId: string;
   speechAct: string;
   text: string;
   roomStateSummary: string;
+  agentStates?: BadAgentPrivateState[];
 }
 
 interface NodeResult {
@@ -62,7 +81,7 @@ export default function App() {
   const [nodeModelId, setNodeModelId] = React.useState("");
   const [target, setTarget] = React.useState(100);
   const [turns, setTurns] = React.useState(100);
-  const [useOllama, setUseOllama] = React.useState(false);
+  const [source, setSource] = React.useState<CompareSource>("deterministic");
   const [mode, setMode] = React.useState<"compare" | "node">("compare");
   const [inputValue, setInputValue] = React.useState("");
   const [agentState, setAgentState] = React.useState<AgentState>("listening");
@@ -72,6 +91,7 @@ export default function App() {
 
   const [badSteps, setBadSteps] = React.useState<CompareStep[]>([]);
   const [goodSteps, setGoodSteps] = React.useState<CompareStep[]>([]);
+  const [provenance, setProvenance] = React.useState<CompareProvenance | null>(null);
   const [nodeMessages, setNodeMessages] = React.useState<TranscriptMessage[]>([]);
   const [compareLoaded, setCompareLoaded] = React.useState(false);
   const [currentStepIndex, setCurrentStepIndex] = React.useState(-1);
@@ -131,18 +151,26 @@ export default function App() {
       const res = await fetch("/compare/demo", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ target, turns, useOllama, model: voiceModelId }),
+        body: JSON.stringify({ target, turns, source, useOllama: source === "ollama", model: voiceModelId }),
       });
       const data = await res.json();
+      if (!res.ok || data?.ok === false) {
+        throw new Error(String(data?.error ?? `compare request failed: ${res.status}`));
+      }
       const bad = data.bad as CompareStep[];
       const good = data.good as CompareStep[];
       setBadSteps(bad);
       setGoodSteps(good);
+      setProvenance((data.provenance as CompareProvenance | undefined) ?? null);
       setCompareLoaded(true);
       setCurrentStepIndex(-1);
       await speakGoodSteps(good);
     } catch (err) {
+      // Clear on-screen error event (e.g. openai source without a server key).
       setBadSteps([{ turn: 0, actorId: "error", speechAct: "error", text: String(err), roomStateSummary: "" }]);
+      setGoodSteps([]);
+      setProvenance(null);
+      setCompareLoaded(true);
       setAgentState("listening");
     }
     setRunning(false);
@@ -207,7 +235,7 @@ export default function App() {
       const res = await fetch("/nodeagents/run", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ goal, useOllama, model: nodeModelId }),
+        body: JSON.stringify({ goal, useOllama: source === "ollama", model: nodeModelId }),
       });
       const data: NodeResult = await res.json();
       if (!res.ok || data.ok === false) {
@@ -284,7 +312,17 @@ export default function App() {
           </Select>
           <NumberField label="N" value={target} min={3} max={100} onChange={setTarget} />
           <NumberField label="Turns" value={turns} min={3} max={100} onChange={setTurns} />
-          <Toggle checked={useOllama} onChange={setUseOllama} />
+          <Select
+            label="Source"
+            value={source}
+            onChange={(e) => setSource(e.target.value as CompareSource)}
+            title="Utterance source: deterministic sim, local Ollama, or server-side OpenAI"
+            className="w-[150px]"
+          >
+            <option value="deterministic">Sim (scripted)</option>
+            <option value="ollama">Ollama (local)</option>
+            <option value="openai">OpenAI (live)</option>
+          </Select>
         </div>
       </header>
 
@@ -319,6 +357,7 @@ export default function App() {
           loaded={compareLoaded}
           running={running}
           onRun={runCompare}
+          provenance={provenance}
         />
       ) : (
         <AgentChatTranscript messages={nodeMessages} className="border-0" />
@@ -372,31 +411,6 @@ function NumberField({
   );
 }
 
-function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      title="Use local Ollama models"
-      className="flex h-9 items-center gap-2 rounded-md border border-border bg-elevated/70 px-2.5 transition-colors hover:border-border-strong"
-    >
-      <span className="select-none text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-        Ollama
-      </span>
-      <span className={cn("relative h-4 w-7 rounded-full transition-colors", checked ? "bg-primary" : "bg-muted")}>
-        <span
-          className={cn(
-            "absolute top-0.5 size-3 rounded-full bg-white shadow transition-all",
-            checked ? "left-3.5" : "left-0.5",
-          )}
-        />
-      </span>
-    </button>
-  );
-}
-
 /* ────────────────────────────────────────────────────────────────── */
 /*  Compare view                                                        */
 /* ────────────────────────────────────────────────────────────────── */
@@ -409,6 +423,7 @@ function CompareView({
   loaded,
   running,
   onRun,
+  provenance,
 }: {
   badSteps: CompareStep[];
   goodSteps: CompareStep[];
@@ -417,6 +432,7 @@ function CompareView({
   loaded: boolean;
   running: boolean;
   onRun: () => void;
+  provenance: CompareProvenance | null;
 }) {
   if (!loaded) {
     return <CompareHero running={running} onRun={onRun} />;
@@ -513,6 +529,8 @@ function CompareView({
           total={badSteps.length}
           streaming={streaming}
           currentStepIndex={currentStepIndex}
+          provenance={provenance?.bad}
+          dock={<AgentPrivateStatePanel steps={badSteps} currentIndex={currentStepIndex} />}
         />
         <ComparePanel
           tone="good"
@@ -526,6 +544,7 @@ function CompareView({
           total={goodSteps.length}
           streaming={streaming}
           currentStepIndex={currentStepIndex}
+          provenance={provenance?.good}
           dock={<RoomStatePanel steps={goodSteps} currentIndex={currentStepIndex} target={target} />}
         />
       </div>
@@ -545,6 +564,7 @@ function ComparePanel({
   total,
   streaming,
   currentStepIndex,
+  provenance,
   dock,
 }: {
   tone: "bad" | "good";
@@ -558,6 +578,7 @@ function ComparePanel({
   total: number;
   streaming: boolean;
   currentStepIndex: number;
+  provenance?: string;
   dock?: React.ReactNode;
 }) {
   const bad = tone === "bad";
@@ -623,6 +644,23 @@ function ComparePanel({
       />
 
       {dock && <div className="sticky bottom-0 z-10">{dock}</div>}
+
+      {/* provenance — honest disclosure of what produced the utterance text */}
+      {provenance && (
+        <div
+          className={cn(
+            "flex shrink-0 items-center gap-1.5 border-t px-4 py-1 font-mono text-[9px]",
+            bad
+              ? "border-destructive/15 bg-destructive/[0.04] text-destructive/80"
+              : "border-success/15 bg-success/[0.04] text-success/80",
+          )}
+        >
+          <Cpu className="size-3 shrink-0" />
+          <span className="truncate" title={provenance}>
+            text source: {provenance}
+          </span>
+        </div>
+      )}
 
       {/* footer */}
       <div
@@ -738,6 +776,97 @@ function RoomStatePanel({ steps, currentIndex, target }: { steps: CompareStep[];
           ))}
         </code>
       </pre>
+    </div>
+  );
+}
+
+/* Per-agent identity accents (matches trace badges + mini architecture). */
+const PRIVATE_STATE_AGENT_COLORS: Record<string, string> = {
+  "voice-a": "text-sky-300 border-sky-400/30 bg-sky-500/10",
+  "voice-b": "text-violet-300 border-violet-400/30 bg-violet-500/10",
+  "voice-c": "text-amber-300 border-amber-400/30 bg-amber-500/10",
+};
+
+/**
+ * LEFT-panel mirror of the roomState inspector: three divergent private
+ * states instead of one authoritative room. The punchline the video needs —
+ * believesCurrent never advances while nextIntent oscillates between
+ * acknowledge and wait-for-someone.
+ */
+function AgentPrivateStatePanel({ steps, currentIndex }: { steps: CompareStep[]; currentIndex: number }) {
+  const activeIndex = currentIndex >= 0 && currentIndex < steps.length ? currentIndex : steps.length - 1;
+  const step = steps[activeIndex];
+  const states = step?.agentStates ?? [];
+  const isLive = currentIndex >= 0 && currentIndex < steps.length;
+
+  if (states.length === 0) return null;
+
+  const maxBelief = Math.max(...states.map((s) => s.believesCurrent));
+  const looping = maxBelief <= 1;
+
+  return (
+    <div
+      className={cn(
+        "border-t bg-[hsl(350_30%_6%)]/95 px-3.5 py-2.5 font-mono backdrop-blur transition-colors",
+        isLive ? "border-destructive/50" : "border-destructive/20",
+      )}
+    >
+      <div className="mb-1.5 flex items-center gap-2">
+        <ListTree className="size-3.5 text-destructive" />
+        <span className="text-[11px] font-bold tracking-wide text-destructive">3 private states — no shared truth</span>
+        {isLive && (
+          <span className="inline-flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider text-destructive/90">
+            <span className="size-1.5 animate-pulse-soft rounded-full bg-destructive shadow-[0_0_6px_hsl(var(--destructive))]" />
+            live
+          </span>
+        )}
+        <span className="ml-auto text-[9px] text-muted-foreground">divergent · no authority</span>
+      </div>
+      <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
+        {states.map((s) => (
+          <div key={s.agentId} className="rounded-md border border-destructive/20 bg-destructive/[0.05] px-2 py-1.5">
+            <div className="mb-1 flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "rounded border px-1.5 py-0.5 text-[9px] font-semibold",
+                  PRIVATE_STATE_AGENT_COLORS[s.agentId] ?? "text-muted-foreground border-border bg-muted",
+                )}
+              >
+                {s.agentId}
+              </span>
+              <span className="text-[8px] uppercase tracking-wider text-muted-foreground">private</span>
+            </div>
+            <div className="space-y-0.5 text-[9.5px] leading-snug">
+              <div>
+                <span className="text-muted-foreground">believesCurrent: </span>
+                <span className="font-bold text-rose-300">{s.believesCurrent}</span>
+                {s.believesCurrent <= 1 && (
+                  <span className="ml-1 text-[8px] font-semibold uppercase tracking-wider text-destructive/80">stuck</span>
+                )}
+              </div>
+              <div>
+                <span className="text-muted-foreground">nextIntent: </span>
+                <span className={cn("font-semibold", s.nextIntent === "acknowledge" ? "text-warning" : "text-rose-200/90")}>
+                  {s.nextIntent}
+                </span>
+              </div>
+              <div>
+                <span className="text-muted-foreground">lastClassifiedAs: </span>
+                <span className="text-rose-200/80">{s.lastClassifiedAs}</span>
+              </div>
+              <div className="text-muted-foreground">
+                heard <span className="text-rose-200/80">{s.heardCount}</span> · spoke{" "}
+                <span className="text-rose-200/80">{s.spokeCount}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-1.5 text-[9px] leading-relaxed text-destructive/70">
+        {looping
+          ? "Each agent privately believes current≤1 and flips between acknowledge ⇄ wait-for-someone. Nobody ever commits 2."
+          : "Still three separate private beliefs — nothing here is authoritative or committed."}
+      </p>
     </div>
   );
 }
