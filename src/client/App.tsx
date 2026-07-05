@@ -21,6 +21,7 @@ import { TraceTreeView, compareStepsToSpans } from "@/components/agents-ui/trace
 import { AgentControlBar } from "@/components/agents-ui/agent-control-bar";
 import { AgentAudioVisualizerBar, type AgentState } from "@/components/agents-ui/agent-audio-visualizer-bar";
 import { AgentChatIndicator } from "@/components/agents-ui/agent-chat-indicator";
+import { deriveBadFooter } from "../compare/badFooter";
 
 interface ModelOption {
   id: string;
@@ -524,7 +525,7 @@ function CompareView({
           subtitle="3 iPhones · transcripts only"
           badge={<Badge variant="destructive" dot>loop</Badge>}
           caption="Each iPhone only hears the audio transcript. No floor control, no counter, no scheduler."
-          footer="3 iPhones + 3 transcripts + no state = stuck at 1"
+          footer={deriveBadFooter(badSteps)}
           steps={revealedBad}
           total={badSteps.length}
           streaming={streaming}
