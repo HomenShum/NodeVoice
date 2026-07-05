@@ -47,6 +47,14 @@ export function validModel(m?: string): string {
 
 export const other = (slot: Slot): Slot => (slot === "a" ? "b" : "a");
 
+/** Short human-typeable join code — unambiguous alphabet (no 0/O/1/l/i). */
+const CODE_ALPHABET = "23456789abcdefghjkmnpqrstuvwxyz";
+export function makeRoomCode(): string {
+  let code = "";
+  for (let i = 0; i < 6; i += 1) code += CODE_ALPHABET[Math.floor(Math.random() * CODE_ALPHABET.length)];
+  return code;
+}
+
 /** Rough speech duration so the scheduler paces turns to ~audio length. */
 export function estimateSpeechMs(text: string): number {
   return Math.min(11_000, 1400 + text.length * 55);

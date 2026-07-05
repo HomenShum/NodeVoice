@@ -1,5 +1,5 @@
-import { useRoom as useHttpRoom } from "./useRoom";
-import { useConvexRoom } from "./useConvexRoom";
+import { useRoom as useHttpRoom, useHttpActiveRooms } from "./useRoom";
+import { useConvexRoom, useConvexActiveRooms } from "./useConvexRoom";
 
 /**
  * Build-time transport selection:
@@ -17,5 +17,8 @@ export const useRoom: typeof useHttpRoom = CONVEX_MODE
   ? (useConvexRoom as unknown as typeof useHttpRoom)
   : useHttpRoom;
 
+/** Lobby list of joinable rooms (reactive on Convex, polled on HTTP). */
+export const useActiveRooms: typeof useHttpActiveRooms = CONVEX_MODE ? useConvexActiveRooms : useHttpActiveRooms;
+
 export { LIVE_BASE } from "./useRoom";
-export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent, TraceEvent } from "./useRoom";
+export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent, TraceEvent, ActiveRoom } from "./useRoom";

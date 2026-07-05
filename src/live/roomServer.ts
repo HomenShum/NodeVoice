@@ -165,6 +165,7 @@ function shortId(): string {
 function publicRoom(room: Room) {
   return {
     id: room.id,
+    code: room.id, // node room ids are already short + human-typeable
     agents: {
       a: pickAgent(AGENTS.a),
       b: pickAgent(AGENTS.b),
@@ -378,6 +379,26 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
     const body = await readJson<{ goal?: string; model?: string }>(req);
     const room = createRoom((body.goal ?? "").trim(), body.model);
     json(res, 200, { ok: true, roomId: room.id, room: publicRoom(room) });
+    return true;
+  }
+
+  // GET /live/rooms — joinable rooms for the lobby (active in the last hour)
+  if (method === "GET" && path === "/live/rooms") {
+    const cutoff = Date.now() - 60 * 60 * 1000;
+    const rooms = [...ROOMS.values()]
+      .filter((r) => r.lastActivity > cutoff)
+      .sort((a, b) => b.lastActivity - a.lastActivity)
+      .slice(0, 8)
+      .map((r) => ({
+        id: r.id,
+        code: r.id,
+        goal: r.state.goal,
+        turn: r.state.turn,
+        running: r.state.running,
+        done: r.state.done,
+        updatedAt: r.lastActivity,
+      }));
+    json(res, 200, { ok: true, rooms });
     return true;
   }
 

@@ -14,6 +14,8 @@ export default defineSchema({
   rooms: defineTable({
     goal: v.string(),
     model: v.string(),
+    // short human-typeable join code (optional: pre-migration rooms lack it)
+    code: v.optional(v.string()),
     floorOwner: v.union(v.literal("a"), v.literal("b")),
     turn: v.number(),
     running: v.boolean(),
@@ -25,7 +27,9 @@ export default defineSchema({
     runToken: v.number(),
     createdAt: v.number(),
     updatedAt: v.number(),
-  }).index("by_activity", ["updatedAt"]),
+  })
+    .index("by_activity", ["updatedAt"])
+    .index("by_code", ["code"]),
 
   participants: defineTable({
     roomId: v.id("rooms"),

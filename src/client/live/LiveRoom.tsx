@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
-import { useRoom, LIVE_BASE, CONVEX_MODE, type Slot, type MySlot, type RoomUtterance, type PublicRoom, type TraceEvent } from "./roomClient";
+import { useRoom, useActiveRooms, LIVE_BASE, CONVEX_MODE, type Slot, type MySlot, type RoomUtterance, type PublicRoom, type TraceEvent } from "./roomClient";
 
 const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
@@ -36,7 +36,9 @@ const SLOT_STYLE: Record<string, string> = {
 export default function LiveRoom() {
   const rm = useRoom();
   const params = React.useMemo(() => new URLSearchParams(window.location.search), []);
-  const joinId = params.get("room");
+  // joinable via QR deep-link (?room=…) OR an in-app pick (active list / code)
+  const [pendingJoin, setPendingJoin] = React.useState<string | null>(null);
+  const joinId = params.get("room") ?? pendingJoin;
   const [joined, setJoined] = React.useState(false);
 
   if (rm.room && (joined || rm.mySlot === "a")) {
@@ -45,7 +47,7 @@ export default function LiveRoom() {
   if (joinId) {
     return <JoinGate rm={rm} roomId={joinId} onJoined={() => setJoined(true)} />;
   }
-  return <Lobby rm={rm} />;
+  return <Lobby rm={rm} onJoinRoom={setPendingJoin} />;
 }
 
 /* ── shell ─────────────────────────────────────────────────────────── */
@@ -73,15 +75,30 @@ function Brand({ tag }: { tag: string }) {
 }
 
 /* ── lobby (create) ────────────────────────────────────────────────── */
-function Lobby({ rm }: { rm: ReturnType<typeof useRoom> }) {
+function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom: (id: string) => void }) {
   const [goal, setGoal] = React.useState(DEFAULT_GOAL);
   const [busy, setBusy] = React.useState(false);
+  const [joinCode, setJoinCode] = React.useState("");
+  const [joinBusy, setJoinBusy] = React.useState(false);
+  const [joinError, setJoinError] = React.useState<string | null>(null);
+  const activeRooms = useActiveRooms();
 
   async function create() {
     setBusy(true);
     rm.unlockAudio();
     await rm.createRoom(goal.trim() || DEFAULT_GOAL);
     setBusy(false);
+  }
+
+  async function joinByCode() {
+    const code = joinCode.trim().toLowerCase();
+    if (!code) return;
+    setJoinBusy(true);
+    setJoinError(null);
+    const id = await rm.resolveCode(code);
+    setJoinBusy(false);
+    if (id) onJoinRoom(id);
+    else setJoinError(`No active room with code "${code}".`);
   }
 
   return (
@@ -126,6 +143,66 @@ function Lobby({ rm }: { rm: ReturnType<typeof useRoom> }) {
             )}
           </div>
           {rm.error && <p className="mt-3 text-xs text-destructive">{rm.error}</p>}
+
+          {/* ── join an existing room ─────────────────────────────── */}
+          <div className="mt-8 rounded-xl border border-border bg-card/60 p-4 shadow-panel">
+            <h3 className="flex items-center gap-2 text-sm font-bold">
+              <QrCode className="size-4 text-primary" />
+              Join a room
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Scan the QR on the host device — or type its room code:
+            </p>
+            <div className="mt-2.5 flex items-center gap-2">
+              <input
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") void joinByCode();
+                }}
+                placeholder="e.g. x7k2mp"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                className="h-10 w-36 rounded-md border border-border bg-input/70 px-3 font-mono text-sm tracking-widest text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
+              />
+              <Button variant="outline" onClick={() => void joinByCode()} disabled={joinBusy || !joinCode.trim()}>
+                {joinBusy ? <Loader className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+                Join
+              </Button>
+            </div>
+            {joinError && <p className="mt-2 text-xs text-destructive">{joinError}</p>}
+
+            {activeRooms.length > 0 && (
+              <div className="mt-4">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Active rooms · tap to join
+                </p>
+                <div className="mt-1.5 flex flex-col gap-1.5">
+                  {activeRooms.map((r) => (
+                    <button
+                      key={r.id}
+                      onClick={() => onJoinRoom(r.id)}
+                      className="flex items-center gap-2.5 rounded-lg border border-border bg-elevated/50 px-3 py-2 text-left transition-colors hover:border-primary/40"
+                    >
+                      <span className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-bold text-primary">
+                        {r.code ?? r.id.slice(0, 6)}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-xs text-foreground/85">{r.goal}</span>
+                      <span className="shrink-0 font-mono text-[10px] text-muted-foreground">turn {r.turn}</span>
+                      {r.done ? (
+                        <Badge variant="success" dot>agreed</Badge>
+                      ) : r.running ? (
+                        <Badge variant="default" dot>talking</Badge>
+                      ) : (
+                        <Badge variant="outline">idle</Badge>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Shell>
@@ -206,7 +283,7 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
     <Shell>
       {/* top bar */}
       <header className="z-20 flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border bg-card/80 px-4 py-2.5 backdrop-blur">
-        <Brand tag={`room ${room.id}`} />
+        <Brand tag={`room ${room.code ?? room.id}`} />
         <div className="ml-auto flex items-center gap-2">
           <ModelSelect rm={rm} />
           <span
@@ -257,6 +334,13 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
           <div className="text-center sm:text-left">
             <p className="text-sm font-semibold">Scan from your phone to add Ben</p>
             <p className="mt-0.5 text-xs text-muted-foreground">Both devices join the same room. Keep them near each other to hear the conversation.</p>
+            {room.code && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                No camera? Open the site and type code{" "}
+                <span className="rounded bg-primary/10 px-1.5 py-0.5 font-mono text-sm font-bold tracking-widest text-primary">{room.code}</span>{" "}
+                under “Join a room”.
+              </p>
+            )}
             <div className="mt-2 flex items-center justify-center gap-1.5 sm:justify-start">
               <LinkIcon className="size-3.5 text-muted-foreground" />
               <code className="rounded bg-elevated px-1.5 py-0.5 text-[11px] text-primary">{joinUrl}</code>

@@ -2,7 +2,7 @@ import { v } from "convex/values";
 import { query, mutation, internalQuery, internalMutation, type QueryCtx, type MutationCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
-import { AGENTS, ROUTER_MODELS, DEFAULT_GOAL, DEFAULT_MODEL, validModel, other, type Slot } from "./shared";
+import { AGENTS, ROUTER_MODELS, DEFAULT_GOAL, DEFAULT_MODEL, validModel, other, makeRoomCode, type Slot } from "./shared";
 
 const MAX_TRACES = 300;
 const MAX_UTTERANCES = 300;
@@ -62,6 +62,7 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   );
   return {
     id: room._id,
+    code: room.code,
     agents: { a: agentPublic("a"), b: agentPublic("b") },
     state: {
       goal: room.goal,
@@ -88,6 +89,42 @@ export const watchRoom = query({
   handler: (ctx, args) => serializeRoom(ctx, args.roomId),
 });
 
+/** Joinable rooms for the lobby: active in the last hour, newest first. */
+export const listActiveRooms = query({
+  args: {},
+  handler: async (ctx) => {
+    const cutoff = Date.now() - 60 * 60 * 1000;
+    const rooms = await ctx.db
+      .query("rooms")
+      .withIndex("by_activity", (q) => q.gt("updatedAt", cutoff))
+      .order("desc")
+      .take(8);
+    return rooms.map((r) => ({
+      id: r._id,
+      code: r.code,
+      goal: r.goal,
+      turn: r.turn,
+      running: r.running,
+      done: r.done,
+      updatedAt: r.updatedAt,
+    }));
+  },
+});
+
+/** Resolve a typed join code to a room id (case-insensitive). */
+export const roomIdByCode = query({
+  args: { code: v.string() },
+  handler: async (ctx, args) => {
+    const code = args.code.trim().toLowerCase();
+    if (!code) return null;
+    const room = await ctx.db
+      .query("rooms")
+      .withIndex("by_code", (q) => q.eq("code", code))
+      .first();
+    return room ? room._id : null;
+  },
+});
+
 export const listTraces = query({
   args: { roomId: v.id("rooms"), limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
@@ -111,9 +148,17 @@ export const createRoom = mutation({
   args: { goal: v.optional(v.string()), model: v.optional(v.string()) },
   handler: async (ctx, args) => {
     const now = Date.now();
+    // unique short join code (retry on the rare collision)
+    let code = makeRoomCode();
+    for (let i = 0; i < 4; i += 1) {
+      const clash = await ctx.db.query("rooms").withIndex("by_code", (q) => q.eq("code", code)).first();
+      if (!clash) break;
+      code = makeRoomCode();
+    }
     const roomId = await ctx.db.insert("rooms", {
       goal: (args.goal ?? "").trim() || DEFAULT_GOAL,
       model: validModel(args.model),
+      code,
       floorOwner: "a",
       turn: 0,
       running: false,

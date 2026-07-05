@@ -2,7 +2,13 @@ import * as React from "react";
 import { useQuery, useMutation, useAction, useConvex } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import type { MySlot, PublicRoom, RoomUtterance } from "./useRoom";
+import type { ActiveRoom, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
+
+/** Lobby list of joinable rooms — reactive over the Convex WebSocket. */
+export function useConvexActiveRooms(): ActiveRoom[] {
+  const rooms = useQuery(api.rooms.listActiveRooms, {});
+  return (rooms ?? []) as ActiveRoom[];
+}
 
 /**
  * Fully reactive room client. Drop-in replacement for the HTTP useRoom():
@@ -262,6 +268,19 @@ export function useConvexRoom() {
     setRecording(false);
   }, []);
 
+  /** Resolve a typed join code to a room id via the by_code index. */
+  const resolveCode = React.useCallback(
+    async (code: string): Promise<string | null> => {
+      try {
+        const id = await convex.query(api.rooms.roomIdByCode, { code });
+        return (id as string | null) ?? null;
+      } catch {
+        return null;
+      }
+    },
+    [convex],
+  );
+
   return {
     room,
     connected,
@@ -282,5 +301,6 @@ export function useConvexRoom() {
     beginTalk,
     endTalk,
     unlockAudio,
+    resolveCode,
   };
 }

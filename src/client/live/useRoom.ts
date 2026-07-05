@@ -35,8 +35,19 @@ export interface TraceEvent {
   payload?: unknown;
   ts: number;
 }
+/** Lobby listing of a joinable room. */
+export interface ActiveRoom {
+  id: string;
+  code?: string;
+  goal: string;
+  turn: number;
+  running: boolean;
+  done: boolean;
+  updatedAt: number;
+}
 export interface PublicRoom {
   id: string;
+  code?: string;
   agents: { a: RoomAgent; b: RoomAgent };
   state: {
     goal: string;
@@ -71,6 +82,31 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
   });
   if (!res.ok) throw new Error(`${path} → ${res.status}`);
   return (await res.json()) as T;
+}
+
+/** Lobby list of joinable rooms — HTTP transport polls the Node server. */
+export function useHttpActiveRooms(): ActiveRoom[] {
+  const [rooms, setRooms] = React.useState<ActiveRoom[]>([]);
+  React.useEffect(() => {
+    let alive = true;
+    const tick = async () => {
+      try {
+        const r = await fetch(`${LIVE_BASE}/live/rooms`);
+        if (!r.ok) return;
+        const j = (await r.json()) as { rooms?: ActiveRoom[] };
+        if (alive && Array.isArray(j.rooms)) setRooms(j.rooms);
+      } catch {
+        /* lobby list is best-effort */
+      }
+    };
+    void tick();
+    const iv = setInterval(tick, 5000);
+    return () => {
+      alive = false;
+      clearInterval(iv);
+    };
+  }, []);
+  return rooms;
 }
 
 function pickRecorderMime(): string {
@@ -377,6 +413,18 @@ export function useRoom() {
     setRecording(false);
   }, []);
 
+  /** Resolve a typed join code to a room id (node room ids ARE the codes). */
+  const resolveCode = React.useCallback(async (code: string): Promise<string | null> => {
+    const c = code.trim().toLowerCase();
+    if (!c) return null;
+    try {
+      const r = await fetch(`${LIVE_BASE}/live/rooms/${c}`);
+      return r.ok ? c : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   return {
     room,
     connected,
@@ -397,5 +445,6 @@ export function useRoom() {
     beginTalk,
     endTalk,
     unlockAudio,
+    resolveCode,
   };
 }
