@@ -79,6 +79,11 @@ export function useRoom() {
   const playAllRef = React.useRef(false);
   const recorderRef = React.useRef<MediaRecorder | null>(null);
   const chunksRef = React.useRef<Blob[]>([]);
+  // Polling fallback (measured: cloudflared quick tunnels buffer SSE — the
+  // stream opens but events never arrive, so remote joiners would freeze).
+  const pollTimerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const seenAudioRef = React.useRef<Set<string>>(new Set());
+  const seededRef = React.useRef(false);
 
   React.useEffect(() => {
     mySlotRef.current = mySlot;
@@ -116,31 +121,126 @@ export function useRoom() {
     [drainQueue],
   );
 
+  /** Remember an audioId so it is never double-played (bounded set). */
+  const rememberAudio = React.useCallback((audioId: string) => {
+    const seen = seenAudioRef.current;
+    if (seen.has(audioId)) return false;
+    seen.add(audioId);
+    if (seen.size > 500) {
+      const first = seen.values().next().value as string | undefined;
+      if (first) seen.delete(first);
+    }
+    return true;
+  }, []);
+
+  /** Seed the seen-set from a snapshot so joining never replays history. */
+  const seedFromRoom = React.useCallback((r: PublicRoom) => {
+    if (seededRef.current) return;
+    for (const u of r.utterances) if (u.audioId) seenAudioRef.current.add(u.audioId);
+    seededRef.current = true;
+  }, []);
+
+  const stopPolling = React.useCallback(() => {
+    if (pollTimerRef.current) {
+      clearInterval(pollTimerRef.current);
+      pollTimerRef.current = null;
+    }
+  }, []);
+
+  /** Snapshot polling — the transport of last resort, but it always works. */
+  const startPolling = React.useCallback((id: string) => {
+    if (pollTimerRef.current) return;
+    const tick = async () => {
+      try {
+        const res = await fetch(`/live/rooms/${id}`);
+        if (!res.ok) return;
+        const j = (await res.json()) as { room?: PublicRoom };
+        const r = j.room;
+        if (!r) return;
+        setConnected(true);
+        if (!seededRef.current) {
+          seedFromRoom(r);
+        } else {
+          for (const u of r.utterances) {
+            if (u.audioId && rememberAudio(u.audioId)) {
+              const forMe = playAllRef.current || u.slot === mySlotRef.current;
+              if (forMe) enqueueAudio(u.audioId);
+            }
+          }
+        }
+        setRoom(r);
+      } catch {
+        setConnected(false);
+      }
+    };
+    void tick();
+    pollTimerRef.current = setInterval(tick, 1500);
+  }, [enqueueAudio, rememberAudio, seedFromRoom]);
+
   const connect = React.useCallback((id: string) => {
     esRef.current?.close();
-    const es = new EventSource(`/live/rooms/${id}/events`);
+    stopPolling();
+
+    let es: EventSource | null = null;
+    try {
+      es = new EventSource(`/live/rooms/${id}/events`);
+    } catch {
+      startPolling(id); // no EventSource in this environment
+      return;
+    }
     esRef.current = es;
+
+    // Watchdog: SSE can "open" through a buffering proxy (cloudflared quick
+    // tunnel) yet never deliver events. If no message lands in time, fall back
+    // to polling for the rest of the session.
+    let gotMessage = false;
+    const watchdog = setTimeout(() => {
+      if (!gotMessage) {
+        es?.close();
+        setConnected(false);
+        startPolling(id);
+      }
+    }, 4000);
+
     es.onopen = () => setConnected(true);
-    es.onerror = () => setConnected(false);
+    es.onerror = () => {
+      setConnected(false);
+      if (!gotMessage) {
+        clearTimeout(watchdog);
+        es?.close();
+        startPolling(id);
+      }
+    };
     es.onmessage = (ev) => {
+      gotMessage = true;
       let msg: { type: string; room?: PublicRoom; audioId?: string; slot?: Slot };
       try {
         msg = JSON.parse(ev.data);
       } catch {
         return;
       }
-      if (msg.type === "state" && msg.room) setRoom(msg.room);
-      else if (msg.type === "utterance" && (msg as { utterance?: RoomUtterance }).utterance) {
+      if (msg.type === "state" && msg.room) {
+        seedFromRoom(msg.room);
+        setRoom(msg.room);
+      } else if (msg.type === "utterance" && (msg as { utterance?: RoomUtterance }).utterance) {
         const u = (msg as { utterance: RoomUtterance }).utterance;
         setRoom((prev) => (prev && !prev.utterances.some((x) => x.id === u.id) ? { ...prev, utterances: [...prev.utterances, u] } : prev));
       } else if (msg.type === "speak" && msg.audioId) {
-        const forMe = playAllRef.current || msg.slot === mySlotRef.current;
-        if (forMe) enqueueAudio(msg.audioId);
+        if (rememberAudio(msg.audioId)) {
+          const forMe = playAllRef.current || msg.slot === mySlotRef.current;
+          if (forMe) enqueueAudio(msg.audioId);
+        }
       }
     };
-  }, [enqueueAudio]);
+  }, [enqueueAudio, rememberAudio, seedFromRoom, startPolling, stopPolling]);
 
-  React.useEffect(() => () => esRef.current?.close(), []);
+  React.useEffect(
+    () => () => {
+      esRef.current?.close();
+      if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+    },
+    [],
+  );
 
   /** Unlock audio playback on iOS with a user gesture (call from a click). */
   const unlockAudio = React.useCallback(() => {
