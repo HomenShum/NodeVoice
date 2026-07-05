@@ -213,7 +213,7 @@ export function useRoom() {
     };
     es.onmessage = (ev) => {
       gotMessage = true;
-      let msg: { type: string; room?: PublicRoom; audioId?: string; slot?: Slot };
+      let msg: { type: string; room?: PublicRoom; audioId?: string; slot?: Slot; utterance?: RoomUtterance };
       try {
         msg = JSON.parse(ev.data);
       } catch {
@@ -222,8 +222,8 @@ export function useRoom() {
       if (msg.type === "state" && msg.room) {
         seedFromRoom(msg.room);
         setRoom(msg.room);
-      } else if (msg.type === "utterance" && (msg as { utterance?: RoomUtterance }).utterance) {
-        const u = (msg as { utterance: RoomUtterance }).utterance;
+      } else if (msg.type === "utterance" && msg.utterance) {
+        const u = msg.utterance;
         setRoom((prev) => (prev && !prev.utterances.some((x) => x.id === u.id) ? { ...prev, utterances: [...prev.utterances, u] } : prev));
       } else if (msg.type === "speak" && msg.audioId) {
         if (rememberAudio(msg.audioId)) {

@@ -654,8 +654,8 @@ function parseRoomState(summary: string): RoomStateValues {
   return {
     current: currentMatch ? Number(currentMatch[1]) : null,
     next: nextMatch ? Number(nextMatch[1]) : null,
-    floorOwner: scheduledMatch ? scheduledMatch[1] : null,
-    nextSpeaker: scheduledMatch ? scheduledMatch[1] : null,
+    floorOwner: scheduledMatch?.[1] ?? null,
+    nextSpeaker: scheduledMatch?.[1] ?? null,
     requiredAct: "task_action",
     suppressAck: true,
   };

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck (server)
+        run: npm run check
+
+      - name: Typecheck (client)
+        run: npm run check:client
+
+      - name: Unit tests
+        run: npm test
+
+      # Deterministic no-keys smoke test: three scripted voice agents count to
+      # COUNT_TARGET through the room reducer. No LLM/API calls unless
+      # USE_OLLAMA=1, so this is safe and stable in CI (~4s).
+      - name: Demo smoke test (demo:compare)
+        run: npm run demo:compare
+        env:
+          COUNT_TARGET: "10"

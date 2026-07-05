@@ -12,9 +12,8 @@
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/client/*"]
+      "@/*": ["./src/client/*"]
     }
   },
   "include": ["src/client/**/*.ts", "src/client/**/*.tsx"]
