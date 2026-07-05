@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
-import { useRoom, type Slot, type MySlot, type RoomUtterance, type PublicRoom } from "./useRoom";
+import { useRoom, LIVE_BASE, type Slot, type MySlot, type RoomUtterance, type PublicRoom } from "./useRoom";
 
 const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
@@ -374,7 +374,7 @@ function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
 function UtteranceRow({ u, isFloor }: { u: RoomUtterance; isFloor: boolean }) {
   const style = SLOT_STYLE[u.slot] ?? SLOT_STYLE.system;
   function play() {
-    if (u.audioId) void new Audio(`/live/audio/${u.audioId}`).play().catch(() => {});
+    if (u.audioId) void new Audio(`${LIVE_BASE}/live/audio/${u.audioId}`).play().catch(() => {});
   }
   return (
     <div

@@ -45,8 +45,15 @@ export interface PublicRoom {
   utterances: RoomUtterance[];
 }
 
+/**
+ * Base for the /live API. Empty in local dev (`npm run live` → same-origin Node
+ * server). Set to the Convex .site URL at build time (Vercel) → permanent host,
+ * laptop can sleep. All /live/* requests below go through here.
+ */
+export const LIVE_BASE = (import.meta.env.VITE_LIVE_BASE as string | undefined) ?? "";
+
 async function post<T>(path: string, body?: unknown): Promise<T> {
-  const res = await fetch(path, {
+  const res = await fetch(LIVE_BASE + path, {
     method: "POST",
     headers: body ? { "content-type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
@@ -99,7 +106,7 @@ export function useRoom() {
     const el = audioRef.current ?? new Audio();
     audioRef.current = el;
     playingRef.current = true;
-    el.src = `/live/audio/${next}`;
+    el.src = `${LIVE_BASE}/live/audio/${next}`;
     el.onended = () => {
       playingRef.current = false;
       drainQueue();
@@ -152,7 +159,7 @@ export function useRoom() {
     if (pollTimerRef.current) return;
     const tick = async () => {
       try {
-        const res = await fetch(`/live/rooms/${id}`);
+        const res = await fetch(`${LIVE_BASE}/live/rooms/${id}`);
         if (!res.ok) return;
         const j = (await res.json()) as { room?: PublicRoom };
         const r = j.room;
@@ -183,7 +190,7 @@ export function useRoom() {
 
     let es: EventSource | null = null;
     try {
-      es = new EventSource(`/live/rooms/${id}/events`);
+      es = new EventSource(`${LIVE_BASE}/live/rooms/${id}/events`);
     } catch {
       startPolling(id); // no EventSource in this environment
       return;
@@ -317,7 +324,7 @@ export function useRoom() {
         const blob = new Blob(chunksRef.current, { type: rec.mimeType || "audio/webm" });
         if (blob.size < 800) return; // ignore accidental taps
         try {
-          const res = await fetch(`/live/rooms/${room.id}/human`, {
+          const res = await fetch(`${LIVE_BASE}/live/rooms/${room.id}/human`, {
             method: "POST",
             headers: { "content-type": rec.mimeType || "audio/webm" },
             body: blob,

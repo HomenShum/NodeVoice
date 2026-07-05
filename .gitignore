@@ -23,3 +23,10 @@ Thumbs.db
 # misc
 .cache/
 coverage/
+
+# convex generated
+convex/_generated/
+
+dist-vercel/
+
+room-os-live/
