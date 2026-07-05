@@ -44,6 +44,10 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   if (!room) return null;
   const participants = await ctx.db.query("participants").withIndex("by_room", (q) => q.eq("roomId", roomId)).collect();
   const utterances = await ctx.db.query("utterances").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("asc").collect();
+  // ride the proof layer along with the snapshot (newest 40) so the Trace
+  // Inspector is reactive for free — every mutation pushes fresh traces too
+  const traceRows = await ctx.db.query("traces").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(40);
+  const traces = traceRows.reverse().map((t) => ({ id: t._id, kind: t.kind, summary: t.summary, payload: t.payload, ts: t.createdAt }));
   const resolved = await Promise.all(
     utterances.map(async (u) => ({
       id: u._id,
@@ -74,6 +78,7 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
     models: ROUTER_MODELS,
     participants: participants.map((p) => ({ slot: p.slot, kind: p.kind })),
     utterances: resolved,
+    traces,
   };
 }
 

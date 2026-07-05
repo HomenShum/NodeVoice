@@ -27,6 +27,14 @@ export interface RouterModel {
   tier: string;
   note: string;
 }
+/** One entry in the proof layer (classify → reduce → guard → schedule). */
+export interface TraceEvent {
+  id: string;
+  kind: string;
+  summary: string;
+  payload?: unknown;
+  ts: number;
+}
 export interface PublicRoom {
   id: string;
   agents: { a: RoomAgent; b: RoomAgent };
@@ -45,6 +53,7 @@ export interface PublicRoom {
   models: RouterModel[];
   participants: { slot: string; kind: string }[];
   utterances: RoomUtterance[];
+  traces?: TraceEvent[];
 }
 
 /**

@@ -71,12 +71,22 @@ interface RoomState {
   recentActs: string[];
 }
 
+/** One entry in the proof layer — mirrors the Convex `traces` table shape. */
+interface TraceEvent {
+  id: string;
+  kind: string;
+  summary: string;
+  payload?: unknown;
+  ts: number;
+}
+
 interface Room {
   id: string;
   createdAt: number;
   lastActivity: number;
   state: RoomState;
   utterances: Utterance[];
+  traces: TraceEvent[];
   audio: Map<string, { mime: string; buf: Buffer; ts: number }>;
   participants: Map<string, { slot: Slot | "spectator"; kind: string; lastSeen: number }>;
   sse: Set<ServerResponse>;
@@ -89,6 +99,7 @@ interface Room {
 const ROOMS = new Map<string, Room>();
 const MAX_ROOMS = 40;
 const MAX_UTTERANCES = 300;
+const MAX_TRACES = 60;
 const MAX_AUDIO_PER_ROOM = 60;
 const MAX_SSE_PER_ROOM = 30;
 const MAX_RUN_TURNS = 40;
@@ -127,6 +138,7 @@ function createRoom(goal: string, model?: string): Room {
     lastActivity: Date.now(),
     state: { goal: goal || DEFAULT_GOAL, model: validModel(model), floorOwner: "a", turn: 0, running: false, done: false, loopRisk: false, recentActs: [] },
     utterances: [],
+    traces: [],
     audio: new Map(),
     participants: new Map(),
     sse: new Set(),
@@ -134,8 +146,15 @@ function createRoom(goal: string, model?: string): Room {
     loopToken: 0,
     busy: false,
   };
+  pushTrace(room, "state_reduced", "Room created.", { goal: room.state.goal, model: room.state.model });
   ROOMS.set(id, room);
   return room;
+}
+
+/** Append to the proof layer (bounded). Traces ride along on state broadcasts. */
+function pushTrace(room: Room, kind: string, summary: string, payload?: unknown) {
+  room.traces.push({ id: randomUUID().replace(/-/g, "").slice(0, 10), kind, summary, payload, ts: Date.now() });
+  while (room.traces.length > MAX_TRACES) room.traces.shift();
 }
 
 function shortId(): string {
@@ -165,6 +184,7 @@ function publicRoom(room: Room) {
     models: ROUTER_MODELS,
     participants: [...room.participants.values()].map((p) => ({ slot: p.slot, kind: p.kind })),
     utterances: room.utterances,
+    traces: room.traces.slice(-40),
   };
 }
 function pickAgent(a: AgentDef) {
@@ -256,6 +276,15 @@ async function runOneTurn(room: Room, slot: Slot): Promise<AgentTurnOutcome> {
   room.state.floorOwner = slot === "a" ? "b" : "a";
   if (turn.done) room.state.done = true;
 
+  if (turn.speechAct === "backchannel") {
+    pushTrace(room, "guardrail_evaluated", "Backchannel — not counted as progress.", { text: turn.text });
+  }
+  pushTrace(room, "state_reduced", `${agent.name} took the floor turn ${room.state.turn}.`, { speechAct: turn.speechAct, done: turn.done });
+  pushTrace(room, "scheduler_selected", `${AGENTS[room.state.floorOwner].name} owns the next floor.`, {
+    floorOwner: room.state.floorOwner,
+    loopRisk: room.state.loopRisk,
+  });
+
   pushUtterance(room, u);
   broadcast(room, { type: "speak", audioId, slot, uttId: u.id });
   broadcastState(room);
@@ -290,6 +319,7 @@ async function runLoop(room: Room) {
         speechAct: "error",
         ts: Date.now(),
       });
+      pushTrace(room, "guardrail_evaluated", "Auto-run halted on error.", { error: String(err).slice(0, 140) });
       room.state.running = false;
       room.busy = false;
       broadcastState(room);
@@ -509,6 +539,7 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
       return true;
     }
     room.pendingHuman = text.slice(0, 400);
+    pushTrace(room, "utterance_received", `you steered: ${text.slice(0, 80)}`, { text: text.slice(0, 400) });
     pushUtterance(room, {
       id: randomUUID().slice(0, 10),
       slot: "human",

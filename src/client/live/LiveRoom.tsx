@@ -14,13 +14,14 @@ import {
   Sparkles,
   ArrowRight,
   Link as LinkIcon,
+  ListTree,
   Loader,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
-import { useRoom, LIVE_BASE, type Slot, type MySlot, type RoomUtterance, type PublicRoom } from "./roomClient";
+import { useRoom, LIVE_BASE, CONVEX_MODE, type Slot, type MySlot, type RoomUtterance, type PublicRoom, type TraceEvent } from "./roomClient";
 
 const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
@@ -117,9 +118,12 @@ function Lobby({ rm }: { rm: ReturnType<typeof useRoom> }) {
               {busy ? <Loader className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
               {busy ? "Creating…" : "Create room"}
             </Button>
-            <a href="/demo" className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-              or watch the bad-vs-good demo →
-            </a>
+            {/* the compare demo needs the local Node server (/compare, /api/models) */}
+            {!CONVEX_MODE && (
+              <a href="/demo" className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+                or watch the bad-vs-good demo →
+              </a>
+            )}
           </div>
           {rm.error && <p className="mt-3 text-xs text-destructive">{rm.error}</p>}
         </div>
@@ -189,6 +193,7 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
   const joinUrl = `${window.location.origin}/?room=${room.id}`;
   const [steer, setSteer] = React.useState("");
   const [showQr, setShowQr] = React.useState(rm.mySlot === "a");
+  const [showTraces, setShowTraces] = React.useState(false);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -216,6 +221,14 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
           <span className={cn("rounded-full border px-2 py-1 text-[11px] font-semibold", SLOT_STYLE[rm.mySlot] ?? SLOT_STYLE.system)}>
             you: {meName}
           </span>
+          <Button
+            variant={showTraces ? "secondary" : "outline"}
+            size="xs"
+            onClick={() => setShowTraces((v) => !v)}
+            title="Trace Inspector — the proof layer: classify → reduce → guard → schedule"
+          >
+            <ListTree className="size-3.5" /> Traces
+          </Button>
           <Button variant="outline" size="xs" onClick={() => setShowQr((v) => !v)}>
             <QrCode className="size-3.5" /> Invite
           </Button>
@@ -228,6 +241,10 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
           <Sparkles className="size-3.5 shrink-0 text-primary" />
           <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Goal</span>
           <span className="min-w-0 flex-1 truncate text-foreground/90">{room.state.goal}</span>
+          {/* provenance: this room is genuinely model-generated, never scripted */}
+          <Badge variant="outline" className="hidden shrink-0 font-mono text-[10px] normal-case sm:inline-flex" title="Every utterance is generated live by this model — nothing is scripted.">
+            openai · {room.state.model} · live
+          </Badge>
           <span className="shrink-0 font-mono text-[11px] text-muted-foreground">turn {room.state.turn}</span>
           {room.state.done && <Badge variant="success" dot>agreed</Badge>}
           {room.state.loopRisk && !room.state.done && <Badge variant="warning" dot>loop risk</Badge>}
@@ -261,6 +278,9 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
           ))}
         </div>
       </div>
+
+      {/* trace inspector — the proof layer */}
+      {showTraces && <TracePanel traces={room.traces ?? []} />}
 
       {/* room state inspector */}
       <RoomStateBar room={room} />
@@ -395,6 +415,62 @@ function UtteranceRow({ u, isFloor }: { u: RoomUtterance; isFloor: boolean }) {
         )}
       </div>
       <p className="text-sm leading-relaxed text-foreground/90">{u.text}</p>
+    </div>
+  );
+}
+
+const TRACE_STYLE: Record<string, string> = {
+  state_reduced: "border-success/30 bg-success/10 text-success",
+  scheduler_selected: "border-sky-400/30 bg-sky-500/10 text-sky-300",
+  guardrail_evaluated: "border-warning/30 bg-warning/10 text-warning",
+  utterance_received: "border-primary/30 bg-primary/10 text-primary",
+};
+
+/**
+ * The proof layer, visible: every decision the room made — classify → reduce →
+ * guard → schedule — as an auditable event stream. Newest first. This is what
+ * separates "trust me, it coordinated" from "here is why it coordinated".
+ */
+function TracePanel({ traces }: { traces: TraceEvent[] }) {
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const ordered = [...traces].reverse();
+  return (
+    <div className="max-h-56 shrink-0 overflow-y-auto border-t border-border bg-[hsl(223_30%_6%)]/95 px-4 py-2 backdrop-blur">
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-1.5 flex items-center gap-2">
+          <ListTree className="size-3.5 text-primary" />
+          <span className="text-[11px] font-bold tracking-wide text-primary">Trace Inspector</span>
+          <span className="text-[10px] text-muted-foreground">classify → reduce → guard → schedule · click a row for the payload</span>
+        </div>
+        {ordered.length === 0 ? (
+          <p className="py-2 text-[11px] text-muted-foreground">No trace events yet — run a turn.</p>
+        ) : (
+          <div className="flex flex-col gap-1">
+            {ordered.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setOpenId((v) => (v === t.id ? null : t.id))}
+                className="rounded-md border border-border/60 bg-card/50 px-2 py-1 text-left transition-colors hover:border-border-strong"
+              >
+                <span className="flex items-center gap-2">
+                  <span className={cn("shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9px] font-semibold", TRACE_STYLE[t.kind] ?? "border-border-strong text-muted-foreground")}>
+                    {t.kind}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[11px] text-foreground/85">{t.summary}</span>
+                  <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
+                    {new Date(t.ts).toLocaleTimeString([], { hour12: false })}
+                  </span>
+                </span>
+                {openId === t.id && t.payload !== undefined && (
+                  <pre className="mt-1 overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
+                    {JSON.stringify(t.payload, null, 2)}
+                  </pre>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

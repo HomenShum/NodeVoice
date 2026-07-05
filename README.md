@@ -40,6 +40,9 @@ npm run live         # build + start server + open a public HTTPS tunnel, prints
 - Open the printed URL on your **laptop** → *Create room* → a QR appears.
 - **Scan the QR with your phone** → join as Ben → *Join & enable sound*.
 - Press **Start** — the agents talk it out; hold **🎤 Hold to talk** to jump in by voice.
+- Toggle **Traces** for the proof layer: every classify → reduce → guard → schedule decision
+  as an auditable event stream (both transports), with expandable JSON payloads. The
+  `openai · <model> · live` badge in the goal bar is the provenance claim: nothing is scripted.
 
 **Pipeline (your keys, server-side only):** phone mic → **Whisper** (STT) → **chat LLM** →
 **TTS** → audio. This sidesteps iOS Safari (which has no browser speech-to-text) and keeps

@@ -18,4 +18,4 @@ export const useRoom: typeof useHttpRoom = CONVEX_MODE
   : useHttpRoom;
 
 export { LIVE_BASE } from "./useRoom";
-export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent } from "./useRoom";
+export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent, TraceEvent } from "./useRoom";
