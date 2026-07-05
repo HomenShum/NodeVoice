@@ -18,10 +18,12 @@ The one line that matters:
 
 | | Transport | Backend | Good for |
 |---|---|---|---|
-| **Local** (`npm run live`) | HTTP + polling, cloudflared tunnel | Node server on your laptop | fastest to hack, offline, on-site demo — laptop must stay awake |
-| **Hosted** ([room-os-live.vercel.app](https://room-os-live.vercel.app)) | HTTP + polling to Convex | **Convex** (cloud) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
+| **Local** (`npm run live`) | SSE + polling fallback, cloudflared tunnel | Node server on your laptop | fastest to hack, offline, on-site demo — laptop must stay awake |
+| **Hosted** ([room-os-live.vercel.app](https://room-os-live.vercel.app)) | **fully reactive** — Convex WebSocket subscriptions (`useQuery`), zero polling | **Convex prod** (state + LLM/TTS actions + audio storage) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
 
-The same frontend serves both — only `VITE_LIVE_BASE` differs (empty = local Node; the Convex `.site` URL = hosted). See [Convex architecture](#convex--the-cloud-room-ledger) below.
+The same frontend serves both — transport is selected at build time ([`roomClient.ts`](src/client/live/roomClient.ts)):
+`VITE_CONVEX_URL` set → the reactive Convex client (`useConvexRoom`); unset → the HTTP client
+against the local Node server. See [Convex architecture](#convex--the-cloud-room-ledger) below.
 
 ---
 
@@ -71,24 +73,47 @@ action   = nondeterministic work: LLM / STT / TTS, commits      (runTurn, stepOn
 ```
  Laptop browser (Ada)                     iPhone browser (Ben)     ← both are just clients;
    create / join / step / run                join via QR             either can sleep
-        │  fetch  https://…convex.site/live/*   │  (poll snapshots)
+        │ useQuery(watchRoom) — WebSocket        │ (reactive subscription,
+        │ useMutation / useAction                │  zero polling)
         └─────────────────────┬──────────────────┘
                               ▼
  ┌──────────────────────────  CONVEX  ──────────────────────────┐
- │ http.ts     mirrors /live/* (+CORS, audio from storage)      │
  │ queries     watchRoom · listTraces        (reactive)         │
  │ mutations   reducer: floor / loop-guard / commit (bounded)   │
  │ actions     runTurn → OpenAI LLM + TTS → ctx.storage → commit│
  │ scheduler   ctx.scheduler hops (runToken cancels stale)      │
- │ storage     TTS mp3                                          │
+ │ storage     TTS mp3 (served by direct storage URLs)          │
+ │ http.ts     /live/* bridge (+CORS) for non-React clients     │
  └──────────────────────────────────────────────────────────────┘
 ```
+
+The hosted client subscribes with `useQuery(api.rooms.watchRoom)` — every server-side mutation
+pushes the new snapshot to all devices over Convex's WebSocket. Measured on the deployed app:
+**0 polling requests** across a full multi-turn run. The `http.ts` bridge stays for curl/scripts
+and non-React clients.
 
 Corrections baked in vs. a naive sketch: `commitAgentTurn` **advances state** (not just logs);
 `traces`/`utterances` are **bounded** (agents amplify unbounded tables fast); auto-run is a
 **durable scheduler hop chain** (pausable/restart-safe), not an in-action loop; TTS mp3 lives in
 **Convex storage**; coordination stays in **mutations** so a slow/verbose model can't corrupt the
-room. Backend in [`convex/`](convex/); deploy with `npx convex deploy` + `vercel deploy`.
+room.
+
+### Deploying your own
+
+```bash
+# 1. Convex backend (dev for iteration, deploy for prod)
+npx convex dev --once          # provision/push to your dev deployment
+npx convex env set OPENAI_API_KEY <key>            # dev
+npx convex deploy -y                                # push to PROD
+npx convex env set OPENAI_API_KEY <key> --prod      # prod
+
+# 2. Frontend → Vercel, pointed at the prod deployment
+VITE_CONVEX_URL="https://<prod>.convex.cloud" \
+VITE_LIVE_BASE="https://<prod>.convex.site" \
+npx vite build --outDir ../../room-os-live --emptyOutDir
+# add vercel.json (SPA rewrite) to the output dir, then:
+cd room-os-live && vercel deploy --prod --yes
+```
 
 Requires a gitignored `.env.local` with `OPENAI_API_KEY` (and optionally `ELEVENLABS_API_KEY`),
 plus [`cloudflared`](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).

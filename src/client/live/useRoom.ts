@@ -18,6 +18,8 @@ export interface RoomUtterance {
   speechAct: string;
   ts: number;
   audioId?: string;
+  /** Direct audio URL (Convex storage). HTTP mode uses /live/audio/:audioId instead. */
+  audioUrl?: string;
 }
 export interface RouterModel {
   id: string;

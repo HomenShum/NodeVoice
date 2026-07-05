@@ -24,8 +24,6 @@ Thumbs.db
 .cache/
 coverage/
 
-# convex generated
-convex/_generated/
 
 dist-vercel/
 
