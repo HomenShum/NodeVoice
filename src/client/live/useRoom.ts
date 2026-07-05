@@ -118,7 +118,9 @@ export function useRoom() {
       drainQueue();
     };
     el.play().catch(() => {
+      // autoplay rejection must not stall the rest of the queue
       playingRef.current = false;
+      drainQueue();
     });
   }, []);
 
@@ -172,8 +174,8 @@ export function useRoom() {
         } else {
           for (const u of r.utterances) {
             if (u.audioId && rememberAudio(u.audioId)) {
-              const forMe = playAllRef.current || u.slot === mySlotRef.current;
-              if (forMe) enqueueAudio(u.audioId);
+              const forMe = playAllRef.current || u.slot === mySlotRef.current || mySlotRef.current === "spectator";
+              if (forMe && (u.slot === "a" || u.slot === "b")) enqueueAudio(u.audioId);
             }
           }
         }
@@ -236,7 +238,7 @@ export function useRoom() {
         setRoom((prev) => (prev && !prev.utterances.some((x) => x.id === u.id) ? { ...prev, utterances: [...prev.utterances, u] } : prev));
       } else if (msg.type === "speak" && msg.audioId) {
         if (rememberAudio(msg.audioId)) {
-          const forMe = playAllRef.current || msg.slot === mySlotRef.current;
+          const forMe = playAllRef.current || msg.slot === mySlotRef.current || mySlotRef.current === "spectator";
           if (forMe) enqueueAudio(msg.audioId);
         }
       }
@@ -311,10 +313,23 @@ export function useRoom() {
     if (room && text.trim()) void post(`/live/rooms/${room.id}/human`, { text: text.trim() }).catch((e) => setError(String(e)));
   }, [room]);
 
+  // Synchronous guards: `recording` state is set after an await, so quick
+  // tap-release / double-tap would otherwise leave a hot mic running.
+  const talkBusyRef = React.useRef(false);
+  const pressActiveRef = React.useRef(false);
+
   const beginTalk = React.useCallback(async () => {
-    if (!room || recording) return;
+    if (!room || talkBusyRef.current) return;
+    talkBusyRef.current = true;
+    pressActiveRef.current = true;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (!pressActiveRef.current) {
+        // released while the mic was warming up — never start recording
+        stream.getTracks().forEach((t) => t.stop());
+        talkBusyRef.current = false;
+        return;
+      }
       const mime = pickRecorderMime();
       const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
       chunksRef.current = [];
@@ -323,6 +338,7 @@ export function useRoom() {
       };
       rec.onstop = async () => {
         stream.getTracks().forEach((t) => t.stop());
+        talkBusyRef.current = false;
         const blob = new Blob(chunksRef.current, { type: rec.mimeType || "audio/webm" });
         if (blob.size < 800) return; // ignore accidental taps
         try {
@@ -340,11 +356,13 @@ export function useRoom() {
       rec.start();
       setRecording(true);
     } catch (e) {
+      talkBusyRef.current = false;
       setError(`Mic unavailable: ${String(e)}`);
     }
-  }, [room, recording]);
+  }, [room]);
 
   const endTalk = React.useCallback(() => {
+    pressActiveRef.current = false;
     const rec = recorderRef.current;
     if (rec && rec.state !== "inactive") rec.stop();
     setRecording(false);

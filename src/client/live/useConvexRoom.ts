@@ -18,9 +18,25 @@ export function useConvexRoom() {
   const [recording, setRecording] = React.useState(false);
   const [playAll, setPlayAll] = React.useState(false);
 
+  // Seed snapshot bridges the gap between create/join resolving and the first
+  // reactive snapshot arriving, so the UI never flashes back to the lobby.
+  const [seedRoom, setSeedRoom] = React.useState<PublicRoom | null>(null);
   const snapshot = useQuery(api.rooms.watchRoom, roomId ? { roomId } : "skip");
-  const room = (snapshot ?? null) as PublicRoom | null;
-  const connected = roomId != null && snapshot !== undefined;
+  const room = ((snapshot ?? seedRoom) ?? null) as PublicRoom | null;
+
+  // Honest connectivity: reflect the actual WebSocket, not just "we ever got data".
+  const [wsOk, setWsOk] = React.useState(true);
+  React.useEffect(() => {
+    const iv = setInterval(() => {
+      try {
+        setWsOk(convex.connectionState().isWebSocketConnected);
+      } catch {
+        /* keep last value */
+      }
+    }, 2000);
+    return () => clearInterval(iv);
+  }, [convex]);
+  const connected = roomId != null && (snapshot !== undefined || seedRoom !== null) && wsOk;
 
   const createRoomMut = useMutation(api.rooms.createRoom);
   const joinRoomMut = useMutation(api.rooms.joinRoom);
@@ -66,7 +82,9 @@ export function useConvexRoom() {
       drainQueue();
     };
     el.play().catch(() => {
+      // autoplay rejection must not stall the rest of the queue
       playingRef.current = false;
+      drainQueue();
     });
   }, []);
 
@@ -87,8 +105,11 @@ export function useConvexRoom() {
         const first = seenRef.current.values().next().value as string | undefined;
         if (first) seenRef.current.delete(first);
       }
+      // spectators ("Watch — listen only") hear every agent; a device voicing
+      // a slot hears its own agent unless "hear both" is on
       const url = u.audioUrl;
-      if (url && (playAllRef.current || u.slot === mySlotRef.current)) {
+      const forMe = playAllRef.current || u.slot === mySlotRef.current || mySlotRef.current === "spectator";
+      if (url && forMe && (u.slot === "a" || u.slot === "b")) {
         queueRef.current.push(url);
         drainQueue();
       }
@@ -112,6 +133,9 @@ export function useConvexRoom() {
       try {
         const id = await createRoomMut({ goal, model });
         await joinRoomMut({ roomId: id, slot: "a", kind: "creator" });
+        // seed so the UI switches to the room immediately (no lobby flash)
+        const snap = (await convex.query(api.rooms.watchRoom, { roomId: id })) as PublicRoom | null;
+        setSeedRoom(snap);
         setMySlot("a");
         setRoomId(id);
         return id as string;
@@ -120,7 +144,7 @@ export function useConvexRoom() {
         return null;
       }
     },
-    [createRoomMut, joinRoomMut],
+    [convex, createRoomMut, joinRoomMut],
   );
 
   const joinRoom = React.useCallback(
@@ -129,9 +153,10 @@ export function useConvexRoom() {
       try {
         const rid = id as Id<"rooms">;
         // validate the id before subscribing (throws on bad/unknown id)
-        const snap = await convex.query(api.rooms.watchRoom, { roomId: rid });
+        const snap = (await convex.query(api.rooms.watchRoom, { roomId: rid })) as PublicRoom | null;
         if (!snap) throw new Error("room not found");
         await joinRoomMut({ roomId: rid, slot: slot === "a" || slot === "b" ? slot : "spectator" });
+        setSeedRoom(snap);
         setMySlot(slot);
         setRoomId(rid);
         return true;
@@ -175,10 +200,23 @@ export function useConvexRoom() {
     [roomId, submitHumanMut],
   );
 
+  // Synchronous guards: `recording` state is set after an await, so quick
+  // tap-release / double-tap would otherwise leave a hot mic running.
+  const talkBusyRef = React.useRef(false);
+  const pressActiveRef = React.useRef(false);
+
   const beginTalk = React.useCallback(async () => {
-    if (!roomId || recording) return;
+    if (!roomId || talkBusyRef.current) return;
+    talkBusyRef.current = true;
+    pressActiveRef.current = true;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (!pressActiveRef.current) {
+        // released while the mic was warming up — never start recording
+        stream.getTracks().forEach((t) => t.stop());
+        talkBusyRef.current = false;
+        return;
+      }
       const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"];
       const mime = candidates.find((c) => typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported?.(c)) ?? "";
       const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
@@ -188,8 +226,13 @@ export function useConvexRoom() {
       };
       rec.onstop = async () => {
         stream.getTracks().forEach((t) => t.stop());
+        talkBusyRef.current = false;
         const blob = new Blob(chunksRef.current, { type: rec.mimeType || "audio/webm" });
         if (blob.size < 800) return; // ignore accidental taps
+        if (blob.size > 8 * 1024 * 1024) {
+          setError("Clip too long — keep steers under a couple of minutes.");
+          return;
+        }
         try {
           const audioBase64 = await new Promise<string>((res, rej) => {
             const fr = new FileReader();
@@ -197,7 +240,8 @@ export function useConvexRoom() {
             fr.onerror = () => rej(fr.error);
             fr.readAsDataURL(blob);
           });
-          await transcribeAction({ roomId, audioBase64, mime: rec.mimeType || "audio/webm" });
+          const out = await transcribeAction({ roomId, audioBase64, mime: rec.mimeType || "audio/webm" });
+          if (!out?.text) setError("Didn't catch that — hold the mic and speak clearly.");
         } catch (e) {
           setError(`transcription failed: ${String(e).slice(0, 160)}`);
         }
@@ -206,11 +250,13 @@ export function useConvexRoom() {
       rec.start();
       setRecording(true);
     } catch (e) {
+      talkBusyRef.current = false;
       setError(`Mic unavailable: ${String(e).slice(0, 160)}`);
     }
-  }, [roomId, recording, transcribeAction]);
+  }, [roomId, transcribeAction]);
 
   const endTalk = React.useCallback(() => {
+    pressActiveRef.current = false;
     const rec = recorderRef.current;
     if (rec && rec.state !== "inactive") rec.stop();
     setRecording(false);

@@ -19,7 +19,17 @@ async function insertTrace(ctx: MutationCtx, roomId: Id<"rooms">, kind: string, 
 async function boundUtterances(ctx: MutationCtx, roomId: Id<"rooms">) {
   const all = await ctx.db.query("utterances").withIndex("by_room", (q) => q.eq("roomId", roomId)).collect();
   if (all.length > MAX_UTTERANCES) {
-    for (const u of all.slice(0, all.length - MAX_UTTERANCES)) await ctx.db.delete(u._id);
+    for (const u of all.slice(0, all.length - MAX_UTTERANCES)) {
+      // free the TTS blob too — evicting only the row leaks file storage
+      if (u.audioId) {
+        try {
+          await ctx.storage.delete(u.audioId);
+        } catch {
+          /* already gone */
+        }
+      }
+      await ctx.db.delete(u._id);
+    }
   }
 }
 
@@ -155,19 +165,28 @@ export const setRunning = mutation({
   handler: async (ctx, args) => {
     const room = await ctx.db.get(args.roomId);
     if (!room) return;
-    const token = room.runToken + 1;
     if (args.running) {
+      // idempotent: a second Start (double-click, second device) must not
+      // spawn a parallel hop chain
+      if (room.running) return;
+      const token = room.runToken + 1;
       await ctx.db.patch(args.roomId, { running: true, done: false, runToken: token, updatedAt: Date.now() });
       await insertTrace(ctx, args.roomId, "scheduler_selected", "Auto-run started.", { floorOwner: room.floorOwner });
       await ctx.scheduler.runAfter(0, internal.coordinator.runTurn, { roomId: args.roomId, token });
     } else {
+      if (!room.running) return;
       // bump the token so any in-flight scheduled hop no-ops
-      await ctx.db.patch(args.roomId, { running: false, runToken: token, updatedAt: Date.now() });
+      await ctx.db.patch(args.roomId, { running: false, runToken: room.runToken + 1, updatedAt: Date.now() });
     }
   },
 });
 
-/** The reducer: append the agent's turn and advance the room. Called by the action. */
+/**
+ * The reducer: append the agent's turn and advance the room. Called by the
+ * action AFTER seconds of non-transactional LLM/TTS work, so it re-validates
+ * everything here — a stale hop (paused, superseded token, lost floor) must
+ * never commit. Returns { committed } so the caller can stop its chain.
+ */
 export const commitAgentTurn = internalMutation({
   args: {
     roomId: v.id("rooms"),
@@ -176,10 +195,36 @@ export const commitAgentTurn = internalMutation({
     speechAct: v.string(),
     done: v.boolean(),
     audioId: v.optional(v.id("_storage")),
+    /** auto-run hop token; omitted for manual stepOnce */
+    token: v.optional(v.number()),
+    /** the pendingHuman value this turn actually incorporated (if any) */
+    consumedHuman: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ committed: boolean; reason?: string }> => {
     const room = await ctx.db.get(args.roomId);
-    if (!room) return;
+    if (!room) return { committed: false, reason: "room gone" };
+    // stale-hop guards: floor must still be ours; auto-run hops must still
+    // hold the current token on a running room
+    if (room.floorOwner !== args.slot) {
+      if (args.audioId) {
+        try {
+          await ctx.storage.delete(args.audioId);
+        } catch {
+          /* ignore */
+        }
+      }
+      return { committed: false, reason: "lost floor" };
+    }
+    if (args.token !== undefined && (!room.running || room.runToken !== args.token)) {
+      if (args.audioId) {
+        try {
+          await ctx.storage.delete(args.audioId);
+        } catch {
+          /* ignore */
+        }
+      }
+      return { committed: false, reason: "stale token / paused" };
+    }
     const name = AGENTS[args.slot].name;
 
     await ctx.db.insert("utterances", {
@@ -202,7 +247,9 @@ export const commitAgentTurn = internalMutation({
       loopRisk,
       floorOwner: next,
       done: room.done || args.done,
-      pendingHuman: undefined,
+      // only clear the steer this turn actually consumed — a steer submitted
+      // mid-flight survives for the next turn
+      ...(room.pendingHuman !== undefined && room.pendingHuman === args.consumedHuman ? { pendingHuman: undefined } : {}),
       updatedAt: Date.now(),
     });
 
@@ -212,6 +259,26 @@ export const commitAgentTurn = internalMutation({
     await insertTrace(ctx, args.roomId, "state_reduced", `${name} took the floor turn ${room.turn + 1}.`, { speechAct: args.speechAct, done: args.done });
     await insertTrace(ctx, args.roomId, "scheduler_selected", `${AGENTS[next].name} owns the next floor.`, { floorOwner: next, loopRisk });
     await boundUtterances(ctx, args.roomId);
+    return { committed: true };
+  },
+});
+
+/** Auto-run hop failed (LLM/TTS error): surface it and stop honestly. */
+export const markRunFailed = internalMutation({
+  args: { roomId: v.id("rooms"), token: v.number(), error: v.string() },
+  handler: async (ctx, args) => {
+    const room = await ctx.db.get(args.roomId);
+    if (!room || room.runToken !== args.token) return; // a newer run owns the room
+    await ctx.db.insert("utterances", {
+      roomId: args.roomId,
+      slot: "system",
+      name: "system",
+      text: `turn failed: ${args.error.slice(0, 140)}`,
+      speechAct: "error",
+      createdAt: Date.now(),
+    });
+    await ctx.db.patch(args.roomId, { running: false, runToken: room.runToken + 1, updatedAt: Date.now() });
+    await insertTrace(ctx, args.roomId, "guardrail_evaluated", "Auto-run halted on error.", { error: args.error.slice(0, 140) });
   },
 });
 
