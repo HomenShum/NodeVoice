@@ -12,6 +12,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { generateAgentTurn, synthesizeSpeech, transcribeAudio, ROUTER_MODELS, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
+import { deriveCountTask, deriveGoalOverrideFromHuman, type LiveCountTask } from "./steering.js";
 
 function validModel(m?: string): string {
   return m && ROUTER_MODELS.some((x) => x.id === m) ? m : DEFAULT_LLM_MODEL;
@@ -63,12 +64,16 @@ interface Utterance {
 interface RoomState {
   goal: string;
   model: string;
+  /** private = unlisted from the lobby; joinable only via link/QR/code */
+  private: boolean;
   floorOwner: Slot;
   turn: number;
   running: boolean;
   done: boolean;
   loopRisk: boolean;
   recentActs: string[];
+  countTarget?: number;
+  countNext?: number;
 }
 
 /** One entry in the proof layer — mirrors the Convex `traces` table shape. */
@@ -102,7 +107,7 @@ const MAX_UTTERANCES = 300;
 const MAX_TRACES = 60;
 const MAX_AUDIO_PER_ROOM = 60;
 const MAX_SSE_PER_ROOM = 30;
-const MAX_RUN_TURNS = 40;
+const MAX_RUN_TURNS = 140;
 const ROOM_TTL_MS = 2 * 60 * 60 * 1000;
 const MAX_BODY_BYTES = 20 * 1024 * 1024;
 
@@ -129,14 +134,47 @@ function evictIfNeeded() {
   }
 }
 
-function createRoom(goal: string, model?: string): Room {
+function applyGoal(room: Room, goal: string) {
+  const task = deriveCountTask(goal);
+  room.state.goal = goal;
+  room.state.done = false;
+  room.state.loopRisk = false;
+  room.state.recentActs = [];
+  if (task) {
+    room.state.countTarget = task.target;
+    room.state.countNext = task.next;
+  } else {
+    delete room.state.countTarget;
+    delete room.state.countNext;
+  }
+}
+
+function currentCountTask(room: Room): LiveCountTask | null {
+  if (typeof room.state.countTarget !== "number" || typeof room.state.countNext !== "number") return null;
+  return { kind: "count_to_n", target: room.state.countTarget, next: room.state.countNext };
+}
+
+function createRoom(goal: string, model?: string, isPrivate?: boolean): Room {
   evictIfNeeded();
   const id = shortId();
+  const initialGoal = goal || DEFAULT_GOAL;
+  const countTask = deriveCountTask(initialGoal);
   const room: Room = {
     id,
     createdAt: Date.now(),
     lastActivity: Date.now(),
-    state: { goal: goal || DEFAULT_GOAL, model: validModel(model), floorOwner: "a", turn: 0, running: false, done: false, loopRisk: false, recentActs: [] },
+    state: {
+      goal: initialGoal,
+      model: validModel(model),
+      private: isPrivate === true,
+      floorOwner: "a",
+      turn: 0,
+      running: false,
+      done: false,
+      loopRisk: false,
+      recentActs: [],
+      ...(countTask ? { countTarget: countTask.target, countNext: countTask.next } : {}),
+    },
     utterances: [],
     traces: [],
     audio: new Map(),
@@ -166,6 +204,7 @@ function publicRoom(room: Room) {
   return {
     id: room.id,
     code: room.id, // node room ids are already short + human-typeable
+    private: room.state.private,
     agents: {
       a: pickAgent(AGENTS.a),
       b: pickAgent(AGENTS.b),
@@ -181,6 +220,15 @@ function publicRoom(room: Room) {
       loopRisk: room.state.loopRisk,
       nextRequiredAct: "task_action",
       suppressAcknowledgements: true,
+      task:
+        typeof room.state.countTarget === "number" && typeof room.state.countNext === "number"
+          ? {
+              kind: "count_to_n" as const,
+              target: room.state.countTarget,
+              next: room.state.countNext,
+              completed: room.state.done && room.state.countNext >= room.state.countTarget,
+            }
+          : null,
     },
     models: ROUTER_MODELS,
     participants: [...room.participants.values()].map((p) => ({ slot: p.slot, kind: p.kind })),
@@ -236,11 +284,13 @@ function storeAudio(room: Room, mime: string, buf: Buffer): string {
 async function runOneTurn(room: Room, slot: Slot): Promise<AgentTurnOutcome> {
   const agent = AGENTS[slot];
   const other = AGENTS[slot === "a" ? "b" : "a"];
+  const goalAtStart = room.state.goal;
   const humanNote = room.pendingHuman ?? undefined;
+  const countTask = currentCountTask(room);
   room.pendingHuman = null;
 
   const turn = await generateAgentTurn({
-    goal: room.state.goal,
+    goal: goalAtStart,
     persona: agent.persona,
     selfName: agent.name,
     otherName: other.name,
@@ -248,6 +298,7 @@ async function runOneTurn(room: Room, slot: Slot): Promise<AgentTurnOutcome> {
     humanNote,
     recentActs: room.state.recentActs,
     model: room.state.model,
+    countTask,
   });
 
   let audioId: string | undefined;
@@ -275,12 +326,21 @@ async function runOneTurn(room: Room, slot: Slot): Promise<AgentTurnOutcome> {
   room.state.recentActs = [...room.state.recentActs, turn.speechAct].slice(-4);
   room.state.loopRisk = room.state.recentActs.slice(-2).every((a) => a === "backchannel");
   room.state.floorOwner = slot === "a" ? "b" : "a";
-  if (turn.done) room.state.done = true;
+  const goalUnchanged = room.state.goal === goalAtStart;
+  const effectiveDone = goalUnchanged && turn.done;
+  if (goalUnchanged && countTask) {
+    room.state.countNext = Math.min(countTask.next + 1, countTask.target);
+  }
+  if (effectiveDone) room.state.done = true;
 
   if (turn.speechAct === "backchannel") {
     pushTrace(room, "guardrail_evaluated", "Backchannel — not counted as progress.", { text: turn.text });
   }
-  pushTrace(room, "state_reduced", `${agent.name} took the floor turn ${room.state.turn}.`, { speechAct: turn.speechAct, done: turn.done });
+  pushTrace(room, "state_reduced", `${agent.name} took the floor turn ${room.state.turn}.`, {
+    speechAct: turn.speechAct,
+    done: effectiveDone,
+    task: goalUnchanged ? countTask : null,
+  });
   pushTrace(room, "scheduler_selected", `${AGENTS[room.state.floorOwner].name} owns the next floor.`, {
     floorOwner: room.state.floorOwner,
     loopRisk: room.state.loopRisk,
@@ -376,8 +436,8 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
 
   // POST /live/rooms
   if (method === "POST" && path === "/live/rooms") {
-    const body = await readJson<{ goal?: string; model?: string }>(req);
-    const room = createRoom((body.goal ?? "").trim(), body.model);
+    const body = await readJson<{ goal?: string; model?: string; private?: boolean }>(req);
+    const room = createRoom((body.goal ?? "").trim(), body.model, body.private === true);
     json(res, 200, { ok: true, roomId: room.id, room: publicRoom(room) });
     return true;
   }
@@ -386,7 +446,7 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
   if (method === "GET" && path === "/live/rooms") {
     const cutoff = Date.now() - 60 * 60 * 1000;
     const rooms = [...ROOMS.values()]
-      .filter((r) => r.lastActivity > cutoff)
+      .filter((r) => r.lastActivity > cutoff && !r.state.private)
       .sort((a, b) => b.lastActivity - a.lastActivity)
       .slice(0, 8)
       .map((r) => ({
@@ -496,7 +556,8 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
   if (method === "POST" && sub === "goal") {
     const body = await readJson<{ goal?: string }>(req);
     if (body.goal && body.goal.trim()) {
-      room.state.goal = body.goal.trim().slice(0, 400);
+      applyGoal(room, body.goal.trim().slice(0, 400));
+      pushTrace(room, "state_reduced", "Goal updated.", { goal: room.state.goal, task: currentCountTask(room) });
       broadcastState(room);
     }
     json(res, 200, { ok: true, room: publicRoom(room) });
@@ -559,13 +620,19 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
       json(res, 400, { ok: false, error: "empty utterance" });
       return true;
     }
-    room.pendingHuman = text.slice(0, 400);
-    pushTrace(room, "utterance_received", `you steered: ${text.slice(0, 80)}`, { text: text.slice(0, 400) });
+    const clipped = text.slice(0, 400);
+    const goalOverride = deriveGoalOverrideFromHuman(clipped);
+    if (goalOverride) {
+      applyGoal(room, goalOverride);
+      pushTrace(room, "state_reduced", "Human retargeted the room goal.", { goal: room.state.goal, task: currentCountTask(room) });
+    }
+    room.pendingHuman = clipped;
+    pushTrace(room, "utterance_received", `you steered: ${text.slice(0, 80)}`, { text: clipped, goalOverride });
     pushUtterance(room, {
       id: randomUUID().slice(0, 10),
       slot: "human",
       name: "you",
-      text: text.slice(0, 400),
+      text: clipped,
       speechAct: "steer",
       ts: Date.now(),
     });

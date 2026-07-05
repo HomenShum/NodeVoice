@@ -5,6 +5,8 @@
  * response bodies are size-capped.
  */
 
+import { coerceCountTurn, type LiveCountTask } from "./steering.js";
+
 const OPENAI = "https://api.openai.com/v1";
 const ELEVEN = "https://api.elevenlabs.io/v1";
 
@@ -33,6 +35,7 @@ export interface AgentTurnInput {
   humanNote?: string;
   recentActs: string[];
   model?: string;
+  countTask?: LiveCountTask | null;
 }
 
 /** Curated router models (backed by scripts/model-eval.mjs measurements). */
@@ -104,6 +107,10 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
     `You are ${input.selfName}, one of two voice agents collaborating out loud in a shared room with ${input.otherName}.`,
     `Persona: ${input.persona}`,
     `Shared goal: ${input.goal}`,
+    input.countTask
+      ? `Active count task: next=${input.countTask.next}, target=${input.countTask.target}. Say exactly the next number and no commentary. Set done=true only when you say the target.`
+      : ``,
+    input.humanNote ? `The latest human steer supersedes earlier transcript turns if they conflict.` : ``,
     ``,
     `Rules of the room (a server-authoritative scheduler enforces turn-taking, you just speak your turn):`,
     `- Say ONE short spoken turn (1-2 sentences, conversational, no lists, no markdown). It will be read aloud by TTS.`,
@@ -152,9 +159,10 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
       parsed = { text: raw.slice(0, 240), speechAct: "task_action", done: false };
     }
     const text = (parsed.text ?? "").toString().trim().slice(0, 400) || "…";
-    const speechAct =
+    const speechAct: AgentTurnResult["speechAct"] =
       parsed.speechAct === "backchannel" || parsed.speechAct === "question" ? parsed.speechAct : "task_action";
-    return { text, speechAct, done: Boolean(parsed.done) };
+    const turn: AgentTurnResult = { text, speechAct, done: Boolean(parsed.done) };
+    return input.countTask ? coerceCountTurn(turn, input.countTask) : turn;
   });
 }
 

@@ -2,7 +2,7 @@
 import { v } from "convex/values";
 import { internalAction, action } from "./_generated/server";
 import { internal, api } from "./_generated/api";
-import { AGENTS, other, estimateSpeechMs, type Slot } from "./shared";
+import { AGENTS, other, estimateSpeechMs, type CountTask, type Slot } from "./shared";
 import { generateAgentTurn, synthesizeSpeech, transcribeAudio } from "./openai";
 import type { Id } from "./_generated/dataModel";
 
@@ -22,6 +22,10 @@ async function produceTurn(
   const snapshot = await ctx.runQuery(api.rooms.watchRoom, { roomId });
   const transcript = (snapshot?.utterances ?? []).map((u: any) => ({ name: u.name, text: u.text }));
   const consumedHuman: string | undefined = room.pendingHuman ?? undefined;
+  const countTask: CountTask | null =
+    typeof room.countTarget === "number" && typeof room.countNext === "number"
+      ? { kind: "count_to_n", target: room.countTarget, next: room.countNext }
+      : null;
 
   const turn = await generateAgentTurn({
     goal: room.goal,
@@ -32,6 +36,7 @@ async function produceTurn(
     transcript,
     humanNote: consumedHuman,
     recentActs: room.recentActs ?? [],
+    countTask,
   });
 
   let audioId: Id<"_storage"> | undefined;
@@ -48,9 +53,12 @@ async function produceTurn(
     text: turn.text,
     speechAct: turn.speechAct,
     done: turn.done,
+    goal: room.goal,
     audioId,
     token,
     consumedHuman,
+    countTarget: countTask?.target,
+    countNext: countTask?.next,
   });
   return { done: turn.done, text: turn.text, committed: Boolean(res?.committed) };
 }

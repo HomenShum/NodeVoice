@@ -19,8 +19,8 @@ const json = (body: unknown, status = 200) =>
 const preflight = httpAction(async () => new Response(null, { status: 204, headers: CORS }));
 
 const create = httpAction(async (ctx, req) => {
-  const body = (await req.json().catch(() => ({}))) as { goal?: string; model?: string };
-  const roomId = await ctx.runMutation(api.rooms.createRoom, { goal: body.goal, model: body.model });
+  const body = (await req.json().catch(() => ({}))) as { goal?: string; model?: string; private?: boolean };
+  const roomId = await ctx.runMutation(api.rooms.createRoom, { goal: body.goal, model: body.model, private: body.private === true });
   const room = await ctx.runQuery(api.rooms.watchRoom, { roomId });
   return json({ ok: true, roomId, room });
 });

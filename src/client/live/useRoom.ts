@@ -48,6 +48,8 @@ export interface ActiveRoom {
 export interface PublicRoom {
   id: string;
   code?: string;
+  /** unlisted from the lobby; joinable only via link/QR/code */
+  private?: boolean;
   agents: { a: RoomAgent; b: RoomAgent };
   state: {
     goal: string;
@@ -60,6 +62,7 @@ export interface PublicRoom {
     loopRisk: boolean;
     nextRequiredAct: string;
     suppressAcknowledgements: boolean;
+    task?: { kind: "count_to_n"; target: number; next: number; completed: boolean } | null;
   };
   models: RouterModel[];
   participants: { slot: string; kind: string }[];
@@ -309,10 +312,10 @@ export function useRoom() {
     el.currentTime = 0;
   }, []);
 
-  const createRoom = React.useCallback(async (goal: string, model?: string) => {
+  const createRoom = React.useCallback(async (goal: string, model?: string, isPrivate?: boolean) => {
     setError(null);
     try {
-      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal, model });
+      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal, model, private: isPrivate === true });
       await post(`/live/rooms/${r.roomId}/join`, { slot: "a", kind: "creator" });
       setMySlot("a");
       setRoom(r.room);

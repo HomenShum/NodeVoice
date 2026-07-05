@@ -16,6 +16,8 @@ export default defineSchema({
     model: v.string(),
     // short human-typeable join code (optional: pre-migration rooms lack it)
     code: v.optional(v.string()),
+    // private = unlisted from the lobby; joinable only via link/QR/code
+    private: v.optional(v.boolean()),
     floorOwner: v.union(v.literal("a"), v.literal("b")),
     turn: v.number(),
     running: v.boolean(),
@@ -23,6 +25,8 @@ export default defineSchema({
     loopRisk: v.boolean(),
     recentActs: v.array(v.string()),
     pendingHuman: v.optional(v.string()),
+    countTarget: v.optional(v.number()),
+    countNext: v.optional(v.number()),
     // bumped by setRunning to cancel stale scheduler hops (durable auto-run)
     runToken: v.number(),
     createdAt: v.number(),

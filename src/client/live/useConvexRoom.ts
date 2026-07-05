@@ -134,10 +134,10 @@ export function useConvexRoom() {
   }, []);
 
   const createRoom = React.useCallback(
-    async (goal: string, model?: string) => {
+    async (goal: string, model?: string, isPrivate?: boolean) => {
       setError(null);
       try {
-        const id = await createRoomMut({ goal, model });
+        const id = await createRoomMut({ goal, model, private: isPrivate === true });
         await joinRoomMut({ roomId: id, slot: "a", kind: "creator" });
         // seed so the UI switches to the room immediately (no lobby flash)
         const snap = (await convex.query(api.rooms.watchRoom, { roomId: id })) as PublicRoom | null;

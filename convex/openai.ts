@@ -2,6 +2,8 @@
  * OpenAI pipeline helpers for Convex actions. Keys come from Convex env
  * (`npx convex env set OPENAI_API_KEY …`) and never reach the client.
  */
+import { coerceCountTurn, type CountTask } from "./shared";
+
 const OPENAI = "https://api.openai.com/v1";
 const STT_MODEL = "whisper-1";
 const OPENAI_TTS_MODEL = "gpt-4o-mini-tts";
@@ -22,6 +24,7 @@ export interface TurnInput {
   transcript: { name: string; text: string }[];
   humanNote?: string;
   recentActs: string[];
+  countTask?: CountTask | null;
 }
 
 export interface TurnResult {
@@ -36,6 +39,10 @@ export async function generateAgentTurn(input: TurnInput): Promise<TurnResult> {
     `You are ${input.selfName}, one of two voice agents collaborating out loud with ${input.otherName}.`,
     `Persona: ${input.persona}`,
     `Shared goal: ${input.goal}`,
+    input.countTask
+      ? `Active count task: next=${input.countTask.next}, target=${input.countTask.target}. Say exactly the next number and no commentary. Set done=true only when you say the target.`
+      : ``,
+    input.humanNote ? `The latest human steer supersedes earlier transcript turns if they conflict.` : ``,
     `Say ONE short spoken turn (1-2 sentences, conversational, no lists/markdown), read aloud by TTS.`,
     `Make concrete progress; build on ${input.otherName}; never produce an empty acknowledgement.`,
     forceAction ? `The last turns were low-content acknowledgements — you MUST take a substantive task_action now.` : ``,
@@ -74,8 +81,9 @@ export async function generateAgentTurn(input: TurnInput): Promise<TurnResult> {
       parsed = { text: "…", speechAct: "task_action", done: false };
     }
     const text = (parsed.text ?? "").toString().trim().slice(0, 400) || "…";
-    const speechAct = parsed.speechAct === "backchannel" || parsed.speechAct === "question" ? parsed.speechAct : "task_action";
-    return { text, speechAct, done: Boolean(parsed.done) };
+    const speechAct: TurnResult["speechAct"] = parsed.speechAct === "backchannel" || parsed.speechAct === "question" ? parsed.speechAct : "task_action";
+    const turn: TurnResult = { text, speechAct, done: Boolean(parsed.done) };
+    return input.countTask ? coerceCountTurn(turn, input.countTask) : turn;
   } finally {
     clearTimeout(t);
   }

@@ -16,6 +16,10 @@ import {
   Link as LinkIcon,
   ListTree,
   Loader,
+  Lock,
+  Globe,
+  Share2,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +82,7 @@ function Brand({ tag }: { tag: string }) {
 function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom: (id: string) => void }) {
   const [goal, setGoal] = React.useState(DEFAULT_GOAL);
   const [busy, setBusy] = React.useState(false);
+  const [isPrivate, setIsPrivate] = React.useState(false);
   const [joinCode, setJoinCode] = React.useState("");
   const [joinBusy, setJoinBusy] = React.useState(false);
   const [joinError, setJoinError] = React.useState<string | null>(null);
@@ -86,7 +91,7 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
   async function create() {
     setBusy(true);
     rm.unlockAudio();
-    await rm.createRoom(goal.trim() || DEFAULT_GOAL);
+    await rm.createRoom(goal.trim() || DEFAULT_GOAL, undefined, isPrivate);
     setBusy(false);
   }
 
@@ -129,6 +134,33 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             className="mt-1.5 w-full resize-none rounded-lg border border-border bg-input/70 px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
             placeholder="What should the agents work on together?"
           />
+
+          {/* visibility: public rooms appear in the lobby list; private are link/code-only */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isPrivate}
+            onClick={() => setIsPrivate((v) => !v)}
+            className={cn(
+              "mt-3 flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 text-left text-xs transition-colors",
+              isPrivate ? "border-warning/40 bg-warning/[0.06]" : "border-border bg-elevated/50 hover:border-border-strong",
+            )}
+          >
+            {isPrivate ? <Lock className="size-4 shrink-0 text-warning" /> : <Globe className="size-4 shrink-0 text-muted-foreground" />}
+            <span className="min-w-0 flex-1">
+              <span className={cn("block font-semibold", isPrivate ? "text-warning" : "text-foreground")}>
+                {isPrivate ? "Private room" : "Public room"}
+              </span>
+              <span className="block text-muted-foreground">
+                {isPrivate
+                  ? "Unlisted — people join only via your shared link, QR, or code."
+                  : "Listed in the lobby so anyone here can hop in."}
+              </span>
+            </span>
+            <span className={cn("relative h-4 w-7 shrink-0 rounded-full transition-colors", isPrivate ? "bg-warning" : "bg-muted")}>
+              <span className={cn("absolute top-0.5 size-3 rounded-full bg-white shadow transition-all", isPrivate ? "left-3.5" : "left-0.5")} />
+            </span>
+          </button>
 
           <div className="mt-5 flex items-center gap-3">
             <Button size="lg" onClick={create} disabled={busy} className="px-7">
@@ -332,8 +364,19 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
         <div className="flex shrink-0 flex-col items-center gap-3 border-b border-border bg-primary/[0.04] px-4 py-4 sm:flex-row sm:justify-center">
           <Qr value={joinUrl} size={148} />
           <div className="text-center sm:text-left">
-            <p className="text-sm font-semibold">Scan from your phone to add Ben</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Both devices join the same room. Keep them near each other to hear the conversation.</p>
+            <p className="flex items-center justify-center gap-2 text-sm font-semibold sm:justify-start">
+              Scan from your phone to add Ben
+              {room.private && (
+                <Badge variant="warning" className="gap-1">
+                  <Lock className="size-3" /> private
+                </Badge>
+              )}
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {room.private
+                ? "Unlisted room — only people with this link, QR, or code can join."
+                : "Both devices join the same room. Keep them near each other to hear the conversation."}
+            </p>
             {room.code && (
               <p className="mt-2 text-xs text-muted-foreground">
                 No camera? Open the site and type code{" "}
@@ -341,9 +384,9 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
                 under “Join a room”.
               </p>
             )}
-            <div className="mt-2 flex items-center justify-center gap-1.5 sm:justify-start">
-              <LinkIcon className="size-3.5 text-muted-foreground" />
-              <code className="rounded bg-elevated px-1.5 py-0.5 text-[11px] text-primary">{joinUrl}</code>
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <ShareInvite joinUrl={joinUrl} code={room.code} />
+              <code className="max-w-full truncate rounded bg-elevated px-1.5 py-0.5 text-[11px] text-primary">{joinUrl}</code>
             </div>
           </div>
         </div>
@@ -503,6 +546,42 @@ function UtteranceRow({ u, isFloor }: { u: RoomUtterance; isFloor: boolean }) {
   );
 }
 
+/**
+ * One-tap invite sharing: the native share sheet where it exists (iOS/Android
+ * — iMessage, WhatsApp, etc.), clipboard with visible confirmation elsewhere.
+ */
+function ShareInvite({ joinUrl, code }: { joinUrl: string; code?: string }) {
+  const [copied, setCopied] = React.useState(false);
+  const text = `Join my Room OS live room — two AI voice agents + you.${code ? ` Code: ${code}` : ""}`;
+
+  async function share() {
+    // prefer the native share sheet (mobile)
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: "Room OS · Live", text, url: joinUrl });
+        return;
+      } catch (e) {
+        if ((e as { name?: string })?.name === "AbortError") return; // user closed the sheet
+        /* fall through to clipboard */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(`${text}\n${joinUrl}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      /* clipboard blocked — the URL is rendered next to the button anyway */
+    }
+  }
+
+  return (
+    <Button variant="outline" size="xs" onClick={() => void share()}>
+      {copied ? <Check className="size-3.5 text-success" /> : <Share2 className="size-3.5" />}
+      {copied ? "Copied!" : "Share invite"}
+    </Button>
+  );
+}
+
 const TRACE_STYLE: Record<string, string> = {
   state_reduced: "border-success/30 bg-success/10 text-success",
   scheduler_selected: "border-sky-400/30 bg-sky-500/10 text-sky-300",
@@ -577,6 +656,7 @@ function RoomStateBar({ room }: { room: PublicRoom }) {
         {item("floor", room.agents[s.floorOwner]?.name ?? s.floorOwner, s.floorOwner)}
         {item("turn", s.turn)}
         {item("act", s.nextRequiredAct)}
+        {s.task?.kind === "count_to_n" && item("count", `${s.task.next}/${s.task.target}`)}
         {item("suppressAck", String(s.suppressAcknowledgements))}
         {item("loopRisk", String(s.loopRisk))}
         {item("done", String(s.done))}

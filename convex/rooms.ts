@@ -2,10 +2,11 @@ import { v } from "convex/values";
 import { query, mutation, internalQuery, internalMutation, type QueryCtx, type MutationCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
-import { AGENTS, ROUTER_MODELS, DEFAULT_GOAL, DEFAULT_MODEL, validModel, other, makeRoomCode, type Slot } from "./shared";
+import { AGENTS, ROUTER_MODELS, DEFAULT_GOAL, DEFAULT_MODEL, validModel, other, makeRoomCode, deriveCountTask, deriveGoalOverrideFromHuman, type CountTask, type Slot } from "./shared";
 
 const MAX_TRACES = 300;
 const MAX_UTTERANCES = 300;
+const MAX_AUTO_RUN_TURNS = 140;
 
 async function insertTrace(ctx: MutationCtx, roomId: Id<"rooms">, kind: string, summary: string, payload: unknown) {
   await ctx.db.insert("traces", { roomId, kind, summary, payload, createdAt: Date.now() });
@@ -38,6 +39,16 @@ function agentPublic(slot: Slot) {
   return { slot: a.slot, name: a.name, device: a.device, persona: a.persona, color: slot === "a" ? "sky" : "violet" };
 }
 
+function currentCountTask(room: { countTarget?: number; countNext?: number }): CountTask | null {
+  if (typeof room.countTarget !== "number" || typeof room.countNext !== "number") return null;
+  return { kind: "count_to_n", target: room.countTarget, next: room.countNext };
+}
+
+function countPatchForGoal(goal: string): { countTarget?: number; countNext?: number } {
+  const task = deriveCountTask(goal);
+  return task ? { countTarget: task.target, countNext: task.next } : { countTarget: undefined, countNext: undefined };
+}
+
 /** Shared serializer used by the reactive query and the HTTP bridge. */
 async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   const room = await ctx.db.get(roomId);
@@ -63,6 +74,7 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   return {
     id: room._id,
     code: room.code,
+    private: room.private === true,
     agents: { a: agentPublic("a"), b: agentPublic("b") },
     state: {
       goal: room.goal,
@@ -75,6 +87,15 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
       loopRisk: room.loopRisk,
       nextRequiredAct: "task_action",
       suppressAcknowledgements: true,
+      task:
+        typeof room.countTarget === "number" && typeof room.countNext === "number"
+          ? {
+              kind: "count_to_n" as const,
+              target: room.countTarget,
+              next: room.countNext,
+              completed: room.done && room.countNext >= room.countTarget,
+            }
+          : null,
     },
     models: ROUTER_MODELS,
     participants: participants.map((p) => ({ slot: p.slot, kind: p.kind })),
@@ -97,6 +118,8 @@ export const listActiveRooms = query({
     const rooms = await ctx.db
       .query("rooms")
       .withIndex("by_activity", (q) => q.gt("updatedAt", cutoff))
+      // private rooms are unlisted — joinable only via link/QR/code
+      .filter((q) => q.neq(q.field("private"), true))
       .order("desc")
       .take(8);
     return rooms.map((r) => ({
@@ -145,9 +168,11 @@ export const getRoomRaw = internalQuery({
 
 // ── mutations ─────────────────────────────────────────────────────────
 export const createRoom = mutation({
-  args: { goal: v.optional(v.string()), model: v.optional(v.string()) },
+  args: { goal: v.optional(v.string()), model: v.optional(v.string()), private: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
     const now = Date.now();
+    const goal = (args.goal ?? "").trim() || DEFAULT_GOAL;
+    const countTask = deriveCountTask(goal);
     // unique short join code (retry on the rare collision)
     let code = makeRoomCode();
     for (let i = 0; i < 4; i += 1) {
@@ -156,20 +181,22 @@ export const createRoom = mutation({
       code = makeRoomCode();
     }
     const roomId = await ctx.db.insert("rooms", {
-      goal: (args.goal ?? "").trim() || DEFAULT_GOAL,
+      goal,
       model: validModel(args.model),
       code,
+      private: args.private === true,
       floorOwner: "a",
       turn: 0,
       running: false,
       done: false,
       loopRisk: false,
       recentActs: [],
+      ...(countTask ? { countTarget: countTask.target, countNext: countTask.next } : {}),
       runToken: 0,
       createdAt: now,
       updatedAt: now,
     });
-    await insertTrace(ctx, roomId, "state_reduced", "Room created.", { goal: args.goal ?? DEFAULT_GOAL });
+    await insertTrace(ctx, roomId, "state_reduced", "Room created.", { goal, task: countTask });
     return roomId;
   },
 });
@@ -186,7 +213,11 @@ export const setGoal = mutation({
   args: { roomId: v.id("rooms"), goal: v.string() },
   handler: async (ctx, args) => {
     const g = args.goal.trim().slice(0, 400);
-    if (g) await ctx.db.patch(args.roomId, { goal: g, updatedAt: Date.now() });
+    if (g) {
+      const countPatch = countPatchForGoal(g);
+      await ctx.db.patch(args.roomId, { goal: g, done: false, loopRisk: false, recentActs: [], ...countPatch, updatedAt: Date.now() });
+      await insertTrace(ctx, args.roomId, "state_reduced", "Goal updated.", { goal: g, task: deriveCountTask(g) });
+    }
   },
 });
 
@@ -202,9 +233,32 @@ export const submitHuman = mutation({
   handler: async (ctx, args) => {
     const text = args.text.trim().slice(0, 400);
     if (!text) return;
+    const goalOverride = deriveGoalOverrideFromHuman(text);
+    const patch: {
+      pendingHuman: string;
+      updatedAt: number;
+      goal?: string;
+      done?: boolean;
+      loopRisk?: boolean;
+      recentActs?: string[];
+      countTarget?: number;
+      countNext?: number;
+    } = { pendingHuman: text, updatedAt: Date.now() };
+    if (goalOverride) {
+      Object.assign(patch, {
+        goal: goalOverride,
+        done: false,
+        loopRisk: false,
+        recentActs: [],
+        ...countPatchForGoal(goalOverride),
+      });
+    }
     await ctx.db.insert("utterances", { roomId: args.roomId, slot: "human", name: "you", text, speechAct: "steer", createdAt: Date.now() });
-    await ctx.db.patch(args.roomId, { pendingHuman: text, updatedAt: Date.now() });
-    await insertTrace(ctx, args.roomId, "utterance_received", `you said: ${text}`, { text });
+    await ctx.db.patch(args.roomId, patch);
+    if (goalOverride) {
+      await insertTrace(ctx, args.roomId, "state_reduced", "Human retargeted the room goal.", { goal: goalOverride, task: deriveCountTask(goalOverride) });
+    }
+    await insertTrace(ctx, args.roomId, "utterance_received", `you said: ${text}`, { text, goalOverride });
     await boundUtterances(ctx, args.roomId);
   },
 });
@@ -244,11 +298,14 @@ export const commitAgentTurn = internalMutation({
     text: v.string(),
     speechAct: v.string(),
     done: v.boolean(),
+    goal: v.string(),
     audioId: v.optional(v.id("_storage")),
     /** auto-run hop token; omitted for manual stepOnce */
     token: v.optional(v.number()),
     /** the pendingHuman value this turn actually incorporated (if any) */
     consumedHuman: v.optional(v.string()),
+    countTarget: v.optional(v.number()),
+    countNext: v.optional(v.number()),
   },
   handler: async (ctx, args): Promise<{ committed: boolean; reason?: string }> => {
     const room = await ctx.db.get(args.roomId);
@@ -290,13 +347,19 @@ export const commitAgentTurn = internalMutation({
     const recentActs = [...room.recentActs, args.speechAct].slice(-4);
     const loopRisk = recentActs.slice(-2).length === 2 && recentActs.slice(-2).every((a) => a === "backchannel");
     const next = other(args.slot as Slot);
+    const goalUnchanged = room.goal === args.goal;
+    const countTask = currentCountTask(room);
+    const countCommitted =
+      goalUnchanged && countTask !== null && args.countTarget === countTask.target && args.countNext === countTask.next;
+    const countDone = countCommitted && countTask ? countTask.next >= countTask.target : false;
 
     await ctx.db.patch(args.roomId, {
       turn: room.turn + 1,
       recentActs,
       loopRisk,
       floorOwner: next,
-      done: room.done || args.done,
+      done: room.done || (goalUnchanged && args.done) || countDone,
+      ...(countCommitted && countTask ? { countNext: Math.min(countTask.next + 1, countTask.target) } : {}),
       // only clear the steer this turn actually consumed — a steer submitted
       // mid-flight survives for the next turn
       ...(room.pendingHuman !== undefined && room.pendingHuman === args.consumedHuman ? { pendingHuman: undefined } : {}),
@@ -306,7 +369,11 @@ export const commitAgentTurn = internalMutation({
     if (args.speechAct === "backchannel") {
       await insertTrace(ctx, args.roomId, "guardrail_evaluated", "Backchannel — not counted as progress.", { text: args.text });
     }
-    await insertTrace(ctx, args.roomId, "state_reduced", `${name} took the floor turn ${room.turn + 1}.`, { speechAct: args.speechAct, done: args.done });
+    await insertTrace(ctx, args.roomId, "state_reduced", `${name} took the floor turn ${room.turn + 1}.`, {
+      speechAct: args.speechAct,
+      done: (goalUnchanged && args.done) || countDone,
+      task: countCommitted ? countTask : null,
+    });
     await insertTrace(ctx, args.roomId, "scheduler_selected", `${AGENTS[next].name} owns the next floor.`, { floorOwner: next, loopRisk });
     await boundUtterances(ctx, args.roomId);
     return { committed: true };
@@ -338,9 +405,9 @@ export const scheduleNext = internalMutation({
   handler: async (ctx, args) => {
     const room = await ctx.db.get(args.roomId);
     if (!room) return;
-    if (room.running && !room.done && room.runToken === args.token && room.turn < 60) {
+    if (room.running && !room.done && room.runToken === args.token && room.turn < MAX_AUTO_RUN_TURNS) {
       await ctx.scheduler.runAfter(args.delayMs, internal.coordinator.runTurn, { roomId: args.roomId, token: args.token });
-    } else if (room.running && (room.done || room.turn >= 60)) {
+    } else if (room.running && (room.done || room.turn >= MAX_AUTO_RUN_TURNS)) {
       await ctx.db.patch(args.roomId, { running: false, updatedAt: Date.now() });
     }
   },
