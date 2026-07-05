@@ -4,12 +4,15 @@ import { applyUtterance } from "../core/roomReducer.js";
 import type { ActorId, AgentDecision, RoomState, Utterance } from "../core/types.js";
 import { enforceRoomPolicy } from "../core/guards.js";
 import { isOllamaAvailable, ollamaChat } from "../providers/ollama.js";
+import { openaiChat } from "../providers/openai.js";
 
 export type VoiceAgentConfig = {
   actorId: ActorId;
   label: string;
   useOllama?: boolean;
   model?: string;
+  source?: "deterministic" | "ollama" | "openai";
+  openaiModel?: string;
 };
 
 export async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig): Promise<AgentDecision> {
@@ -24,26 +27,29 @@ export async function decideVoiceUtterance(state: RoomState, config: VoiceAgentC
     intendedSpeechAct: "task_action",
   };
 
-  if (!config.useOllama) return deterministic;
-  if (!(await isOllamaAvailable())) return deterministic;
+  const source = config.source ?? (config.useOllama ? "ollama" : "deterministic");
+  if (source === "deterministic") return deterministic;
+  if (source === "ollama" && !(await isOllamaAvailable())) return deterministic;
 
   const prompt = [
     "You are inside a multi-agent realtime voice room.",
     "The room state, not the transcript, is authoritative.",
     `Task: count from 1 to ${state.task.target}.`,
     `Last committed number: ${state.task.current}.`,
+    `Required next speech act: ${state.requiredNextAct ?? "task_action"}.`,
     `You must say only the next number: ${requiredNumber}.`,
     "No acknowledgement. No explanation. No 'yeah exactly'.",
   ].join("\n");
+  const messages = [
+    { role: "system" as const, content: "Return only the requested spoken utterance, with no markdown." },
+    { role: "user" as const, content: prompt },
+  ];
 
   try {
-    const text = await ollamaChat(
-      [
-        { role: "system", content: "Return only the requested spoken utterance, with no markdown." },
-        { role: "user", content: prompt },
-      ],
-      { model: config.model },
-    );
+    const text =
+      source === "openai"
+        ? await openaiChat(messages, { model: config.openaiModel })
+        : await ollamaChat(messages, { model: config.model });
     const cleaned = sanitizeNumberOnly(text, requiredNumber);
     return { actorId: config.actorId, text: cleaned, intendedSpeechAct: "task_action" };
   } catch {
