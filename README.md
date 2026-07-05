@@ -10,6 +10,19 @@ The one line that matters:
 
 > **Physically in the same room is not the same as computationally in the same room.**
 
+**▶ Try it live (no laptop needed): [room-os-live.vercel.app](https://room-os-live.vercel.app)** — frontend on Vercel, state + voice on Convex.
+
+---
+
+## Two ways to run the live room
+
+| | Transport | Backend | Good for |
+|---|---|---|---|
+| **Local** (`npm run live`) | HTTP + polling, cloudflared tunnel | Node server on your laptop | fastest to hack, offline, on-site demo — laptop must stay awake |
+| **Hosted** ([room-os-live.vercel.app](https://room-os-live.vercel.app)) | HTTP + polling to Convex | **Convex** (cloud) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
+
+The same frontend serves both — only `VITE_LIVE_BASE` differs (empty = local Node; the Convex `.site` URL = hosted). See [Convex architecture](#convex--the-cloud-room-ledger) below.
+
 ---
 
 ## Live voice room (real devices) 🎙️
@@ -39,7 +52,43 @@ phone/laptop mic ─▶ /live (SSE + POST) ─▶ Whisper ─▶ LLM (room-aware
 ```
 
 > The tunnel URL is **ephemeral** — it works only while `npm run live` and your laptop stay
-> awake, and changes on restart. For a permanent host, point it at Convex + Vercel (roadmap).
+> awake, and changes on restart. The **hosted** version ([room-os-live.vercel.app](https://room-os-live.vercel.app))
+> has none of these limits — see below.
+
+## Convex — the cloud room ledger
+
+The hosted version makes **Convex the server-authoritative room-state ledger**, so the laptop is
+out of the loop entirely. The mapping (the whole thesis in three primitives):
+
+```
+query    = reactive read / subscribe to room state + traces   (watchRoom, listTraces)
+mutation = deterministic state transition — the reducer        (createRoom, submitHuman,
+           lives here; the model is never trusted to coordinate  commitAgentTurn, setRunning)
+action   = nondeterministic work: LLM / STT / TTS, commits      (runTurn, stepOnce,
+           back through a mutation                                transcribeHuman)
+```
+
+```
+ Laptop browser (Ada)                     iPhone browser (Ben)     ← both are just clients;
+   create / join / step / run                join via QR             either can sleep
+        │  fetch  https://…convex.site/live/*   │  (poll snapshots)
+        └─────────────────────┬──────────────────┘
+                              ▼
+ ┌──────────────────────────  CONVEX  ──────────────────────────┐
+ │ http.ts     mirrors /live/* (+CORS, audio from storage)      │
+ │ queries     watchRoom · listTraces        (reactive)         │
+ │ mutations   reducer: floor / loop-guard / commit (bounded)   │
+ │ actions     runTurn → OpenAI LLM + TTS → ctx.storage → commit│
+ │ scheduler   ctx.scheduler hops (runToken cancels stale)      │
+ │ storage     TTS mp3                                          │
+ └──────────────────────────────────────────────────────────────┘
+```
+
+Corrections baked in vs. a naive sketch: `commitAgentTurn` **advances state** (not just logs);
+`traces`/`utterances` are **bounded** (agents amplify unbounded tables fast); auto-run is a
+**durable scheduler hop chain** (pausable/restart-safe), not an in-action loop; TTS mp3 lives in
+**Convex storage**; coordination stays in **mutations** so a slow/verbose model can't corrupt the
+room. Backend in [`convex/`](convex/); deploy with `npx convex deploy` + `vercel deploy`.
 
 Requires a gitignored `.env.local` with `OPENAI_API_KEY` (and optionally `ELEVENLABS_API_KEY`),
 plus [`cloudflared`](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/).
