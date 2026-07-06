@@ -125,14 +125,45 @@ const COLOR_STYLE: Record<string, string> = {
   system: "text-muted-foreground bg-muted border-border",
 };
 
-function slotStyle(slot: string, room?: PublicRoom): string {
-  if (slot === "human") return COLOR_STYLE.human!;
-  if (slot === "system" || slot === "spectator") return COLOR_STYLE.system!;
+/** Stronger fill for circular avatar badges — COLOR_STYLE's 10% tint reads as
+ *  near-invisible at avatar size, so avatars get their own saturated variant. */
+const AVATAR_STYLE: Record<string, string> = {
+  sky: "bg-sky-500/25 text-sky-100 ring-sky-400/40",
+  violet: "bg-violet-500/25 text-violet-100 ring-violet-400/40",
+  emerald: "bg-emerald-500/25 text-emerald-100 ring-emerald-400/40",
+  amber: "bg-amber-500/25 text-amber-100 ring-amber-400/40",
+  rose: "bg-rose-500/25 text-rose-100 ring-rose-400/40",
+  cyan: "bg-cyan-500/25 text-cyan-100 ring-cyan-400/40",
+  lime: "bg-lime-500/25 text-lime-100 ring-lime-400/40",
+  pink: "bg-pink-500/25 text-pink-100 ring-pink-400/40",
+  orange: "bg-orange-500/25 text-orange-100 ring-orange-400/40",
+  indigo: "bg-indigo-500/25 text-indigo-100 ring-indigo-400/40",
+  human: "bg-primary/25 text-primary-foreground ring-primary/50",
+  system: "bg-muted text-muted-foreground ring-border",
+};
+
+function slotColorName(slot: string, room?: PublicRoom): string {
+  if (slot === "human") return "human";
+  if (slot === "system" || slot === "spectator") return "system";
   const color = room?.agents[slot]?.color;
-  if (color && COLOR_STYLE[color]) return COLOR_STYLE[color];
+  if (color && COLOR_STYLE[color]) return color;
   const idx = agentIndexFromSlot(slot) ?? 1;
   const palette = ["sky", "violet", "emerald", "amber", "rose", "cyan", "lime", "pink", "orange", "indigo"];
-  return COLOR_STYLE[palette[(idx - 1) % palette.length]!] ?? COLOR_STYLE.system!;
+  return palette[(idx - 1) % palette.length]!;
+}
+
+function slotStyle(slot: string, room?: PublicRoom): string {
+  return COLOR_STYLE[slotColorName(slot, room)] ?? COLOR_STYLE.system!;
+}
+
+function avatarStyle(slot: string, room?: PublicRoom): string {
+  return AVATAR_STYLE[slotColorName(slot, room)] ?? AVATAR_STYLE.system!;
+}
+
+/** Avatar initial: agent display name's first letter, or '?' if unnamed. */
+function avatarInitial(name: string): string {
+  const trimmed = name.trim();
+  return trimmed ? trimmed[0]!.toUpperCase() : "?";
 }
 
 function fallbackAgentName(slot: string): string {
@@ -222,8 +253,7 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             local-first · your keys, server-side
           </Badge>
           <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-            Start a live room. Voice agents{" "}
-            <span className="bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">actually talk it out.</span>
+            Start a live room. Voice <span className="text-primary">agents</span> actually talk it out.
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             This device becomes <span className="font-semibold text-sky-300">Ada</span>. Add phones or tabs for more agent voices in the same shared room, then jump in by voice anytime.
@@ -247,12 +277,17 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
                   type="button"
                   onClick={() => setProfile(p.id)}
                   className={cn(
-                    "min-w-0 rounded-lg px-2 py-2 text-left transition-colors",
-                    active ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    "min-w-0 rounded-lg border px-2 py-2 text-left transition-all",
+                    active
+                      ? "border-primary/40 bg-primary text-primary-foreground shadow-[0_4px_16px_-6px_hsl(var(--primary)/0.6)]"
+                      : "border-transparent text-muted-foreground hover:border-border-strong hover:bg-muted hover:text-foreground",
                   )}
                   title={`${p.label}: ${p.note}`}
                 >
-                  <span className="block text-xs font-bold">{p.short}</span>
+                  <span className="flex items-center gap-1 text-xs font-bold">
+                    <span className={cn("size-1.5 rounded-full", active ? "bg-primary-foreground" : "bg-muted-foreground/50")} />
+                    {p.short}
+                  </span>
                   <span className="block truncate text-[10px] opacity-85">{p.note}</span>
                 </button>
               );
@@ -361,9 +396,9 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
                     <button
                       key={r.id}
                       onClick={() => onJoinRoom(r.id)}
-                      className="flex items-center gap-2.5 rounded-lg border border-border bg-elevated/50 px-3 py-2 text-left transition-colors hover:border-primary/40"
+                      className="flex items-center gap-2.5 rounded-lg border border-border bg-elevated/50 px-3 py-2 text-left transition-all hover:border-primary/40 hover:shadow-[0_4px_16px_-8px_hsl(var(--primary)/0.5)]"
                     >
-                      <span className="shrink-0 rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-bold text-primary">
+                      <span className="shrink-0 rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-bold text-primary ring-1 ring-inset ring-primary/20">
                         {r.code ?? r.id.slice(0, 6)}
                       </span>
                       <span className="min-w-0 flex-1 truncate text-xs text-foreground/85">{r.goal}</span>
@@ -835,7 +870,10 @@ function UtteranceRow({ u, room, isFloor }: { u: RoomUtterance; room: PublicRoom
       )}
     >
       <div className="mb-1 flex items-center gap-2">
-        <span className={cn("rounded-full border px-2 py-0.5 text-[11px] font-bold", style)}>{u.name}</span>
+        <span className={cn("flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ring-1 ring-inset", avatarStyle(u.slot, room))}>
+          {avatarInitial(u.name)}
+        </span>
+        <span className={cn("text-[12px] font-bold", style.split(" ").find((c) => c.startsWith("text-")) ?? "text-foreground")}>{u.name}</span>
         <span className="rounded border border-border-strong px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">{u.speechAct}</span>
         {u.audioId && (
           <button onClick={play} className="ml-auto inline-flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
