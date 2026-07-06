@@ -1,47 +1,54 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/*  Design tokens — Room OS "observability console" (dark-only)        */
-/*  indigo = the shared system · red = loop/chaos · emerald = progress */
+/*  Design tokens — Room OS × NodeRoom design language (dark, mission- */
+/*  control console). Coral-orange = brand/agent accent · indigo =    */
+/*  scheduler/system · emerald = progress · amber = guardrail.        */
 /* ------------------------------------------------------------------ */
 :root {
-  --background: 224 32% 5%;
+  --background: 224 28% 6%;
   --foreground: 210 22% 93%;
 
-  --card: 223 27% 8%;
+  --card: 223 24% 9%;
   --card-foreground: 210 22% 93%;
 
-  --elevated: 222 22% 11%;
+  --elevated: 222 20% 12%;
   --elevated-foreground: 210 22% 93%;
 
-  --popover: 222 24% 9%;
+  --popover: 222 22% 10%;
   --popover-foreground: 210 22% 93%;
 
-  --muted: 220 18% 15%;
-  --muted-foreground: 216 15% 62%;
+  --muted: 220 16% 15%;
+  --muted-foreground: 216 14% 63%;
 
-  --border: 220 16% 17%;
-  --border-strong: 219 15% 26%;
-  --input: 220 16% 15%;
-  --ring: 250 90% 70%;
+  --border: 220 15% 17%;
+  --border-strong: 219 14% 27%;
+  --input: 220 15% 15%;
+  --ring: 22 90% 62%;
 
-  --primary: 250 84% 68%;
-  --primary-foreground: 250 60% 99%;
+  --primary: 22 88% 58%;
+  --primary-foreground: 20 45% 8%;
 
   --secondary: 220 16% 15%;
   --secondary-foreground: 210 22% 93%;
 
-  --accent: 224 22% 15%;
+  --accent: 224 20% 15%;
   --accent-foreground: 210 22% 93%;
 
   --destructive: 0 74% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --success: 152 62% 47%;
+  --success: 152 60% 46%;
   --success-foreground: 152 80% 97%;
 
   --warning: 38 92% 60%;
   --warning-foreground: 38 90% 8%;
+
+  /* trace-span "kind" accents — Console/Trace-UI badge palette */
+  --kind-reduced: 22 88% 58%;
+  --kind-scheduled: 231 70% 68%;
+  --kind-guardrail: 38 92% 60%;
+  --kind-utterance: 152 60% 46%;
 
   --radius: 0.7rem;
 }
@@ -95,6 +102,11 @@
   --color-warning: hsl(var(--warning));
   --color-warning-foreground: hsl(var(--warning-foreground));
 
+  --color-kind-reduced: hsl(var(--kind-reduced));
+  --color-kind-scheduled: hsl(var(--kind-scheduled));
+  --color-kind-guardrail: hsl(var(--kind-guardrail));
+  --color-kind-utterance: hsl(var(--kind-utterance));
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 3px);
   --radius-sm: calc(var(--radius) - 5px);
@@ -141,11 +153,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* layered depth: two soft accent glows + a faint dot grid */
+    /* layered depth: coral-orange brand glow + two cool counter-glows */
     background-image:
-      radial-gradient(60rem 40rem at 15% -10%, hsl(250 84% 60% / 0.10), transparent 60%),
-      radial-gradient(50rem 40rem at 100% 0%, hsl(190 80% 50% / 0.06), transparent 55%),
-      radial-gradient(40rem 30rem at 50% 120%, hsl(152 62% 45% / 0.05), transparent 60%);
+      radial-gradient(60rem 40rem at 15% -10%, hsl(22 88% 58% / 0.10), transparent 60%),
+      radial-gradient(50rem 40rem at 100% 0%, hsl(231 70% 65% / 0.07), transparent 55%),
+      radial-gradient(40rem 30rem at 50% 120%, hsl(152 60% 45% / 0.05), transparent 60%);
     background-attachment: fixed;
   }
 

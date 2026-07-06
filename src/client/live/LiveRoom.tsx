@@ -884,12 +884,84 @@ function ShareInvite({ joinUrl, code }: { joinUrl: string; code?: string }) {
   );
 }
 
+/** Span-kind accents — dedicated palette, independent of status semantics
+ *  (success/warning/destructive stay reserved for outcome, not category). */
 const TRACE_STYLE: Record<string, string> = {
-  state_reduced: "border-success/30 bg-success/10 text-success",
-  scheduler_selected: "border-sky-400/30 bg-sky-500/10 text-sky-300",
-  guardrail_evaluated: "border-warning/30 bg-warning/10 text-warning",
-  utterance_received: "border-primary/30 bg-primary/10 text-primary",
+  state_reduced: "border-kind-reduced/30 bg-kind-reduced/10 text-kind-reduced",
+  scheduler_selected: "border-kind-scheduled/30 bg-kind-scheduled/10 text-kind-scheduled",
+  guardrail_evaluated: "border-kind-guardrail/30 bg-kind-guardrail/10 text-kind-guardrail",
+  utterance_received: "border-kind-utterance/30 bg-kind-utterance/10 text-kind-utterance",
 };
+const TRACE_DOT: Record<string, string> = {
+  state_reduced: "bg-kind-reduced shadow-[0_0_6px_hsl(var(--kind-reduced)/0.7)]",
+  scheduler_selected: "bg-kind-scheduled shadow-[0_0_6px_hsl(var(--kind-scheduled)/0.7)]",
+  guardrail_evaluated: "bg-kind-guardrail shadow-[0_0_6px_hsl(var(--kind-guardrail)/0.7)]",
+  utterance_received: "bg-kind-utterance shadow-[0_0_6px_hsl(var(--kind-utterance)/0.7)]",
+};
+
+/** Timeline rail: a connecting line + colored dot per row, AgentPrism-style. */
+function TraceTimeline({
+  traces,
+  openId,
+  setOpenId,
+}: {
+  traces: TraceEvent[];
+  openId: string | null;
+  setOpenId: (updater: (v: string | null) => string | null) => void;
+}) {
+  const ordered = [...traces].reverse();
+  if (ordered.length === 0) {
+    return <p className="py-2 text-[11px] text-muted-foreground">No trace events yet — run a turn.</p>;
+  }
+  const counts = traces.reduce<Record<string, number>>((acc, t) => ({ ...acc, [t.kind]: (acc[t.kind] ?? 0) + 1 }), {});
+  const span = traces.length >= 2 ? ((traces[traces.length - 1]!.ts - traces[0]!.ts) / 1000).toFixed(1) : "0.0";
+  return (
+    <div className="flex flex-col">
+      <ol className="relative flex flex-col gap-0.5 border-l border-border/70 pl-3">
+        {ordered.map((t) => (
+          <li key={t.id} className="relative">
+            <span
+              className={cn(
+                "absolute -left-[16.5px] top-[9px] size-1.5 rounded-full ring-2 ring-background",
+                TRACE_DOT[t.kind] ?? "bg-muted-foreground/50",
+              )}
+            />
+            <button
+              onClick={() => setOpenId((v) => (v === t.id ? null : t.id))}
+              className="w-full rounded-md border border-transparent px-2 py-1 text-left transition-colors hover:border-border-strong hover:bg-card/50"
+            >
+              <span className="flex items-center gap-2">
+                <span className={cn("shrink-0 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wide border", TRACE_STYLE[t.kind] ?? "border-border-strong text-muted-foreground")}>
+                  {t.kind.replace(/_/g, " ")}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[11px] text-foreground/85">{t.summary}</span>
+                <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
+                  {new Date(t.ts).toLocaleTimeString([], { hour12: false })}
+                </span>
+              </span>
+              {openId === t.id && t.payload !== undefined && (
+                <pre className="mt-1 overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
+                  {JSON.stringify(t.payload, null, 2)}
+                </pre>
+              )}
+            </button>
+          </li>
+        ))}
+      </ol>
+      {traces.length > 0 && (
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-1.5 pl-3 font-mono text-[9px] text-muted-foreground">
+          <span>{traces.length} events · {span}s span</span>
+          {Object.entries(counts).map(([kind, n]) => (
+            <span key={kind} className={cn("inline-flex items-center gap-1", TRACE_STYLE[kind]?.split(" ").find((c) => c.startsWith("text-")) ?? "")}>
+              <span className={cn("size-1 rounded-full", TRACE_DOT[kind] ?? "bg-muted-foreground/50")} />
+              {kind.replace(/_/g, " ")} · {n}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /**
  * The proof layer, visible: every decision the room made — classify → reduce →
@@ -898,7 +970,6 @@ const TRACE_STYLE: Record<string, string> = {
  */
 function TracePanel({ traces }: { traces: TraceEvent[] }) {
   const [openId, setOpenId] = React.useState<string | null>(null);
-  const ordered = [...traces].reverse();
   return (
     <div className="max-h-56 shrink-0 overflow-y-auto border-t border-border bg-[hsl(223_30%_6%)]/95 px-4 py-2 backdrop-blur">
       <div className="mx-auto max-w-3xl">
@@ -907,34 +978,7 @@ function TracePanel({ traces }: { traces: TraceEvent[] }) {
           <span className="text-[11px] font-bold tracking-wide text-primary">Trace Inspector</span>
           <span className="text-[10px] text-muted-foreground">classify → reduce → guard → schedule · click a row for the payload</span>
         </div>
-        {ordered.length === 0 ? (
-          <p className="py-2 text-[11px] text-muted-foreground">No trace events yet — run a turn.</p>
-        ) : (
-          <div className="flex flex-col gap-1">
-            {ordered.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setOpenId((v) => (v === t.id ? null : t.id))}
-                className="rounded-md border border-border/60 bg-card/50 px-2 py-1 text-left transition-colors hover:border-border-strong"
-              >
-                <span className="flex items-center gap-2">
-                  <span className={cn("shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9px] font-semibold", TRACE_STYLE[t.kind] ?? "border-border-strong text-muted-foreground")}>
-                    {t.kind}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-[11px] text-foreground/85">{t.summary}</span>
-                  <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
-                    {new Date(t.ts).toLocaleTimeString([], { hour12: false })}
-                  </span>
-                </span>
-                {openId === t.id && t.payload !== undefined && (
-                  <pre className="mt-1 overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
-                    {JSON.stringify(t.payload, null, 2)}
-                  </pre>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+        <TraceTimeline traces={traces} openId={openId} setOpenId={setOpenId} />
       </div>
     </div>
   );
@@ -943,7 +987,6 @@ function TracePanel({ traces }: { traces: TraceEvent[] }) {
 function StateInspector({ room }: { room: PublicRoom }) {
   const [openId, setOpenId] = React.useState<string | null>(null);
   const traces = room.traces ?? [];
-  const ordered = [...traces].reverse();
   const stateSnapshot = {
     room: {
       id: room.id,
@@ -990,34 +1033,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
             <span className="text-[11px] font-bold tracking-wide text-primary">Trace Inspector</span>
             <span className="text-[10px] text-muted-foreground">click a row for payload</span>
           </div>
-          {ordered.length === 0 ? (
-            <p className="py-2 text-[11px] text-muted-foreground">No trace events yet.</p>
-          ) : (
-            <div className="flex flex-col gap-1">
-              {ordered.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setOpenId((v) => (v === t.id ? null : t.id))}
-                  className="rounded-md border border-border/60 bg-card/50 px-2 py-1 text-left transition-colors hover:border-border-strong"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className={cn("shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9px] font-semibold", TRACE_STYLE[t.kind] ?? "border-border-strong text-muted-foreground")}>
-                      {t.kind}
-                    </span>
-                    <span className="min-w-0 flex-1 truncate text-[11px] text-foreground/85">{t.summary}</span>
-                    <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
-                      {new Date(t.ts).toLocaleTimeString([], { hour12: false })}
-                    </span>
-                  </span>
-                  {openId === t.id && t.payload !== undefined && (
-                    <pre className="mt-1 overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
-                      {JSON.stringify(t.payload, null, 2)}
-                    </pre>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
+          <TraceTimeline traces={traces} openId={openId} setOpenId={setOpenId} />
         </div>
       </div>
     </div>
