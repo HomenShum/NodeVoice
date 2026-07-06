@@ -2,7 +2,8 @@ import * as React from "react";
 import { useQuery, useMutation, useAction, useConvex } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import type { ActiveRoom, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
+import { isAgentSlot } from "./useRoom";
+import type { ActiveRoom, CapabilityProfileId, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
 
 /** Lobby list of joinable rooms — reactive over the Convex WebSocket. */
 export function useConvexActiveRooms(): ActiveRoom[] {
@@ -48,6 +49,8 @@ export function useConvexRoom() {
   const joinRoomMut = useMutation(api.rooms.joinRoom);
   const setGoalMut = useMutation(api.rooms.setGoal);
   const setModelMut = useMutation(api.rooms.setModel);
+  const setProfileMut = useMutation(api.rooms.setProfile);
+  const setAgentCountMut = useMutation(api.rooms.setAgentCount);
   const setRunningMut = useMutation(api.rooms.setRunning);
   const submitHumanMut = useMutation(api.rooms.submitHuman);
   const stepAction = useAction(api.coordinator.stepOnce);
@@ -115,7 +118,7 @@ export function useConvexRoom() {
       // a slot hears its own agent unless "hear both" is on
       const url = u.audioUrl;
       const forMe = playAllRef.current || u.slot === mySlotRef.current || mySlotRef.current === "spectator";
-      if (url && forMe && (u.slot === "a" || u.slot === "b")) {
+      if (url && forMe && isAgentSlot(u.slot)) {
         queueRef.current.push(url);
         drainQueue();
       }
@@ -134,15 +137,15 @@ export function useConvexRoom() {
   }, []);
 
   const createRoom = React.useCallback(
-    async (goal: string, model?: string, isPrivate?: boolean) => {
+    async (goal: string, model?: string, isPrivate?: boolean, profile?: CapabilityProfileId, agentCount?: number) => {
       setError(null);
       try {
-        const id = await createRoomMut({ goal, model, private: isPrivate === true });
-        await joinRoomMut({ roomId: id, slot: "a", kind: "creator" });
+        const id = await createRoomMut({ goal, model, private: isPrivate === true, profile, agentCount });
+        const joined = (await joinRoomMut({ roomId: id, slot: "auto", kind: "creator" })) as { slot?: MySlot } | null;
         // seed so the UI switches to the room immediately (no lobby flash)
         const snap = (await convex.query(api.rooms.watchRoom, { roomId: id })) as PublicRoom | null;
         setSeedRoom(snap);
-        setMySlot("a");
+        setMySlot(joined?.slot ?? "agent-001");
         setRoomId(id);
         return id as string;
       } catch (e) {
@@ -154,16 +157,16 @@ export function useConvexRoom() {
   );
 
   const joinRoom = React.useCallback(
-    async (id: string, slot: MySlot) => {
+    async (id: string, slot: MySlot | "auto") => {
       setError(null);
       try {
         const rid = id as Id<"rooms">;
         // validate the id before subscribing (throws on bad/unknown id)
         const snap = (await convex.query(api.rooms.watchRoom, { roomId: rid })) as PublicRoom | null;
         if (!snap) throw new Error("room not found");
-        await joinRoomMut({ roomId: rid, slot: slot === "a" || slot === "b" ? slot : "spectator" });
+        const joined = (await joinRoomMut({ roomId: rid, slot: slot === "spectator" || slot === "auto" || isAgentSlot(slot) ? slot : "auto" })) as { slot?: MySlot } | null;
         setSeedRoom(snap);
-        setMySlot(slot);
+        setMySlot(joined?.slot ?? slot);
         setRoomId(rid);
         return true;
       } catch (e) {
@@ -186,6 +189,20 @@ export function useConvexRoom() {
       if (roomId) void setModelMut({ roomId, model }).catch((e) => setError(String(e).slice(0, 160)));
     },
     [roomId, setModelMut],
+  );
+
+  const setProfile = React.useCallback(
+    (profile: CapabilityProfileId) => {
+      if (roomId) void setProfileMut({ roomId, profile }).catch((e) => setError(String(e).slice(0, 160)));
+    },
+    [roomId, setProfileMut],
+  );
+
+  const setAgentCount = React.useCallback(
+    (agentCount: number) => {
+      if (roomId) void setAgentCountMut({ roomId, agentCount }).catch((e) => setError(String(e).slice(0, 160)));
+    },
+    [roomId, setAgentCountMut],
   );
 
   const setRunning = React.useCallback(
@@ -295,6 +312,8 @@ export function useConvexRoom() {
     joinRoom,
     setGoal,
     setModel,
+    setProfile,
+    setAgentCount,
     setRunning,
     step,
     sendText,

@@ -2,8 +2,8 @@
 import { v } from "convex/values";
 import { internalAction, action } from "./_generated/server";
 import { internal, api } from "./_generated/api";
-import { AGENTS, other, estimateSpeechMs, type CountTask, type Slot } from "./shared";
-import { generateAgentTurn, synthesizeSpeech, transcribeAudio } from "./openai";
+import { agentForSlot, nextSlot, estimateSpeechMs, deriveHumanSteeringIntentFallback, validProfile, type CountTask, type Slot } from "./shared";
+import { generateAgentTurn, interpretHumanSteer as interpretHumanSteerWithModel, synthesizeSpeech, transcribeAudio } from "./openai";
 import type { Id } from "./_generated/dataModel";
 
 /**
@@ -16,9 +16,9 @@ async function produceTurn(
   roomId: Id<"rooms">,
   room: any,
   token?: number,
-): Promise<{ done: boolean; text: string; committed: boolean }> {
+): Promise<{ done: boolean; text: string; committed: boolean; reason?: string }> {
   const slot = room.floorOwner as Slot;
-  const agent = AGENTS[slot];
+  const agent = agentForSlot(slot);
   const snapshot = await ctx.runQuery(api.rooms.watchRoom, { roomId });
   const transcript = (snapshot?.utterances ?? []).map((u: any) => ({ name: u.name, text: u.text }));
   const consumedHuman: string | undefined = room.pendingHuman ?? undefined;
@@ -30,9 +30,10 @@ async function produceTurn(
   const turn = await generateAgentTurn({
     goal: room.goal,
     model: room.model,
+    profile: validProfile(room.profile),
     persona: agent.persona,
     selfName: agent.name,
-    otherName: AGENTS[other(slot)].name,
+    otherName: agentForSlot(nextSlot(slot, room.agentCount)).name,
     transcript,
     humanNote: consumedHuman,
     recentActs: room.recentActs ?? [],
@@ -54,13 +55,14 @@ async function produceTurn(
     speechAct: turn.speechAct,
     done: turn.done,
     goal: room.goal,
+    goalVersion: room.goalVersion ?? 0,
     audioId,
     token,
     consumedHuman,
     countTarget: countTask?.target,
     countNext: countTask?.next,
   });
-  return { done: turn.done, text: turn.text, committed: Boolean(res?.committed) };
+  return { done: turn.done, text: turn.text, committed: Boolean(res?.committed), reason: res?.reason };
 }
 
 /** Durable auto-run hop. Re-checks token/running each time — pause/restart safe. */
@@ -70,7 +72,7 @@ export const runTurn = internalAction({
     const room = await ctx.runQuery(internal.rooms.getRoomRaw, { roomId: args.roomId });
     if (!room || !room.running || room.done || room.runToken !== args.token) return;
 
-    let out: { done: boolean; text: string; committed: boolean };
+    let out: { done: boolean; text: string; committed: boolean; reason?: string };
     try {
       out = await produceTurn(ctx, args.roomId, room, args.token);
     } catch (err) {
@@ -82,6 +84,13 @@ export const runTurn = internalAction({
       });
       return;
     }
+    if (!out.committed && out.reason === "lost floor") {
+      await ctx.runMutation(internal.rooms.scheduleNext, {
+        roomId: args.roomId,
+        token: args.token,
+        delayMs: 100,
+      });
+    }
     if (!out.committed) return; // stale hop (paused / superseded) — stop the chain
 
     // schedule the next hop iff still running (checked inside the mutation)
@@ -89,6 +98,43 @@ export const runTurn = internalAction({
       roomId: args.roomId,
       token: args.token,
       delayMs: estimateSpeechMs(out.text) + 350,
+    });
+  },
+});
+
+export const interpretHumanSteer = internalAction({
+  args: { roomId: v.id("rooms"), text: v.string(), seq: v.number() },
+  handler: async (ctx, args) => {
+    const room = await ctx.runQuery(internal.rooms.getRoomRaw, { roomId: args.roomId });
+    if (!room || room.pendingHuman !== args.text || (room.pendingHumanSeq ?? 0) !== args.seq) return;
+    const snapshot = await ctx.runQuery(api.rooms.watchRoom, { roomId: args.roomId });
+    const transcript = (snapshot?.utterances ?? []).map((u: any) => ({ name: u.name, text: u.text }));
+    let intent;
+    let source = "llm";
+    try {
+      intent = await interpretHumanSteerWithModel({
+        text: args.text,
+        currentGoal: room.goal,
+        model: room.model,
+        profile: validProfile(room.profile),
+        transcript,
+      });
+    } catch (err) {
+      source = "fallback";
+      intent = deriveHumanSteeringIntentFallback(args.text);
+      await ctx.runMutation(internal.rooms.insertTraceInternal, {
+        roomId: args.roomId,
+        kind: "guardrail_evaluated",
+        summary: "LLM intent interpreter failed; used deterministic fallback.",
+        payload: { error: String(err).slice(0, 160) },
+      });
+    }
+    await ctx.runMutation(internal.rooms.applyHumanIntent, {
+      roomId: args.roomId,
+      text: args.text,
+      seq: args.seq,
+      intent,
+      source,
     });
   },
 });
@@ -102,8 +148,10 @@ export const stepOnce = action({
   handler: async (ctx, args) => {
     const room = await ctx.runQuery(internal.rooms.getRoomRaw, { roomId: args.roomId });
     if (!room) throw new Error("room not found");
+    if (room.running) return { ok: false, reason: "room is busy" };
+    if (room.done) return { ok: false, reason: "room is done" };
     const out = await produceTurn(ctx, args.roomId, room);
-    return { ok: out.committed };
+    return { ok: out.committed, reason: out.reason };
   },
 });
 

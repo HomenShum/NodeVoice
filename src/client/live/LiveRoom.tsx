@@ -20,22 +20,125 @@ import {
   Globe,
   Share2,
   Check,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
-import { useRoom, useActiveRooms, LIVE_BASE, CONVEX_MODE, type Slot, type MySlot, type RoomUtterance, type PublicRoom, type TraceEvent } from "./roomClient";
+import {
+  useRoom,
+  useActiveRooms,
+  LIVE_BASE,
+  CONVEX_MODE,
+  MAX_AGENT_COUNT,
+  activeSlots,
+  agentIndexFromSlot,
+  isAgentSlot,
+  type CapabilityProfileId,
+  type Slot,
+  type MySlot,
+  type RoomUtterance,
+  type PublicRoom,
+  type TraceEvent,
+} from "./roomClient";
 
 const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
+const VISIBLE_UTTERANCE_LIMIT = 160;
 
-const SLOT_STYLE: Record<string, string> = {
-  a: "text-sky-300 bg-sky-500/10 border-sky-400/30",
-  b: "text-violet-300 bg-violet-500/10 border-violet-400/30",
+const PROFILE_OPTIONS: Array<{
+  id: CapabilityProfileId;
+  label: string;
+  short: string;
+  note: string;
+  coordination: string;
+  steering: string;
+  liveEffect: string;
+}> = [
+  {
+    id: "v0_no_room_state",
+    label: "V0 Failure",
+    short: "V0",
+    note: "raw transcript",
+    coordination: "No room counter",
+    steering: "Steer stays transcript-only",
+    liveEffect: "Good for reproducing overlap and stalls",
+  },
+  {
+    id: "v1_room_state",
+    label: "V1 Room State",
+    short: "V1",
+    note: "shared reducer",
+    coordination: "Floor + count state",
+    steering: "Goal changes are durable",
+    liveEffect: "Best default for phone/laptop tests",
+  },
+  {
+    id: "v2_work_room",
+    label: "V2 Work Room",
+    short: "V2",
+    note: "intent router",
+    coordination: "Reducer + typed intent",
+    steering: "LLM interprets interrupts",
+    liveEffect: "Use for retargeting mid-conversation",
+  },
+  {
+    id: "v3_agent_ecosystem",
+    label: "V3 Ecosystem",
+    short: "V3",
+    note: "agent stacks",
+    coordination: "External-agent lane",
+    steering: "Room state remains authority",
+    liveEffect: "Future adapter profile",
+  },
+];
+
+function profileMeta(profile?: string) {
+  return PROFILE_OPTIONS.find((p) => p.id === profile) ?? PROFILE_OPTIONS[1]!;
+}
+
+function listNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? "";
+  if (names.length === 2) return `${names[0]} and ${names[1]}`;
+  return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+}
+
+function compactNameList(names: string[]): string {
+  if (names.length <= 4) return listNames(names);
+  return `${names.slice(0, 3).join(", ")}, and ${names.length - 3} more`;
+}
+
+const COLOR_STYLE: Record<string, string> = {
+  sky: "text-sky-300 bg-sky-500/10 border-sky-400/30",
+  violet: "text-violet-300 bg-violet-500/10 border-violet-400/30",
+  emerald: "text-emerald-300 bg-emerald-500/10 border-emerald-400/30",
+  amber: "text-amber-300 bg-amber-500/10 border-amber-400/30",
+  rose: "text-rose-300 bg-rose-500/10 border-rose-400/30",
+  cyan: "text-cyan-300 bg-cyan-500/10 border-cyan-400/30",
+  lime: "text-lime-300 bg-lime-500/10 border-lime-400/30",
+  pink: "text-pink-300 bg-pink-500/10 border-pink-400/30",
+  orange: "text-orange-300 bg-orange-500/10 border-orange-400/30",
+  indigo: "text-indigo-300 bg-indigo-500/10 border-indigo-400/30",
   human: "text-primary bg-primary/10 border-primary/30",
   system: "text-muted-foreground bg-muted border-border",
 };
+
+function slotStyle(slot: string, room?: PublicRoom): string {
+  if (slot === "human") return COLOR_STYLE.human!;
+  if (slot === "system" || slot === "spectator") return COLOR_STYLE.system!;
+  const color = room?.agents[slot]?.color;
+  if (color && COLOR_STYLE[color]) return COLOR_STYLE[color];
+  const idx = agentIndexFromSlot(slot) ?? 1;
+  const palette = ["sky", "violet", "emerald", "amber", "rose", "cyan", "lime", "pink", "orange", "indigo"];
+  return COLOR_STYLE[palette[(idx - 1) % palette.length]!] ?? COLOR_STYLE.system!;
+}
+
+function fallbackAgentName(slot: string): string {
+  const idx = agentIndexFromSlot(slot);
+  return idx ? `Agent ${idx}` : slot;
+}
 
 export default function LiveRoom() {
   const rm = useRoom();
@@ -43,23 +146,22 @@ export default function LiveRoom() {
   // joinable via QR deep-link (?room=…) OR an in-app pick (active list / code)
   const [pendingJoin, setPendingJoin] = React.useState<string | null>(null);
   const joinId = params.get("room") ?? pendingJoin;
-  const [joined, setJoined] = React.useState(false);
 
-  if (rm.room && (joined || rm.mySlot === "a")) {
+  if (rm.room) {
     return <InRoom rm={rm} />;
   }
   if (joinId) {
-    return <JoinGate rm={rm} roomId={joinId} onJoined={() => setJoined(true)} />;
+    return <JoinGate rm={rm} roomId={joinId} onJoined={() => setPendingJoin(null)} />;
   }
   return <Lobby rm={rm} onJoinRoom={setPendingJoin} />;
 }
 
 /* ── shell ─────────────────────────────────────────────────────────── */
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, locked = false }: { children: React.ReactNode; locked?: boolean }) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+    <div className={cn("relative flex flex-col bg-background text-foreground", locked ? "h-dvh overflow-hidden" : "min-h-screen")}>
       <div className="bg-grid pointer-events-none fixed inset-0 opacity-[0.25] [mask-image:radial-gradient(70%_60%_at_50%_0%,black,transparent)]" />
-      <div className="relative flex flex-1 flex-col">{children}</div>
+      <div className={cn("relative flex flex-1 flex-col", locked && "min-h-0 overflow-hidden")}>{children}</div>
     </div>
   );
 }
@@ -83,6 +185,8 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
   const [goal, setGoal] = React.useState(DEFAULT_GOAL);
   const [busy, setBusy] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
+  const [profile, setProfile] = React.useState<CapabilityProfileId>("v1_room_state");
+  const [agentCount, setAgentCount] = React.useState(2);
   const [joinCode, setJoinCode] = React.useState("");
   const [joinBusy, setJoinBusy] = React.useState(false);
   const [joinError, setJoinError] = React.useState<string | null>(null);
@@ -91,7 +195,7 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
   async function create() {
     setBusy(true);
     rm.unlockAudio();
-    await rm.createRoom(goal.trim() || DEFAULT_GOAL, undefined, isPrivate);
+    await rm.createRoom(goal.trim() || DEFAULT_GOAL, undefined, isPrivate, profile, agentCount);
     setBusy(false);
   }
 
@@ -111,19 +215,18 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
       <div className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-xl">
           <div className="mb-6 flex justify-center">
-            <Brand tag="two agents · one shared room · live voice" />
+            <Brand tag={`${agentCount} agents · one shared room · live voice`} />
           </div>
           <Badge variant="outline" className="mb-4 gap-1.5">
             <span className="size-1.5 rounded-full bg-success shadow-[0_0_6px_hsl(var(--success))]" />
             local-first · your keys, server-side
           </Badge>
           <h2 className="text-balance text-2xl font-bold tracking-tight sm:text-3xl">
-            Start a live room. Two voice agents{" "}
+            Start a live room. Voice agents{" "}
             <span className="bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">actually talk it out.</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            This device becomes <span className="font-semibold text-sky-300">Ada</span> (laptop). Scan the QR from your phone to add{" "}
-            <span className="font-semibold text-violet-300">Ben</span>. They collaborate on your goal through one shared room — and you can jump in by voice anytime.
+            This device becomes <span className="font-semibold text-sky-300">Ada</span>. Add phones or tabs for more agent voices in the same shared room, then jump in by voice anytime.
           </p>
 
           <label className="mt-6 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Shared goal</label>
@@ -134,6 +237,49 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             className="mt-1.5 w-full resize-none rounded-lg border border-border bg-input/70 px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
             placeholder="What should the agents work on together?"
           />
+
+          <div className="mt-3 grid grid-cols-4 gap-1.5 rounded-xl border border-border bg-elevated/40 p-1.5">
+            {PROFILE_OPTIONS.map((p) => {
+              const active = profile === p.id;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setProfile(p.id)}
+                  className={cn(
+                    "min-w-0 rounded-lg px-2 py-2 text-left transition-colors",
+                    active ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                  title={`${p.label}: ${p.note}`}
+                >
+                  <span className="block text-xs font-bold">{p.short}</span>
+                  <span className="block truncate text-[10px] opacity-85">{p.note}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 flex items-center gap-2 rounded-xl border border-border bg-elevated/40 p-2">
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs font-bold text-foreground">Starting roster</span>
+              <span className="block text-[10px] text-muted-foreground">Joiners get their own agent; host can grow to {MAX_AGENT_COUNT}.</span>
+            </span>
+            <Button variant="outline" size="icon" onClick={() => setAgentCount((v) => Math.max(1, v - 1))} disabled={agentCount <= 1} title="One fewer starting agent">
+              <Minus className="size-4" />
+            </Button>
+            <input
+              type="number"
+              min={1}
+              max={MAX_AGENT_COUNT}
+              value={agentCount}
+              onChange={(e) => setAgentCount(Math.max(1, Math.min(MAX_AGENT_COUNT, Number(e.target.value) || 1)))}
+              className="h-9 w-16 rounded-md border border-border bg-input/70 text-center font-mono text-sm font-semibold text-foreground outline-none focus-visible:border-primary/60 focus-visible:ring-2 focus-visible:ring-ring/40"
+              aria-label="Starting agent count"
+            />
+            <Button variant="outline" size="icon" onClick={() => setAgentCount((v) => Math.min(MAX_AGENT_COUNT, v + 1))} disabled={agentCount >= MAX_AGENT_COUNT} title="One more starting agent">
+              <Plus className="size-4" />
+            </Button>
+          </div>
 
           {/* visibility: public rooms appear in the lobby list; private are link/code-only */}
           <button
@@ -221,6 +367,10 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
                         {r.code ?? r.id.slice(0, 6)}
                       </span>
                       <span className="min-w-0 flex-1 truncate text-xs text-foreground/85">{r.goal}</span>
+                      <Badge variant="outline" className="shrink-0 font-mono text-[10px]">
+                        {profileMeta(r.profile).short}
+                      </Badge>
+                      <span className="shrink-0 font-mono text-[10px] text-muted-foreground">{r.agentCount ?? 2} agents</span>
                       <span className="shrink-0 font-mono text-[10px] text-muted-foreground">turn {r.turn}</span>
                       {r.done ? (
                         <Badge variant="success" dot>agreed</Badge>
@@ -243,7 +393,7 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
 
 /* ── join gate (phone via QR) ──────────────────────────────────────── */
 function JoinGate({ rm, roomId, onJoined }: { rm: ReturnType<typeof useRoom>; roomId: string; onJoined: () => void }) {
-  const [slot, setSlot] = React.useState<MySlot>("b");
+  const [slot, setSlot] = React.useState<MySlot | "auto">("auto");
   const [busy, setBusy] = React.useState(false);
 
   async function join() {
@@ -262,13 +412,12 @@ function JoinGate({ rm, roomId, onJoined }: { rm: ReturnType<typeof useRoom>; ro
             <Brand tag={`joining room ${roomId}`} />
           </div>
           <h2 className="text-xl font-bold">Join the room</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Pick which agent this device voices, then enable sound.</p>
+          <p className="mt-2 text-sm text-muted-foreground">Join with your own agent voice, or watch silently.</p>
 
-          <div className="mt-5 grid grid-cols-3 gap-2">
+          <div className="mt-5 grid grid-cols-2 gap-2">
             {([
-              { k: "b" as MySlot, label: "Ben", sub: "phone agent", cls: SLOT_STYLE.b },
-              { k: "a" as MySlot, label: "Ada", sub: "laptop agent", cls: SLOT_STYLE.a },
-              { k: "spectator" as MySlot, label: "Watch", sub: "listen only", cls: SLOT_STYLE.system },
+              { k: "auto" as const, label: "My agent", sub: "auto-assigned", cls: COLOR_STYLE.sky },
+              { k: "spectator" as MySlot, label: "Watch", sub: "listen only", cls: COLOR_STYLE.system },
             ] as const).map((o) => (
               <button
                 key={o.k}
@@ -301,23 +450,33 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
   const room = rm.room!;
   const joinUrl = `${window.location.origin}/?room=${room.id}`;
   const [steer, setSteer] = React.useState("");
-  const [showQr, setShowQr] = React.useState(rm.mySlot === "a");
+  const [showQr, setShowQr] = React.useState(true);
   const [showTraces, setShowTraces] = React.useState(false);
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const agentSlots = activeSlots(room.state.agentCount);
+  const connectedAgentSlots = new Set(room.participants.map((p) => p.slot).filter(isAgentSlot));
+  const hasRemoteAgent = [...connectedAgentSlots].some((slot) => agentIndexFromSlot(slot) !== 1);
+  const waitingForAgent = agentIndexFromSlot(rm.mySlot) === 1 && connectedAgentSlots.size < agentSlots.length;
+  const currentProfile = profileMeta(room.state.profile);
+  const visibleUtterances = room.utterances.slice(-VISIBLE_UTTERANCE_LIMIT);
+  const hiddenUtteranceCount = Math.max(0, room.utterances.length - visibleUtterances.length);
 
   React.useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [room.utterances.length]);
 
-  const meName = rm.mySlot === "a" ? room.agents.a.name : rm.mySlot === "b" ? room.agents.b.name : "spectator";
+  const meName = isAgentSlot(rm.mySlot) ? room.agents[rm.mySlot]?.name ?? fallbackAgentName(rm.mySlot) : "spectator";
+  const agentNames = agentSlots.map((slot) => room.agents[slot]?.name ?? fallbackAgentName(slot));
+  const connectedLabel = hasRemoteAgent
+    ? `${connectedAgentSlots.size}/${agentSlots.length} agent devices connected`
+    : `waiting for another device`;
 
   return (
-    <Shell>
+    <Shell locked>
       {/* top bar */}
-      <header className="z-20 flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border bg-card/80 px-4 py-2.5 backdrop-blur">
-        <Brand tag={`room ${room.code ?? room.id}`} />
+      <header className="z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/85 px-4 py-2.5 backdrop-blur">
+        <Brand tag={`room ${room.code ?? room.id} · ${connectedLabel}`} />
         <div className="ml-auto flex items-center gap-2">
-          <ModelSelect rm={rm} />
           <span
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium",
@@ -327,16 +486,16 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
             <span className={cn("size-1.5 rounded-full", rm.connected ? "bg-success animate-pulse" : "bg-muted-foreground")} />
             {rm.connected ? "live" : "connecting…"}
           </span>
-          <span className={cn("rounded-full border px-2 py-1 text-[11px] font-semibold", SLOT_STYLE[rm.mySlot] ?? SLOT_STYLE.system)}>
+          <span className={cn("rounded-full border px-2 py-1 text-[11px] font-semibold", slotStyle(rm.mySlot, room))}>
             you: {meName}
           </span>
           <Button
             variant={showTraces ? "secondary" : "outline"}
             size="xs"
             onClick={() => setShowTraces((v) => !v)}
-            title="Trace Inspector — the proof layer: classify → reduce → guard → schedule"
+            title="Internal State — live reducer snapshot plus trace payloads"
           >
-            <ListTree className="size-3.5" /> Traces
+            <ListTree className="size-3.5" /> State
           </Button>
           <Button variant="outline" size="xs" onClick={() => setShowQr((v) => !v)}>
             <QrCode className="size-3.5" /> Invite
@@ -352,7 +511,7 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
           <span className="min-w-0 flex-1 truncate text-foreground/90">{room.state.goal}</span>
           {/* provenance: this room is genuinely model-generated, never scripted */}
           <Badge variant="outline" className="hidden shrink-0 font-mono text-[10px] normal-case sm:inline-flex" title="Every utterance is generated live by this model — nothing is scripted.">
-            openai · {room.state.model} · live
+            openai · {room.state.model} · {currentProfile.short}
           </Badge>
           <span className="shrink-0 font-mono text-[11px] text-muted-foreground">turn {room.state.turn}</span>
           {room.state.done && <Badge variant="success" dot>agreed</Badge>}
@@ -360,12 +519,14 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
         </div>
       </div>
 
-      {showQr && (
+      <LiveVersionPanel room={room} onChange={rm.setProfile} onAgentCountChange={rm.setAgentCount} />
+
+      {showQr && waitingForAgent && (
         <div className="flex shrink-0 flex-col items-center gap-3 border-b border-border bg-primary/[0.04] px-4 py-4 sm:flex-row sm:justify-center">
-          <Qr value={joinUrl} size={148} />
-          <div className="text-center sm:text-left">
+          <Qr value={joinUrl} size={132} />
+          <div className="max-w-xl text-center sm:text-left">
             <p className="flex items-center justify-center gap-2 text-sm font-semibold sm:justify-start">
-              Scan from your phone to add Ben
+              Scan from your phone to join another agent
               {room.private && (
                 <Badge variant="warning" className="gap-1">
                   <Lock className="size-3" /> private
@@ -375,7 +536,7 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
             <p className="mt-0.5 text-xs text-muted-foreground">
               {room.private
                 ? "Unlisted room — only people with this link, QR, or code can join."
-                : "Both devices join the same room. Keep them near each other to hear the conversation."}
+                : "Devices join the same room. Keep them near each other to hear the conversation."}
             </p>
             {room.code && (
               <p className="mt-2 text-xs text-muted-foreground">
@@ -386,35 +547,37 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
             )}
             <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
               <ShareInvite joinUrl={joinUrl} code={room.code} />
-              <code className="max-w-full truncate rounded bg-elevated px-1.5 py-0.5 text-[11px] text-primary">{joinUrl}</code>
+              <code className="max-w-[20rem] truncate rounded bg-elevated px-1.5 py-0.5 text-[11px] text-primary">{joinUrl}</code>
             </div>
           </div>
         </div>
       )}
 
       {/* transcript */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
         <div className="mx-auto flex max-w-3xl flex-col gap-2.5">
-          {room.utterances.length === 0 && (
-            <div className="mt-10 text-center text-sm text-muted-foreground">
-              Press <span className="font-semibold text-foreground">Start</span> to let {room.agents.a.name} and {room.agents.b.name} begin — or hold the mic to speak first.
+          {hiddenUtteranceCount > 0 && (
+            <div className="py-1 text-center text-[11px] text-muted-foreground">
+              Showing latest {visibleUtterances.length} of {room.utterances.length} room entries.
             </div>
           )}
-          {room.utterances.map((u) => (
-            <UtteranceRow key={u.id} u={u} isFloor={u.slot === room.state.floorOwner} />
+          {room.utterances.length === 0 && (
+            <div className="mt-10 text-center text-sm text-muted-foreground">
+              Press <span className="font-semibold text-foreground">Start</span> to let {compactNameList(agentNames)} begin — or hold the mic to speak first.
+            </div>
+          )}
+          {visibleUtterances.map((u) => (
+            <UtteranceRow key={u.id} u={u} room={room} isFloor={u.slot === room.state.floorOwner} />
           ))}
         </div>
       </div>
 
       {/* trace inspector — the proof layer */}
-      {showTraces && <TracePanel traces={room.traces ?? []} />}
-
-      {/* room state inspector */}
-      <RoomStateBar room={room} />
+      {showTraces && <StateInspector room={room} />}
 
       {/* controls */}
-      <div className="shrink-0 border-t border-border bg-card/80 px-4 py-3 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-2">
+      <div className="shrink-0 border-t border-border bg-card/85 px-4 py-3 backdrop-blur">
+        <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-2xl border border-border bg-background/85 p-2 shadow-panel">
           {room.state.running ? (
             <Button variant="outline" size="default" onClick={() => rm.setRunning(false)}>
               <Pause className="size-4" /> Pause
@@ -424,11 +587,19 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
               <Play className="size-4 fill-current" /> {room.state.turn === 0 ? "Start" : "Resume"}
             </Button>
           )}
-          <Button variant="outline" size="default" onClick={rm.step} disabled={room.state.running}>
-            <StepForward className="size-4" /> Step
-          </Button>
+          <input
+            value={steer}
+            onChange={(e) => setSteer(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && steer.trim()) {
+                rm.sendText(steer);
+                setSteer("");
+              }
+            }}
+            placeholder="Message or steer the agents"
+            className="h-10 min-w-0 flex-1 bg-transparent px-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+          />
 
-          {/* press-to-talk */}
           <button
             onPointerDown={(e) => {
               e.preventDefault();
@@ -437,30 +608,45 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
             onPointerUp={rm.endTalk}
             onPointerLeave={() => rm.recording && rm.endTalk()}
             className={cn(
-              "inline-flex select-none items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all",
+              "inline-flex size-10 shrink-0 select-none items-center justify-center rounded-full text-sm font-medium transition-all",
               rm.recording
                 ? "bg-destructive text-destructive-foreground shadow-[0_0_0_4px_hsl(var(--destructive)/0.25)]"
                 : "border border-border-strong bg-elevated/60 text-foreground hover:border-primary/40",
             )}
             title="Hold to talk"
+            aria-label={rm.recording ? "Release to send voice steer" : "Hold to talk"}
           >
             <Mic className={cn("size-4", rm.recording && "animate-pulse")} />
-            {rm.recording ? "Listening… release to send" : "Hold to talk"}
+            <span className="sr-only">{rm.recording ? "Listening, release to send" : "Hold to talk"}</span>
           </button>
+
+          <Button
+            variant="secondary"
+            size="icon"
+            onClick={() => {
+              if (steer.trim()) {
+                rm.sendText(steer);
+                setSteer("");
+              }
+            }}
+            disabled={!steer.trim()}
+            title="Send steer"
+          >
+            <Send className="size-4" />
+          </Button>
 
           <button
             onClick={() => rm.setPlayAll(!rm.playAll)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-2 text-xs font-medium transition-colors",
+              "inline-flex size-9 shrink-0 items-center justify-center rounded-full border text-xs font-medium transition-colors",
               rm.playAll ? "border-primary/40 bg-primary/10 text-primary" : "border-border bg-elevated/60 text-muted-foreground hover:text-foreground",
             )}
-            title="Play audio for both agents on this device"
+            title="Play audio for all agents on this device"
           >
             {rm.playAll ? <Volume2 className="size-3.5" /> : <VolumeX className="size-3.5" />}
-            hear both
           </button>
 
-          <div className="flex min-w-40 flex-1 items-center gap-2">
+          <div className="hidden">
             <input
               value={steer}
               onChange={(e) => setSteer(e.target.value)}
@@ -493,6 +679,113 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
   );
 }
 
+function LiveVersionPanel({
+  room,
+  onChange,
+  onAgentCountChange,
+}: {
+  room: PublicRoom;
+  onChange: (profile: CapabilityProfileId) => void;
+  onAgentCountChange: (agentCount: number) => void;
+}) {
+  const activeProfile = profileMeta(room.state.profile);
+  const task = room.state.task;
+  const roomStateItems = [
+    ["version", activeProfile.short],
+    ["agents", String(room.state.agentCount)],
+    ["floor", room.agents[room.state.floorOwner]?.name ?? fallbackAgentName(room.state.floorOwner)],
+    ["act", room.state.nextRequiredAct],
+    ["turn", String(room.state.turn)],
+    ["ack", room.state.suppressAcknowledgements ? "suppressed" : "allowed"],
+    ["risk", room.state.loopRisk ? "true" : "false"],
+  ];
+  if (task?.kind === "count_to_n") {
+    roomStateItems.splice(4, 0, ["count", `${task.next}/${task.target}`]);
+  }
+
+  return (
+    <section className="shrink-0 border-b border-border bg-background/75 px-4 py-3">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Agent versions</span>
+          <Badge variant="default" className="font-mono text-[10px]">
+            active {activeProfile.short}
+          </Badge>
+          <span className="text-xs text-muted-foreground">
+            Switches the live room behavior for every joined device.
+          </span>
+          <Button
+            variant="outline"
+            size="xs"
+            onClick={() => onAgentCountChange(Math.min(MAX_AGENT_COUNT, room.state.agentCount + 1))}
+            disabled={room.state.agentCount >= MAX_AGENT_COUNT}
+            title="Add one more generated agent to this live room"
+          >
+            <Plus className="size-3.5" /> Agent
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+          {PROFILE_OPTIONS.map((p) => {
+            const active = room.state.profile === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => onChange(p.id)}
+                className={cn(
+                  "min-w-0 rounded-lg border p-2.5 text-left transition-colors",
+                  active
+                    ? "border-primary/60 bg-primary/[0.12] shadow-[0_0_0_1px_hsl(var(--primary)/0.2)_inset]"
+                    : "border-border bg-card/55 hover:border-border-strong hover:bg-elevated/70",
+                )}
+                aria-pressed={active}
+                title={`${p.label}: ${p.liveEffect}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex size-7 shrink-0 items-center justify-center rounded-md border font-mono text-xs font-bold",
+                      active ? "border-primary/50 bg-primary text-primary-foreground" : "border-border-strong bg-background text-foreground",
+                    )}
+                  >
+                    {p.short}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-xs font-bold text-foreground">{p.label}</span>
+                    <span className="block truncate text-[10px] text-muted-foreground">{p.note}</span>
+                  </span>
+                </div>
+                <div className="mt-2 space-y-1 font-mono text-[10px] leading-snug text-muted-foreground">
+                  <p>
+                    <span className="text-foreground/80">coord:</span> {p.coordination}
+                  </p>
+                  <p>
+                    <span className="text-foreground/80">steer:</span> {p.steering}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-border bg-[hsl(223_30%_6%)]/70 px-3 py-2 font-mono text-[10px]">
+          <span className="inline-flex items-center gap-1.5 font-sans font-bold uppercase tracking-wider text-success">
+            <span className="size-1.5 animate-pulse rounded-full bg-success shadow-[0_0_6px_hsl(var(--success))]" />
+            live roomState
+          </span>
+          {roomStateItems.map(([label, value]) => (
+            <span key={label} className="inline-flex items-center gap-1 whitespace-nowrap">
+              <span className="text-muted-foreground">{label}</span>
+              <span className="font-semibold text-foreground">{value}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
   const room = rm.room!;
   const cur = room.models.find((m) => m.id === room.state.model);
@@ -518,11 +811,20 @@ function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
   );
 }
 
-function UtteranceRow({ u, isFloor }: { u: RoomUtterance; isFloor: boolean }) {
-  const style = SLOT_STYLE[u.slot] ?? SLOT_STYLE.system;
+function UtteranceRow({ u, room, isFloor }: { u: RoomUtterance; room: PublicRoom; isFloor: boolean }) {
+  const style = slotStyle(u.slot, room);
   function play() {
     const src = u.audioUrl ?? (u.audioId ? `${LIVE_BASE}/live/audio/${u.audioId}` : null);
     if (src) void new Audio(src).play().catch(() => {});
+  }
+  if (u.slot === "system") {
+    return (
+      <div className="flex justify-center py-1">
+        <div className="max-w-[90%] rounded-full border border-border bg-elevated/70 px-3 py-1 text-center text-xs text-muted-foreground">
+          {u.text}
+        </div>
+      </div>
+    );
   }
   return (
     <div
@@ -638,12 +940,96 @@ function TracePanel({ traces }: { traces: TraceEvent[] }) {
   );
 }
 
+function StateInspector({ room }: { room: PublicRoom }) {
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const traces = room.traces ?? [];
+  const ordered = [...traces].reverse();
+  const stateSnapshot = {
+    room: {
+      id: room.id,
+      code: room.code,
+      private: Boolean(room.private),
+    },
+    state: room.state,
+    agents: activeSlots(room.state.agentCount).map((slot) => {
+      const agent = room.agents[slot];
+      return {
+        slot,
+        name: agent?.name ?? fallbackAgentName(slot),
+        device: agent?.device ?? "unassigned",
+        color: agent?.color ?? "default",
+      };
+    }),
+    participants: room.participants,
+    utterances: {
+      total: room.utterances.length,
+      rendered: Math.min(room.utterances.length, VISIBLE_UTTERANCE_LIMIT),
+      renderLimit: VISIBLE_UTTERANCE_LIMIT,
+    },
+    traces: {
+      total: traces.length,
+    },
+  };
+
+  return (
+    <div className="max-h-[min(44vh,26rem)] shrink-0 overflow-hidden border-t border-border bg-[hsl(223_30%_6%)]/95 px-4 py-2 backdrop-blur">
+      <div className="mx-auto grid h-full max-w-6xl gap-3 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <div className="min-h-0 overflow-y-auto rounded-lg border border-border/70 bg-background/40 p-2">
+          <div className="mb-1.5 flex items-center gap-2">
+            <ListTree className="size-3.5 text-primary" />
+            <span className="text-[11px] font-bold tracking-wide text-primary">Internal State</span>
+            <span className="text-[10px] text-muted-foreground">live reducer snapshot</span>
+          </div>
+          <pre className="overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
+            {JSON.stringify(stateSnapshot, null, 2)}
+          </pre>
+        </div>
+        <div className="min-h-0 overflow-y-auto">
+          <div className="mb-1.5 flex items-center gap-2">
+            <ListTree className="size-3.5 text-primary" />
+            <span className="text-[11px] font-bold tracking-wide text-primary">Trace Inspector</span>
+            <span className="text-[10px] text-muted-foreground">click a row for payload</span>
+          </div>
+          {ordered.length === 0 ? (
+            <p className="py-2 text-[11px] text-muted-foreground">No trace events yet.</p>
+          ) : (
+            <div className="flex flex-col gap-1">
+              {ordered.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setOpenId((v) => (v === t.id ? null : t.id))}
+                  className="rounded-md border border-border/60 bg-card/50 px-2 py-1 text-left transition-colors hover:border-border-strong"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className={cn("shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9px] font-semibold", TRACE_STYLE[t.kind] ?? "border-border-strong text-muted-foreground")}>
+                      {t.kind}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-[11px] text-foreground/85">{t.summary}</span>
+                    <span className="shrink-0 font-mono text-[9px] text-muted-foreground">
+                      {new Date(t.ts).toLocaleTimeString([], { hour12: false })}
+                    </span>
+                  </span>
+                  {openId === t.id && t.payload !== undefined && (
+                    <pre className="mt-1 overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
+                      {JSON.stringify(t.payload, null, 2)}
+                    </pre>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RoomStateBar({ room }: { room: PublicRoom }) {
   const s = room.state;
   const item = (label: string, value: React.ReactNode, slot?: Slot) => (
     <span className="inline-flex items-center gap-1 whitespace-nowrap">
       <span className="text-muted-foreground">{label}</span>
-      <span className={cn("font-semibold", slot ? SLOT_STYLE[slot]?.split(" ")[0] : "text-foreground")}>{value}</span>
+      <span className={cn("font-semibold", slot ? slotStyle(slot, room).split(" ")[0] : "text-foreground")}>{value}</span>
     </span>
   );
   return (
@@ -653,7 +1039,7 @@ function RoomStateBar({ room }: { room: PublicRoom }) {
           <span className="size-1.5 animate-pulse rounded-full bg-success shadow-[0_0_6px_hsl(var(--success))]" />
           roomState
         </span>
-        {item("floor", room.agents[s.floorOwner]?.name ?? s.floorOwner, s.floorOwner)}
+        {item("floor", room.agents[s.floorOwner]?.name ?? fallbackAgentName(s.floorOwner), s.floorOwner)}
         {item("turn", s.turn)}
         {item("act", s.nextRequiredAct)}
         {s.task?.kind === "count_to_n" && item("count", `${s.task.next}/${s.task.target}`)}

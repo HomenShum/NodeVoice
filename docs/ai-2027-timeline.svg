@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 430" width="1040" height="430" role="img" aria-labelledby="title desc">
+  <title id="title">AI agent timeline from 2024 to 2028</title>
+  <desc id="desc">A timeline showing the progression from chat copilots to agent labor, AI R and D automation, superhuman research systems, and institutional control.</desc>
+  <style>
+    .bg { fill: #0b0f14; }
+    .panel { fill: #111722; stroke: #233044; stroke-width: 1; }
+    .muted { fill: #8f9bae; font: 500 13px Inter, system-ui, sans-serif; }
+    .label { fill: #f3f7fb; font: 800 18px Inter, system-ui, sans-serif; }
+    .small { fill: #c3ccd8; font: 500 12px Inter, system-ui, sans-serif; }
+    .title { fill: #f6f9fc; font: 850 24px Inter, system-ui, sans-serif; }
+    .axis { stroke: #3b4658; stroke-width: 3; stroke-linecap: round; }
+    .dot { stroke: #0b0f14; stroke-width: 4; }
+  </style>
+  <rect class="bg" width="1040" height="430" rx="20"/>
+  <text class="title" x="40" y="46">From copilots to room-scale agent organizations</text>
+  <text class="muted" x="40" y="72">The 2027 moment is not one model release. It is the convergence of autonomy, tool access, cheap parallel labor, R&amp;D feedback, and governance pressure.</text>
+
+  <line class="axis" x1="86" y1="215" x2="954" y2="215"/>
+
+  <g transform="translate(64 112)">
+    <rect class="panel" x="0" y="0" width="164" height="94" rx="10"/>
+    <circle class="dot" cx="28" cy="103" r="13" fill="#49b6ff"/>
+    <text class="label" x="18" y="30">2024</text>
+    <text class="small" x="18" y="54">Chat copilots</text>
+    <text class="muted" x="18" y="74">Single-user prompts,</text>
+    <text class="muted" x="18" y="91">weak persistence.</text>
+  </g>
+
+  <g transform="translate(230 230)">
+    <circle class="dot" cx="28" cy="-15" r="13" fill="#f4b64a"/>
+    <rect class="panel" x="0" y="8" width="172" height="104" rx="10"/>
+    <text class="label" x="18" y="40">2025</text>
+    <text class="small" x="18" y="64">Stumbling agents</text>
+    <text class="muted" x="18" y="84">Coding agents and</text>
+    <text class="muted" x="18" y="101">tool protocols appear.</text>
+  </g>
+
+  <g transform="translate(410 112)">
+    <rect class="panel" x="0" y="0" width="176" height="104" rx="10"/>
+    <circle class="dot" cx="28" cy="103" r="13" fill="#36d399"/>
+    <text class="label" x="18" y="30">2026</text>
+    <text class="small" x="18" y="54">Room OS buildout</text>
+    <text class="muted" x="18" y="74">Shared state, traces,</text>
+    <text class="muted" x="18" y="91">voice steering, cloud ledger.</text>
+  </g>
+
+  <g transform="translate(596 230)">
+    <circle class="dot" cx="28" cy="-15" r="13" fill="#ff6b6b"/>
+    <rect class="panel" x="0" y="8" width="190" height="120" rx="10"/>
+    <text class="label" x="18" y="40">2027</text>
+    <text class="small" x="18" y="64">Schedulable AI labor</text>
+    <text class="muted" x="18" y="84">Parallel agent teams</text>
+    <text class="muted" x="18" y="101">compress software and</text>
+    <text class="muted" x="18" y="118">research cycles.</text>
+  </g>
+
+  <g transform="translate(802 112)">
+    <rect class="panel" x="0" y="0" width="188" height="116" rx="10"/>
+    <circle class="dot" cx="28" cy="103" r="13" fill="#b98cff"/>
+    <text class="label" x="18" y="30">2028</text>
+    <text class="small" x="18" y="54">Control becomes product</text>
+    <text class="muted" x="18" y="74">Audit, treaty, security,</text>
+    <text class="muted" x="18" y="91">budget, and authority</text>
+    <text class="muted" x="18" y="108">layers matter most.</text>
+  </g>
+
+  <rect x="40" y="354" width="960" height="28" rx="14" fill="#132318" stroke="#27533a"/>
+  <text class="small" x="64" y="373">Agency reveal: talks -> thinks -> uses tools -> loops -> remembers -> controls software -> works async -> delegates.</text>
+  <rect x="40" y="390" width="960" height="28" rx="14" fill="#2a1519" stroke="#5a2830"/>
+  <text class="small" x="64" y="409">Failure receipts: loops, runaway spend, fake completion, unsafe writes, and prod incidents create the demand for room-state control.</text>
+</svg>

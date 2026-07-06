@@ -5,7 +5,7 @@
  * response bodies are size-capped.
  */
 
-import { coerceCountTurn, type LiveCountTask } from "./steering.js";
+import { coerceCountTurn, normalizeHumanSteeringIntent, type CapabilityProfile, type HumanSteeringIntent, type LiveCountTask } from "./steering.js";
 
 const OPENAI = "https://api.openai.com/v1";
 const ELEVEN = "https://api.elevenlabs.io/v1";
@@ -28,6 +28,7 @@ const MAX_STT_BYTES = 20 * 1024 * 1024; // Whisper hard limit is 25 MB
 
 export interface AgentTurnInput {
   goal: string;
+  profile?: CapabilityProfile;
   persona: string;
   otherName: string;
   selfName: string;
@@ -104,8 +105,9 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
   const backchannelRun = input.recentActs.slice(-2).filter((a) => a === "backchannel").length >= 2;
 
   const system = [
-    `You are ${input.selfName}, one of two voice agents collaborating out loud in a shared room with ${input.otherName}.`,
+    `You are ${input.selfName}, one voice agent collaborating out loud in a shared room. The next scheduled peer is ${input.otherName}.`,
     `Persona: ${input.persona}`,
+    input.profile ? `Capability profile: ${input.profile}.` : ``,
     `Shared goal: ${input.goal}`,
     input.countTask
       ? `Active count task: next=${input.countTask.next}, target=${input.countTask.target}. Say exactly the next number and no commentary. Set done=true only when you say the target.`
@@ -117,7 +119,7 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
     `- Make concrete progress toward the goal every turn. Build on what ${input.otherName} just said; do not merely agree.`,
     `- NEVER produce an empty acknowledgement like "yeah, exactly" or "sounds good" on its own — that wastes a turn.`,
     backchannelRun ? `- The last turns were low-content acknowledgements. You MUST take a substantive task_action now.` : ``,
-    `- When the goal is genuinely achieved and both of you would agree it is complete, set done=true and give a crisp closing summary.`,
+    `- When the goal is genuinely achieved and the active agents would agree it is complete, set done=true and give a crisp closing summary.`,
     input.humanNote ? `- A human just steered the room: "${input.humanNote}". Incorporate it directly.` : ``,
     ``,
     `Respond ONLY with JSON: {"text": string, "speechAct": "task_action"|"question"|"backchannel", "done": boolean}`,
@@ -163,6 +165,65 @@ export async function generateAgentTurn(input: AgentTurnInput): Promise<AgentTur
       parsed.speechAct === "backchannel" || parsed.speechAct === "question" ? parsed.speechAct : "task_action";
     const turn: AgentTurnResult = { text, speechAct, done: Boolean(parsed.done) };
     return input.countTask ? coerceCountTurn(turn, input.countTask) : turn;
+  });
+}
+
+export async function interpretHumanSteer(input: {
+  text: string;
+  currentGoal: string;
+  model?: string;
+  profile?: CapabilityProfile;
+  transcript: { name: string; text: string }[];
+}): Promise<HumanSteeringIntent> {
+  const key = keyOrThrow("OPENAI_API_KEY");
+  const model = input.model || LLM_MODEL;
+  const nextgen = isNextGenModel(model);
+  const system = [
+    `You interpret human steering for a live multi-agent voice room.`,
+    `Return only JSON. Do not write an agent reply.`,
+    `Current goal: ${input.currentGoal}`,
+    input.profile ? `Capability profile: ${input.profile}` : ``,
+    ``,
+    `Classify the human's latest utterance by intent, not by keyword.`,
+    `Allowed JSON shapes:`,
+    `{"kind":"count_task","start":number,"target":number,"confidence":number,"reason":string}`,
+    `{"kind":"retarget","goal":string,"confidence":number,"reason":string}`,
+    `{"kind":"constraint","note":string,"confidence":number,"reason":string}`,
+    `{"kind":"question","question":string,"confidence":number,"reason":string}`,
+    `{"kind":"control","action":"start"|"pause"|"resume"|"stop","confidence":number,"reason":string}`,
+    `{"kind":"none","confidence":number,"reason":string}`,
+    ``,
+    `Use count_task when the human asks the agents to count, alternate, count one at a time, count up to N, or count from A to B.`,
+    `Use retarget for a new non-count task or goal.`,
+    `Use constraint for budget/style/process constraints that should steer the existing goal without replacing it.`,
+    `Use none for approvals/backchannels like "sounds good" or "great".`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  const convo = input.transcript.slice(-10).map((m) => `${m.name}: ${m.text}`).join("\n");
+
+  return withTimeout(12_000, async (signal) => {
+    const r = await fetch(`${OPENAI}/chat/completions`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        model,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          {
+            role: "user",
+            content: `${convo ? `Recent transcript:\n${convo}\n\n` : ""}Latest human utterance:\n${input.text}`,
+          },
+        ],
+        ...(nextgen ? { max_completion_tokens: 1000, reasoning_effort: REASONING_EFFORT } : { temperature: 0, max_tokens: 180 }),
+      }),
+      signal,
+    });
+    if (!r.ok) throw new Error(`intent llm failed: ${r.status} ${(await r.text()).slice(0, 200)}`);
+    const j = (await r.json()) as { choices?: { message?: { content?: string } }[] };
+    const parsed = JSON.parse(j.choices?.[0]?.message?.content ?? "{}") as unknown;
+    return normalizeHumanSteeringIntent(parsed, input.text);
   });
 }
 

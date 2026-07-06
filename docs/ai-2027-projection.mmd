@@ -1,0 +1,23 @@
+flowchart LR
+  classDef capability fill:#30161e,stroke:#ff6b6b,color:#f7f9fc,stroke-width:1px
+  classDef load fill:#302514,stroke:#f4b64a,color:#f7f9fc,stroke-width:1px
+  classDef control fill:#132b21,stroke:#36d399,color:#f7f9fc,stroke-width:1px
+  classDef moment fill:#151e2b,stroke:#7c8da6,color:#f7f9fc,stroke-width:1px
+
+  start["2025<br/>Agents are interesting"]:::moment
+  y2026["2026<br/>Agents become product-shaped"]:::moment
+  y2027["2027 moment<br/>Capability compounding"]:::capability
+  y2028["2028 moment<br/>Control becomes product"]:::control
+
+  cap["Capability curve<br/>longer tasks, tools, code, research, parallel copies"]:::capability
+  load["Coordination load<br/>state, permissions, retries, audit, security, budget"]:::load
+  plane["Control plane<br/>Room OS: durable reducer, traces, caps, human steering"]:::control
+
+  start --> y2026 --> y2027 --> y2028
+  y2026 --> cap --> y2027
+  cap --> load
+  load --> plane
+  plane --> y2028
+
+  y2027 -. without control .-> load
+  y2028 -. product wedge .-> plane

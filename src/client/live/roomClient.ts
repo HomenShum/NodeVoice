@@ -20,5 +20,5 @@ export const useRoom: typeof useHttpRoom = CONVEX_MODE
 /** Lobby list of joinable rooms (reactive on Convex, polled on HTTP). */
 export const useActiveRooms: typeof useHttpActiveRooms = CONVEX_MODE ? useConvexActiveRooms : useHttpActiveRooms;
 
-export { LIVE_BASE } from "./useRoom";
-export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent, TraceEvent, ActiveRoom } from "./useRoom";
+export { LIVE_BASE, AGENT_SLOTS, DEFAULT_AGENT_COUNT, MAX_AGENT_COUNT, activeSlots, agentIndexFromSlot, isAgentSlot, slotForIndex } from "./useRoom";
+export type { Slot, MySlot, RoomUtterance, PublicRoom, RouterModel, RoomAgent, TraceEvent, ActiveRoom, CapabilityProfileId, CapabilityProfileOption } from "./useRoom";

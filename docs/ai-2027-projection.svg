@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 460" width="1040" height="460" role="img" aria-labelledby="title desc">
+  <title id="title">Projection chart for AI capability, coordination load, and control plane maturity</title>
+  <desc id="desc">A projection chart from 2025 to 2028 showing that agent capability and coordination load rise faster than control-plane maturity, making Room OS style shared state important.</desc>
+  <style>
+    .bg { fill: #0b0f14; }
+    .grid { stroke: #202a39; stroke-width: 1; }
+    .axis { stroke: #526071; stroke-width: 2; }
+    .title { fill: #f6f9fc; font: 850 24px Inter, system-ui, sans-serif; }
+    .muted { fill: #8f9bae; font: 500 13px Inter, system-ui, sans-serif; }
+    .tick { fill: #9aa6b7; font: 600 12px Inter, system-ui, sans-serif; }
+    .label { fill: #eef4fb; font: 800 13px Inter, system-ui, sans-serif; }
+    .note { fill: #c8d2df; font: 600 12px Inter, system-ui, sans-serif; }
+    .card { fill: #111722; stroke: #263245; stroke-width: 1; }
+  </style>
+  <rect class="bg" width="1040" height="460" rx="20"/>
+  <text class="title" x="40" y="46">Projection: why 2027 and 2028 are different moments</text>
+  <text class="muted" x="40" y="72">2027 is capability compounding. 2028 is institutional control catching up: policy, security, audit, and product runtimes.</text>
+
+  <g transform="translate(86 108)">
+    <rect x="0" y="0" width="700" height="270" rx="12" fill="#0f151f" stroke="#273447"/>
+    <line class="grid" x1="0" y1="216" x2="700" y2="216"/>
+    <line class="grid" x1="0" y1="162" x2="700" y2="162"/>
+    <line class="grid" x1="0" y1="108" x2="700" y2="108"/>
+    <line class="grid" x1="0" y1="54" x2="700" y2="54"/>
+    <line class="grid" x1="175" y1="0" x2="175" y2="270"/>
+    <line class="grid" x1="350" y1="0" x2="350" y2="270"/>
+    <line class="grid" x1="525" y1="0" x2="525" y2="270"/>
+    <line class="axis" x1="0" y1="270" x2="700" y2="270"/>
+    <line class="axis" x1="0" y1="0" x2="0" y2="270"/>
+
+    <path d="M0 230 C120 220 210 196 300 156 C410 108 510 58 700 24" fill="none" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>
+    <path d="M0 238 C110 224 220 198 330 142 C470 70 575 36 700 14" fill="none" stroke="#f4b64a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M0 246 C130 240 250 226 350 202 C470 172 585 126 700 86" fill="none" stroke="#36d399" stroke-width="5" stroke-linecap="round"/>
+
+    <circle cx="350" cy="156" r="6" fill="#ff6b6b"/>
+    <circle cx="350" cy="142" r="6" fill="#f4b64a"/>
+    <circle cx="350" cy="202" r="6" fill="#36d399"/>
+    <rect x="312" y="28" width="128" height="42" rx="8" fill="#2a1420" stroke="#ff6b6b"/>
+    <text class="note" x="326" y="54">2027 moment</text>
+
+    <circle cx="700" cy="24" r="6" fill="#ff6b6b"/>
+    <circle cx="700" cy="14" r="6" fill="#f4b64a"/>
+    <circle cx="700" cy="86" r="6" fill="#36d399"/>
+    <rect x="546" y="102" width="138" height="42" rx="8" fill="#13261e" stroke="#36d399"/>
+    <text class="note" x="560" y="128">2028 moment</text>
+
+    <text class="tick" x="0" y="294" text-anchor="middle">2025</text>
+    <text class="tick" x="175" y="294" text-anchor="middle">2026</text>
+    <text class="tick" x="350" y="294" text-anchor="middle">2027</text>
+    <text class="tick" x="525" y="294" text-anchor="middle">late 2027</text>
+    <text class="tick" x="700" y="294" text-anchor="middle">2028</text>
+    <text class="tick" x="-18" y="274" text-anchor="end">low</text>
+    <text class="tick" x="-18" y="58" text-anchor="end">high</text>
+  </g>
+
+  <g transform="translate(820 114)">
+    <rect class="card" x="0" y="0" width="180" height="198" rx="12"/>
+    <circle cx="20" cy="32" r="7" fill="#ff6b6b"/>
+    <text class="label" x="36" y="36">Capability</text>
+    <text class="muted" x="20" y="62">Long-horizon tasks,</text>
+    <text class="muted" x="20" y="80">coding, research,</text>
+    <text class="muted" x="20" y="98">parallel copies.</text>
+    <circle cx="20" cy="126" r="7" fill="#f4b64a"/>
+    <text class="label" x="36" y="130">Coordination load</text>
+    <text class="muted" x="20" y="156">Floor control, state,</text>
+    <text class="muted" x="20" y="174">audit, approvals,</text>
+    <text class="muted" x="20" y="192">security boundaries.</text>
+  </g>
+
+  <g transform="translate(820 328)">
+    <rect class="card" x="0" y="0" width="180" height="70" rx="12"/>
+    <circle cx="20" cy="30" r="7" fill="#36d399"/>
+    <text class="label" x="36" y="34">Control plane</text>
+    <text class="muted" x="20" y="56">Room OS, traces, caps, durable reducers.</text>
+  </g>
+
+  <text class="note" x="86" y="424">Interpretation: the product opportunity is the green line. Make coordination explicit before the orange line becomes the bottleneck and the red line becomes unreviewable.</text>
+</svg>

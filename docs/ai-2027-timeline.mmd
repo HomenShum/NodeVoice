@@ -1,0 +1,28 @@
+flowchart LR
+  classDef reveal fill:#10283d,stroke:#49b6ff,color:#f3f7fb,stroke-width:1px
+  classDef failure fill:#31171b,stroke:#ff6b6b,color:#f3f7fb,stroke-width:1px
+  classDef control fill:#132b21,stroke:#36d399,color:#f3f7fb,stroke-width:1px
+
+  subgraph agency["Agency reveal: what becomes newly visible"]
+    a2024["2024: talks<br/>Chat copilots feel useful"]:::reveal
+    a2025["2025: uses tools<br/>Stumbling agents and coding demos"]:::reveal
+    a2026["2026: works in rooms<br/>Shared state, traces, hosted ledgers"]:::control
+    a2027["2027: works async<br/>Parallel agent labor and AI R&D loops"]:::reveal
+    a2028["2028: delegates<br/>Organizations need agent control planes"]:::control
+  end
+
+  subgraph receipts["Failure receipts: what goes viral after the reveal"]
+    f2024["Hallucinated certainty<br/>Prompt fragility"]:::failure
+    f2025["Auto loops<br/>Runaway spend and demo debunks"]:::failure
+    f2026["Fake done<br/>Lost state and unsafe tool writes"]:::failure
+    f2027["Fleet failures<br/>Bad commits, bad evals, security incidents"]:::failure
+    f2028["Institutional risk<br/>Audits, liability, treaty pressure"]:::failure
+  end
+
+  a2024 --> a2025 --> a2026 --> a2027 --> a2028
+  f2024 --> f2025 --> f2026 --> f2027 --> f2028
+  a2024 -. creates receipts .-> f2024
+  a2025 -. creates receipts .-> f2025
+  a2026 -. creates receipts .-> f2026
+  a2027 -. creates receipts .-> f2027
+  a2028 -. creates receipts .-> f2028

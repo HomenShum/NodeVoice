@@ -1,7 +1,35 @@
 import * as React from "react";
 
-export type Slot = "a" | "b";
+export type Slot = string;
 export type MySlot = Slot | "spectator";
+export const MIN_AGENT_COUNT = 1;
+export const DEFAULT_AGENT_COUNT = 2;
+export const MAX_AGENT_COUNT = 100;
+
+export function slotForIndex(index: number): Slot {
+  const n = Math.max(1, Math.min(MAX_AGENT_COUNT, Math.trunc(index)));
+  return `agent-${String(n).padStart(3, "0")}`;
+}
+
+export function agentIndexFromSlot(slot: string): number | null {
+  const legacy: Record<string, number> = { a: 1, b: 2, c: 3, d: 4, e: 5 };
+  if (slot in legacy) return legacy[slot]!;
+  const match = /^agent-(\d{3})$/.exec(slot);
+  if (!match) return null;
+  const n = Number(match[1]);
+  return Number.isInteger(n) && n >= 1 && n <= MAX_AGENT_COUNT ? n : null;
+}
+
+export function isAgentSlot(value: unknown): value is Slot {
+  return typeof value === "string" && agentIndexFromSlot(value) !== null;
+}
+
+export function activeSlots(agentCount?: number): Slot[] {
+  const count = typeof agentCount === "number" && Number.isFinite(agentCount) ? Math.max(MIN_AGENT_COUNT, Math.min(MAX_AGENT_COUNT, Math.trunc(agentCount))) : DEFAULT_AGENT_COUNT;
+  return Array.from({ length: count }, (_, i) => slotForIndex(i + 1));
+}
+
+export const AGENT_SLOTS = activeSlots(MAX_AGENT_COUNT);
 
 export interface RoomAgent {
   slot: Slot;
@@ -27,6 +55,13 @@ export interface RouterModel {
   tier: string;
   note: string;
 }
+export type CapabilityProfileId = "v0_no_room_state" | "v1_room_state" | "v2_work_room" | "v3_agent_ecosystem";
+export interface CapabilityProfileOption {
+  id: CapabilityProfileId;
+  label: string;
+  shortLabel: string;
+  note: string;
+}
 /** One entry in the proof layer (classify → reduce → guard → schedule). */
 export interface TraceEvent {
   id: string;
@@ -40,20 +75,24 @@ export interface ActiveRoom {
   id: string;
   code?: string;
   goal: string;
+  agentCount?: number;
   turn: number;
   running: boolean;
   done: boolean;
   updatedAt: number;
+  profile?: CapabilityProfileId;
 }
 export interface PublicRoom {
   id: string;
   code?: string;
   /** unlisted from the lobby; joinable only via link/QR/code */
   private?: boolean;
-  agents: { a: RoomAgent; b: RoomAgent };
+  agents: Record<string, RoomAgent>;
   state: {
     goal: string;
     model: string;
+    agentCount: number;
+    profile: CapabilityProfileId;
     floorOwner: Slot;
     nextSpeaker: Slot;
     turn: number;
@@ -65,6 +104,7 @@ export interface PublicRoom {
     task?: { kind: "count_to_n"; target: number; next: number; completed: boolean } | null;
   };
   models: RouterModel[];
+  profiles?: CapabilityProfileOption[];
   participants: { slot: string; kind: string }[];
   utterances: RoomUtterance[];
   traces?: TraceEvent[];
@@ -223,7 +263,7 @@ export function useRoom() {
           for (const u of r.utterances) {
             if (u.audioId && rememberAudio(u.audioId)) {
               const forMe = playAllRef.current || u.slot === mySlotRef.current || mySlotRef.current === "spectator";
-              if (forMe && (u.slot === "a" || u.slot === "b")) enqueueAudio(u.audioId);
+              if (forMe && isAgentSlot(u.slot)) enqueueAudio(u.audioId);
             }
           }
         }
@@ -312,13 +352,13 @@ export function useRoom() {
     el.currentTime = 0;
   }, []);
 
-  const createRoom = React.useCallback(async (goal: string, model?: string, isPrivate?: boolean) => {
+  const createRoom = React.useCallback(async (goal: string, model?: string, isPrivate?: boolean, profile?: CapabilityProfileId, agentCount?: number) => {
     setError(null);
     try {
-      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal, model, private: isPrivate === true });
-      await post(`/live/rooms/${r.roomId}/join`, { slot: "a", kind: "creator" });
-      setMySlot("a");
-      setRoom(r.room);
+      const r = await post<{ roomId: string; room: PublicRoom }>("/live/rooms", { goal, model, private: isPrivate === true, profile, agentCount });
+      const joined = await post<{ slot: MySlot; room: PublicRoom }>(`/live/rooms/${r.roomId}/join`, { slot: "auto", kind: "creator" });
+      setMySlot(joined.slot);
+      setRoom(joined.room ?? r.room);
       connect(r.roomId);
       return r.roomId;
     } catch (e) {
@@ -327,11 +367,11 @@ export function useRoom() {
     }
   }, [connect]);
 
-  const joinRoom = React.useCallback(async (id: string, slot: MySlot) => {
+  const joinRoom = React.useCallback(async (id: string, slot: MySlot | "auto") => {
     setError(null);
     try {
       const r = await post<{ room: PublicRoom; slot: MySlot }>(`/live/rooms/${id}/join`, { slot, kind: "device" });
-      setMySlot(slot);
+      setMySlot(r.slot);
       setRoom(r.room);
       connect(id);
       return true;
@@ -347,6 +387,14 @@ export function useRoom() {
 
   const setModel = React.useCallback((model: string) => {
     if (room) void post(`/live/rooms/${room.id}/model`, { model }).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const setProfile = React.useCallback((profile: CapabilityProfileId) => {
+    if (room) void post(`/live/rooms/${room.id}/profile`, { profile }).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const setAgentCount = React.useCallback((agentCount: number) => {
+    if (room) void post(`/live/rooms/${room.id}/agents`, { agentCount }).catch((e) => setError(String(e)));
   }, [room]);
 
   const setRunning = React.useCallback((running: boolean) => {
@@ -442,6 +490,8 @@ export function useRoom() {
     joinRoom,
     setGoal,
     setModel,
+    setProfile,
+    setAgentCount,
     setRunning,
     step,
     sendText,

@@ -2,7 +2,7 @@
  * OpenAI pipeline helpers for Convex actions. Keys come from Convex env
  * (`npx convex env set OPENAI_API_KEY …`) and never reach the client.
  */
-import { coerceCountTurn, type CountTask } from "./shared";
+import { coerceCountTurn, normalizeHumanSteeringIntent, type CapabilityProfile, type CountTask, type HumanSteeringIntent } from "./shared";
 
 const OPENAI = "https://api.openai.com/v1";
 const STT_MODEL = "whisper-1";
@@ -18,6 +18,7 @@ function key(): string {
 export interface TurnInput {
   goal: string;
   model: string;
+  profile?: CapabilityProfile;
   persona: string;
   selfName: string;
   otherName: string;
@@ -36,8 +37,9 @@ export interface TurnResult {
 export async function generateAgentTurn(input: TurnInput): Promise<TurnResult> {
   const forceAction = input.recentActs.slice(-2).filter((a) => a === "backchannel").length >= 2;
   const system = [
-    `You are ${input.selfName}, one of two voice agents collaborating out loud with ${input.otherName}.`,
+    `You are ${input.selfName}, one voice agent collaborating out loud in a shared room. The next scheduled peer is ${input.otherName}.`,
     `Persona: ${input.persona}`,
+    input.profile ? `Capability profile: ${input.profile}.` : ``,
     `Shared goal: ${input.goal}`,
     input.countTask
       ? `Active count task: next=${input.countTask.next}, target=${input.countTask.target}. Say exactly the next number and no commentary. Set done=true only when you say the target.`
@@ -84,6 +86,66 @@ export async function generateAgentTurn(input: TurnInput): Promise<TurnResult> {
     const speechAct: TurnResult["speechAct"] = parsed.speechAct === "backchannel" || parsed.speechAct === "question" ? parsed.speechAct : "task_action";
     const turn: TurnResult = { text, speechAct, done: Boolean(parsed.done) };
     return input.countTask ? coerceCountTurn(turn, input.countTask) : turn;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+export async function interpretHumanSteer(input: {
+  text: string;
+  currentGoal: string;
+  model: string;
+  profile?: CapabilityProfile;
+  transcript: { name: string; text: string }[];
+}): Promise<HumanSteeringIntent> {
+  const nextgen = isNextGen(input.model);
+  const system = [
+    `You interpret human steering for a live multi-agent voice room.`,
+    `Return only JSON. Do not write an agent reply.`,
+    `Current goal: ${input.currentGoal}`,
+    input.profile ? `Capability profile: ${input.profile}` : ``,
+    ``,
+    `Classify the human's latest utterance by intent, not by keyword.`,
+    `Allowed JSON shapes:`,
+    `{"kind":"count_task","start":number,"target":number,"confidence":number,"reason":string}`,
+    `{"kind":"retarget","goal":string,"confidence":number,"reason":string}`,
+    `{"kind":"constraint","note":string,"confidence":number,"reason":string}`,
+    `{"kind":"question","question":string,"confidence":number,"reason":string}`,
+    `{"kind":"control","action":"start"|"pause"|"resume"|"stop","confidence":number,"reason":string}`,
+    `{"kind":"none","confidence":number,"reason":string}`,
+    ``,
+    `Use count_task when the human asks the agents to count, alternate, count one at a time, count up to N, or count from A to B.`,
+    `Use retarget for a new non-count task or goal.`,
+    `Use constraint for budget/style/process constraints that should steer the existing goal without replacing it.`,
+    `Use none for approvals/backchannels like "sounds good" or "great".`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  const convo = input.transcript.slice(-10).map((m) => `${m.name}: ${m.text}`).join("\n");
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 12_000);
+  try {
+    const r = await fetch(`${OPENAI}/chat/completions`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${key()}`, "content-type": "application/json" },
+      signal: ctrl.signal,
+      body: JSON.stringify({
+        model: input.model,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: system },
+          {
+            role: "user",
+            content: `${convo ? `Recent transcript:\n${convo}\n\n` : ""}Latest human utterance:\n${input.text}`,
+          },
+        ],
+        ...(nextgen ? { max_completion_tokens: 1000, reasoning_effort: "low" } : { temperature: 0, max_tokens: 180 }),
+      }),
+    });
+    if (!r.ok) throw new Error(`intent llm ${r.status} ${(await r.text()).slice(0, 160)}`);
+    const j = (await r.json()) as { choices?: { message?: { content?: string } }[] };
+    const parsed = JSON.parse(j.choices?.[0]?.message?.content ?? "{}") as unknown;
+    return normalizeHumanSteeringIntent(parsed, input.text);
   } finally {
     clearTimeout(t);
   }

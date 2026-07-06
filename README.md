@@ -14,6 +14,100 @@ The one line that matters:
 
 ---
 
+## The 2027 / 2028 read
+
+The short version: **2027 is the moment AI labor becomes schedulable; 2028 is the moment control of that labor becomes the product.** The outside trend is no longer just "better chat." The converging pieces are long-horizon task reliability, tool protocols, background coding agents, synthetic data, reinforcement learning on real workflows, large-scale compute, power infrastructure, and governments treating model capability as strategic capacity.
+
+The viral pattern has two halves. First, a new fragment of agency becomes visible: talks, thinks, uses tools, loops, remembers, controls software, works async, delegates. Then the failure wave goes viral too: looping agents burning money, demos that overclaim, agents saying work is done when it is not, unsafe writes, and production incidents. The counter-content spreads because it has drama plus receipts. That is the market signal: every agency reveal creates demand for a control layer.
+
+```mermaid
+flowchart LR
+  classDef reveal fill:#10283d,stroke:#49b6ff,color:#f3f7fb,stroke-width:1px
+  classDef failure fill:#31171b,stroke:#ff6b6b,color:#f3f7fb,stroke-width:1px
+  classDef control fill:#132b21,stroke:#36d399,color:#f3f7fb,stroke-width:1px
+
+  subgraph agency["Agency reveal: what becomes newly visible"]
+    a2024["2024: talks<br/>Chat copilots feel useful"]:::reveal
+    a2025["2025: uses tools<br/>Stumbling agents and coding demos"]:::reveal
+    a2026["2026: works in rooms<br/>Shared state, traces, hosted ledgers"]:::control
+    a2027["2027: works async<br/>Parallel agent labor and AI R&D loops"]:::reveal
+    a2028["2028: delegates<br/>Organizations need agent control planes"]:::control
+  end
+
+  subgraph receipts["Failure receipts: what goes viral after the reveal"]
+    f2024["Hallucinated certainty<br/>Prompt fragility"]:::failure
+    f2025["Auto loops<br/>Runaway spend and demo debunks"]:::failure
+    f2026["Fake done<br/>Lost state and unsafe tool writes"]:::failure
+    f2027["Fleet failures<br/>Bad commits, bad evals, security incidents"]:::failure
+    f2028["Institutional risk<br/>Audits, liability, treaty pressure"]:::failure
+  end
+
+  a2024 --> a2025 --> a2026 --> a2027 --> a2028
+  f2024 --> f2025 --> f2026 --> f2027 --> f2028
+  a2024 -. creates receipts .-> f2024
+  a2025 -. creates receipts .-> f2025
+  a2026 -. creates receipts .-> f2026
+  a2027 -. creates receipts .-> f2027
+  a2028 -. creates receipts .-> f2028
+```
+
+The clearest outside anchor is [AI 2027](https://ai-2027.com/): its scenario moves from unreliable agents in 2025, to AI-assisted coding automation in 2026, to internal AI R&D acceleration and massive parallel agent labor in 2027. Its own caveat matters: 2027 was the authors' modal year at publication, not a certainty, and their later notes point to somewhat longer medians. The direction is still the part to take seriously.
+
+Other research points the same way:
+
+- [METR](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) frames progress as "task horizon": the length of tasks agents can complete has been growing roughly exponentially, with a reported doubling time around seven months on their 2025 measurement.
+- [Stanford HAI's 2026 AI Index](https://hai.stanford.edu/ai-index/2026-ai-index-report) shows fast consumer adoption and a large investment surge; their 2026 takeaways also show agent benchmarks improving while real-world planning and robotics remain uneven.
+- [Epoch AI](https://epoch.ai/publications/can-ai-scaling-continue-through-2030) argues that gigawatt-scale training facilities are plausible by 2030, while [IEA](https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary) projects data-center electricity use roughly doubling from 2025 to 2030 and AI-focused data-center use growing faster.
+- Tool plumbing is becoming standardized: [Anthropic's MCP](https://www.anthropic.com/news/model-context-protocol), [OpenAI's agent-building stack](https://openai.com/index/new-tools-for-building-agents/), and [GitHub Copilot's coding agent](https://github.blog/news-insights/product-news/github-copilot-meet-the-new-coding-agent/) all push toward agents that can call tools, hold context, and work asynchronously.
+
+What contributes to the **2027 moment**:
+
+- Agent autonomy starts crossing from demos to useful chunks of work: software tasks, research tasks, browser/tool tasks, and issue-to-PR workflows.
+- AI R&D becomes a feedback loop: agents help generate data, write experiments, evaluate outputs, and improve the next training run.
+- Parallel copies matter: once agents are useful, organizations run fleets, not one assistant.
+- The bottleneck moves from model intelligence to orchestration: floor control, task state, tool permissions, memory, audit, retries, and human steering.
+- Security becomes first-order: model weights, tool credentials, prompt injection, insider risk, and cyber capability become board-level and government-level concerns.
+
+What contributes to the **2028 moment**:
+
+- Governance catches up to deployment: oversight committees, procurement rules, audits, incident reporting, and treaty-like monitoring become practical product requirements.
+- Enterprise buyers demand control planes, not just APIs: approvals, traces, budget caps, durable state, rollback, and per-agent authority boundaries.
+- Infrastructure constraints bite: power, chips, HBM, cooling, grid interconnects, and capital markets shape what can actually be run.
+- Public legitimacy matters: labor displacement, safety leaks, and concentration of power push agent systems toward visible accountability.
+- The winning product category is the runtime around agents: the room where humans, models, tools, and policies share state.
+
+```mermaid
+flowchart LR
+  classDef capability fill:#30161e,stroke:#ff6b6b,color:#f7f9fc,stroke-width:1px
+  classDef load fill:#302514,stroke:#f4b64a,color:#f7f9fc,stroke-width:1px
+  classDef control fill:#132b21,stroke:#36d399,color:#f7f9fc,stroke-width:1px
+  classDef moment fill:#151e2b,stroke:#7c8da6,color:#f7f9fc,stroke-width:1px
+
+  start["2025<br/>Agents are interesting"]:::moment
+  y2026["2026<br/>Agents become product-shaped"]:::moment
+  y2027["2027 moment<br/>Capability compounding"]:::capability
+  y2028["2028 moment<br/>Control becomes product"]:::control
+
+  cap["Capability curve<br/>longer tasks, tools, code, research, parallel copies"]:::capability
+  load["Coordination load<br/>state, permissions, retries, audit, security, budget"]:::load
+  plane["Control plane<br/>Room OS: durable reducer, traces, caps, human steering"]:::control
+
+  start --> y2026 --> y2027 --> y2028
+  y2026 --> cap --> y2027
+  cap --> load
+  load --> plane
+  plane --> y2028
+
+  y2027 -. without control .-> load
+  y2028 -. product wedge .-> plane
+```
+
+That is why this repo is not just a voice demo. The visible commit history has been converging on the same stack: shared room state, live traces, provenance badges, model routing, a hosted Convex ledger, reactive subscriptions, private rooms, durable count steers, and now steering-layer parity tests. The hard bugs we just fixed are exactly the 2028 class of bugs in miniature: stale commits, lost human steers, parser hijacks, divergent transports, and hidden caps. If agents become labor, the reducer is infrastructure.
+
+For README polish, this section now uses native [Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams), which GitHub renders directly from Markdown. Editable sources live in [docs/ai-2027-timeline.mmd](docs/ai-2027-timeline.mmd) and [docs/ai-2027-projection.mmd](docs/ai-2027-projection.mmd). The old SVGs remain as reference artifacts: [timeline SVG](docs/ai-2027-timeline.svg) and [projection SVG](docs/ai-2027-projection.svg). Other good OSS options for later are [D2](https://d2lang.com/) for more polished generated diagrams and [Kroki](https://kroki.io/) for rendering Mermaid, D2, PlantUML, Graphviz, Vega-Lite, Excalidraw, and more from text.
+
+---
+
 ## Two ways to run the live room
 
 | | Transport | Backend | Good for |

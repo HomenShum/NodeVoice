@@ -38,6 +38,16 @@ interface ModelOption {
 
 type CompareSource = "deterministic" | "ollama" | "openai";
 
+const DEMO_API_BASE =
+  (import.meta.env.VITE_DEMO_API_BASE as string | undefined) ??
+  ((import.meta.env.VITE_CONVEX_URL as string | undefined) ? ((import.meta.env.VITE_CONVEX_SITE_URL as string | undefined) ?? "") : "");
+const DEMO_REMOTE_SOURCES_ENABLED = (import.meta.env.VITE_DEMO_ENABLE_REMOTE_SOURCES as string | undefined) === "true";
+const DEMO_HOSTED_ONLY = Boolean(DEMO_API_BASE) && !DEMO_REMOTE_SOURCES_ENABLED;
+
+function demoApi(path: string): string {
+  return DEMO_API_BASE ? `${DEMO_API_BASE.replace(/\/$/, "")}${path}` : path;
+}
+
 interface BadAgentPrivateState {
   agentId: string;
   heardCount: number;
@@ -110,7 +120,7 @@ export default function App() {
 
   async function loadModels() {
     try {
-      const res = await fetch("/api/models");
+      const res = await fetch(demoApi("/api/models"));
       if (!res.ok) throw new Error(`models request failed: ${res.status}`);
       const data = await res.json();
       const voice = Array.isArray(data?.voice) ? data.voice : [];
@@ -126,6 +136,7 @@ export default function App() {
   }
 
   function handleModeChange(newMode: "compare" | "node") {
+    if (DEMO_HOSTED_ONLY && newMode === "node") return;
     setMode(newMode);
     if (newMode === "node") {
       setInputValue("Build a local-first agent room that prevents acknowledgement loops and emits cited artifacts.");
@@ -147,12 +158,13 @@ export default function App() {
     setRunning(true);
     setAgentState("thinking");
     setCompareLoaded(false);
+    const requestedSource = DEMO_HOSTED_ONLY ? "deterministic" : source;
 
     try {
-      const res = await fetch("/compare/demo", {
+      const res = await fetch(demoApi("/compare/demo"), {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ target, turns, source, useOllama: source === "ollama", model: voiceModelId }),
+        body: JSON.stringify({ target, turns, source: requestedSource, useOllama: requestedSource === "ollama", model: voiceModelId }),
       });
       const data = await res.json();
       if (!res.ok || data?.ok === false) {
@@ -224,6 +236,7 @@ export default function App() {
   }
 
   async function runNode(goal: string) {
+    if (DEMO_HOSTED_ONLY) return;
     if (!goal) return;
     setRunning(true);
     setAgentState("thinking");
@@ -233,7 +246,7 @@ export default function App() {
     ]);
 
     try {
-      const res = await fetch("/nodeagents/run", {
+      const res = await fetch(demoApi("/nodeagents/run"), {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ goal, useOllama: source === "ollama", model: nodeModelId }),
@@ -297,33 +310,37 @@ export default function App() {
               </option>
             ))}
           </Select>
-          <Select
-            label="Node"
-            value={nodeModelId}
-            onChange={(e) => setNodeModelId(e.target.value)}
-            title="NodeAgent model"
-            className="hidden w-[190px] lg:flex"
-          >
-            {nodeModels.map((m) => (
-              <option key={m.id} value={m.id}>
-                {bucketPrefix(m.bucket)}
-                {m.label}
-              </option>
-            ))}
-          </Select>
+          {!DEMO_HOSTED_ONLY && (
+            <Select
+              label="Node"
+              value={nodeModelId}
+              onChange={(e) => setNodeModelId(e.target.value)}
+              title="NodeAgent model"
+              className="hidden w-[190px] lg:flex"
+            >
+              {nodeModels.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {bucketPrefix(m.bucket)}
+                  {m.label}
+                </option>
+              ))}
+            </Select>
+          )}
           <NumberField label="N" value={target} min={3} max={100} onChange={setTarget} />
           <NumberField label="Turns" value={turns} min={3} max={100} onChange={setTurns} />
-          <Select
-            label="Source"
-            value={source}
-            onChange={(e) => setSource(e.target.value as CompareSource)}
-            title="Utterance source: deterministic sim, local Ollama, or server-side OpenAI"
-            className="w-[150px]"
-          >
-            <option value="deterministic">Sim (scripted)</option>
-            <option value="ollama">Ollama (local)</option>
-            <option value="openai">OpenAI (live)</option>
-          </Select>
+          {!DEMO_HOSTED_ONLY && (
+            <Select
+              label="Source"
+              value={source}
+              onChange={(e) => setSource(e.target.value as CompareSource)}
+              title="Utterance source: deterministic sim, local Ollama, or server-side OpenAI"
+              className="w-[150px]"
+            >
+              <option value="deterministic">Sim (scripted)</option>
+              <option value="ollama">Ollama (local)</option>
+              <option value="openai">OpenAI (live)</option>
+            </Select>
+          )}
         </div>
       </header>
 
@@ -368,6 +385,7 @@ export default function App() {
       <AgentControlBar
         mode={mode}
         onModeChange={handleModeChange}
+        availableModes={DEMO_HOSTED_ONLY ? ["compare"] : undefined}
         onSend={handleSend}
         inputValue={inputValue}
         onInputChange={setInputValue}
