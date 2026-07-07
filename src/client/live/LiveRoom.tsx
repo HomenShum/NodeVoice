@@ -1360,6 +1360,14 @@ function agentRoster(room: PublicRoom) {
   });
 }
 
+function versionSummary(contrast: ReturnType<typeof profileStateContrast>) {
+  return {
+    label: contrast.label,
+    layer: contrast.layer,
+    newCapability: contrast.newCapability,
+  };
+}
+
 function v3PolicyMetrics(room: PublicRoom, policy: AgentOsPolicy) {
   const selectedModel = room.models.find((model) => model.id === room.state.model);
   const webResearchModel = room.models.find((model) => model.id === WEB_RESEARCH_MODEL_ID);
@@ -1406,18 +1414,22 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
   if (room.state.profile === "v0_no_room_state") {
     return {
       transcriptOnlyState: {
-        version: contrast,
         durableRoomState: {
           task: null,
           intent: null,
           workerGraph: null,
           artifacts: null,
         },
-        schedulingShell: compactSchedule(room),
         transcriptBuffer: {
           totalUtterances: room.utterances.length,
           renderedLimit: VISIBLE_UTTERANCE_LIMIT,
           recentUtterances: recentUtterances(room),
+        },
+        schedulingShell: compactSchedule(room),
+        version: versionSummary(contrast),
+        gap: {
+          missing: contrast.missing,
+          steerPath: contrast.steerPath,
         },
         evidenceTraces: traceDigest(traces, ["utterance_received", "intent_interpreted", "state_reduced"]),
       },
@@ -1428,7 +1440,6 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
   if (room.state.profile === "v1_room_state") {
     return {
       roomReducerState: {
-        version: contrast,
         reducer: {
           goal: room.state.goal,
           task,
@@ -1440,6 +1451,11 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
           doneGuard: room.state.done,
           loopRisk: room.state.loopRisk,
         },
+        version: versionSummary(contrast),
+        gap: {
+          missing: contrast.missing,
+          steerPath: contrast.steerPath,
+        },
         reducerTrace: traceDigest(traces, ["state_reduced", "scheduler_selected", "guardrail_evaluated"]),
       },
       _room: roomMeta,
@@ -1450,7 +1466,6 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
     const intentEvents = traceDigest(traces, ["intent_interpreted", "utterance_received", "guardrail_evaluated"], 8);
     return {
       workRoomState: {
-        version: contrast,
         intentRouter: {
           latestIntent: intentEvents.find((trace) => trace.kind === "intent_interpreted") ?? null,
           auditTrail: intentEvents,
@@ -1467,6 +1482,7 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
           artifacts: null,
           policy: null,
         },
+        version: versionSummary(contrast),
       },
       _room: roomMeta,
     };
@@ -1480,20 +1496,22 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
   };
   return {
     agentOsState: {
-      version: contrast,
+      controlPlane: {
+        policy,
+        costLatency: v3PolicyMetrics(room, policy),
+        goalGraph: room.goals ?? [],
+        taskQueue: room.tasks ?? [],
+        workers: room.workers ?? [],
+        artifacts: room.artifacts ?? [],
+        world: room.world ?? { beliefs: [] },
+      },
       foregroundReducer: {
         goal: room.state.goal,
         task,
         schedule: compactSchedule(room),
         model: room.state.model,
       },
-      policy,
-      costLatency: v3PolicyMetrics(room, policy),
-      goalGraph: room.goals ?? [],
-      taskQueue: room.tasks ?? [],
-      workers: room.workers ?? [],
-      artifacts: room.artifacts ?? [],
-      world: room.world ?? { beliefs: [] },
+      version: versionSummary(contrast),
       controlPlaneTraces: traceDigest(traces, ["intent_interpreted", "state_reduced", "scheduler_selected", "policy_updated", "guardrail_evaluated"], 10),
     },
     _room: roomMeta,
