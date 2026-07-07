@@ -1257,7 +1257,29 @@ function TracePanel({ traces }: { traces: TraceEvent[] }) {
 function StateInspector({ room }: { room: PublicRoom }) {
   const [openId, setOpenId] = React.useState<string | null>(null);
   const traces = room.traces ?? [];
+  const v3Control = {
+    goalCount: room.goals?.length ?? 0,
+    taskCount: room.tasks?.length ?? 0,
+    workerCount: room.workers?.length ?? 0,
+    artifactCount: room.artifacts?.length ?? 0,
+    beliefCount: room.world?.beliefs?.length ?? 0,
+  };
   const stateSnapshot = {
+    stateReceipt: {
+      profile: room.state.profile,
+      agentCount: room.state.agentCount,
+      floorOwner: room.state.floorOwner,
+      nextSpeaker: room.state.nextSpeaker,
+      nextRequiredAct: room.state.nextRequiredAct,
+      turn: room.state.turn,
+      running: room.state.running,
+      done: room.state.done,
+      loopRisk: room.state.loopRisk,
+      suppressAcknowledgements: room.state.suppressAcknowledgements,
+      goal: room.state.goal,
+      task: room.state.task ?? null,
+      v3Control,
+    },
     state: room.state,
     v3: {
       goals: room.goals ?? [],
@@ -1300,7 +1322,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
           <div className="mb-1.5 flex items-center gap-2">
             <ListTree className="size-3.5 text-primary" />
             <span className="text-[11px] font-bold tracking-wide text-primary">Internal State</span>
-            <span className="text-[10px] text-muted-foreground">JSON snapshot · state first</span>
+            <span className="text-[10px] text-muted-foreground">JSON state receipt · full reducer below</span>
           </div>
           <pre className="overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
             {JSON.stringify(stateSnapshot, null, 2)}
