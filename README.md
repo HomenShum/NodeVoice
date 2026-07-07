@@ -20,9 +20,14 @@ The production comparison below was captured from four fresh live rooms on
 It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
 opens the internal state layer for auditability. The storyboard alternates all-version
 overview shots with focused transcript/state shots so the human steer, agent outputs,
-`roomState`, and V3 worker stats stay readable.
+`roomState`, and V3 worker stats stay readable. It now includes explicit comparison
+axes, per-version verdicts, and a final scorecard so the viewer does not have to
+guess what each scene is proving.
 
 <img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-v1-v2-v3.gif" alt="Room OS V0 to V3 live production comparison" width="940">
+
+For text-heavy review, open the high-resolution
+[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-v1-v2-v3.mp4).
 
 Read the panes as a control-plane progression:
 
@@ -37,7 +42,7 @@ Reproduce the asset from the walkthrough repo:
 
 ```bash
 node walkthrough.roomos.mjs
-npx remotion render src/roomos-index.js WTG-RoomOSV0123 out/room-os-v0-v1-v2-v3.mp4 --concurrency=2
+npm run render:roomos
 ```
 
 ---
