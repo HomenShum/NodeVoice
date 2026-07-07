@@ -12,6 +12,32 @@ The one line that matters:
 
 **▶ Try it live (no laptop needed): [room-os-live.vercel.app](https://room-os-live.vercel.app)** — frontend on Vercel, state + voice on Convex.
 
+## Watch the V0 -> V3 live run
+
+The production comparison below was captured from four fresh live rooms on
+[room-os-live.vercel.app](https://room-os-live.vercel.app), rendered by
+[HomenShum/feature-walkthrough-gif](https://github.com/HomenShum/feature-walkthrough-gif).
+It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
+opens the internal state layer for auditability.
+
+<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-v1-v2-v3.gif" alt="Room OS V0 to V3 live production comparison" width="940">
+
+Read the panes as a control-plane progression:
+
+| Version | What is visible | Why it matters |
+|---|---|---|
+| **V0 Failure** | Raw transcript only | The model can talk, but progress is not durable or inspectable. |
+| **V1 Room State** | Shared reducer: floor, turn, count, done, loop risk | The room owns coordination instead of hoping each reply remembers. |
+| **V2 Work Room** | Typed intent for human interrupts | Mid-run steering becomes a state transition, not just another chat message. |
+| **V3 Agent OS** | Goals, workers, artifacts, policy, expected cost, observed latency, traces | Agent work becomes schedulable, auditable, and budget-aware. |
+
+Reproduce the asset from the walkthrough repo:
+
+```bash
+node walkthrough.roomos.mjs
+npx remotion render src/roomos-index.js WTG-RoomOSV0123 out/room-os-v0-v1-v2-v3.mp4 --concurrency=2
+```
+
 ---
 
 ## The 2027 / 2028 read
