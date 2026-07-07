@@ -993,6 +993,8 @@ The V3 design is codified as repo-operational markdown:
 Standalone public distribution: [HomenShum/agent-os-markdown](https://github.com/HomenShum/agent-os-markdown).
 
 Agent-era maturity rubric: [HomenShum/agent-era-maturity-model](https://github.com/HomenShum/agent-era-maturity-model).
+Source-backed agent history, news, and 2027/2028 projection timeline:
+[agent-era-history-timeline.md](https://github.com/HomenShum/agent-era-maturity-model/blob/main/docs/agent-era-history-timeline.md).
 
 ---
 
