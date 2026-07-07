@@ -1498,12 +1498,12 @@ function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
     agentOsState: {
       controlPlane: {
         policy,
-        costLatency: v3PolicyMetrics(room, policy),
         goalGraph: room.goals ?? [],
         taskQueue: room.tasks ?? [],
         workers: room.workers ?? [],
         artifacts: room.artifacts ?? [],
         world: room.world ?? { beliefs: [] },
+        costLatency: v3PolicyMetrics(room, policy),
       },
       foregroundReducer: {
         goal: room.state.goal,
