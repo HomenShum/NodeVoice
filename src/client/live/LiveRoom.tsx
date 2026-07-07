@@ -1254,6 +1254,56 @@ function TracePanel({ traces }: { traces: TraceEvent[] }) {
   );
 }
 
+function profileStateContrast(profile: CapabilityProfileId) {
+  switch (profile) {
+    case "v0_no_room_state":
+      return {
+        label: "V0 Failure",
+        layer: "transcript-only coordination",
+        newCapability: "Agents can speak, but the room does not own the task.",
+        roomOwns: ["speaker shell", "transcript log"],
+        missing: ["durable count target", "durable next count", "typed human steer"],
+        steerPath: "user utterance is appended as chat; no task mutation is guaranteed",
+      };
+    case "v1_room_state":
+      return {
+        label: "V1 Room State",
+        layer: "shared reducer",
+        newCapability: "Count target, next value, floor, turn, and done become room state.",
+        roomOwns: ["count task", "floor owner", "turn counter", "done guard"],
+        missing: ["typed semantic intent lane", "background workers", "artifact ledger"],
+        steerPath: "count steer retargets the reducer task",
+      };
+    case "v2_work_room":
+      return {
+        label: "V2 Work Room",
+        layer: "typed intent router",
+        newCapability: "Human interrupts become structured room-control intent before reduction.",
+        roomOwns: ["count task", "floor owner", "typed steer history", "done guard"],
+        missing: ["goal graph", "worker lanes", "cost and latency policy"],
+        steerPath: "LLM parses steer as intent; reducer commits the state change",
+      };
+    case "v3_agent_ecosystem":
+      return {
+        label: "V3 Agent OS",
+        layer: "governed agent work",
+        newCapability: "The room owns goals, workers, artifacts, policy, and task state.",
+        roomOwns: ["goal graph", "worker lanes", "artifact ledger", "policy budget", "count task"],
+        missing: [],
+        steerPath: "steer can become goals and workstreams under room policy",
+      };
+    default:
+      return {
+        label: "Unknown",
+        layer: "unknown",
+        newCapability: "Unknown profile.",
+        roomOwns: [],
+        missing: [],
+        steerPath: "unknown",
+      };
+  }
+}
+
 function StateInspector({ room }: { room: PublicRoom }) {
   const [openId, setOpenId] = React.useState<string | null>(null);
   const traces = room.traces ?? [];
@@ -1272,21 +1322,34 @@ function StateInspector({ room }: { room: PublicRoom }) {
         completed: room.state.task.completed,
       }
     : null;
+  const contrast = profileStateContrast(room.state.profile);
   const stateSnapshot = {
     stateReceipt: {
-      profile: room.state.profile,
-      agentCount: room.state.agentCount,
-      floorOwner: room.state.floorOwner,
-      nextSpeaker: room.state.nextSpeaker,
-      nextRequiredAct: room.state.nextRequiredAct,
-      turn: room.state.turn,
-      running: room.state.running,
-      done: room.state.done,
-      loopRisk: room.state.loopRisk,
-      suppressAcknowledgements: room.state.suppressAcknowledgements,
+      version: {
+        id: room.state.profile,
+        label: contrast.label,
+        layer: contrast.layer,
+        newCapability: contrast.newCapability,
+      },
+      coordinationLayer: {
+        roomOwns: contrast.roomOwns,
+        missing: contrast.missing,
+        steerPath: contrast.steerPath,
+      },
+      liveState: {
+        agentCount: room.state.agentCount,
+        floorOwner: room.state.floorOwner,
+        nextSpeaker: room.state.nextSpeaker,
+        nextRequiredAct: room.state.nextRequiredAct,
+        turn: room.state.turn,
+        running: room.state.running,
+        done: room.state.done,
+        loopRisk: room.state.loopRisk,
+        suppressAcknowledgements: room.state.suppressAcknowledgements,
+      },
       task: taskReceipt,
+      controlPlane: room.state.profile === "v3_agent_ecosystem" ? v3Control : null,
       goal: room.state.goal,
-      v3Control,
     },
     state: room.state,
     v3: {
@@ -1330,7 +1393,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
           <div className="mb-1.5 flex items-center gap-2">
             <ListTree className="size-3.5 text-primary" />
             <span className="text-[11px] font-bold tracking-wide text-primary">Internal State</span>
-            <span className="text-[10px] text-muted-foreground">JSON state receipt · full reducer below</span>
+            <span className="text-[10px] text-muted-foreground">JSON contrast receipt · full reducer below</span>
           </div>
           <pre className="overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
             {JSON.stringify(stateSnapshot, null, 2)}
