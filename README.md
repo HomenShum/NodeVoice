@@ -992,6 +992,8 @@ The V3 design is codified as repo-operational markdown:
 
 Standalone public distribution: [HomenShum/agent-os-markdown](https://github.com/HomenShum/agent-os-markdown).
 
+Agent-era maturity rubric: [HomenShum/agent-era-maturity-model](https://github.com/HomenShum/agent-era-maturity-model).
+
 ---
 
 ## Two ways to run the live room
