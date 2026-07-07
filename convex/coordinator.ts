@@ -2,8 +2,15 @@
 import { v } from "convex/values";
 import { internalAction, action } from "./_generated/server";
 import { internal, api } from "./_generated/api";
-import { agentForSlot, nextSlot, estimateSpeechMs, deriveHumanSteeringIntentFallback, validProfile, type CountTask, type Slot } from "./shared";
-import { generateAgentTurn, interpretHumanSteer as interpretHumanSteerWithModel, synthesizeSpeech, transcribeAudio } from "./openai";
+import { agentForSlot, nextSlot, estimateSpeechMs, deriveHumanSteeringIntentFallback, validProfile, coerceCountTurn, type CountTask, type Slot } from "./shared";
+import {
+  generateAgentTurn,
+  interpretHumanSteer as interpretHumanSteerWithModel,
+  runPlanningWorker,
+  runWebResearchWorker,
+  synthesizeSpeech,
+  transcribeAudio,
+} from "./openai";
 import type { Id } from "./_generated/dataModel";
 
 /**
@@ -27,18 +34,20 @@ async function produceTurn(
       ? { kind: "count_to_n", target: room.countTarget, next: room.countNext }
       : null;
 
-  const turn = await generateAgentTurn({
-    goal: room.goal,
-    model: room.model,
-    profile: validProfile(room.profile),
-    persona: agent.persona,
-    selfName: agent.name,
-    otherName: agentForSlot(nextSlot(slot, room.agentCount)).name,
-    transcript,
-    humanNote: consumedHuman,
-    recentActs: room.recentActs ?? [],
-    countTask,
-  });
+  const turn = countTask
+    ? coerceCountTurn({ text: String(countTask.next), speechAct: "task_action", done: countTask.next >= countTask.target }, countTask)
+    : await generateAgentTurn({
+        goal: room.goal,
+        model: room.model,
+        profile: validProfile(room.profile),
+        persona: agent.persona,
+        selfName: agent.name,
+        otherName: agentForSlot(nextSlot(slot, room.agentCount)).name,
+        transcript,
+        humanNote: consumedHuman,
+        recentActs: room.recentActs ?? [],
+        countTask,
+      });
 
   let audioId: Id<"_storage"> | undefined;
   try {
@@ -136,6 +145,65 @@ export const interpretHumanSteer = internalAction({
       intent,
       source,
     });
+  },
+});
+
+export const runV3Worker = internalAction({
+  args: { workerId: v.id("workers") },
+  handler: async (ctx, args) => {
+    const started = await ctx.runMutation(internal.rooms.startV3Worker, { workerId: args.workerId });
+    if (!started?.started) return;
+
+    const raw = await ctx.runQuery(internal.rooms.getV3WorkerRaw, { workerId: args.workerId });
+    if (!raw?.worker || !raw.goal || !raw.room) {
+      await ctx.runMutation(internal.rooms.failV3Worker, { workerId: args.workerId, error: "worker, goal, or room disappeared before execution" });
+      return;
+    }
+
+    const worker = raw.worker;
+    const goal = raw.goal;
+    const room = raw.room;
+    try {
+      if (worker.kind === "deterministic_count") {
+        const countTask: CountTask | null =
+          typeof room.countTarget === "number" && typeof room.countNext === "number"
+            ? { kind: "count_to_n", target: room.countTarget, next: room.countNext }
+            : null;
+        const target = countTask?.target ?? Number((goal.title.match(/\bto\s+(\d{1,3})\b/i) ?? [])[1] ?? 0);
+        if (!target) throw new Error("count worker could not determine target");
+        const content = [
+          `# Deterministic Count Plan`,
+          ``,
+          `Target: ${target}`,
+          `Execution: server-authoritative count state; each committed voice turn must equal the next reducer number.`,
+          `Verification: room state completes only when count reaches ${target}; stale turns fail commit revalidation.`,
+        ].join("\n");
+        await ctx.runMutation(internal.rooms.completeV3Worker, {
+          workerId: args.workerId,
+          title: `Count execution plan to ${target}`,
+          content,
+          summary: `Prepared deterministic count execution to ${target}.`,
+        });
+        return;
+      }
+
+      const taskTitle = raw.task?.title ?? worker.title;
+      const output =
+        worker.kind === "web_research"
+          ? await runWebResearchWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model })
+          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model ?? room.model });
+
+      await ctx.runMutation(internal.rooms.completeV3Worker, {
+        workerId: args.workerId,
+        title: output.title,
+        content: output.content,
+        summary: output.summary,
+        sources: output.sources,
+        model: output.model,
+      });
+    } catch (err) {
+      await ctx.runMutation(internal.rooms.failV3Worker, { workerId: args.workerId, error: String(err).slice(0, 500) });
+    }
   },
 });
 

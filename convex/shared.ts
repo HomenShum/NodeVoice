@@ -109,12 +109,12 @@ export const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
 
 export const ROUTER_MODELS = [
-  { id: "gpt-5.4-mini", label: "GPT-5.4 mini", tier: "smart + fast", note: "default · smartest mini that stays ~1.3s" },
-  { id: "gpt-4.1-nano", label: "GPT-4.1 nano", tier: "cheapest", note: "fastest (~0.7s) + cheapest" },
-  { id: "gpt-4.1-mini", label: "GPT-4.1 mini", tier: "balanced", note: "fast, mid capability" },
-  { id: "gpt-4o-mini", label: "GPT-4o mini", tier: "legacy", note: "older baseline" },
-  { id: "gpt-5-nano", label: "GPT-5 nano", tier: "cheap + smart", note: "smart but ~3s (reasoning)" },
-  { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning)" },
+  { id: "gpt-5.4-mini", label: "GPT-5.4 mini", tier: "smart + fast", note: "default · smartest mini that stays ~1.3s", expectedLatencyMs: 1300, expectedCostUsd: 0.0007164375, qualityScore: 4.75 },
+  { id: "gpt-4.1-nano", label: "GPT-4.1 nano", tier: "cheapest", note: "fastest (~0.7s) + cheapest", expectedLatencyMs: 700, expectedCostUsd: 0.000033425, qualityScore: 4.15 },
+  { id: "gpt-4.1-mini", label: "GPT-4.1 mini", tier: "balanced", note: "fast, mid capability", expectedLatencyMs: 700, expectedCostUsd: 0.0001409, qualityScore: 4.1 },
+  { id: "gpt-4o-mini", label: "GPT-4o mini", tier: "legacy", note: "older baseline", expectedLatencyMs: 1000, expectedCostUsd: 0.0000505875, qualityScore: 4.5 },
+  { id: "gpt-5-nano", label: "GPT-5 nano", tier: "cheap + smart", note: "smart but ~3s (reasoning)", expectedLatencyMs: 3200, expectedCostUsd: 0.0001320625, qualityScore: 4.6 },
+  { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning)", expectedLatencyMs: 3000, expectedCostUsd: 0.0007873125, qualityScore: 5 },
 ] as const;
 
 export const DEFAULT_MODEL = "gpt-5.4-mini";
@@ -146,7 +146,7 @@ export const CAPABILITY_PROFILES = [
     id: "v3_agent_ecosystem",
     label: "V3 Ecosystem",
     shortLabel: "V3",
-    note: "adapter lane for external agent stacks and subagents",
+    note: "goal graph, world model, workers, artifacts, and subagents",
   },
 ] as const;
 
@@ -159,6 +159,35 @@ export function validProfile(profile?: string): CapabilityProfile {
 
 export function profileUsesRoomState(profile?: string): boolean {
   return validProfile(profile) !== "v0_no_room_state";
+}
+
+export function profileUsesAgentOs(profile?: string): boolean {
+  return validProfile(profile) === "v3_agent_ecosystem";
+}
+
+export interface AgentOsPolicy {
+  budgetMaxWorkers: number;
+  budgetWorkersUsed: number;
+  permissionWebResearch: boolean;
+  permissionExternalActions: boolean;
+}
+
+export const DEFAULT_AGENT_OS_POLICY: AgentOsPolicy = {
+  budgetMaxWorkers: 16,
+  budgetWorkersUsed: 0,
+  permissionWebResearch: true,
+  permissionExternalActions: false,
+};
+
+export function normalizeAgentOsPolicy(value: Partial<AgentOsPolicy> = {}): AgentOsPolicy {
+  const max = typeof value.budgetMaxWorkers === "number" && Number.isFinite(value.budgetMaxWorkers) ? Math.trunc(value.budgetMaxWorkers) : DEFAULT_AGENT_OS_POLICY.budgetMaxWorkers;
+  const used = typeof value.budgetWorkersUsed === "number" && Number.isFinite(value.budgetWorkersUsed) ? Math.trunc(value.budgetWorkersUsed) : DEFAULT_AGENT_OS_POLICY.budgetWorkersUsed;
+  return {
+    budgetMaxWorkers: Math.max(1, Math.min(200, max)),
+    budgetWorkersUsed: Math.max(0, used),
+    permissionWebResearch: value.permissionWebResearch ?? DEFAULT_AGENT_OS_POLICY.permissionWebResearch,
+    permissionExternalActions: value.permissionExternalActions ?? DEFAULT_AGENT_OS_POLICY.permissionExternalActions,
+  };
 }
 
 export const other = (slot: Slot): Slot => nextSlot(slot, 2);
@@ -231,6 +260,7 @@ export type HumanSteeringIntent =
   | { kind: "none"; confidence?: number; reason?: string }
   | { kind: "question"; question?: string; confidence?: number; reason?: string }
   | { kind: "constraint"; note: string; confidence?: number; reason?: string }
+  | { kind: "add_goal"; goal: string; confidence?: number; reason?: string }
   | { kind: "retarget"; goal: string; confidence?: number; reason?: string }
   | { kind: "count_task"; start: number; target: number; confidence?: number; reason?: string }
   | { kind: "control"; action: "start" | "pause" | "resume" | "stop"; confidence?: number; reason?: string };
@@ -283,11 +313,25 @@ export function buildCountGoal(startOrTarget: number, maybeTarget?: number): str
 
 export function goalFromHumanSteeringIntent(intent: HumanSteeringIntent): string | null {
   if (intent.kind === "count_task") return buildCountGoal(intent.start, intent.target);
-  if (intent.kind !== "retarget") return null;
+  if (intent.kind !== "retarget" && intent.kind !== "add_goal") return null;
   const goal = cleanGoal(intent.goal);
   if (!goal) return null;
   const countCommand = extractCountCommand(goal);
   return countCommand ? buildCountGoal(countCommand.start, countCommand.target) : goal;
+}
+
+export function shouldReplaceAgentOsGoal(text: string): boolean {
+  const normalized = normalizeNumberText(text);
+  return /\b(instead|replace|switch|change|stop doing|drop|forget)\b/.test(normalized) || /^(new goal|set goal|change goal|replace goal)\b/.test(normalized);
+}
+
+export function agentOsGoalKind(intent: HumanSteeringIntent): "count" | "research" | "planning" | "constraint" | "question" {
+  if (intent.kind === "count_task") return "count";
+  if (intent.kind === "question") return "question";
+  if (intent.kind === "constraint") return "constraint";
+  const text = intent.kind === "retarget" || intent.kind === "add_goal" ? intent.goal : "";
+  if (/\b(research|latest|current|market|competitor|trend|pricing|source|cite|citation)\b/i.test(text)) return "research";
+  return "planning";
 }
 
 export function deriveHumanSteeringIntentFallback(text: string): HumanSteeringIntent {
@@ -322,6 +366,11 @@ export function normalizeHumanSteeringIntent(raw: unknown, fallbackText: string)
     const start = positiveInt(raw.start ?? raw.countStart ?? nested.start) ?? 1;
     if (target !== null && validCountRange(start, target)) return withMeta({ kind: "count_task", start, target });
     return deriveHumanSteeringIntentFallback(fallbackText);
+  }
+
+  if (kind === "add_goal" || kind === "parallel_goal" || kind === "also") {
+    const goal = cleanGoal(String(raw.goal ?? raw.task ?? raw.value ?? ""));
+    return goal ? withMeta({ kind: "add_goal", goal }) : deriveHumanSteeringIntentFallback(fallbackText);
   }
 
   if (kind === "retarget" || kind === "new_goal" || kind === "goal" || kind === "task") {
@@ -524,7 +573,7 @@ function isInterrogative(text: string): boolean {
   return /\?\s*$/.test(text) || /^(?:are|is|am|was|were|what|why|how|do|did|does|can|could|should|would|will|may|might|where|when|who|which)\b/i.test(text);
 }
 
-function numberToWords(n: number): string {
+export function numberToWords(n: number): string {
   const small = Object.entries(SMALL_NUMBERS).find(([key, value]) => key !== "a" && value === n);
   if (small) return capitalize(small[0]);
   const tens = Object.entries(TENS_NUMBERS).sort((a, b) => b[1] - a[1]);

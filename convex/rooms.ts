@@ -17,9 +17,13 @@ import {
   validModel,
   validProfile,
   profileUsesRoomState,
+  profileUsesAgentOs,
+  normalizeAgentOsPolicy,
   makeRoomCode,
   deriveCountTask,
   goalFromHumanSteeringIntent,
+  agentOsGoalKind,
+  shouldReplaceAgentOsGoal,
   type CapabilityProfile,
   type CountTask,
   type HumanSteeringIntent,
@@ -121,6 +125,124 @@ async function allocateJoinSlot(ctx: MutationCtx, roomId: Id<"rooms">, room: { a
   return slot;
 }
 
+function titleForAgentOsIntent(intent: HumanSteeringIntent, goalOverride: string | null, text: string): string | null {
+  if (intent.kind === "constraint") return `Constraint: ${intent.note}`;
+  if (intent.kind === "question") return `Question: ${intent.question ?? text}`;
+  return goalOverride;
+}
+
+async function spawnAgentOsGoal(
+  ctx: MutationCtx,
+  roomId: Id<"rooms">,
+  room: {
+    goal: string;
+    model: string;
+    budgetMaxWorkers?: number;
+    budgetWorkersUsed?: number;
+    permissionWebResearch?: boolean;
+    permissionExternalActions?: boolean;
+  },
+  title: string,
+  kind: string,
+  sourceText: string,
+): Promise<Id<"workers">[]> {
+  const now = Date.now();
+  const goalId = await ctx.db.insert("goals", {
+    roomId,
+    title: title.slice(0, 500),
+    kind,
+    status: "active",
+    priority: 1,
+    sourceText: sourceText.slice(0, 500),
+    createdAt: now,
+    updatedAt: now,
+  });
+  const taskId = await ctx.db.insert("tasks", {
+    roomId,
+    goalId,
+    title: kind === "count" ? "Execute deterministic count task" : "Produce first useful artifact",
+    kind: kind === "count" ? "deterministic_execution" : "knowledge_work",
+    status: "queued",
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  const workers: Id<"workers">[] = [];
+  const blocked: Array<{ kind: string; reason: string }> = [];
+  const policy = normalizeAgentOsPolicy(room);
+  let workersUsed = policy.budgetWorkersUsed;
+  const workerSpecs =
+    kind === "count"
+      ? [{ kind: "deterministic_count", title: "Prepare exact count sequence", model: undefined as string | undefined }]
+      : [
+          { kind: "web_research", title: "Research current external context", model: "gpt-4.1-mini" },
+          { kind: "execution_plan", title: "Draft execution plan", model: room.model },
+        ];
+  for (const spec of workerSpecs) {
+    const budgetBlocked = workersUsed >= policy.budgetMaxWorkers;
+    const permissionBlocked = spec.kind === "web_research" && !policy.permissionWebResearch;
+    const blockedReason = budgetBlocked
+      ? `Worker budget exhausted (${policy.budgetWorkersUsed}/${policy.budgetMaxWorkers}).`
+      : permissionBlocked
+        ? "Web research permission is disabled."
+        : null;
+    const workerId = await ctx.db.insert("workers", {
+      roomId,
+      goalId,
+      taskId,
+      kind: spec.kind,
+      status: blockedReason ? "blocked" : "queued",
+      title: spec.title,
+      ...(spec.model ? { model: spec.model } : {}),
+      ...(blockedReason ? { error: blockedReason } : {}),
+      attempt: 1,
+      createdAt: now,
+      updatedAt: now,
+    });
+    workers.push(workerId);
+    if (blockedReason) {
+      blocked.push({ kind: spec.kind, reason: blockedReason });
+    } else {
+      workersUsed += 1;
+      await ctx.scheduler.runAfter(0, internal.coordinator.runV3Worker, { workerId });
+    }
+  }
+  if (workersUsed !== policy.budgetWorkersUsed) {
+    await ctx.db.patch(roomId, { budgetWorkersUsed: workersUsed, updatedAt: now });
+  }
+  if (blocked.length === workerSpecs.length) {
+    await ctx.db.patch(taskId, { status: "blocked", updatedAt: now });
+  }
+  await ctx.db.insert("beliefs", {
+    roomId,
+    goalId,
+    claim: `User requested workstream: ${title.slice(0, 220)}`,
+    source: "human_steer",
+    confidence: 1,
+    createdAt: now,
+    updatedAt: now,
+  });
+  await insertTrace(ctx, roomId, "worker_scheduled", "V3 goal graph spawned workers.", {
+    goalId,
+    title,
+    kind,
+    workers,
+    blocked,
+    policy: { ...policy, budgetWorkersUsed: workersUsed },
+  });
+  return workers;
+}
+
+async function ensureInitialAgentOsGoal(
+  ctx: MutationCtx,
+  roomId: Id<"rooms">,
+  room: { goal: string; model: string },
+): Promise<void> {
+  const existing = await ctx.db.query("goals").withIndex("by_room", (q) => q.eq("roomId", roomId)).first();
+  if (existing) return;
+  await spawnAgentOsGoal(ctx, roomId, room, room.goal, deriveCountTask(room.goal) ? "count" : "planning", "initial_room_goal");
+}
+
 /** Shared serializer used by the reactive query and the HTTP bridge. */
 async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   const room = await ctx.db.get(roomId);
@@ -131,6 +253,35 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
   // Inspector is reactive for free — every mutation pushes fresh traces too
   const traceRows = await ctx.db.query("traces").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(40);
   const traces = traceRows.reverse().map((t) => ({ id: t._id, kind: t.kind, summary: t.summary, payload: t.payload, ts: t.createdAt }));
+  const goals = (await ctx.db.query("goals").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(24))
+    .reverse()
+    .map((g) => ({ id: g._id, title: g.title, kind: g.kind, status: g.status, priority: g.priority, sourceText: g.sourceText, createdAt: g.createdAt, updatedAt: g.updatedAt }));
+  const tasks = (await ctx.db.query("tasks").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(40))
+    .reverse()
+    .map((t) => ({ id: t._id, goalId: t.goalId, title: t.title, kind: t.kind, status: t.status, createdAt: t.createdAt, updatedAt: t.updatedAt }));
+  const workers = (await ctx.db.query("workers").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(50))
+    .reverse()
+    .map((w) => ({
+      id: w._id,
+      goalId: w.goalId,
+      taskId: w.taskId,
+      kind: w.kind,
+      status: w.status,
+      title: w.title,
+      model: w.model,
+      summary: w.summary,
+      error: w.error,
+      createdAt: w.createdAt,
+      updatedAt: w.updatedAt,
+      startedAt: w.startedAt,
+      completedAt: w.completedAt,
+    }));
+  const artifacts = (await ctx.db.query("artifacts").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(24))
+    .reverse()
+    .map((a) => ({ id: a._id, goalId: a.goalId, workerId: a.workerId, kind: a.kind, title: a.title, content: a.content, sources: a.sources, createdAt: a.createdAt }));
+  const beliefs = (await ctx.db.query("beliefs").withIndex("by_room", (q) => q.eq("roomId", roomId)).order("desc").take(40))
+    .reverse()
+    .map((b) => ({ id: b._id, goalId: b.goalId, claim: b.claim, source: b.source, confidence: b.confidence, createdAt: b.createdAt, updatedAt: b.updatedAt }));
   const resolved = await Promise.all(
     utterances.map(async (u) => ({
       id: u._id,
@@ -148,6 +299,12 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
     code: room.code,
     private: room.private === true,
     agents: publicAgents(room.agentCount),
+    policy: normalizeAgentOsPolicy({
+      budgetMaxWorkers: room.budgetMaxWorkers,
+      budgetWorkersUsed: room.budgetWorkersUsed,
+      permissionWebResearch: room.permissionWebResearch,
+      permissionExternalActions: room.permissionExternalActions,
+    }),
     state: {
       goal: room.goal,
       model: room.model,
@@ -176,6 +333,11 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
     participants: participants.map((p) => ({ slot: p.slot, kind: p.kind })),
     utterances: resolved,
     traces,
+    goals,
+    tasks,
+    workers,
+    artifacts,
+    world: { beliefs },
   };
 }
 
@@ -243,10 +405,209 @@ export const getRoomRaw = internalQuery({
   handler: (ctx, args) => ctx.db.get(args.roomId),
 });
 
+export const getV3WorkerRaw = internalQuery({
+  args: { workerId: v.id("workers") },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker) return null;
+    const goal = await ctx.db.get(worker.goalId);
+    const task = worker.taskId ? await ctx.db.get(worker.taskId) : null;
+    const room = await ctx.db.get(worker.roomId);
+    return { worker, goal, task, room };
+  },
+});
+
 export const insertTraceInternal = internalMutation({
   args: { roomId: v.id("rooms"), kind: v.string(), summary: v.string(), payload: v.any() },
   handler: async (ctx, args) => {
     await insertTrace(ctx, args.roomId, args.kind, args.summary, args.payload);
+  },
+});
+
+export const startV3Worker = internalMutation({
+  args: { workerId: v.id("workers") },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker || worker.status !== "queued") return { started: false };
+    const now = Date.now();
+    await ctx.db.patch(args.workerId, { status: "running", startedAt: now, updatedAt: now });
+    if (worker.taskId) await ctx.db.patch(worker.taskId, { status: "running", updatedAt: now });
+    await insertTrace(ctx, worker.roomId, "worker_started", `V3 worker started: ${worker.title}.`, { workerId: args.workerId, kind: worker.kind });
+    return { started: true };
+  },
+});
+
+export const completeV3Worker = internalMutation({
+  args: {
+    workerId: v.id("workers"),
+    title: v.string(),
+    content: v.string(),
+    summary: v.string(),
+    sources: v.optional(v.array(v.any())),
+    model: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker) return;
+    if (worker.status !== "running") {
+      await insertTrace(ctx, worker.roomId, "guardrail_evaluated", "Ignored stale V3 worker completion.", {
+        workerId: args.workerId,
+        status: worker.status,
+      });
+      return;
+    }
+    const now = Date.now();
+    await ctx.db.insert("artifacts", {
+      roomId: worker.roomId,
+      goalId: worker.goalId,
+      workerId: args.workerId,
+      kind: worker.kind,
+      title: args.title.slice(0, 180),
+      content: args.content.slice(0, 10000),
+      ...(args.sources ? { sources: args.sources } : {}),
+      createdAt: now,
+    });
+    await ctx.db.insert("beliefs", {
+      roomId: worker.roomId,
+      goalId: worker.goalId,
+      claim: args.summary.slice(0, 500),
+      source: worker.kind,
+      confidence: worker.kind === "web_research" ? 0.82 : 0.72,
+      createdAt: now,
+      updatedAt: now,
+    });
+    await ctx.db.patch(args.workerId, {
+      status: "completed",
+      summary: args.summary.slice(0, 500),
+      ...(args.model ? { model: args.model } : {}),
+      completedAt: now,
+      updatedAt: now,
+    });
+    if (worker.taskId) await ctx.db.patch(worker.taskId, { status: "completed", updatedAt: now });
+    await ctx.db.patch(worker.goalId, { status: "active", updatedAt: now });
+    await insertTrace(ctx, worker.roomId, "artifact_created", `V3 worker completed: ${worker.title}.`, {
+      workerId: args.workerId,
+      goalId: worker.goalId,
+      kind: worker.kind,
+      summary: args.summary,
+    });
+  },
+});
+
+export const failV3Worker = internalMutation({
+  args: { workerId: v.id("workers"), error: v.string() },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker) return;
+    if (worker.status === "canceled" || worker.status === "completed") return;
+    const now = Date.now();
+    await ctx.db.patch(args.workerId, { status: "failed", error: args.error.slice(0, 500), completedAt: now, updatedAt: now });
+    if (worker.taskId) await ctx.db.patch(worker.taskId, { status: "failed", updatedAt: now });
+    await insertTrace(ctx, worker.roomId, "worker_failed", `V3 worker failed: ${worker.title}.`, {
+      workerId: args.workerId,
+      kind: worker.kind,
+      error: args.error.slice(0, 500),
+    });
+  },
+});
+
+export const cancelV3Worker = mutation({
+  args: { roomId: v.id("rooms"), workerId: v.id("workers") },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker || worker.roomId !== args.roomId) throw new Error("worker not found in room");
+    if (worker.status === "completed" || worker.status === "failed" || worker.status === "canceled") return;
+    const now = Date.now();
+    await ctx.db.patch(args.workerId, { status: "canceled", error: "Canceled by user.", completedAt: now, updatedAt: now });
+    if (worker.taskId) await ctx.db.patch(worker.taskId, { status: "canceled", updatedAt: now });
+    await insertTrace(ctx, args.roomId, "worker_canceled", `V3 worker canceled: ${worker.title}.`, { workerId: args.workerId, kind: worker.kind });
+  },
+});
+
+export const retryV3Worker = mutation({
+  args: { roomId: v.id("rooms"), workerId: v.id("workers") },
+  handler: async (ctx, args) => {
+    const worker = await ctx.db.get(args.workerId);
+    if (!worker || worker.roomId !== args.roomId) throw new Error("worker not found in room");
+    if (worker.status === "queued" || worker.status === "running") return { workerId: args.workerId, reused: true };
+    const room = await ctx.db.get(args.roomId);
+    if (!room) throw new Error("room not found");
+    const policy = normalizeAgentOsPolicy({
+      budgetMaxWorkers: room.budgetMaxWorkers,
+      budgetWorkersUsed: room.budgetWorkersUsed,
+      permissionWebResearch: room.permissionWebResearch,
+      permissionExternalActions: room.permissionExternalActions,
+    });
+    const budgetBlocked = policy.budgetWorkersUsed >= policy.budgetMaxWorkers;
+    const permissionBlocked = worker.kind === "web_research" && !policy.permissionWebResearch;
+    if (budgetBlocked || permissionBlocked) {
+      const reason = budgetBlocked
+        ? `Worker budget exhausted (${policy.budgetWorkersUsed}/${policy.budgetMaxWorkers}).`
+        : "Web research permission is disabled.";
+      await insertTrace(ctx, args.roomId, "guardrail_evaluated", "V3 worker retry blocked by policy.", {
+        workerId: args.workerId,
+        kind: worker.kind,
+        reason,
+        policy,
+      });
+      return { workerId: args.workerId, blocked: true, reason };
+    }
+    const now = Date.now();
+    const nextWorkerId = await ctx.db.insert("workers", {
+      roomId: args.roomId,
+      goalId: worker.goalId,
+      ...(worker.taskId ? { taskId: worker.taskId } : {}),
+      kind: worker.kind,
+      status: "queued",
+      title: worker.title,
+      ...(worker.model ? { model: worker.model } : {}),
+      retryOf: args.workerId,
+      attempt: (worker.attempt ?? 1) + 1,
+      createdAt: now,
+      updatedAt: now,
+    });
+    await ctx.db.patch(args.roomId, { budgetWorkersUsed: policy.budgetWorkersUsed + 1, updatedAt: now });
+    if (worker.taskId) await ctx.db.patch(worker.taskId, { status: "queued", updatedAt: now });
+    await insertTrace(ctx, args.roomId, "worker_scheduled", `V3 worker retry queued: ${worker.title}.`, {
+      workerId: nextWorkerId,
+      retryOf: args.workerId,
+      kind: worker.kind,
+      attempt: (worker.attempt ?? 1) + 1,
+    });
+    await ctx.scheduler.runAfter(0, internal.coordinator.runV3Worker, { workerId: nextWorkerId });
+    return { workerId: nextWorkerId, reused: false };
+  },
+});
+
+export const setV3Policy = mutation({
+  args: {
+    roomId: v.id("rooms"),
+    budgetMaxWorkers: v.optional(v.number()),
+    permissionWebResearch: v.optional(v.boolean()),
+    permissionExternalActions: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const room = await ctx.db.get(args.roomId);
+    if (!room) throw new Error("room not found");
+    const current = normalizeAgentOsPolicy({
+      budgetMaxWorkers: room.budgetMaxWorkers,
+      budgetWorkersUsed: room.budgetWorkersUsed,
+      permissionWebResearch: room.permissionWebResearch,
+      permissionExternalActions: room.permissionExternalActions,
+    });
+    const next = normalizeAgentOsPolicy({
+      ...current,
+      budgetMaxWorkers: args.budgetMaxWorkers ?? current.budgetMaxWorkers,
+      permissionWebResearch: args.permissionWebResearch ?? current.permissionWebResearch,
+      permissionExternalActions: args.permissionExternalActions ?? current.permissionExternalActions,
+    });
+    await ctx.db.patch(args.roomId, {
+      budgetMaxWorkers: next.budgetMaxWorkers,
+      permissionWebResearch: next.permissionWebResearch,
+      permissionExternalActions: next.permissionExternalActions,
+      updatedAt: Date.now(),
+    });
+    await insertTrace(ctx, args.roomId, "policy_updated", "V3 policy updated.", { previous: current, next });
   },
 });
 
@@ -280,6 +641,7 @@ export const createRoom = mutation({
       loopRisk: false,
       recentActs: [],
       ...(countTask ? { countTarget: countTask.target, countNext: countTask.next } : {}),
+      ...normalizeAgentOsPolicy(),
       pendingHumanSeq: 0,
       goalVersion: 0,
       runToken: 0,
@@ -296,6 +658,9 @@ export const createRoom = mutation({
       speechAct: "system",
       createdAt: now,
     });
+    if (profileUsesAgentOs(profile)) {
+      await ensureInitialAgentOsGoal(ctx, roomId, { goal, model: validModel(args.model) });
+    }
     return roomId;
   },
 });
@@ -402,6 +767,9 @@ export const setProfile = mutation({
       speechAct: "system",
       createdAt: Date.now(),
     });
+    if (profileUsesAgentOs(profile)) {
+      await ensureInitialAgentOsGoal(ctx, args.roomId, { goal: room.goal, model: room.model });
+    }
     await boundUtterances(ctx, args.roomId);
   },
 });
@@ -459,6 +827,10 @@ export const applyHumanIntent = internalMutation({
 
     const intent = args.intent as HumanSteeringIntent;
     const goalOverride = goalFromHumanSteeringIntent(intent);
+    const agentOs = profileUsesAgentOs(room.profile);
+    const agentOsTitle = agentOs ? titleForAgentOsIntent(intent, goalOverride, args.text) : null;
+    const replaceAgentOsForeground = agentOs && shouldReplaceAgentOsGoal(args.text);
+    const foregroundGoalOverride = goalOverride && (!agentOs || replaceAgentOsForeground || intent.kind === "count_task") ? goalOverride : null;
     const patch: {
       goal?: string;
       goalVersion?: number;
@@ -474,15 +846,22 @@ export const applyHumanIntent = internalMutation({
     } = { updatedAt: Date.now() };
     let resumeToken: number | null = null;
     let stateChanged = false;
+    let scheduledWorkers = 0;
 
-    if (goalOverride && goalOverride !== room.goal) {
+    if (agentOs && agentOsTitle && intent.kind !== "control" && intent.kind !== "none") {
+      const workers = await spawnAgentOsGoal(ctx, args.roomId, room, agentOsTitle, agentOsGoalKind(intent), args.text);
+      scheduledWorkers = workers.length;
+      stateChanged = true;
+    }
+
+    if (foregroundGoalOverride && foregroundGoalOverride !== room.goal) {
       Object.assign(patch, {
-        goal: goalOverride,
+        goal: foregroundGoalOverride,
         goalVersion: roomGoalVersion(room) + 1,
         done: false,
         loopRisk: false,
         recentActs: [],
-        ...countPatchForGoal(goalOverride, room.profile),
+        ...countPatchForGoal(foregroundGoalOverride, room.profile),
       });
       stateChanged = true;
     }
@@ -519,7 +898,9 @@ export const applyHumanIntent = internalMutation({
     const shouldResumeForIntent =
       !room.running &&
       resumeToken === null &&
-      (intent.kind === "count_task" || intent.kind === "retarget" || intent.kind === "constraint" || intent.kind === "question");
+      (agentOs
+        ? intent.kind === "count_task" || (replaceAgentOsForeground && intent.kind === "retarget")
+        : intent.kind === "count_task" || intent.kind === "retarget" || intent.kind === "constraint" || intent.kind === "question");
     if (shouldResumeForIntent) {
       resumeToken = room.runToken + 1;
       Object.assign(patch, {
@@ -538,14 +919,16 @@ export const applyHumanIntent = internalMutation({
       source: args.source,
       intent,
       goalOverride,
+      foregroundGoalOverride,
       stateChanged,
+      scheduledWorkers,
       profile: roomProfile(room),
     });
-    if (goalOverride && goalOverride !== room.goal) {
+    if (foregroundGoalOverride && foregroundGoalOverride !== room.goal) {
       await insertTrace(ctx, args.roomId, "state_reduced", "Human retargeted the room goal.", {
-        goal: goalOverride,
+        goal: foregroundGoalOverride,
         source: args.source,
-        task: deriveCountTask(goalOverride),
+        task: deriveCountTask(foregroundGoalOverride),
       });
     }
     if (resumeToken !== null) {

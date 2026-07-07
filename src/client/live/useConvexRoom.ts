@@ -3,7 +3,7 @@ import { useQuery, useMutation, useAction, useConvex } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { isAgentSlot } from "./useRoom";
-import type { ActiveRoom, CapabilityProfileId, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
+import type { ActiveRoom, AgentOsPolicy, CapabilityProfileId, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
 
 /** Lobby list of joinable rooms — reactive over the Convex WebSocket. */
 export function useConvexActiveRooms(): ActiveRoom[] {
@@ -53,6 +53,9 @@ export function useConvexRoom() {
   const setAgentCountMut = useMutation(api.rooms.setAgentCount);
   const setRunningMut = useMutation(api.rooms.setRunning);
   const submitHumanMut = useMutation(api.rooms.submitHuman);
+  const cancelV3WorkerMut = useMutation(api.rooms.cancelV3Worker);
+  const retryV3WorkerMut = useMutation(api.rooms.retryV3Worker);
+  const setV3PolicyMut = useMutation(api.rooms.setV3Policy);
   const stepAction = useAction(api.coordinator.stepOnce);
   const transcribeAction = useAction(api.coordinator.transcribeHuman);
 
@@ -223,6 +226,27 @@ export function useConvexRoom() {
     [roomId, submitHumanMut],
   );
 
+  const cancelV3Worker = React.useCallback(
+    (workerId: string) => {
+      if (roomId) void cancelV3WorkerMut({ roomId, workerId: workerId as Id<"workers"> }).catch((e) => setError(String(e).slice(0, 160)));
+    },
+    [roomId, cancelV3WorkerMut],
+  );
+
+  const retryV3Worker = React.useCallback(
+    (workerId: string) => {
+      if (roomId) void retryV3WorkerMut({ roomId, workerId: workerId as Id<"workers"> }).catch((e) => setError(String(e).slice(0, 160)));
+    },
+    [roomId, retryV3WorkerMut],
+  );
+
+  const setV3Policy = React.useCallback(
+    (policy: Partial<AgentOsPolicy>) => {
+      if (roomId) void setV3PolicyMut({ roomId, ...policy }).catch((e) => setError(String(e).slice(0, 160)));
+    },
+    [roomId, setV3PolicyMut],
+  );
+
   // Synchronous guards: `recording` state is set after an await, so quick
   // tap-release / double-tap would otherwise leave a hot mic running.
   const talkBusyRef = React.useRef(false);
@@ -317,6 +341,9 @@ export function useConvexRoom() {
     setRunning,
     step,
     sendText,
+    cancelV3Worker,
+    retryV3Worker,
+    setV3Policy,
     beginTalk,
     endTalk,
     unlockAudio,

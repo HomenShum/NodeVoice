@@ -106,6 +106,16 @@ That is why this repo is not just a voice demo. The visible commit history has b
 
 For README polish, this section now uses native [Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams), which GitHub renders directly from Markdown. Editable sources live in [docs/ai-2027-timeline.mmd](docs/ai-2027-timeline.mmd) and [docs/ai-2027-projection.mmd](docs/ai-2027-projection.mmd). The old SVGs remain as reference artifacts: [timeline SVG](docs/ai-2027-timeline.svg) and [projection SVG](docs/ai-2027-projection.svg). Other good OSS options for later are [D2](https://d2lang.com/) for more polished generated diagrams and [Kroki](https://kroki.io/) for rendering Mermaid, D2, PlantUML, Graphviz, Vega-Lite, Excalidraw, and more from text.
 
+## V3 Agent OS Playbook
+
+The V3 design is codified as repo-operational markdown:
+
+- [soul.md](soul.md): the operating constitution for durable, inspectable agency.
+- [skills.md](skills.md): the worker/skill catalog and execution contracts.
+- [docs/v3-agent-os.md](docs/v3-agent-os.md): state model, loop engineering, harness engineering, context engineering, and current production slice.
+
+Standalone public distribution: [HomenShum/agent-os-markdown](https://github.com/HomenShum/agent-os-markdown).
+
 ---
 
 ## Two ways to run the live room

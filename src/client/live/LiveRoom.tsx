@@ -22,6 +22,9 @@ import {
   Check,
   Plus,
   Minus,
+  RotateCcw,
+  XCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -42,11 +45,13 @@ import {
   type RoomUtterance,
   type PublicRoom,
   type TraceEvent,
+  type AgentOsPolicy,
 } from "./roomClient";
 
 const DEFAULT_GOAL =
   "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
 const VISIBLE_UTTERANCE_LIMIT = 160;
+const WEB_RESEARCH_MODEL_ID = "gpt-4.1-mini";
 
 const PROFILE_OPTIONS: Array<{
   id: CapabilityProfileId;
@@ -86,12 +91,12 @@ const PROFILE_OPTIONS: Array<{
   },
   {
     id: "v3_agent_ecosystem",
-    label: "V3 Ecosystem",
+    label: "V3 Agent OS",
     short: "V3",
-    note: "agent stacks",
-    coordination: "External-agent lane",
-    steering: "Room state remains authority",
-    liveEffect: "Future adapter profile",
+    note: "goal graph",
+    coordination: "Goals + workers + artifacts",
+    steering: "Adds workstreams by default",
+    liveEffect: "Parallel background execution",
   },
 ];
 
@@ -108,6 +113,31 @@ function listNames(names: string[]): string {
 function compactNameList(names: string[]): string {
   if (names.length <= 4) return listNames(names);
   return `${names.slice(0, 3).join(", ")}, and ${names.length - 3} more`;
+}
+
+function formatExpectedCost(value?: number): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "n/a";
+  if (value <= 0) return "$0";
+  if (value < 0.01) return `$${value.toFixed(6).replace(/0+$/, "").replace(/\.$/, "")}`;
+  return `$${value.toFixed(2)}`;
+}
+
+function formatDurationMs(value?: number): string {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) return "n/a";
+  if (value < 1000) return `${Math.round(value)}ms`;
+  if (value < 10_000) return `${(value / 1000).toFixed(1)}s`;
+  return `${Math.round(value / 1000)}s`;
+}
+
+function workerRuntimeMs(worker: { startedAt?: number; completedAt?: number; updatedAt: number; status: string }): number | null {
+  if (typeof worker.startedAt !== "number") return null;
+  const end = typeof worker.completedAt === "number" ? worker.completedAt : worker.status === "running" ? Date.now() : worker.updatedAt;
+  return Math.max(0, end - worker.startedAt);
+}
+
+function average(values: number[]): number | null {
+  if (values.length === 0) return null;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
 const COLOR_STYLE: Record<string, string> = {
@@ -556,6 +586,10 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
 
       <LiveVersionPanel room={room} onChange={rm.setProfile} onAgentCountChange={rm.setAgentCount} />
 
+      {(room.state.profile === "v3_agent_ecosystem" || (room.goals?.length ?? 0) > 0 || (room.workers?.length ?? 0) > 0) && (
+        <V3WorkPanel room={room} onCancelWorker={rm.cancelV3Worker} onRetryWorker={rm.retryV3Worker} onPolicyChange={rm.setV3Policy} />
+      )}
+
       {showQr && waitingForAgent && (
         <div className="flex shrink-0 flex-col items-center gap-3 border-b border-border bg-primary/[0.04] px-4 py-4 sm:flex-row sm:justify-center">
           <Qr value={joinUrl} size={132} />
@@ -821,12 +855,210 @@ function LiveVersionPanel({
   );
 }
 
+function V3WorkPanel({
+  room,
+  onCancelWorker,
+  onRetryWorker,
+  onPolicyChange,
+}: {
+  room: PublicRoom;
+  onCancelWorker: (workerId: string) => void;
+  onRetryWorker: (workerId: string) => void;
+  onPolicyChange: (policy: Partial<AgentOsPolicy>) => void;
+}) {
+  const goals = room.goals ?? [];
+  const workers = room.workers ?? [];
+  const artifacts = room.artifacts ?? [];
+  const policy = room.policy ?? {
+    budgetMaxWorkers: 16,
+    budgetWorkersUsed: 0,
+    permissionWebResearch: true,
+    permissionExternalActions: false,
+  };
+  const runningWorkers = workers.filter((w) => w.status === "running").length;
+  const queuedWorkers = workers.filter((w) => w.status === "queued").length;
+  const completedWorkers = workers.filter((w) => w.status === "completed").length;
+  const failedWorkers = workers.filter((w) => w.status === "failed").length;
+  const blockedWorkers = workers.filter((w) => w.status === "blocked").length;
+  const latestArtifacts = artifacts.slice(-3);
+  const latestWorkers = workers.slice(-6);
+  const selectedModel = room.models.find((m) => m.id === room.state.model);
+  const webResearchModel = room.models.find((m) => m.id === WEB_RESEARCH_MODEL_ID);
+  const expectedBatchCost = (selectedModel?.expectedCostUsd ?? 0) + (policy.permissionWebResearch ? (webResearchModel?.expectedCostUsd ?? 0) : 0);
+  const expectedBatchLatency = Math.max(selectedModel?.expectedLatencyMs ?? 0, policy.permissionWebResearch ? (webResearchModel?.expectedLatencyMs ?? 0) : 0);
+  const remainingWorkerBudget = Math.max(0, policy.budgetMaxWorkers - policy.budgetWorkersUsed);
+  const expectedBudgetExposure = remainingWorkerBudget * (selectedModel?.expectedCostUsd ?? 0);
+  const completedDurations = workers.map(workerRuntimeMs).filter((value): value is number => typeof value === "number");
+  const observedAverageLatency = average(completedDurations);
+
+  return (
+    <section className="shrink-0 border-b border-border bg-card/45 px-4 py-2">
+      <div className="mx-auto mb-2 flex max-w-5xl flex-wrap items-center gap-2 rounded-lg border border-border bg-background/45 px-2 py-1.5">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          <ShieldCheck className="size-3.5 text-primary" /> Policy
+        </span>
+        <label className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+          workers
+          <input
+            type="number"
+            min={1}
+            max={200}
+            value={policy.budgetMaxWorkers}
+            onChange={(e) => onPolicyChange({ budgetMaxWorkers: Number(e.target.value) || 1 })}
+            className="h-6 w-14 rounded border border-border bg-input/60 text-center font-mono text-[11px] text-foreground outline-none"
+          />
+          <span className="font-mono">{policy.budgetWorkersUsed}/{policy.budgetMaxWorkers}</span>
+        </label>
+        <button
+          type="button"
+          onClick={() => onPolicyChange({ permissionWebResearch: !policy.permissionWebResearch })}
+          className={cn(
+            "rounded border px-2 py-1 text-[10px] font-semibold",
+            policy.permissionWebResearch ? "border-success/30 bg-success/10 text-success" : "border-border bg-muted text-muted-foreground",
+          )}
+          title="Allow hosted web-search workers."
+        >
+          web {policy.permissionWebResearch ? "on" : "off"}
+        </button>
+        <button
+          type="button"
+          onClick={() => onPolicyChange({ permissionExternalActions: !policy.permissionExternalActions })}
+          className={cn(
+            "rounded border px-2 py-1 text-[10px] font-semibold",
+            policy.permissionExternalActions ? "border-warning/30 bg-warning/10 text-warning" : "border-border bg-muted text-muted-foreground",
+          )}
+          title="Future side-effect tools. Current workers remain read-only except artifact writes."
+        >
+          external {policy.permissionExternalActions ? "on" : "off"}
+        </button>
+        <span
+          className="rounded border border-border bg-elevated/60 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+          title="Expected per foreground/model call from scripts/model-eval.mjs proofloop measurements."
+        >
+          model {formatDurationMs(selectedModel?.expectedLatencyMs)} {formatExpectedCost(selectedModel?.expectedCostUsd)}
+        </span>
+        <span
+          className="rounded border border-border bg-elevated/60 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+          title="Expected next V3 planning workstream: execution-plan worker plus web-research worker when web is enabled. Web-search provider/tool fees are not included."
+        >
+          next v3 {formatDurationMs(expectedBatchLatency)} {formatExpectedCost(expectedBatchCost)}
+        </span>
+        <span
+          className="rounded border border-border bg-elevated/60 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+          title="Rough remaining model-call exposure if the rest of the worker budget uses the selected room model."
+        >
+          exposure {formatExpectedCost(expectedBudgetExposure)}
+        </span>
+        <span
+          className="rounded border border-border bg-elevated/60 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+          title="Observed average runtime for completed or terminal workers in this room."
+        >
+          observed {observedAverageLatency === null ? "n/a" : formatDurationMs(observedAverageLatency)}
+        </span>
+      </div>
+      <div className="mx-auto grid max-h-44 max-w-5xl gap-2 overflow-y-auto md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
+            <Badge variant="default" className="font-mono text-[10px]">V3</Badge>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Goal Graph</span>
+            <span className="font-mono text-[10px] text-muted-foreground">{goals.length}</span>
+          </div>
+          <div className="space-y-1">
+            {goals.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground">No V3 goals yet. Steer the room to create one.</p>
+            ) : (
+              goals.slice(-4).map((goal) => (
+                <div key={goal.id} className="rounded-md border border-border bg-background/55 px-2 py-1">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded border border-border-strong px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground">{goal.kind}</span>
+                    <span className="min-w-0 flex-1 truncate text-xs font-medium text-foreground">{goal.title}</span>
+                    <span className="font-mono text-[9px] text-muted-foreground">{goal.status}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Workers</span>
+            <span className="font-mono text-[10px] text-muted-foreground">
+              q{queuedWorkers} r{runningWorkers} c{completedWorkers} f{failedWorkers} b{blockedWorkers}
+            </span>
+          </div>
+          <div className="space-y-1">
+            {latestWorkers.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground">Workers appear here when V3 spawns execution.</p>
+            ) : (
+              latestWorkers.map((worker) => (
+                <div key={worker.id} className="rounded-md border border-border bg-background/55 px-2 py-1">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "rounded border px-1.5 py-0.5 font-mono text-[9px]",
+                        worker.status === "completed"
+                          ? "border-success/30 text-success"
+                          : worker.status === "failed"
+                            ? "border-destructive/40 text-destructive"
+                            : worker.status === "running"
+                              ? "border-primary/40 text-primary"
+                              : "border-border-strong text-muted-foreground",
+                      )}
+                    >
+                      {worker.status}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-xs text-foreground">{worker.title}</span>
+                    {workerRuntimeMs(worker) !== null && (
+                      <span className="font-mono text-[9px] text-muted-foreground">{formatDurationMs(workerRuntimeMs(worker) ?? undefined)}</span>
+                    )}
+                    {(worker.status === "queued" || worker.status === "running") && (
+                      <Button variant="ghost" size="icon" onClick={() => onCancelWorker(worker.id)} title="Cancel worker" className="size-6">
+                        <XCircle className="size-3.5" />
+                      </Button>
+                    )}
+                    {(worker.status === "failed" || worker.status === "blocked" || worker.status === "canceled") && (
+                      <Button variant="ghost" size="icon" onClick={() => onRetryWorker(worker.id)} title="Retry worker" className="size-6">
+                        <RotateCcw className="size-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                  {(worker.summary || worker.error) && <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{worker.error ?? worker.summary}</p>}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Artifacts</span>
+            <span className="font-mono text-[10px] text-muted-foreground">{artifacts.length}</span>
+          </div>
+          <div className="space-y-1">
+            {latestArtifacts.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground">Completed workers write artifacts here.</p>
+            ) : (
+              latestArtifacts.map((artifact) => (
+                <details key={artifact.id} className="rounded-md border border-border bg-background/55 px-2 py-1">
+                  <summary className="cursor-pointer truncate text-xs font-medium text-foreground">{artifact.title}</summary>
+                  <pre className="mt-1 max-h-28 overflow-auto whitespace-pre-wrap font-mono text-[10px] leading-relaxed text-foreground/80">{artifact.content.slice(0, 1600)}</pre>
+                </details>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
   const room = rm.room!;
   const cur = room.models.find((m) => m.id === room.state.model);
   return (
     <label
-      title={cur ? `${cur.tier} — ${cur.note}` : "router model"}
+      title={cur ? `${cur.tier} - ${cur.note} - ${formatDurationMs(cur.expectedLatencyMs)} / ${formatExpectedCost(cur.expectedCostUsd)} per model call` : "router model"}
       className="group relative flex h-8 items-center gap-1.5 rounded-md border border-border bg-elevated/70 pl-2 pr-6 text-xs transition-colors hover:border-border-strong focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/40"
     >
       <Cpu className="size-3.5 shrink-0 text-primary" />
@@ -837,7 +1069,7 @@ function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
       >
         {room.models.map((m) => (
           <option key={m.id} value={m.id}>
-            {m.label} · {m.tier}
+            {m.label} - {m.tier} - {formatDurationMs(m.expectedLatencyMs)} - {formatExpectedCost(m.expectedCostUsd)}
           </option>
         ))}
       </select>
@@ -1031,6 +1263,8 @@ function StateInspector({ room }: { room: PublicRoom }) {
       code: room.code,
       private: Boolean(room.private),
     },
+    policy: room.policy ?? null,
+    models: room.models,
     state: room.state,
     agents: activeSlots(room.state.agentCount).map((slot) => {
       const agent = room.agents[slot];
@@ -1049,6 +1283,13 @@ function StateInspector({ room }: { room: PublicRoom }) {
     },
     traces: {
       total: traces.length,
+    },
+    v3: {
+      goals: room.goals ?? [],
+      tasks: room.tasks ?? [],
+      workers: room.workers ?? [],
+      artifacts: room.artifacts ?? [],
+      world: room.world ?? { beliefs: [] },
     },
   };
 

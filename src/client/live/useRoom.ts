@@ -54,6 +54,9 @@ export interface RouterModel {
   label: string;
   tier: string;
   note: string;
+  expectedLatencyMs?: number;
+  expectedCostUsd?: number;
+  qualityScore?: number;
 }
 export type CapabilityProfileId = "v0_no_room_state" | "v1_room_state" | "v2_work_room" | "v3_agent_ecosystem";
 export interface CapabilityProfileOption {
@@ -69,6 +72,67 @@ export interface TraceEvent {
   summary: string;
   payload?: unknown;
   ts: number;
+}
+export interface V3Goal {
+  id: string;
+  title: string;
+  kind: string;
+  status: string;
+  priority: number;
+  sourceText?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+export interface V3Task {
+  id: string;
+  goalId: string;
+  title: string;
+  kind: string;
+  status: string;
+  createdAt: number;
+  updatedAt: number;
+}
+export interface V3Worker {
+  id: string;
+  goalId: string;
+  taskId?: string;
+  kind: string;
+  status: string;
+  title: string;
+  model?: string;
+  summary?: string;
+  error?: string;
+  retryOf?: string;
+  attempt?: number;
+  createdAt: number;
+  updatedAt: number;
+  startedAt?: number;
+  completedAt?: number;
+}
+export interface AgentOsPolicy {
+  budgetMaxWorkers: number;
+  budgetWorkersUsed: number;
+  permissionWebResearch: boolean;
+  permissionExternalActions: boolean;
+}
+export interface V3Artifact {
+  id: string;
+  goalId?: string;
+  workerId?: string;
+  kind: string;
+  title: string;
+  content: string;
+  sources?: unknown[];
+  createdAt: number;
+}
+export interface V3Belief {
+  id: string;
+  goalId?: string;
+  claim: string;
+  source: string;
+  confidence: number;
+  createdAt: number;
+  updatedAt: number;
 }
 /** Lobby listing of a joinable room. */
 export interface ActiveRoom {
@@ -88,6 +152,7 @@ export interface PublicRoom {
   /** unlisted from the lobby; joinable only via link/QR/code */
   private?: boolean;
   agents: Record<string, RoomAgent>;
+  policy?: AgentOsPolicy;
   state: {
     goal: string;
     model: string;
@@ -108,6 +173,11 @@ export interface PublicRoom {
   participants: { slot: string; kind: string }[];
   utterances: RoomUtterance[];
   traces?: TraceEvent[];
+  goals?: V3Goal[];
+  tasks?: V3Task[];
+  workers?: V3Worker[];
+  artifacts?: V3Artifact[];
+  world?: { beliefs?: V3Belief[] };
 }
 
 /**
@@ -409,6 +479,18 @@ export function useRoom() {
     if (room && text.trim()) void post(`/live/rooms/${room.id}/human`, { text: text.trim() }).catch((e) => setError(String(e)));
   }, [room]);
 
+  const cancelV3Worker = React.useCallback((workerId: string) => {
+    if (room) void post(`/live/rooms/${room.id}/workers/${workerId}/cancel`).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const retryV3Worker = React.useCallback((workerId: string) => {
+    if (room) void post(`/live/rooms/${room.id}/workers/${workerId}/retry`).catch((e) => setError(String(e)));
+  }, [room]);
+
+  const setV3Policy = React.useCallback((policy: Partial<AgentOsPolicy>) => {
+    if (room) void post(`/live/rooms/${room.id}/v3-policy`, policy).catch((e) => setError(String(e)));
+  }, [room]);
+
   // Synchronous guards: `recording` state is set after an await, so quick
   // tap-release / double-tap would otherwise leave a hot mic running.
   const talkBusyRef = React.useRef(false);
@@ -495,6 +577,9 @@ export function useRoom() {
     setRunning,
     step,
     sendText,
+    cancelV3Worker,
+    retryV3Worker,
+    setV3Policy,
     beginTalk,
     endTalk,
     unlockAudio,

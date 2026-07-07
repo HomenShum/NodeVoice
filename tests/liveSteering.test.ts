@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import * as convexSteering from "../convex/shared.js";
 import * as liveSteering from "../src/live/steering.js";
+import { ROUTER_MODELS as nodeRouterModels } from "../src/live/pipeline.js";
 
 const steeringCopies = [
   ["node", liveSteering],
@@ -146,6 +147,63 @@ describe("live room steering", () => {
       const approval = steering.normalizeHumanSteeringIntent({ kind: "none", confidence: 0.8 }, "actually that plan sounds great");
       expect(steering.goalFromHumanSteeringIntent(approval), name).toBeNull();
     }
+  });
+
+  it("classifies V3 agent OS goal semantics without replacing by default", () => {
+    for (const [name, steering] of steeringCopies) {
+      expect(steering.profileUsesAgentOs("v3_agent_ecosystem"), name).toBe(true);
+      expect(steering.profileUsesAgentOs("v2_work_room"), name).toBe(false);
+
+      const add = steering.normalizeHumanSteeringIntent(
+        { kind: "add_goal", goal: "build an AI B2B SaaS wedge with current market research", confidence: 0.9 },
+        "also build the SaaS plan",
+      );
+      expect(add, name).toMatchObject({ kind: "add_goal" });
+      expect(steering.goalFromHumanSteeringIntent(add), name).toBe("build an AI B2B SaaS wedge with current market research");
+      expect(steering.agentOsGoalKind(add), name).toBe("research");
+
+      const plan = steering.normalizeHumanSteeringIntent({ kind: "retarget", goal: "plan the trip" }, "plan the trip");
+      expect(steering.agentOsGoalKind(plan), name).toBe("planning");
+
+      const count = steering.normalizeHumanSteeringIntent({ kind: "count_task", start: 1, target: 100 }, "also count to 100");
+      expect(steering.agentOsGoalKind(count), name).toBe("count");
+
+      expect(steering.shouldReplaceAgentOsGoal("also count to 100"), name).toBe(false);
+      expect(steering.shouldReplaceAgentOsGoal("instead replace the goal with count to 100"), name).toBe(true);
+    }
+  });
+
+  it("normalizes V3 policy defaults and clamps worker budget", () => {
+    expect(convexSteering.normalizeAgentOsPolicy({})).toEqual({
+      budgetMaxWorkers: 16,
+      budgetWorkersUsed: 0,
+      permissionWebResearch: true,
+      permissionExternalActions: false,
+    });
+    expect(convexSteering.normalizeAgentOsPolicy({ budgetMaxWorkers: 0, budgetWorkersUsed: -5 })).toMatchObject({
+      budgetMaxWorkers: 1,
+      budgetWorkersUsed: 0,
+    });
+    expect(convexSteering.normalizeAgentOsPolicy({ budgetMaxWorkers: 500, permissionWebResearch: false })).toMatchObject({
+      budgetMaxWorkers: 200,
+      permissionWebResearch: false,
+    });
+  });
+
+  it("exposes router cost and latency estimates for the live UI", () => {
+    for (const models of [convexSteering.ROUTER_MODELS, nodeRouterModels]) {
+      expect(models).toHaveLength(6);
+      for (const model of models) {
+        expect(model.expectedLatencyMs, model.id).toBeGreaterThan(0);
+        expect(model.expectedCostUsd, model.id).toBeGreaterThan(0);
+        expect(model.qualityScore, model.id).toBeGreaterThan(0);
+      }
+    }
+
+    const convexDefault = convexSteering.ROUTER_MODELS.find((model) => model.id === "gpt-5.4-mini");
+    const nodeDefault = nodeRouterModels.find((model) => model.id === "gpt-5.4-mini");
+    expect(convexDefault?.expectedLatencyMs).toBe(nodeDefault?.expectedLatencyMs);
+    expect(convexDefault?.expectedCostUsd).toBe(nodeDefault?.expectedCostUsd);
   });
 
   it("falls back to typed intent when the LLM result is malformed", () => {

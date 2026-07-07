@@ -35,7 +35,7 @@ export const CAPABILITY_PROFILES = [
     id: "v3_agent_ecosystem",
     label: "V3 Ecosystem",
     shortLabel: "V3",
-    note: "adapter lane for external agent stacks and subagents",
+    note: "goal graph, world model, workers, artifacts, and subagents",
   },
 ] as const;
 
@@ -48,6 +48,10 @@ export function validProfile(profile?: string): CapabilityProfile {
 
 export function profileUsesRoomState(profile?: string): boolean {
   return validProfile(profile) !== "v0_no_room_state";
+}
+
+export function profileUsesAgentOs(profile?: string): boolean {
+  return validProfile(profile) === "v3_agent_ecosystem";
 }
 
 const MAX_COUNT_TARGET = 300;
@@ -95,6 +99,7 @@ export type HumanSteeringIntent =
   | { kind: "none"; confidence?: number; reason?: string }
   | { kind: "question"; question?: string; confidence?: number; reason?: string }
   | { kind: "constraint"; note: string; confidence?: number; reason?: string }
+  | { kind: "add_goal"; goal: string; confidence?: number; reason?: string }
   | { kind: "retarget"; goal: string; confidence?: number; reason?: string }
   | { kind: "count_task"; start: number; target: number; confidence?: number; reason?: string }
   | { kind: "control"; action: "start" | "pause" | "resume" | "stop"; confidence?: number; reason?: string };
@@ -147,11 +152,25 @@ export function buildCountGoal(startOrTarget: number, maybeTarget?: number): str
 
 export function goalFromHumanSteeringIntent(intent: HumanSteeringIntent): string | null {
   if (intent.kind === "count_task") return buildCountGoal(intent.start, intent.target);
-  if (intent.kind !== "retarget") return null;
+  if (intent.kind !== "retarget" && intent.kind !== "add_goal") return null;
   const goal = cleanGoal(intent.goal);
   if (!goal) return null;
   const countCommand = extractCountCommand(goal);
   return countCommand ? buildCountGoal(countCommand.start, countCommand.target) : goal;
+}
+
+export function shouldReplaceAgentOsGoal(text: string): boolean {
+  const normalized = normalize(text);
+  return /\b(instead|replace|switch|change|stop doing|drop|forget)\b/.test(normalized) || /^(new goal|set goal|change goal|replace goal)\b/.test(normalized);
+}
+
+export function agentOsGoalKind(intent: HumanSteeringIntent): "count" | "research" | "planning" | "constraint" | "question" {
+  if (intent.kind === "count_task") return "count";
+  if (intent.kind === "question") return "question";
+  if (intent.kind === "constraint") return "constraint";
+  const text = intent.kind === "retarget" || intent.kind === "add_goal" ? intent.goal : "";
+  if (/\b(research|latest|current|market|competitor|trend|pricing|source|cite|citation)\b/i.test(text)) return "research";
+  return "planning";
 }
 
 export function deriveHumanSteeringIntentFallback(text: string): HumanSteeringIntent {
@@ -186,6 +205,11 @@ export function normalizeHumanSteeringIntent(raw: unknown, fallbackText: string)
     const start = positiveInt(raw.start ?? raw.countStart ?? nested.start) ?? 1;
     if (target !== null && validCountRange(start, target)) return withMeta({ kind: "count_task", start, target });
     return deriveHumanSteeringIntentFallback(fallbackText);
+  }
+
+  if (kind === "add_goal" || kind === "parallel_goal" || kind === "also") {
+    const goal = cleanGoal(String(raw.goal ?? raw.task ?? raw.value ?? ""));
+    return goal ? withMeta({ kind: "add_goal", goal }) : deriveHumanSteeringIntentFallback(fallbackText);
   }
 
   if (kind === "retarget" || kind === "new_goal" || kind === "goal" || kind === "task") {
