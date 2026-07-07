@@ -23,7 +23,7 @@ const source: ComparisonSource | undefined =
 
 const result = await runSideBySideComparison({ target, turns, useOllama, model, source });
 
-console.log("\nlocal-collab-mvp / side-by-side comparison");
+console.log("\nroom-os / side-by-side comparison");
 console.log(`Model: ${result.provenance.mode === "deterministic" ? "deterministic fallback" : result.selectedModel}`);
 console.log(`Provenance (bad):  ${result.provenance.bad}`);
 console.log(`Provenance (good): ${result.provenance.good}`);
