@@ -1264,6 +1264,14 @@ function StateInspector({ room }: { room: PublicRoom }) {
     artifactCount: room.artifacts?.length ?? 0,
     beliefCount: room.world?.beliefs?.length ?? 0,
   };
+  const taskReceipt = room.state.task
+    ? {
+        kind: room.state.task.kind,
+        next: room.state.task.next,
+        target: room.state.task.target,
+        completed: room.state.task.completed,
+      }
+    : null;
   const stateSnapshot = {
     stateReceipt: {
       profile: room.state.profile,
@@ -1276,8 +1284,8 @@ function StateInspector({ room }: { room: PublicRoom }) {
       done: room.state.done,
       loopRisk: room.state.loopRisk,
       suppressAcknowledgements: room.state.suppressAcknowledgements,
+      task: taskReceipt,
       goal: room.state.goal,
-      task: room.state.task ?? null,
       v3Control,
     },
     state: room.state,
