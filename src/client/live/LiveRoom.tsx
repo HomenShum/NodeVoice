@@ -1304,17 +1304,28 @@ function profileStateContrast(profile: CapabilityProfileId) {
   }
 }
 
-function StateInspector({ room }: { room: PublicRoom }) {
-  const [openId, setOpenId] = React.useState<string | null>(null);
-  const traces = room.traces ?? [];
-  const v3Control = {
-    goalCount: room.goals?.length ?? 0,
-    taskCount: room.tasks?.length ?? 0,
-    workerCount: room.workers?.length ?? 0,
-    artifactCount: room.artifacts?.length ?? 0,
-    beliefCount: room.world?.beliefs?.length ?? 0,
-  };
-  const taskReceipt = room.state.task
+function traceDigest(traces: TraceEvent[], kinds?: string[], limit = 4) {
+  const filtered = kinds ? traces.filter((trace) => kinds.includes(trace.kind)) : traces;
+  return filtered.slice(0, limit).map((trace) => ({
+    kind: trace.kind,
+    summary: trace.summary,
+    payload: trace.payload ?? null,
+    ts: trace.ts,
+  }));
+}
+
+function recentUtterances(room: PublicRoom, limit = 5) {
+  return room.utterances.slice(-limit).map((utterance) => ({
+    slot: utterance.slot,
+    name: utterance.name,
+    speechAct: utterance.speechAct,
+    text: utterance.text,
+    ts: utterance.ts,
+  }));
+}
+
+function compactTask(room: PublicRoom) {
+  return room.state.task
     ? {
         kind: room.state.task.kind,
         next: room.state.task.next,
@@ -1322,71 +1333,177 @@ function StateInspector({ room }: { room: PublicRoom }) {
         completed: room.state.task.completed,
       }
     : null;
-  const contrast = profileStateContrast(room.state.profile);
-  const stateSnapshot = {
-    stateReceipt: {
-      version: {
-        id: room.state.profile,
-        label: contrast.label,
-        layer: contrast.layer,
-        newCapability: contrast.newCapability,
-      },
-      liveProof: {
-        task: taskReceipt,
-        floorOwner: room.state.floorOwner,
-        nextSpeaker: room.state.nextSpeaker,
-        nextRequiredAct: room.state.nextRequiredAct,
-        turn: room.state.turn,
-        done: room.state.done,
-        loopRisk: room.state.loopRisk,
-        controlPlane: room.state.profile === "v3_agent_ecosystem" ? v3Control : null,
-      },
-      coordinationLayer: {
-        roomOwns: contrast.roomOwns,
-        missing: contrast.missing,
-        steerPath: contrast.steerPath,
-      },
-      runtime: {
-        agentCount: room.state.agentCount,
-        running: room.state.running,
-        suppressAcknowledgements: room.state.suppressAcknowledgements,
-      },
-      goal: room.state.goal,
+}
+
+function compactSchedule(room: PublicRoom) {
+  return {
+    floorOwner: room.state.floorOwner,
+    nextSpeaker: room.state.nextSpeaker,
+    nextRequiredAct: room.state.nextRequiredAct,
+    turn: room.state.turn,
+    running: room.state.running,
+    done: room.state.done,
+    loopRisk: room.state.loopRisk,
+    suppressAcknowledgements: room.state.suppressAcknowledgements,
+  };
+}
+
+function agentRoster(room: PublicRoom) {
+  return activeSlots(room.state.agentCount).map((slot) => {
+    const agent = room.agents[slot];
+    return {
+      slot,
+      name: agent?.name ?? fallbackAgentName(slot),
+      device: agent?.device ?? "unassigned",
+      color: agent?.color ?? "default",
+    };
+  });
+}
+
+function v3PolicyMetrics(room: PublicRoom, policy: AgentOsPolicy) {
+  const selectedModel = room.models.find((model) => model.id === room.state.model);
+  const webResearchModel = room.models.find((model) => model.id === WEB_RESEARCH_MODEL_ID);
+  const expectedModelCall = {
+    model: selectedModel?.id ?? room.state.model,
+    expectedLatencyMs: selectedModel?.expectedLatencyMs ?? null,
+    expectedCostUsd: selectedModel?.expectedCostUsd ?? null,
+  };
+  const expectedBatchCost =
+    (selectedModel?.expectedCostUsd ?? 0) + (policy.permissionWebResearch ? (webResearchModel?.expectedCostUsd ?? 0) : 0);
+  const expectedBatchLatencyMs = Math.max(
+    selectedModel?.expectedLatencyMs ?? 0,
+    policy.permissionWebResearch ? (webResearchModel?.expectedLatencyMs ?? 0) : 0,
+  );
+  const remainingWorkerBudget = Math.max(0, policy.budgetMaxWorkers - policy.budgetWorkersUsed);
+  const completedDurations = (room.workers ?? [])
+    .map(workerRuntimeMs)
+    .filter((value): value is number => typeof value === "number");
+  return {
+    expectedModelCall,
+    expectedNextV3Batch: {
+      expectedLatencyMs: expectedBatchLatencyMs,
+      expectedCostUsd: expectedBatchCost,
     },
-    state: room.state,
-    v3: {
-      goals: room.goals ?? [],
-      tasks: room.tasks ?? [],
+    remainingWorkerBudget,
+    expectedBudgetExposureUsd: remainingWorkerBudget * (selectedModel?.expectedCostUsd ?? 0),
+    observedAverageWorkerLatencyMs: average(completedDurations),
+  };
+}
+
+function buildStateSnapshot(room: PublicRoom, traces: TraceEvent[]) {
+  const contrast = profileStateContrast(room.state.profile);
+  const task = compactTask(room);
+  const roomMeta = {
+    id: room.id,
+    code: room.code,
+    private: Boolean(room.private),
+    profile: room.state.profile,
+    model: room.state.model,
+    agents: agentRoster(room),
+    participants: room.participants,
+  };
+
+  if (room.state.profile === "v0_no_room_state") {
+    return {
+      transcriptOnlyState: {
+        version: contrast,
+        durableRoomState: {
+          task: null,
+          intent: null,
+          workerGraph: null,
+          artifacts: null,
+        },
+        schedulingShell: compactSchedule(room),
+        transcriptBuffer: {
+          totalUtterances: room.utterances.length,
+          renderedLimit: VISIBLE_UTTERANCE_LIMIT,
+          recentUtterances: recentUtterances(room),
+        },
+        evidenceTraces: traceDigest(traces, ["utterance_received", "intent_interpreted", "state_reduced"]),
+      },
+      _room: roomMeta,
+    };
+  }
+
+  if (room.state.profile === "v1_room_state") {
+    return {
+      roomReducerState: {
+        version: contrast,
+        reducer: {
+          goal: room.state.goal,
+          task,
+          schedule: compactSchedule(room),
+          model: room.state.model,
+        },
+        durableGuards: {
+          suppressAcknowledgements: room.state.suppressAcknowledgements,
+          doneGuard: room.state.done,
+          loopRisk: room.state.loopRisk,
+        },
+        reducerTrace: traceDigest(traces, ["state_reduced", "scheduler_selected", "guardrail_evaluated"]),
+      },
+      _room: roomMeta,
+    };
+  }
+
+  if (room.state.profile === "v2_work_room") {
+    const intentEvents = traceDigest(traces, ["intent_interpreted", "utterance_received", "guardrail_evaluated"], 8);
+    return {
+      workRoomState: {
+        version: contrast,
+        intentRouter: {
+          latestIntent: intentEvents.find((trace) => trace.kind === "intent_interpreted") ?? null,
+          auditTrail: intentEvents,
+        },
+        reducer: {
+          goal: room.state.goal,
+          task,
+          schedule: compactSchedule(room),
+          model: room.state.model,
+        },
+        missingControlPlane: {
+          goals: null,
+          workers: null,
+          artifacts: null,
+          policy: null,
+        },
+      },
+      _room: roomMeta,
+    };
+  }
+
+  const policy = room.policy ?? {
+    budgetMaxWorkers: 16,
+    budgetWorkersUsed: 0,
+    permissionWebResearch: true,
+    permissionExternalActions: false,
+  };
+  return {
+    agentOsState: {
+      version: contrast,
+      foregroundReducer: {
+        goal: room.state.goal,
+        task,
+        schedule: compactSchedule(room),
+        model: room.state.model,
+      },
+      policy,
+      costLatency: v3PolicyMetrics(room, policy),
+      goalGraph: room.goals ?? [],
+      taskQueue: room.tasks ?? [],
       workers: room.workers ?? [],
       artifacts: room.artifacts ?? [],
       world: room.world ?? { beliefs: [] },
+      controlPlaneTraces: traceDigest(traces, ["intent_interpreted", "state_reduced", "scheduler_selected", "policy_updated", "guardrail_evaluated"], 10),
     },
-    policy: room.policy ?? null,
-    room: {
-      id: room.id,
-      code: room.code,
-      private: Boolean(room.private),
-    },
-    agents: activeSlots(room.state.agentCount).map((slot) => {
-      const agent = room.agents[slot];
-      return {
-        slot,
-        name: agent?.name ?? fallbackAgentName(slot),
-        device: agent?.device ?? "unassigned",
-        color: agent?.color ?? "default",
-      };
-    }),
-    participants: room.participants,
-    utterances: {
-      total: room.utterances.length,
-      rendered: Math.min(room.utterances.length, VISIBLE_UTTERANCE_LIMIT),
-      renderLimit: VISIBLE_UTTERANCE_LIMIT,
-    },
-    traces: {
-      total: traces.length,
-    },
-    models: room.models,
+    _room: roomMeta,
   };
+}
+
+function StateInspector({ room }: { room: PublicRoom }) {
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const traces = room.traces ?? [];
+  const stateSnapshot = buildStateSnapshot(room, traces);
 
   return (
     <div className="max-h-[min(44vh,26rem)] shrink-0 overflow-hidden border-t border-border bg-[hsl(223_30%_6%)]/95 px-4 py-2 backdrop-blur">
@@ -1395,7 +1512,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
           <div className="mb-1.5 flex items-center gap-2">
             <ListTree className="size-3.5 text-primary" />
             <span className="text-[11px] font-bold tracking-wide text-primary">Internal State</span>
-            <span className="text-[10px] text-muted-foreground">JSON contrast receipt · full reducer below</span>
+            <span className="text-[10px] text-muted-foreground">version-specific JSON state</span>
           </div>
           <pre className="overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
             {JSON.stringify(stateSnapshot, null, 2)}
