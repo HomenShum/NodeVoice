@@ -16,7 +16,7 @@ The one line that matters:
 
 The production comparison below was captured from four fresh live rooms on
 [room-os-live.vercel.app](https://room-os-live.vercel.app), rendered by
-[HomenShum/feature-walkthrough-gif](https://github.com/HomenShum/feature-walkthrough-gif).
+[HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio).
 It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
 opens the internal state layer for auditability.
 
@@ -26,12 +26,12 @@ state crop, and the full version-specific JSON captured from the live State draw
 
 ### V0 Failure: transcript-only coordination
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-proof.gif" alt="Room OS V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-proof.gif" alt="Room OS V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-state-json.png" alt="Room OS V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-state-json.png" alt="Room OS V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
 
 <!-- room-os-v0-json-start -->
-<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -188,12 +188,12 @@ count target, no count progress object, and no durable control event.
 
 ### V1 Room State: reducer-owned progress
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v1-proof.gif" alt="Room OS V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-proof.gif" alt="Room OS V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v1-state-json.png" alt="Room OS V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-state-json.png" alt="Room OS V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
 
 <!-- room-os-v1-json-start -->
-<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v1-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -315,12 +315,12 @@ explicit state instead of being inferred from agent prose.
 
 ### V2 Work Room: typed human interrupts
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v2-proof.gif" alt="Room OS V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-proof.gif" alt="Room OS V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v2-state-json.png" alt="Room OS V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-state-json.png" alt="Room OS V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
 
 <!-- room-os-v2-json-start -->
-<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v2-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -450,12 +450,12 @@ becomes a state transition, not loose chat that the next model turn may ignore.
 
 ### V3 Agent OS: governed agent work
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v3-proof.gif" alt="Room OS V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-proof.gif" alt="Room OS V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v3-state-json.png" alt="Room OS V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-state-json.png" alt="Room OS V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
 
 <!-- room-os-v3-json-start -->
-<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v3-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -859,7 +859,7 @@ cost, expected latency, observed runtime, and trace payloads.
 
 ### Final comparison
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-final-scorecard.png" alt="Room OS final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-final-scorecard.png" alt="Room OS final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
 
 | Axis | V0 Failure | V1 Room State | V2 Work Room | V3 Agent OS |
 |---|---|---|---|---|
@@ -872,10 +872,10 @@ cost, expected latency, observed runtime, and trace payloads.
 
 <details><summary><b>Optional motion capture</b></summary>
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-v1-v2-v3.gif" alt="Room OS V0 to V3 live production comparison GIF" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-v1-v2-v3.gif" alt="Room OS V0 to V3 live production comparison GIF" width="940">
 
 For a clearer moving version, open the high-resolution
-[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-walkthrough-gif/main/assets/room-os-v0-v1-v2-v3.mp4).
+[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-v1-v2-v3.mp4).
 
 </details>
 
