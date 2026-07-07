@@ -1258,14 +1258,20 @@ function StateInspector({ room }: { room: PublicRoom }) {
   const [openId, setOpenId] = React.useState<string | null>(null);
   const traces = room.traces ?? [];
   const stateSnapshot = {
+    state: room.state,
+    v3: {
+      goals: room.goals ?? [],
+      tasks: room.tasks ?? [],
+      workers: room.workers ?? [],
+      artifacts: room.artifacts ?? [],
+      world: room.world ?? { beliefs: [] },
+    },
+    policy: room.policy ?? null,
     room: {
       id: room.id,
       code: room.code,
       private: Boolean(room.private),
     },
-    policy: room.policy ?? null,
-    models: room.models,
-    state: room.state,
     agents: activeSlots(room.state.agentCount).map((slot) => {
       const agent = room.agents[slot];
       return {
@@ -1284,13 +1290,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
     traces: {
       total: traces.length,
     },
-    v3: {
-      goals: room.goals ?? [],
-      tasks: room.tasks ?? [],
-      workers: room.workers ?? [],
-      artifacts: room.artifacts ?? [],
-      world: room.world ?? { beliefs: [] },
-    },
+    models: room.models,
   };
 
   return (
@@ -1300,7 +1300,7 @@ function StateInspector({ room }: { room: PublicRoom }) {
           <div className="mb-1.5 flex items-center gap-2">
             <ListTree className="size-3.5 text-primary" />
             <span className="text-[11px] font-bold tracking-wide text-primary">Internal State</span>
-            <span className="text-[10px] text-muted-foreground">live reducer snapshot</span>
+            <span className="text-[10px] text-muted-foreground">JSON snapshot · state first</span>
           </div>
           <pre className="overflow-x-auto rounded bg-background/70 p-2 font-mono text-[10px] leading-relaxed text-emerald-200/90">
             {JSON.stringify(stateSnapshot, null, 2)}
