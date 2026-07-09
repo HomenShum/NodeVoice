@@ -27,7 +27,7 @@ coverage/
 
 dist-vercel/
 
-room-os-live/
+nodevoice-live/
 
 .vercel
 .env*.local
