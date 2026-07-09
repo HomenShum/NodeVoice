@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 460" width="1040" height="460" role="img" aria-labelledby="title desc">
   <title id="title">Projection chart for AI capability, coordination load, and control plane maturity</title>
-  <desc id="desc">A projection chart from 2025 to 2028 showing that agent capability and coordination load rise faster than control-plane maturity, making Room OS style shared state important.</desc>
+  <desc id="desc">A projection chart from 2025 to 2028 showing that agent capability and coordination load rise faster than control-plane maturity, making NodeVoice-style shared state important.</desc>
   <style>
     .bg { fill: #0b0f14; }
     .grid { stroke: #202a39; stroke-width: 1; }
@@ -71,7 +71,7 @@
     <rect class="card" x="0" y="0" width="180" height="70" rx="12"/>
     <circle cx="20" cy="30" r="7" fill="#36d399"/>
     <text class="label" x="36" y="34">Control plane</text>
-    <text class="muted" x="20" y="56">Room OS, traces, caps, durable reducers.</text>
+    <text class="muted" x="20" y="56">NodeVoice, traces, caps, durable reducers.</text>
   </g>
 
   <text class="note" x="86" y="424">Interpretation: the product opportunity is the green line. Make coordination explicit before the orange line becomes the bottleneck and the red line becomes unreviewable.</text>

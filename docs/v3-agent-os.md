@@ -1,6 +1,6 @@
 # V3 Agent OS Architecture
 
-V3 turns Room OS from a live voice room into an agent operating system.
+V3 turns NodeVoice from a live voice room into an agent operating system.
 
 ## State Model
 

@@ -4,13 +4,15 @@
 >
 > They didn’t fail for lack of intelligence. They failed for lack of **shared state**. The fix isn’t better agents — it’s a shared room.
 
+> Formerly **Room OS**. Historical proof GIFs, JSON receipts, and raw asset names keep the old `room-os` slug so existing evidence links remain stable.
+
 NodeVoice is a local-first demo that shows *why* multiple AI voice agents fall into never-ending “yeah, exactly…” acknowledgement loops — and proves the fix: a **server-authoritative room state** that agents read from and write to, instead of reacting to each other’s transcripts.
 
 The one line that matters:
 
 > **Physically in the same room is not the same as computationally in the same room.**
 
-**▶ Try NodeVoice live (no laptop needed): [room-os-live.vercel.app](https://room-os-live.vercel.app)** — frontend on Vercel, state + voice on Convex.
+**▶ Try NodeVoice live (no laptop needed): [nodevoice.vercel.app](https://nodevoice.vercel.app)** — frontend on Vercel, state + voice on Convex. Legacy receipt URL: [room-os-live.vercel.app](https://room-os-live.vercel.app).
 
 ## Read the V0 -> V3 live proof
 
@@ -19,6 +21,9 @@ The production comparison below was captured from four fresh live rooms on
 [HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio).
 It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
 opens the internal state layer for auditability.
+
+These historical proof assets intentionally keep the original Room OS filenames and
+alt text because they are evidence receipts from the pre-NodeVoice rename.
 
 The readable version is segmented by version instead of forcing everything into one
 fast, compressed four-pane GIF. Each section includes a slow proof loop, a visual
@@ -966,7 +971,7 @@ flowchart LR
 
   cap["Capability curve<br/>longer tasks, tools, code, research, parallel copies"]:::capability
   load["Coordination load<br/>state, permissions, retries, audit, security, budget"]:::load
-  plane["Control plane<br/>Room OS: durable reducer, traces, caps, human steering"]:::control
+  plane["Control plane<br/>NodeVoice: durable reducer, traces, caps, human steering"]:::control
 
   start --> y2026 --> y2027 --> y2028
   y2026 --> cap --> y2027
@@ -1003,7 +1008,7 @@ Source-backed agent history, news, and 2027/2028 projection timeline:
 | | Transport | Backend | Good for |
 |---|---|---|---|
 | **Local** (`npm run live`) | SSE + polling fallback, cloudflared tunnel | Node server on your laptop | fastest to hack, offline, on-site demo — laptop must stay awake |
-| **Hosted** ([room-os-live.vercel.app](https://room-os-live.vercel.app)) | **fully reactive** — Convex WebSocket subscriptions (`useQuery`), zero polling | **Convex prod** (state + LLM/TTS actions + audio storage) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
+| **Hosted** ([nodevoice.vercel.app](https://nodevoice.vercel.app), legacy [room-os-live.vercel.app](https://room-os-live.vercel.app)) | **fully reactive** — Convex WebSocket subscriptions (`useQuery`), zero polling | **Convex prod** (state + LLM/TTS actions + audio storage) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
 
 The same frontend serves both — transport is selected at build time ([`roomClient.ts`](src/client/live/roomClient.ts)):
 `VITE_CONVEX_URL` set → the reactive Convex client (`useConvexRoom`); unset → the HTTP client
@@ -1041,7 +1046,7 @@ phone/laptop mic ─▶ /live (SSE + POST) ─▶ Whisper ─▶ LLM (room-aware
 ```
 
 > The tunnel URL is **ephemeral** — it works only while `npm run live` and your laptop stay
-> awake, and changes on restart. The **hosted** version ([room-os-live.vercel.app](https://room-os-live.vercel.app))
+> awake, and changes on restart. The **hosted** version ([nodevoice.vercel.app](https://nodevoice.vercel.app))
 > has none of these limits — see below.
 
 ## Convex — the cloud room ledger
@@ -1097,9 +1102,9 @@ npx convex env set OPENAI_API_KEY <key> --prod      # prod
 # 2. Frontend → Vercel, pointed at the prod deployment
 VITE_CONVEX_URL="https://<prod>.convex.cloud" \
 VITE_LIVE_BASE="https://<prod>.convex.site" \
-npx vite build --outDir ../../room-os-live --emptyOutDir
+npx vite build --outDir ../../nodevoice-live --emptyOutDir
 # add vercel.json (SPA rewrite) to the output dir, then:
-cd room-os-live && vercel deploy --prod --yes
+cd nodevoice-live && vercel deploy --prod --yes
 ```
 
 Requires a gitignored `.env.local` with `OPENAI_API_KEY` (and optionally `ELEVENLABS_API_KEY`),

@@ -39,7 +39,7 @@
     <rect class="panel" x="0" y="0" width="176" height="104" rx="10"/>
     <circle class="dot" cx="28" cy="103" r="13" fill="#36d399"/>
     <text class="label" x="18" y="30">2026</text>
-    <text class="small" x="18" y="54">Room OS buildout</text>
+    <text class="small" x="18" y="54">NodeVoice buildout</text>
     <text class="muted" x="18" y="74">Shared state, traces,</text>
     <text class="muted" x="18" y="91">voice steering, cloud ledger.</text>
   </g>

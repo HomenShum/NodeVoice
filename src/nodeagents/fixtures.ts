@@ -21,9 +21,9 @@ export const demoDocs: DemoDoc[] = [
   },
   {
     id: "arch-1",
-    title: "Room OS architecture",
+    title: "NodeVoice architecture",
     text: "Every utterance is classified as a speech act. Backchannels do not trigger responses. Task actions mutate shared state. Handoffs update the floor owner. The server is authoritative for task state and artifact commits.",
-    citations: ["design:room-os:1"],
+    citations: ["design:nodevoice:1"],
   },
   {
     id: "model-1",
