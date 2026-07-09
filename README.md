@@ -18,7 +18,7 @@ The one line that matters:
 
 The production comparison below was captured from four fresh live rooms, now available on
 [nodevoice.vercel.app](https://nodevoice.vercel.app), rendered by
-[HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio).
+[HomenShum/FeatureClipStudio](https://github.com/HomenShum/FeatureClipStudio).
 It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
 opens the internal state layer for auditability.
 
@@ -31,12 +31,12 @@ state crop, and the full version-specific JSON captured from the live State draw
 
 ### V0 Failure: transcript-only coordination
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-proof.gif" alt="NodeVoice V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-proof.gif" alt="NodeVoice V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-state-json.png" alt="NodeVoice V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-state-json.png" alt="NodeVoice V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
 
 <!-- nodevoice-v0-json-start -->
-<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -193,12 +193,12 @@ count target, no count progress object, and no durable control event.
 
 ### V1 Room State: reducer-owned progress
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-proof.gif" alt="NodeVoice V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-proof.gif" alt="NodeVoice V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-state-json.png" alt="NodeVoice V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-state-json.png" alt="NodeVoice V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
 
 <!-- nodevoice-v1-json-start -->
-<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -320,12 +320,12 @@ explicit state instead of being inferred from agent prose.
 
 ### V2 Work Room: typed human interrupts
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-proof.gif" alt="NodeVoice V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-proof.gif" alt="NodeVoice V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-state-json.png" alt="NodeVoice V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-state-json.png" alt="NodeVoice V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
 
 <!-- nodevoice-v2-json-start -->
-<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -455,12 +455,12 @@ becomes a state transition, not loose chat that the next model turn may ignore.
 
 ### V3 Agent OS: governed agent work
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-proof.gif" alt="NodeVoice V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-proof.gif" alt="NodeVoice V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-state-json.png" alt="NodeVoice V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-state-json.png" alt="NodeVoice V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
 
 <!-- nodevoice-v3-json-start -->
-<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -864,7 +864,7 @@ cost, expected latency, observed runtime, and trace payloads.
 
 ### Final comparison
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-final-scorecard.png" alt="NodeVoice final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-final-scorecard.png" alt="NodeVoice final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
 
 | Axis | V0 Failure | V1 Room State | V2 Work Room | V3 Agent OS |
 |---|---|---|---|---|
@@ -877,15 +877,15 @@ cost, expected latency, observed runtime, and trace payloads.
 
 <details><summary><b>Optional motion capture</b></summary>
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-v1-v2-v3.gif" alt="NodeVoice V0 to V3 live production comparison GIF" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-v1-v2-v3.gif" alt="NodeVoice V0 to V3 live production comparison GIF" width="940">
 
 For a clearer moving version, open the high-resolution
-[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-v1-v2-v3.mp4).
+[MP4 version](https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-v1-v2-v3.mp4).
 
 </details>
 
 The source capture remains archived in
-[HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio);
+[HomenShum/FeatureClipStudio](https://github.com/HomenShum/FeatureClipStudio);
 the published embeds above use NodeVoice asset aliases.
 
 ---
@@ -990,7 +990,7 @@ The V3 design is codified as repo-operational markdown:
 - [skills.md](skills.md): the worker/skill catalog and execution contracts.
 - [docs/v3-agent-os.md](docs/v3-agent-os.md): state model, loop engineering, harness engineering, context engineering, and current production slice.
 
-Standalone public distribution: [HomenShum/agent-os-markdown](https://github.com/HomenShum/agent-os-markdown).
+Standalone public distribution: [HomenShum/NodeAgentSpec](https://github.com/HomenShum/NodeAgentSpec).
 
 Agent-era maturity rubric: [HomenShum/agent-era-maturity-model](https://github.com/HomenShum/agent-era-maturity-model).
 Source-backed agent history, news, and 2027/2028 projection timeline:
