@@ -290,7 +290,7 @@ export default function App() {
             <Radio className="size-4.5 text-primary-foreground" strokeWidth={2.25} />
           </div>
           <div className="leading-tight">
-            <h1 className="whitespace-nowrap text-sm font-bold tracking-tight">Room OS</h1>
+            <h1 className="whitespace-nowrap text-sm font-bold tracking-tight">NodeVoice</h1>
             <p className="hidden text-[10px] text-muted-foreground sm:block">shared-state agent console</p>
           </div>
         </div>

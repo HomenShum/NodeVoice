@@ -40,7 +40,7 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && path === "/health") {
       return json(res, 200, {
         ok: true,
-        service: "room-os",
+        service: "nodevoice",
         live: { openai: Boolean(process.env.OPENAI_API_KEY), elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY) },
       });
     }
@@ -135,7 +135,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`room-os server running on http://localhost:${port}`);
+  console.log(`nodevoice server running on http://localhost:${port}`);
   console.log("GET  /               tiny browser UI");
   console.log("GET  /api/models     local model dropdown data");
   console.log("POST /compare/demo   { target, turns, source, model, openaiModel }");

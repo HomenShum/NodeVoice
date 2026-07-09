@@ -7,7 +7,7 @@ const useOllama = process.env.USE_OLLAMA === "1";
 const model = process.env.OLLAMA_MODEL;
 let state = createVoiceRoom(target);
 
-console.log("\nroom-os / voice agents");
+console.log("\nnodevoice / voice agents");
 console.log("Task: three local agents count without acknowledgement loops.");
 console.log(`Model: ${useOllama ? process.env.OLLAMA_MODEL ?? "llama3.2:3b" : "deterministic fallback"}\n`);
 

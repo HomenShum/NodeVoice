@@ -1,16 +1,16 @@
-# Room OS — shared-state voice agents
+# NodeVoice — shared-state voice rooms
 
 > **Three friends walk down a street, each with an iPhone voice agent.** *“Count to 100 together.”*
 >
 > They didn’t fail for lack of intelligence. They failed for lack of **shared state**. The fix isn’t better agents — it’s a shared room.
 
-A local-first demo that shows *why* multiple AI voice agents fall into never-ending “yeah, exactly…” acknowledgement loops — and proves the fix: a **server-authoritative room state** that agents read from and write to, instead of reacting to each other’s transcripts.
+NodeVoice is a local-first demo that shows *why* multiple AI voice agents fall into never-ending “yeah, exactly…” acknowledgement loops — and proves the fix: a **server-authoritative room state** that agents read from and write to, instead of reacting to each other’s transcripts.
 
 The one line that matters:
 
 > **Physically in the same room is not the same as computationally in the same room.**
 
-**▶ Try it live (no laptop needed): [room-os-live.vercel.app](https://room-os-live.vercel.app)** — frontend on Vercel, state + voice on Convex.
+**▶ Try NodeVoice live (no laptop needed): [room-os-live.vercel.app](https://room-os-live.vercel.app)** — frontend on Vercel, state + voice on Convex.
 
 ## Read the V0 -> V3 live proof
 

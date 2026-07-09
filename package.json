@@ -1,9 +1,9 @@
 {
-  "name": "room-os",
+  "name": "nodevoice",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Local-first multi-agent room-state MVP for voice agents and NodeAgent-style frame agents.",
+  "description": "NodeVoice: shared-state voice rooms for multi-agent voice coordination and NodeAgent-style frame agents.",
   "scripts": {
     "demo:voice": "tsx src/voice/runVoiceMvp.ts",
     "demo:node": "tsx src/nodeagents/runNodeAgentMvp.ts",

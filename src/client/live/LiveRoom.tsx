@@ -234,7 +234,7 @@ function Brand({ tag }: { tag: string }) {
         <Radio className="size-4.5 text-primary-foreground" strokeWidth={2.25} />
       </div>
       <div className="leading-tight">
-        <h1 className="text-sm font-bold tracking-tight">Room OS · Live</h1>
+        <h1 className="text-sm font-bold tracking-tight">NodeVoice · Live</h1>
         <p className="text-[10px] text-muted-foreground">{tag}</p>
       </div>
     </div>
@@ -1124,13 +1124,13 @@ function UtteranceRow({ u, room, isFloor }: { u: RoomUtterance; room: PublicRoom
  */
 function ShareInvite({ joinUrl, code }: { joinUrl: string; code?: string }) {
   const [copied, setCopied] = React.useState(false);
-  const text = `Join my Room OS live room — two AI voice agents + you.${code ? ` Code: ${code}` : ""}`;
+  const text = `Join my NodeVoice live room — two AI voice agents + you.${code ? ` Code: ${code}` : ""}`;
 
   async function share() {
     // prefer the native share sheet (mobile)
     if (typeof navigator.share === "function") {
       try {
-        await navigator.share({ title: "Room OS · Live", text, url: joinUrl });
+        await navigator.share({ title: "NodeVoice · Live", text, url: joinUrl });
         return;
       } catch (e) {
         if ((e as { name?: string })?.name === "AbortError") return; // user closed the sheet

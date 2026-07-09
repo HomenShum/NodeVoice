@@ -4,7 +4,7 @@ const goal = process.argv.slice(2).join(" ") || "Build a local-first MVP where v
 const useOllama = process.env.USE_OLLAMA === "1";
 const model = process.env.OLLAMA_MODEL;
 
-console.log("\nroom-os / nodeagents");
+console.log("\nnodevoice / nodeagents");
 console.log(`Goal: ${goal}`);
 console.log(`Model: ${useOllama ? process.env.OLLAMA_MODEL ?? "llama3.2:3b" : "deterministic fallback"}\n`);
 
