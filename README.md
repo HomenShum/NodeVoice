@@ -4,7 +4,7 @@
 >
 > They didn’t fail for lack of intelligence. They failed for lack of **shared state**. The fix isn’t better agents — it’s a shared room.
 
-> Formerly **Room OS**. Historical proof GIFs, JSON receipts, and raw asset names keep the old `room-os` slug so existing evidence links remain stable.
+> Formerly **Room OS**. The original evidence links still exist for backward compatibility; the active proof embeds below use NodeVoice asset aliases.
 
 NodeVoice is a local-first demo that shows *why* multiple AI voice agents fall into never-ending “yeah, exactly…” acknowledgement loops — and proves the fix: a **server-authoritative room state** that agents read from and write to, instead of reacting to each other’s transcripts.
 
@@ -12,18 +12,18 @@ The one line that matters:
 
 > **Physically in the same room is not the same as computationally in the same room.**
 
-**▶ Try NodeVoice live (no laptop needed): [nodevoice.vercel.app](https://nodevoice.vercel.app)** — frontend on Vercel, state + voice on Convex. Legacy receipt URL: [room-os-live.vercel.app](https://room-os-live.vercel.app).
+**▶ Try NodeVoice live (no laptop needed): [nodevoice.vercel.app](https://nodevoice.vercel.app)** — frontend on Vercel, state + voice on Convex.
 
 ## Read the V0 -> V3 live proof
 
-The production comparison below was captured from four fresh live rooms on
-[room-os-live.vercel.app](https://room-os-live.vercel.app), rendered by
+The production comparison below was captured from four fresh live rooms, now available on
+[nodevoice.vercel.app](https://nodevoice.vercel.app), rendered by
 [HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio).
 It starts the same task in V0/V1/V2/V3, sends the same mid-run human interrupt, and
 opens the internal state layer for auditability.
 
-These historical proof assets intentionally keep the original Room OS filenames and
-alt text because they are evidence receipts from the pre-NodeVoice rename.
+The original Room OS asset names remain in the proof-studio repo for existing
+receipts; this README points at the NodeVoice aliases.
 
 The readable version is segmented by version instead of forcing everything into one
 fast, compressed four-pane GIF. Each section includes a slow proof loop, a visual
@@ -31,12 +31,12 @@ state crop, and the full version-specific JSON captured from the live State draw
 
 ### V0 Failure: transcript-only coordination
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-proof.gif" alt="Room OS V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-proof.gif" alt="NodeVoice V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-state-json.png" alt="Room OS V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-state-json.png" alt="NodeVoice V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
 
-<!-- room-os-v0-json-start -->
-<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-state.json">raw JSON</a>)</summary>
+<!-- nodevoice-v0-json-start -->
+<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -186,19 +186,19 @@ state crop, and the full version-specific JSON captured from the live State draw
 ```
 
 </details>
-<!-- room-os-v0-json-end -->
+<!-- nodevoice-v0-json-end -->
 
 V0 can speak, but the steer is just another transcript row. There is no authoritative
 count target, no count progress object, and no durable control event.
 
 ### V1 Room State: reducer-owned progress
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-proof.gif" alt="Room OS V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-proof.gif" alt="NodeVoice V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-state-json.png" alt="Room OS V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-state-json.png" alt="NodeVoice V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
 
-<!-- room-os-v1-json-start -->
-<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v1-state.json">raw JSON</a>)</summary>
+<!-- nodevoice-v1-json-start -->
+<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v1-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -313,19 +313,19 @@ count target, no count progress object, and no durable control event.
 ```
 
 </details>
-<!-- room-os-v1-json-end -->
+<!-- nodevoice-v1-json-end -->
 
 V1 gives the room a reducer. Floor, turn, next act, count, done, and loop-risk become
 explicit state instead of being inferred from agent prose.
 
 ### V2 Work Room: typed human interrupts
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-proof.gif" alt="Room OS V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-proof.gif" alt="NodeVoice V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-state-json.png" alt="Room OS V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-state-json.png" alt="NodeVoice V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
 
-<!-- room-os-v2-json-start -->
-<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v2-state.json">raw JSON</a>)</summary>
+<!-- nodevoice-v2-json-start -->
+<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v2-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -448,19 +448,19 @@ explicit state instead of being inferred from agent prose.
 ```
 
 </details>
-<!-- room-os-v2-json-end -->
+<!-- nodevoice-v2-json-end -->
 
 V2 keeps the reducer and routes human steering as typed room intent. A mid-run steer
 becomes a state transition, not loose chat that the next model turn may ignore.
 
 ### V3 Agent OS: governed agent work
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-proof.gif" alt="Room OS V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-proof.gif" alt="NodeVoice V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-state-json.png" alt="Room OS V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-state-json.png" alt="NodeVoice V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
 
-<!-- room-os-v3-json-start -->
-<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v3-state.json">raw JSON</a>)</summary>
+<!-- nodevoice-v3-json-start -->
+<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v3-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -857,14 +857,14 @@ becomes a state transition, not loose chat that the next model turn may ignore.
 ```
 
 </details>
-<!-- room-os-v3-json-end -->
+<!-- nodevoice-v3-json-end -->
 
 V3 adds the control plane around the room: goals, workers, artifacts, policy, expected
 cost, expected latency, observed runtime, and trace payloads.
 
 ### Final comparison
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-final-scorecard.png" alt="Room OS final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-final-scorecard.png" alt="NodeVoice final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
 
 | Axis | V0 Failure | V1 Room State | V2 Work Room | V3 Agent OS |
 |---|---|---|---|---|
@@ -877,21 +877,16 @@ cost, expected latency, observed runtime, and trace payloads.
 
 <details><summary><b>Optional motion capture</b></summary>
 
-<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-v1-v2-v3.gif" alt="Room OS V0 to V3 live production comparison GIF" width="940">
+<img src="https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-v1-v2-v3.gif" alt="NodeVoice V0 to V3 live production comparison GIF" width="940">
 
 For a clearer moving version, open the high-resolution
-[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/room-os-v0-v1-v2-v3.mp4).
+[MP4 version](https://raw.githubusercontent.com/HomenShum/feature-proof-studio/main/assets/nodevoice-v0-v1-v2-v3.mp4).
 
 </details>
 
-Reproduce the asset from the walkthrough repo:
-
-```bash
-node walkthrough.roomos.mjs
-npm run render:roomos
-magick public/wt-roomos/RoomOSV0123/v1_08.png -crop 1085x760+125+650 +repage -resize 1280x assets/room-os-v1-state-json.png
-magick -delay 220 public/wt-roomos/RoomOSV0123/v1_03.png -delay 260 public/wt-roomos/RoomOSV0123/v1_04_05.png -delay 260 public/wt-roomos/RoomOSV0123/v1_05_05.png -delay 520 public/wt-roomos/RoomOSV0123/v1_08.png -resize 1280x -loop 0 -layers Optimize assets/room-os-v1-proof.gif
-```
+The source capture remains archived in
+[HomenShum/feature-proof-studio](https://github.com/HomenShum/feature-proof-studio);
+the published embeds above use NodeVoice asset aliases.
 
 ---
 
@@ -1008,7 +1003,7 @@ Source-backed agent history, news, and 2027/2028 projection timeline:
 | | Transport | Backend | Good for |
 |---|---|---|---|
 | **Local** (`npm run live`) | SSE + polling fallback, cloudflared tunnel | Node server on your laptop | fastest to hack, offline, on-site demo — laptop must stay awake |
-| **Hosted** ([nodevoice.vercel.app](https://nodevoice.vercel.app), legacy [room-os-live.vercel.app](https://room-os-live.vercel.app)) | **fully reactive** — Convex WebSocket subscriptions (`useQuery`), zero polling | **Convex prod** (state + LLM/TTS actions + audio storage) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
+| **Hosted** ([nodevoice.vercel.app](https://nodevoice.vercel.app)) | **fully reactive** — Convex WebSocket subscriptions (`useQuery`), zero polling | **Convex prod** (state + LLM/TTS actions + audio storage) + **Vercel** (frontend) | permanent URL, **laptop can sleep**, scales |
 
 The same frontend serves both — transport is selected at build time ([`roomClient.ts`](src/client/live/roomClient.ts)):
 `VITE_CONVEX_URL` set → the reactive Convex client (`useConvexRoom`); unset → the HTTP client
