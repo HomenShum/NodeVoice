@@ -1356,6 +1356,10 @@ src/
 
 ## Commands
 
+The additive P1 NodeKit mapping is documented in
+[`docs/nodekit-runtime-map.md`](docs/nodekit-runtime-map.md). It maps the existing
+`src/nodeagents` runtime and voice-room reducer without moving either one.
+
 | Command | Description |
 |---------|-------------|
 | `npm run ui` | Build client + start server (http://localhost:8787) |

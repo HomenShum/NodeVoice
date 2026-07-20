@@ -1,0 +1,72 @@
+{
+  "application": {
+    "id": "nodevoice-voice-room",
+    "name": "NodeVoice Voice Room",
+    "purpose": "Coordinate voice agents through authoritative room state and continue work through the existing local NodeAgent artifact loop without acknowledgement loops."
+  },
+  "backend": {
+    "adapter": "process-local-room-reducer",
+    "config": {
+      "implementation": "./src/core/roomReducer.ts",
+      "persistence": "in-memory"
+    }
+  },
+  "configHash": "683f7ed3a0b65eb368fcc12dd0a306b5c21620dee8e9969ad9d770cf40f91804",
+  "contracts": {
+    "event": "nodeagent.event/v1",
+    "trace": "nodeagent.trace/v1"
+  },
+  "discovered": {
+    "evals": [
+      "evals/nodevoice-voice-room.json"
+    ],
+    "integrations": [],
+    "packs": [
+      "packs/voice-room/pack.yaml"
+    ],
+    "policies": [],
+    "skills": [
+      "packs/voice-room/SKILL.md"
+    ],
+    "subagents": [],
+    "tools": []
+  },
+  "fileCount": 6,
+  "manifestDigest": "e8e37e96a9956bb5d944e71547ae825cd5847327453297e62ed1b0a4be81c898",
+  "orchestration": {
+    "mode": "server-authoritative-room-state",
+    "entrypoint": "./src/nodeagents/runNodeAgentMvp.ts",
+    "implementationSources": [
+      "./src/nodeagents/nodeAgentLocalMvp.ts",
+      "./src/nodeagents/fixtures.ts",
+      "./src/core/roomReducer.ts",
+      "./src/voice/voiceAgent.ts",
+      "./src/compare/badGoodDemo.ts"
+    ],
+    "optionalProviderSources": [
+      "./src/providers/ollama.ts",
+      "./src/providers/openai.ts"
+    ]
+  },
+  "policies": {
+    "authority": "room-reducer",
+    "acknowledgementScheduling": "suppressed",
+    "externalProviders": "opt-in"
+  },
+  "provider": {
+    "adapter": "repo-local-openai-ollama-router",
+    "model": {
+      "provider": "openai",
+      "id": "gpt-5.4-mini"
+    },
+    "package": null
+  },
+  "runtime": {
+    "engine": "repo-local-nodevoice",
+    "profile": "deterministic-no-key"
+  },
+  "schemaVersion": "nodeagent.resolved/v1",
+  "secretRefs": [
+    "OPENAI_API_KEY"
+  ]
+}
