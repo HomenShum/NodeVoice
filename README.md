@@ -14,6 +14,17 @@ The one line that matters:
 
 **▶ Try NodeVoice live (no laptop needed): [nodevoice.vercel.app](https://nodevoice.vercel.app)** — frontend on Vercel, state + voice on Convex.
 
+## Quickstart (30 seconds)
+
+```bash
+npm install
+npm run ui          # build the client + start the server
+```
+
+Open **http://localhost:8787** and click **Run the comparison**. No API keys needed for the
+core demo. Full details (hot reload, voice rooms, model router, Ollama):
+[Quick start](#quick-start) below.
+
 ## Read the V0 -> V3 live proof
 
 The production comparison below was captured from four fresh live rooms, now available on
@@ -1118,19 +1129,24 @@ with latency + token cost measured per call.
 
 ![Model quality vs latency](docs/model-chart.svg)
 
-| Model | Proofloop quality (1–5) | Latency (single turn) | $ / turn | Best for |
+| Model | Proofloop quality (1–5) | Latency (p50, full turn) | $ / turn | Best for |
 |---|---|---|---|---|
-| **gpt-5.4-mini** · default | **4.75** | **1.3s** | $0.00072 | smartest mini that stays fast |
-| gpt-4.1-nano | 4.15 | **0.7s** | **$0.000033** | cheapest + fastest |
-| gpt-4.1-mini | 4.1 | 0.7s | $0.00014 | fast, balanced |
-| gpt-4o-mini | 4.5 | 1.0s | $0.000051 | legacy baseline |
-| gpt-5-nano | 4.6 | 3.2s | $0.00013 | cheap + smart, but slow |
-| gpt-5-mini | 5.0 | 3.0s | $0.00079 | top quality — too slow for live voice |
+| **gpt-5.4-mini** · default | **4.75** | **2.8s** | $0.00072 | smartest mini that stays fast |
+| gpt-4.1-nano | 4.15 | **2.0s** | **$0.000033** | cheapest + fastest |
+| gpt-4.1-mini | 4.1 | 2.0s | $0.00014 | fast, balanced |
+| gpt-4o-mini | 4.5 | 2.4s | $0.000051 | legacy baseline |
+| gpt-5-nano | 4.6 | 3.4s | $0.00013 | cheap + smart, but slow |
+| gpt-5-mini | 5.0 | 6.3s | $0.00079 | top quality — too slow for live voice |
+
+Latency is `p50ms` from the eval receipt, [`docs/model-eval-results.json`](docs/model-eval-results.json)
+(median wall-clock time for the full completion call, measured per turn during the eval run;
+absolute numbers include eval-run contention, so treat them as relative, not best-case).
 
 **Takeaways:** these are all capable models, so quality clusters tightly (4.1–5.0) — the
 decisive axes are **latency** and **cost**. `gpt-5-mini`/`nano` reason before answering
-(~3s, 250-300 reasoning tokens); `gpt-5.4-mini` adaptively *skips* reasoning on simple turns
-(~60 tokens, 1.3s) so it's the only "smartest-tier" model fast enough for a live loop.
+(250–320 reasoning tokens; 3.4–6.3s p50); `gpt-5.4-mini` adaptively *skips* reasoning on
+simple turns (~60 tokens, 2.8s p50) so it's the only "smartest-tier" model fast enough for
+a live loop.
 Reproduce anytime: `node scripts/model-eval.mjs` → writes `docs/model-eval-results.json`.
 
 ## Realtime vs. this STT → LLM → TTS pipeline
