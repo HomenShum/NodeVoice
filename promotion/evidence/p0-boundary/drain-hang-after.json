@@ -1,12 +1,12 @@
 {
   "label": "drain-hang-after",
-  "capturedAt": "2026-08-13T23:45:49.588Z",
-  "commit": "9598eea251741362367023a75173afd0059e6bc9",
+  "capturedAt": "2026-08-13T23:51:53.420Z",
+  "commit": "abac411548a111cefa78c174920a2684f7a1548f",
   "node": "v22.22.2",
   "probes": {
     "server": {
       "port": 4802,
-      "pid": 44792,
+      "pid": 66460,
       "health": {
         "ok": true,
         "service": "nodevoice",
@@ -15,7 +15,7 @@
           "elevenlabs": false
         }
       },
-      "idleRssMB": 90.25
+      "idleRssMB": 90.02734375
     },
     "P2_target_string": {
       "probe": "POST /compare/demo {\"target\":\"abc\"}",
@@ -41,45 +41,45 @@
       "bodyBytes": 26214400,
       "status": 413,
       "head": "{\n  \"ok\": false,\n  \"error\": \"body too large\"\n}",
-      "elapsedMs": 1874,
-      "serverPeakRssMB": 92.8
+      "elapsedMs": 2050,
+      "serverPeakRssMB": 92.2
     },
     "P1b2_body_cap_45mb": {
       "probe": "POST /compare/demo with a 45 MB JSON body (over twice the 20 MB cap)",
       "bodyBytes": 47185920,
       "status": 413,
       "head": "{\n  \"ok\": false,\n  \"error\": \"body too large\"\n}",
-      "elapsedMs": 1834,
-      "serverPeakRssMB": 105.5
+      "elapsedMs": 2094,
+      "serverPeakRssMB": 105.3
     },
     "P1d_over_cap_then_silent": {
       "probe": "raw socket: POST /live/rooms, content-length 1073741824, write 22020096 B, then send nothing",
       "declaredContentLength": 1073741824,
       "bytesWritten": 22020096,
       "observationWindowMs": 20000,
-      "msToFirstResponseByte": 2045,
-      "msToSocketClose": 2046,
+      "msToFirstResponseByte": 2039,
+      "msToSocketClose": 2040,
       "statusLine": "HTTP/1.1 413 Payload Too Large",
       "answeredWithinWindow": true,
       "socketStillOpenAtWindowEnd": false,
-      "serverRssBeforeMB": 105.5,
-      "serverRssAfterMB": 92.8,
+      "serverRssBeforeMB": 105.3,
+      "serverRssAfterMB": 87.8,
       "healthAfter": 200
     },
     "P1c_voice_demo_sibling": {
       "probe": "POST /voice/demo {\"target\":\"abc\",\"turns\":20000}",
       "status": 200,
       "responseBytes": 5669,
-      "elapsedMs": 1395,
-      "serverPeakRssMB": 87.8
+      "elapsedMs": 1295,
+      "serverPeakRssMB": 86.7
     },
     "P1_turns_flood": {
       "probe": "POST /compare/demo {\"turns\":3000000}",
       "status": 200,
       "responseBytes": 343026,
       "stepsReturned": 332,
-      "elapsedMs": 1259,
-      "serverPeakRssMB": 86
+      "elapsedMs": 1243,
+      "serverPeakRssMB": 86.7
     },
     "P3_provenance_after_midrun_failure": {
       "probe": "runSideBySideComparison({source:'openai'}) with the provider failing after the bad side",

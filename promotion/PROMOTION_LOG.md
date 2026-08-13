@@ -321,14 +321,14 @@ reproduction; a hunch is not a defect.
 
   | Probe (both trees, port 4802, Node v22.22.2) | Before | After |
   |---|---|---|
-  | raw socket, 1 GB declared, 21 MB written, then silent — time to first response byte | **none in 20 000 ms** | **2 045 ms** |
-  | …time to socket close | **none in 20 000 ms** (still open) | **2 046 ms** |
+  | raw socket, 1 GB declared, 21 MB written, then silent — time to first response byte | **none in 20 000 ms** | **2 039 ms** |
+  | …time to socket close | **none in 20 000 ms** (still open) | **2 040 ms** |
   | …status line | none | `HTTP/1.1 413 Payload Too Large` |
-  | …server RSS after / `/health` after | 81.1 MB / 200 | 92.8 MB / 200 |
+  | …server RSS after / `/health` after | 81.1 MB / 200 | 87.8 MB / 200 |
   | `POST /compare/demo`, 45 MB body (over twice the cap) | `transport_error` — `TypeError: fetch failed` | HTTP **413** `body too large` |
-  | …server peak RSS | 132.9 MB | 105.5 MB |
-  | `POST /compare/demo`, 25 MB body | HTTP 413, peak 116.5 MB | HTTP 413, peak 92.8 MB |
-  | `POST /compare/demo {"turns":3000000}` | 200, 332 steps, peak 81.4 MB | 200, 332 steps, peak 86.0 MB |
+  | …server peak RSS | 132.9 MB | 105.3 MB |
+  | `POST /compare/demo`, 25 MB body | HTTP 413, peak 116.5 MB | HTTP 413, peak 92.2 MB |
+  | `POST /compare/demo {"turns":3000000}` | 200, 332 steps, peak 81.4 MB | 200, 332 steps, peak 86.7 MB |
 
   The memory bound iteration 2 won is intact: every peak above sits within
   ~16 MB of the 90 MB idle baseline, against 2 869.7 MB at the original D5
