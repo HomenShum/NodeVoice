@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import * as convexSteering from "../convex/shared.js";
-import * as liveSteering from "../src/live/steering.js";
-import { ROUTER_MODELS as nodeRouterModels } from "../src/live/pipeline.js";
+import * as coreSteering from "../src/core/steering.js";
+import * as coreAgents from "../src/core/agents.js";
+import { ROUTER_MODELS } from "../src/core/routerModels.js";
 
-const steeringCopies = [
-  ["node", liveSteering],
-  ["convex", convexSteering],
-] as const;
+// There is ONE steering implementation (src/core/steering.ts). Both backends
+// import it. `steeringCopies` used to hold two separate implementations that a
+// parity test kept in sync; the copies are gone, so the loop now runs once and
+// the identity test below proves there is nothing left to keep in sync.
+const steeringCopies = [["core", coreSteering]] as const;
 
 function countGoal(start: number, target: number): string {
   return `Count from ${start} to ${target} out loud, one number per agent turn, stopping exactly at ${target}.`;
@@ -26,7 +28,20 @@ function expectCountTask(goal: string, expected: { target: number; next: number 
 }
 
 describe("live room steering", () => {
-  it("keeps the Convex and Node steering parsers in parity", () => {
+  it("gives the Convex backend and the Node server the SAME parser, not two copies", () => {
+    // Stronger than the parity test this replaces: identical function objects
+    // cannot drift, so a fix can no longer land in one backend and not the
+    // other (which is exactly how the count-to-100 defect shipped).
+    expect(convexSteering.deriveGoalOverrideFromHuman).toBe(coreSteering.deriveGoalOverrideFromHuman);
+    expect(convexSteering.deriveCountTask).toBe(coreSteering.deriveCountTask);
+    expect(convexSteering.coerceCountTurn).toBe(coreSteering.coerceCountTurn);
+    expect(convexSteering.normalizeHumanSteeringIntent).toBe(coreSteering.normalizeHumanSteeringIntent);
+    expect(convexSteering.activeSlots).toBe(coreAgents.activeSlots);
+    expect(convexSteering.nextSlot).toBe(coreAgents.nextSlot);
+    expect(convexSteering.ROUTER_MODELS).toBe(ROUTER_MODELS);
+
+    // The behavioural cases the old parity test compared across the two copies
+    // are kept verbatim, and still have to produce these exact goals.
     const cases = [
       "count to 100",
       "please count to one hundred",
@@ -43,7 +58,7 @@ describe("live room steering", () => {
     ];
 
     for (const text of cases) {
-      expect(liveSteering.deriveGoalOverrideFromHuman(text)).toBe(convexSteering.deriveGoalOverrideFromHuman(text));
+      expect(coreSteering.deriveGoalOverrideFromHuman(text), text).toBe(convexSteering.deriveGoalOverrideFromHuman(text));
     }
   });
 
@@ -99,22 +114,22 @@ describe("live room steering", () => {
     expectCountTask(countGoal(50, 60), { target: 60, next: 55 }, 55);
     expectCountTask(countGoal(50, 60), { target: 60, next: 50 }, 1);
 
-    const task = liveSteering.deriveCountTask(countGoal(1, 100));
+    const task = coreSteering.deriveCountTask(countGoal(1, 100));
     expect(task).toEqual({ kind: "count_to_n", target: 100, next: 1 });
 
-    expect(liveSteering.coerceCountTurn({ text: "Let's keep planning the picnic.", speechAct: "backchannel", done: false }, task!)).toEqual({
+    expect(coreSteering.coerceCountTurn({ text: "Let's keep planning the picnic.", speechAct: "backchannel", done: false }, task!)).toEqual({
       text: "One",
       speechAct: "task_action",
       done: false,
     });
 
-    expect(liveSteering.coerceCountTurn({ text: "one hundred", speechAct: "task_action", done: false }, { ...task!, next: 100 })).toEqual({
+    expect(coreSteering.coerceCountTurn({ text: "one hundred", speechAct: "task_action", done: false }, { ...task!, next: 100 })).toEqual({
       text: "one hundred",
       speechAct: "task_action",
       done: true,
     });
 
-    expect(liveSteering.coerceCountTurn({ text: "wrong number", speechAct: "backchannel", done: false }, { kind: "count_to_n", target: 60, next: 50 })).toEqual({
+    expect(coreSteering.coerceCountTurn({ text: "wrong number", speechAct: "backchannel", done: false }, { kind: "count_to_n", target: 60, next: 50 })).toEqual({
       text: "Fifty",
       speechAct: "task_action",
       done: false,
@@ -191,7 +206,7 @@ describe("live room steering", () => {
   });
 
   it("exposes router cost and latency estimates for the live UI", () => {
-    for (const models of [convexSteering.ROUTER_MODELS, nodeRouterModels]) {
+    for (const models of [convexSteering.ROUTER_MODELS, ROUTER_MODELS]) {
       expect(models).toHaveLength(6);
       for (const model of models) {
         expect(model.expectedLatencyMs, model.id).toBeGreaterThan(0);
@@ -201,7 +216,7 @@ describe("live room steering", () => {
     }
 
     const convexDefault = convexSteering.ROUTER_MODELS.find((model) => model.id === "gpt-5.4-mini");
-    const nodeDefault = nodeRouterModels.find((model) => model.id === "gpt-5.4-mini");
+    const nodeDefault = ROUTER_MODELS.find((model) => model.id === "gpt-5.4-mini");
     expect(convexDefault?.expectedLatencyMs).toBe(nodeDefault?.expectedLatencyMs);
     expect(convexDefault?.expectedCostUsd).toBe(nodeDefault?.expectedCostUsd);
   });

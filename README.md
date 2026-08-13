@@ -29,6 +29,20 @@ Open **http://localhost:8787** and click **Run the comparison**. No API keys nee
 core demo. Full details (hot reload, voice rooms, model router, Ollama):
 [Quick start](#quick-start) below.
 
+**Working on the code rather than trying the product?** Read
+**[docs/START_HERE.md](docs/START_HERE.md)** — one button press followed through
+the code in the order it runs — then open the three walkthroughs in
+[`.tours/`](.tours) with the VS Code CodeTour extension. Reference material lives
+in [docs/codebase/](docs/codebase): [STACK](docs/codebase/STACK.md),
+[STRUCTURE](docs/codebase/STRUCTURE.md),
+[ARCHITECTURE](docs/codebase/ARCHITECTURE.md),
+[CONVENTIONS](docs/codebase/CONVENTIONS.md),
+[INTEGRATIONS](docs/codebase/INTEGRATIONS.md),
+[TESTING](docs/codebase/TESTING.md), and
+[CONCERNS](docs/codebase/CONCERNS.md) — the known problems, with reproductions.
+What was deleted and why is in
+[docs/SIMPLIFICATION_REPORT.md](docs/SIMPLIFICATION_REPORT.md).
+
 ## Read the V0 -> V3 live proof
 
 The production comparison below was captured from four fresh live rooms, now available on
@@ -1366,13 +1380,25 @@ src/
 │   └── components/
 │       ├── agents-ui/              # trace-tree-view, control bar, visualizer, indicator, transcript
 │       └── ui/                     # Button, Badge, Input, Select
-├── core/                           # types, speechActClassifier, roomReducer, guards — the heart of the system
+├── core/                           # the rules of a room. ONE copy, imported by the
+│                                   # Node server, the Convex backend AND the browser:
+│                                   # roomReducer, agents, steering, numberWords,
+│                                   # routerModels, speechActClassifier, guards, types
+├── live/                           # the local live room: roomServer (HTTP + SSE), pipeline
 ├── compare/badGoodDemo.ts          # side-by-side bad/good step generator
 ├── voice/voiceAgent.ts             # voice agent loop
 ├── nodeagents/nodeAgentLocalMvp.ts # NodeAgent four-frame artifact chain
-├── providers/localModels.ts        # local model catalog
+├── providers/                      # outbound calls: openai, ollama, localModels catalog
 └── server.ts                       # HTTP server (API + static)
+
+convex/                             # the hosted backend. Room RULES are imported from
+                                    # src/core/ — convex/shared.ts holds only the
+                                    # Convex-specific glue.
 ```
+
+The one structural rule: **anything two runtimes must agree on lives in
+`src/core/` and is imported, never copied.** `tests/liveSteering.test.ts` asserts
+that by object identity.
 
 ## Commands
 
@@ -1383,5 +1409,7 @@ src/
 | `npm run build` | Build client for production |
 | `npm run start` | Start server only (serves `dist/`) |
 | `npm test` | Run Vitest tests |
-| `npm run check` / `check:client` | TypeScript type-check (server / client) |
+| `npm run check` / `check:client` / `check:convex` | TypeScript type-check (server / client / Convex) |
+| `npm run check:tours` | Verify every `.tours/` step still points at the code it describes |
+| `npm run doctor` | All four checks above |
 | `npm run demo:compare` / `demo:voice` / `demo:node` | CLI demos |

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "1 · One button press, all the way down",
+  "description": "Follow the /demo page's 'Run the comparison' button from the click to the shared record and back to the screen. No API key needed to run along.",
+  "steps": [
+    {
+      "file": "src/client/App.tsx",
+      "line": 156,
+      "anchor": "async function runCompare()",
+      "description": "**The click lands here.** Someone pressed **Run the comparison**. This is the only place the demo's inputs — how high to count (`target`, default 100), how many turns to allow, and whether to use the scripted script, a local model, or OpenAI — become a request."
+    },
+    {
+      "file": "src/client/App.tsx",
+      "line": 164,
+      "anchor": "const res = await fetch(demoApi(\"/compare/demo\")",
+      "description": "One POST. Everything after this is server-side until the response comes back."
+    },
+    {
+      "file": "src/server.ts",
+      "line": 67,
+      "anchor": "if (req.method === \"POST\" && path === \"/compare/demo\")",
+      "description": "**Where input becomes trusted.** `source` is narrowed to the three values the code understands; anything else quietly becomes `deterministic` instead of reaching a provider. Asking for OpenAI with no server key is refused here with a 400 that names what is missing — before any work starts."
+    },
+    {
+      "file": "src/compare/badGoodDemo.ts",
+      "line": 58,
+      "anchor": "export async function runSideBySideComparison",
+      "description": "**The product's argument, executed.** The same task runs in two rooms that differ in exactly one thing: whether a shared record of progress exists. Everything else is held constant, which is what makes the comparison honest."
+    },
+    {
+      "file": "src/compare/badGoodDemo.ts",
+      "line": 339,
+      "anchor": "async function runGoodRoomStateLoop",
+      "description": "The right-hand room. It loops until the task completes or the turn budget runs out — it cannot finish early, because completion is decided by the reducer, not by this loop."
+    },
+    {
+      "file": "src/voice/voiceAgent.ts",
+      "line": 60,
+      "anchor": "export async function runVoiceStep",
+      "description": "**One agent's turn.** Note the order: the deterministic answer is computed first, a model is consulted only if the request asked for one, and `enforceRoomPolicy` gets the last word. A model never decides the count."
+    },
+    {
+      "file": "src/core/roomReducer.ts",
+      "line": 47,
+      "anchor": "export function applyUtterance",
+      "description": "**This is the product.** Speaking is not progress. The utterance is classified, the task is advanced only if it should be, the loop guard runs, and the next speaker is chosen by the server. A new state object is returned — nothing is mutated in place."
+    },
+    {
+      "file": "src/core/roomReducer.ts",
+      "line": 87,
+      "anchor": "function applyTaskMutation",
+      "description": "The commit itself. If the number spoken is not the number the room was waiting for, the count stays exactly where it was and the room asks for a correction. That single rule is why the left-hand room stalls and the right one reaches 100."
+    },
+    {
+      "file": "src/core/numberWords.ts",
+      "line": 44,
+      "anchor": "export function extractNumber",
+      "description": "**How the room hears a number.** Read the comment below this function: 'One hundred' is two tokens, and returning on the first one made the room hear `1`, demand a correction, and stall at 99 forever. `tests/countToOneHundred.test.ts` exists because of that."
+    },
+    {
+      "file": "src/client/App.tsx",
+      "line": 192,
+      "anchor": "async function speakGoodSteps",
+      "description": "**Back on screen.** The run is played back one turn at a time, because the point is watching the right-hand counter climb while the left-hand agents' private beliefs stay wrong. A browser with no speech synthesis renders everything and skips the audio."
+    },
+    {
+      "file": "tests/countToOneHundred.test.ts",
+      "line": 31,
+      "anchor": "finishes the shared-room demo",
+      "description": "**The test that proves this flow.** It runs the comparison at the shipped default target of 100 and asserts the shared room completes. `npm test`."
+    }
+  ]
+}

@@ -1,5 +1,9 @@
-const SMALL: Record<string, number> = {
-  zero: 0,
+/**
+ * The English number lexicon, in one place. `src/core/steering.ts` reads the
+ * same two tables, so a room that can SAY a number can also HEAR it — the two
+ * used to be separate copies and drifted (see docs/codebase/CONCERNS.md).
+ */
+export const ONES: Record<string, number> = {
   one: 1,
   two: 2,
   three: 3,
@@ -21,7 +25,7 @@ const SMALL: Record<string, number> = {
   nineteen: 19,
 };
 
-const TENS: Record<string, number> = {
+export const TENS: Record<string, number> = {
   twenty: 20,
   thirty: 30,
   forty: 40,
@@ -32,6 +36,11 @@ const TENS: Record<string, number> = {
   ninety: 90,
 };
 
+// Hearing a spoken turn accepts "zero"; issuing a count command (steering.ts)
+// accepts "a" ("count to a hundred") instead. Same lexicon, two extra words.
+const SMALL: Record<string, number> = { ...ONES, zero: 0 };
+
+/** What number did this speaker just say? Returns undefined if they said none. */
 export function extractNumber(text: string): number | undefined {
   const normalized = text.toLowerCase().replace(/[,.!?]/g, " ").replace(/-/g, " ").trim();
   const digit = normalized.match(/\b(\d{1,3})\b/);

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "3 · When it breaks: where to look, and what the room does",
+  "description": "Every failure edge in one pass — missing keys, slow models, oversized responses, bad input, and the two places state can be inspected.",
+  "steps": [
+    {
+      "file": "src/live/pipeline.ts",
+      "line": 52,
+      "anchor": "function keyOrThrow",
+      "description": "**Missing key.** Not a silent no-op and not a fake success: a named error. In the UI it appears as 'turn failed: Error: OPENAI_API_KEY is not configured on the server' plus an 'Auto-run halted on error' row in the trace."
+    },
+    {
+      "file": "src/live/pipeline.ts",
+      "line": 58,
+      "anchor": "async function withTimeout",
+      "description": "**Slow model.** Every outbound call runs under an `AbortController` budget: 30 s for a turn, 12 s for interpreting a human steer. Nothing waits forever."
+    },
+    {
+      "file": "src/live/pipeline.ts",
+      "line": 26,
+      "anchor": "const MAX_TTS_BYTES",
+      "description": "**Oversized response.** Audio and speech-to-text bodies are size-capped before they are read into memory."
+    },
+    {
+      "file": "src/providers/ollama.ts",
+      "line": 44,
+      "anchor": "export async function isOllamaAvailable",
+      "description": "**Local model absent.** Answers within 800 ms either way, and the caller falls back to the deterministic script rather than hanging."
+    },
+    {
+      "file": "src/server.ts",
+      "line": 133,
+      "anchor": "catch (error)",
+      "description": "**The server's outer boundary.** Any unhandled throw becomes a 500 with the message, never a 200 with an empty body."
+    },
+    {
+      "file": "src/client/App.tsx",
+      "line": 182,
+      "anchor": "// Clear on-screen error event",
+      "description": "**The browser's boundary.** The failure is rendered as a step in the transcript, so the person sees what went wrong instead of a spinner that never stops."
+    },
+    {
+      "file": "src/core/guards.ts",
+      "line": 5,
+      "anchor": "export function enforceRoomPolicy",
+      "description": "**A wandering model.** If an agent tries to say something off-task, the utterance is blocked and the room speaks the correct number anyway. The room cannot be talked out of its own state."
+    },
+    {
+      "file": "src/live/roomServer.ts",
+      "line": 245,
+      "anchor": "function pushTrace",
+      "description": "**Where to look when a room misbehaves.** Every state change appends a trace entry. The State drawer in the live room renders these with timestamps next to the raw reducer JSON — start there, not in the transcript."
+    },
+    {
+      "file": "src/server.ts",
+      "line": 167,
+      "anchor": "error: \"client_not_built\"",
+      "description": "**`npm start` before `npm run build`.** The API works, page requests say exactly this, and the startup log tells you which command to run. There is exactly one browser client; an older one is never served instead."
+    },
+    {
+      "file": "docs/codebase/CONCERNS.md",
+      "line": 7,
+      "anchor": "## 1. The two backends give the steering model",
+      "description": "**Known problems live here**, with reproductions. Read this before concluding you have found something new."
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import { getOpenAIModelName, hasOpenAIKey, openaiChat, type OpenAIChatMessage } 
 
 export type ComparisonSource = "deterministic" | "ollama" | "openai";
 
-export type BadAgentIntent = "acknowledge" | "wait-for-someone" | "start-counting";
+type BadAgentIntent = "acknowledge" | "wait-for-someone" | "start-counting";
 
 /**
  * What each bad-side agent privately believes. There is no shared room, so
@@ -26,14 +26,14 @@ export type BadAgentPrivateState = {
 };
 
 /** Honest disclosure of what produced the utterance text on each side. */
-export type ComparisonProvenance = {
+type ComparisonProvenance = {
   mode: ComparisonSource;
   modelId: string | null;
   bad: string;
   good: string;
 };
 
-export type ComparisonStep = {
+type ComparisonStep = {
   turn: number;
   actorId: ActorId;
   text: string;

@@ -21,9 +21,10 @@ try {
 }
 
 const port = Number(process.env.PORT ?? "8787");
-const distDir = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
-const publicDir = resolve(fileURLToPath(new URL("../public", import.meta.url)));
-const staticDir = existsSync(distDir) ? distDir : publicDir;
+// The browser UI is the Vite build in dist/. There is exactly one client; if it
+// has not been built the API still answers and the page says so, rather than a
+// second, older UI being served silently from somewhere else.
+const staticDir = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
 
 const server = createServer(async (req, res) => {
   try {
@@ -136,6 +137,7 @@ const server = createServer(async (req, res) => {
 
 server.listen(port, () => {
   console.log(`nodevoice server running on http://localhost:${port}`);
+  if (!existsSync(staticDir)) console.log("NOTE: dist/ is missing — run `npm run build` (or `npm run ui`) to get the browser UI. API routes below work regardless.");
   console.log("GET  /               tiny browser UI");
   console.log("GET  /api/models     local model dropdown data");
   console.log("POST /compare/demo   { target, turns, source, model, openaiModel }");
@@ -155,16 +157,15 @@ async function serveStatic(path: string, res: ServerResponse): Promise<void> {
     res.writeHead(200, { "content-type": contentType(filePath) });
     res.end(file);
   } catch {
-    if (staticDir === distDir) {
-      try {
-        const fallback = resolve(join(distDir, "index.html"));
-        const file = await readFile(fallback);
-        res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-        res.end(file);
-        return;
-      } catch { /* fall through to 404 */ }
+    // Single-page app: unknown GET paths fall back to index.html so deep links
+    // like /demo work on reload.
+    try {
+      const file = await readFile(resolve(join(staticDir, "index.html")));
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end(file);
+    } catch {
+      json(res, 404, { ok: false, error: "client_not_built", hint: "run `npm run build` (or `npm run ui`)" });
     }
-    json(res, 404, { ok: false, error: "not_found" });
   }
 }
 

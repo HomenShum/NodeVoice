@@ -1,7 +1,7 @@
 export type LocalModelUse = "voice" | "nodeagent" | "code" | "vision" | "embedding" | "reasoning";
-export type HardwareTier = "tiny" | "laptop" | "workstation" | "high_vram" | "cloud_or_lab";
-export type ModelBucket = "latest_local" | "latest_edge" | "practical_stable" | "specialized" | "embedding" | "cloud_only_reference";
-export type ModelAvailability = "local" | "local_pre_release" | "local_lab" | "cloud_only";
+type HardwareTier = "tiny" | "laptop" | "workstation" | "high_vram" | "cloud_or_lab";
+type ModelBucket = "latest_local" | "latest_edge" | "practical_stable" | "specialized" | "embedding" | "cloud_only_reference";
+type ModelAvailability = "local" | "local_pre_release" | "local_lab" | "cloud_only";
 
 export type LocalModelOption = {
   id: string;
@@ -717,7 +717,7 @@ export const CLOUD_ONLY_REFERENCE_MODELS: LocalModelOption[] = [
 export const DEFAULT_VOICE_MODEL_ID = "gemma4_e2b";
 export const DEFAULT_NODEAGENT_MODEL_ID = "gemma4_12b";
 
-export function getLocalModelById(id: string | undefined, fallbackId = DEFAULT_VOICE_MODEL_ID): LocalModelOption {
+function getLocalModelById(id: string | undefined, fallbackId = DEFAULT_VOICE_MODEL_ID): LocalModelOption {
   return LOCAL_MODEL_OPTIONS.find((model) => model.id === id || model.ollamaModel === id) ?? LOCAL_MODEL_OPTIONS.find((model) => model.id === fallbackId)!;
 }
 
@@ -729,6 +729,3 @@ export function getModelsFor(use: LocalModelUse): LocalModelOption[] {
   return LOCAL_MODEL_OPTIONS.filter((model) => model.recommendedFor.includes(use) && model.availability !== "cloud_only");
 }
 
-export function getModelsByBucket(bucket: ModelBucket): LocalModelOption[] {
-  return LOCAL_MODEL_OPTIONS.filter((model) => model.bucket === bucket);
-}

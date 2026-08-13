@@ -1,37 +1,15 @@
 import * as React from "react";
 
-export type Slot = string;
+// Seat ids, seat count and rotation come from src/core/agents.ts — the same
+// module the Node server and the Convex backend use, so the browser cannot
+// disagree with the server about who sits where.
+export type { Slot } from "../../core/agents.js";
+import { isAgentSlot } from "../../core/agents.js";
+import type { Slot } from "../../core/agents.js";
+
 export type MySlot = Slot | "spectator";
-export const MIN_AGENT_COUNT = 1;
-export const DEFAULT_AGENT_COUNT = 2;
-export const MAX_AGENT_COUNT = 100;
 
-export function slotForIndex(index: number): Slot {
-  const n = Math.max(1, Math.min(MAX_AGENT_COUNT, Math.trunc(index)));
-  return `agent-${String(n).padStart(3, "0")}`;
-}
-
-export function agentIndexFromSlot(slot: string): number | null {
-  const legacy: Record<string, number> = { a: 1, b: 2, c: 3, d: 4, e: 5 };
-  if (slot in legacy) return legacy[slot]!;
-  const match = /^agent-(\d{3})$/.exec(slot);
-  if (!match) return null;
-  const n = Number(match[1]);
-  return Number.isInteger(n) && n >= 1 && n <= MAX_AGENT_COUNT ? n : null;
-}
-
-export function isAgentSlot(value: unknown): value is Slot {
-  return typeof value === "string" && agentIndexFromSlot(value) !== null;
-}
-
-export function activeSlots(agentCount?: number): Slot[] {
-  const count = typeof agentCount === "number" && Number.isFinite(agentCount) ? Math.max(MIN_AGENT_COUNT, Math.min(MAX_AGENT_COUNT, Math.trunc(agentCount))) : DEFAULT_AGENT_COUNT;
-  return Array.from({ length: count }, (_, i) => slotForIndex(i + 1));
-}
-
-export const AGENT_SLOTS = activeSlots(MAX_AGENT_COUNT);
-
-export interface RoomAgent {
+interface RoomAgent {
   slot: Slot;
   name: string;
   device: string;
@@ -49,7 +27,7 @@ export interface RoomUtterance {
   /** Direct audio URL (Convex storage). HTTP mode uses /live/audio/:audioId instead. */
   audioUrl?: string;
 }
-export interface RouterModel {
+interface RouterModel {
   id: string;
   label: string;
   tier: string;
@@ -59,7 +37,7 @@ export interface RouterModel {
   qualityScore?: number;
 }
 export type CapabilityProfileId = "v0_no_room_state" | "v1_room_state" | "v2_work_room" | "v3_agent_ecosystem";
-export interface CapabilityProfileOption {
+interface CapabilityProfileOption {
   id: CapabilityProfileId;
   label: string;
   shortLabel: string;
@@ -73,7 +51,7 @@ export interface TraceEvent {
   payload?: unknown;
   ts: number;
 }
-export interface V3Goal {
+interface V3Goal {
   id: string;
   title: string;
   kind: string;
@@ -83,7 +61,7 @@ export interface V3Goal {
   createdAt: number;
   updatedAt: number;
 }
-export interface V3Task {
+interface V3Task {
   id: string;
   goalId: string;
   title: string;
@@ -92,7 +70,7 @@ export interface V3Task {
   createdAt: number;
   updatedAt: number;
 }
-export interface V3Worker {
+interface V3Worker {
   id: string;
   goalId: string;
   taskId?: string;
@@ -115,7 +93,7 @@ export interface AgentOsPolicy {
   permissionWebResearch: boolean;
   permissionExternalActions: boolean;
 }
-export interface V3Artifact {
+interface V3Artifact {
   id: string;
   goalId?: string;
   workerId?: string;
@@ -125,7 +103,7 @@ export interface V3Artifact {
   sources?: unknown[];
   createdAt: number;
 }
-export interface V3Belief {
+interface V3Belief {
   id: string;
   goalId?: string;
   claim: string;

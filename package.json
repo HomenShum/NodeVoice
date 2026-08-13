@@ -11,33 +11,24 @@
     "start": "tsx src/server.ts",
     "check": "tsc --noEmit",
     "check:client": "tsc --noEmit -p tsconfig.client.json",
-    "doctor": "npm run check && npm run check:client",
+    "doctor": "npm run check && npm run check:client && npm run check:convex && npm run check:tours",
     "proof": "npm run test && npm run demo:compare",
     "test": "vitest run --root .",
     "demo:compare": "tsx src/compare/runComparisonMvp.ts",
     "dev": "vite",
     "build": "vite build",
     "ui": "npm run build && tsx src/server.ts",
-    "live": "node scripts/live.mjs"
+    "live": "node scripts/live.mjs",
+    "check:convex": "tsc --noEmit -p convex/tsconfig.json",
+    "check:tours": "node scripts/check-tours.mjs"
   },
   "dependencies": {
     "@assistant-ui/react-o11y": "^0.0.25",
     "@assistant-ui/store": "^0.2.19",
-    "@astryxdesign/cli": "^0.1.2",
-    "@astryxdesign/core": "^0.1.2",
-    "@astryxdesign/theme-neutral": "^0.1.2",
-    "@evilmartians/agent-prism-data": "^0.0.9",
-    "@evilmartians/agent-prism-types": "^0.0.9",
-    "@livekit/components-react": "^2.9.21",
-    "@radix-ui/react-collapsible": "^1.1.15",
-    "@radix-ui/react-tabs": "^1.1.16",
     "convex": "^1.42.1",
-    "livekit-client": "^2.20.0",
     "qrcode-generator": "^1.5.2",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-json-pretty": "^2.2.0",
-    "react-resizable-panels": "^4.12.1"
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.2",

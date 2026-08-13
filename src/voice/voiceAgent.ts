@@ -15,7 +15,7 @@ export type VoiceAgentConfig = {
   openaiModel?: string;
 };
 
-export async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig): Promise<AgentDecision> {
+async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig): Promise<AgentDecision> {
   if (state.task.kind !== "count_to_n") {
     throw new Error("voice MVP currently expects a count_to_n task");
   }

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "2 · A live room: real devices, real speech, one shared record",
+  "description": "The second flow: a laptop creates a room, a phone joins by scanning a code, and agents take turns out loud. Same rules as the demo, real transport.",
+  "steps": [
+    {
+      "file": "src/live/roomServer.ts",
+      "line": 660,
+      "anchor": "export async function handleLive",
+      "description": "**Every `/live/*` route enters here.** One function, one router, no framework. It returns `false` for anything that is not a live-room path so `src/server.ts` can carry on."
+    },
+    {
+      "file": "src/live/roomServer.ts",
+      "line": 665,
+      "anchor": "if (method === \"POST\" && path === \"/live/rooms\")",
+      "description": "**Create a room.** The laptop calls this. The room id doubles as the six-character join code a phone types or scans."
+    },
+    {
+      "file": "src/core/agents.ts",
+      "line": 86,
+      "anchor": "export function agentIdentity",
+      "description": "**Who sits where — one copy, three readers.** The Node server, the hosted Convex backend and the browser all import this file, so a room created on a laptop and joined by a phone shows the same person in seat 2. Seat 1 is the host's laptop; every later seat is a phone."
+    },
+    {
+      "file": "src/live/roomServer.ts",
+      "line": 765,
+      "anchor": "if (method === \"POST\" && sub === \"join\")",
+      "description": "**A device joins.** `allocateJoinSlot` hands out the next free seat. The room broadcasts its new state to everyone already connected."
+    },
+    {
+      "file": "src/core/steering.ts",
+      "line": 155,
+      "anchor": "export function deriveHumanSteeringIntentFallback",
+      "description": "**What did the human mean?** Someone says 'actually, count to one hundred'. This decides whether that was a new goal, a constraint, a question, or nothing. It never guesses a number the speaker did not say. Both backends import this exact function — `tests/liveSteering.test.ts` asserts it by object identity."
+    },
+    {
+      "file": "src/live/pipeline.ts",
+      "line": 92,
+      "anchor": "export async function generateAgentTurn",
+      "description": "**The model call.** Note `withTimeout` and the size caps: every outbound call is bounded, and the response body is capped, so one slow model cannot hang a room."
+    },
+    {
+      "file": "src/live/pipeline.ts",
+      "line": 8,
+      "anchor": "coerceCountTurn",
+      "description": "The model's answer is not trusted as-is. If a count task is active, `coerceCountTurn` (in `src/core/steering.ts`) forces the turn back onto the number the room is waiting for."
+    },
+    {
+      "file": "src/live/roomServer.ts",
+      "line": 313,
+      "anchor": "function broadcastState",
+      "description": "**How progress reaches the interface.** Server-Sent Events to every connected browser, with polling as the fallback — which is what makes this work through a tunnel and on iOS Safari."
+    },
+    {
+      "file": "convex/coordinator.ts",
+      "line": 78,
+      "anchor": "export const runTurn",
+      "description": "**The same turn, hosted.** On the Convex deployment the scheduler is an action rather than a loop in a Node process, and state lives in tables instead of a `Map`. The rules it applies come from the same `src/core/` modules."
+    },
+    {
+      "file": "convex/coordinator.ts",
+      "line": 151,
+      "anchor": "export const runV3Worker",
+      "description": "**Where tools are registered and called.** A V3 room can spawn background workers; this dispatches to `runWebResearchWorker` or `runPlanningWorker` and refuses to exceed the room's worker budget."
+    },
+    {
+      "file": "tests/liveRoomSeats.test.ts",
+      "line": 38,
+      "anchor": "seats both devices in the same room",
+      "description": "**The test that proves this flow.** It starts a real HTTP server on an ephemeral port, creates a room, joins twice, and checks both devices are in the *same* room in different seats. No mocks."
+    }
+  ]
+}

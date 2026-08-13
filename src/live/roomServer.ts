@@ -11,7 +11,8 @@
  */
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
-import { generateAgentTurn, interpretHumanSteer, synthesizeSpeech, transcribeAudio, ROUTER_MODELS, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
+import { generateAgentTurn, interpretHumanSteer, synthesizeSpeech, transcribeAudio, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
+import { ROUTER_MODELS } from "../core/routerModels.js";
 import {
   CAPABILITY_PROFILES,
   deriveCountTask,
@@ -21,26 +22,34 @@ import {
   validProfile,
   type CapabilityProfile,
   type HumanSteeringIntent,
-  type LiveCountTask,
-} from "./steering.js";
+  type CountTask,
+} from "../core/steering.js";
 
 function validModel(m?: string): string {
   return m && ROUTER_MODELS.some((x) => x.id === m) ? m : DEFAULT_LLM_MODEL;
 }
 
-type Slot = string;
+import {
+  DEFAULT_GOAL,
+  MAX_AGENT_COUNT,
+  activeSlots,
+  agentIdentity,
+  agentIndexFromSlot,
+  isAgentSlot,
+  estimateSpeechMs,
+  nextSlot,
+  slotForIndex,
+  validAgentCount,
+  type AgentIdentity,
+  type Slot,
+} from "../core/agents.js";
 
-interface AgentDef {
-  slot: Slot;
-  name: string;
-  device: "laptop" | "phone";
+/** A seat plus the voices it speaks with. Seats come from src/core/agents.ts;
+ *  only the OpenAI/ElevenLabs voice pairing is local to this server. */
+interface AgentDef extends AgentIdentity {
   voice: AgentVoice;
-  color: string;
-  persona: string;
 }
 
-const LEGACY_SLOT_INDEX: Record<string, number> = { a: 1, b: 2, c: 3, d: 4, e: 5 };
-const AGENT_NAMES = ["Ada", "Ben", "Cara", "Dev", "Eli", "Fay", "Gus", "Hana", "Ira", "Jo", "Kai", "Lea", "Mika", "Noor", "Owen", "Pia", "Quin", "Rae", "Sol", "Tess"];
 const VOICES: AgentVoice[] = [
   { openai: "nova", eleven: "21m00Tcm4TlvDq8ikWAM" },
   { openai: "onyx", eleven: "pNInz6obpgDQGcFmaJgB" },
@@ -48,67 +57,11 @@ const VOICES: AgentVoice[] = [
   { openai: "echo", eleven: "ErXwobaYiN019PkySvjV" },
   { openai: "fable", eleven: "MF3mGyEYCl7XYWbV9V6O" },
 ];
-const AGENT_COLORS = ["sky", "violet", "emerald", "amber", "rose", "cyan", "lime", "pink", "orange", "indigo"];
-const PERSONAS = [
-  "A decisive planner. Proposes concrete, specific options with names and rough timing, and pushes to lock decisions.",
-  "A thoughtful challenger. Asks one sharp question, checks constraints and budget, then refines the plan.",
-  "A concise synthesizer. Tracks the shared state, resolves ambiguity, and turns partial ideas into crisp next steps.",
-  "A practical operator. Checks feasibility, catches edge cases, and keeps the group moving without over-talking.",
-  "A final reviewer. Looks for missing constraints, confirms decisions, and helps close tasks cleanly.",
-  "A creative scout. Offers one fresh option when the room is stuck, then hands the floor back to execution.",
-  "A systems thinker. Notices dependencies, sequencing, and failure modes before they become expensive.",
-  "A user advocate. Keeps the conversation grounded in what a real person would understand and do next.",
-];
-
-const DEFAULT_AGENT_COUNT = 2;
-const MIN_AGENT_COUNT = 1;
-const MAX_AGENT_COUNT = 100;
-
-function validAgentCount(value?: number): number {
-  if (typeof value !== "number" || !Number.isFinite(value)) return DEFAULT_AGENT_COUNT;
-  return Math.max(MIN_AGENT_COUNT, Math.min(MAX_AGENT_COUNT, Math.trunc(value)));
-}
-
-function slotForIndex(index: number): Slot {
-  const n = Math.max(1, Math.min(MAX_AGENT_COUNT, Math.trunc(index)));
-  return `agent-${String(n).padStart(3, "0")}`;
-}
-
-function agentIndexFromSlot(slot: string): number | null {
-  if (slot in LEGACY_SLOT_INDEX) return LEGACY_SLOT_INDEX[slot]!;
-  const match = /^agent-(\d{3})$/.exec(slot);
-  if (!match) return null;
-  const n = Number(match[1]);
-  return Number.isInteger(n) && n >= 1 && n <= MAX_AGENT_COUNT ? n : null;
-}
-
-function activeSlots(agentCount?: number): Slot[] {
-  return Array.from({ length: validAgentCount(agentCount) }, (_, i) => slotForIndex(i + 1));
-}
-
-function isAgentSlot(value: unknown): value is Slot {
-  return typeof value === "string" && agentIndexFromSlot(value) !== null;
-}
-
-function nextSlot(slot: Slot, agentCount?: number): Slot {
-  const slots = activeSlots(agentCount);
-  const index = agentIndexFromSlot(slot);
-  const current = index && index <= slots.length ? index - 1 : 0;
-  return slots[(current + 1) % slots.length]!;
-}
 
 function agentForSlot(slot: Slot): AgentDef {
-  const index = agentIndexFromSlot(slot) ?? 1;
-  const nameBase = AGENT_NAMES[(index - 1) % AGENT_NAMES.length]!;
-  const cycle = Math.floor((index - 1) / AGENT_NAMES.length);
-  return {
-    slot: slotForIndex(index),
-    name: cycle === 0 ? nameBase : `${nameBase} ${cycle + 1}`,
-    device: index === 1 ? "laptop" : "phone",
-    voice: VOICES[(index - 1) % VOICES.length]!,
-    color: AGENT_COLORS[(index - 1) % AGENT_COLORS.length]!,
-    persona: PERSONAS[(index - 1) % PERSONAS.length]!,
-  };
+  const identity = agentIdentity(slot);
+  const index = agentIndexFromSlot(identity.slot) ?? 1;
+  return { ...identity, voice: VOICES[(index - 1) % VOICES.length]! };
 }
 
 const AGENTS: Record<Slot, AgentDef> = new Proxy({} as Record<Slot, AgentDef>, {
@@ -117,8 +70,6 @@ const AGENTS: Record<Slot, AgentDef> = new Proxy({} as Record<Slot, AgentDef>, {
   },
 });
 
-const DEFAULT_GOAL =
-  "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
 
 interface Utterance {
   id: string;
@@ -228,7 +179,7 @@ function applyGoal(room: Room, goal: string): boolean {
   return true;
 }
 
-function currentCountTask(room: Room): LiveCountTask | null {
+function currentCountTask(room: Room): CountTask | null {
   if (!profileUsesRoomState(room.state.profile)) return null;
   if (typeof room.state.countTarget !== "number" || typeof room.state.countNext !== "number") return null;
   return { kind: "count_to_n", target: room.state.countTarget, next: room.state.countNext };
@@ -632,10 +583,6 @@ interface AgentTurnOutcome {
   reason?: string;
 }
 
-function estimateSpeechMs(text: string): number {
-  return Math.min(11_000, 1400 + text.length * 55);
-}
-
 /** Auto-drive the two agents until done / stopped / max turns. */
 async function runLoop(room: Room, token: number) {
   while (room.state.running && !room.state.done && room.state.turn - room.state.runStartTurn < MAX_RUN_TURNS) {
@@ -1017,5 +964,3 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
   return true;
 }
 
-export const LIVE_AGENTS = AGENTS;
-export const LIVE_DEFAULT_GOAL = DEFAULT_GOAL;

@@ -30,15 +30,12 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
+import { MAX_AGENT_COUNT, activeSlots, agentIndexFromSlot, isAgentSlot, DEFAULT_GOAL } from "../../core/agents.js";
 import {
   useRoom,
   useActiveRooms,
   LIVE_BASE,
   CONVEX_MODE,
-  MAX_AGENT_COUNT,
-  activeSlots,
-  agentIndexFromSlot,
-  isAgentSlot,
   type CapabilityProfileId,
   type Slot,
   type MySlot,
@@ -48,8 +45,6 @@ import {
   type AgentOsPolicy,
 } from "./roomClient";
 
-const DEFAULT_GOAL =
-  "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
 const VISIBLE_UTTERANCE_LIMIT = 160;
 const WEB_RESEARCH_MODEL_ID = "gpt-4.1-mini";
 

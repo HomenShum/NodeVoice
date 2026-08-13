@@ -1,6 +1,16 @@
-import { numberToWords } from "../core/numberWords.js";
+/**
+ * Turning what a human SAID into what the room should DO.
+ *
+ * A person in a live room types or says "actually, count to one hundred". This
+ * module decides whether that was a new goal, a constraint, a question, or
+ * nothing at all, and never guesses a number the speaker did not say. It is the
+ * ONE copy: the local Node server (`src/live/`) and the hosted Convex backend
+ * (`convex/`) both import it, because a fix applied to only one of them once
+ * shipped a room that could never finish counting.
+ */
+import { ONES, TENS, numberToWords } from "./numberWords.js";
 
-export interface LiveCountTask {
+export interface CountTask {
   kind: "count_to_n";
   target: number;
   next: number;
@@ -56,39 +66,8 @@ export function profileUsesAgentOs(profile?: string): boolean {
 
 const MAX_COUNT_TARGET = 300;
 
-const SMALL: Record<string, number> = {
-  a: 1,
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-  six: 6,
-  seven: 7,
-  eight: 8,
-  nine: 9,
-  ten: 10,
-  eleven: 11,
-  twelve: 12,
-  thirteen: 13,
-  fourteen: 14,
-  fifteen: 15,
-  sixteen: 16,
-  seventeen: 17,
-  eighteen: 18,
-  nineteen: 19,
-};
-
-const TENS: Record<string, number> = {
-  twenty: 20,
-  thirty: 30,
-  forty: 40,
-  fifty: 50,
-  sixty: 60,
-  seventy: 70,
-  eighty: 80,
-  ninety: 90,
-};
+// "count to a hundred" — a command may use the article; a spoken turn may not.
+const SMALL: Record<string, number> = { ...ONES, a: 1 };
 
 interface CountCommand {
   start: number;
@@ -134,7 +113,7 @@ export function deriveGoalOverrideFromHuman(text: string): string | null {
   return null;
 }
 
-export function deriveCountTask(goal: string, next?: number): LiveCountTask | null {
+export function deriveCountTask(goal: string, next?: number): CountTask | null {
   const command = extractCountCommand(goal);
   if (command === null) return null;
   return {
@@ -235,7 +214,7 @@ export function normalizeHumanSteeringIntent(raw: unknown, fallbackText: string)
   return deriveHumanSteeringIntentFallback(fallbackText);
 }
 
-export function coerceCountTurn<T extends CountTurnLike>(turn: T, task: LiveCountTask): T {
+export function coerceCountTurn<T extends CountTurnLike>(turn: T, task: CountTask): T {
   const spoken = parseNumberPhrase(turn.text);
   const terse = turn.text.trim().split(/\s+/).filter(Boolean).length <= 4;
   const text = spoken === task.next && terse ? turn.text.trim() : numberToWords(task.next);
