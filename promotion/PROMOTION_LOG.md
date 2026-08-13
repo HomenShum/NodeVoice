@@ -216,7 +216,10 @@ reproduction; a hunch is not a defect.
     while the client is still uploading resets the connection before it can read
     the 413 (measured: the probe got `transport_error` and a hand-run got `413`
     — a race, not a flake). A caller still sending at twice the cap gets the
-    socket destroyed.
+    socket destroyed; measured rather than assumed, because a defensive branch
+    nothing has ever executed is not a defence: a 45 MB body on port 4704 →
+    `ECONNRESET`, server peak RSS **92.0 MB** against 89.5 idle, and `/health`
+    still 200 afterwards.
   - `src/voice/voiceAgent.ts` — the bare `catch` now logs and calls
     `onProviderError`; the fallback text itself is unchanged.
 - **Preserved on purpose:** the deterministic and all-model provenance strings
