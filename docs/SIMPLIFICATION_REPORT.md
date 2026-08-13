@@ -23,7 +23,7 @@ reported because it is cheap to check, not because it was the goal.
 | Circular dependencies | 0 (45 modules, 101 deps) | 0 (45 modules, 101 deps) | 0 | `npx dependency-cruiser --no-config --output-type err src convex` |
 | Canonical workflow tests | 7 files / 35 tests, exit 0 | 8 files / 38 tests, exit 0 | +1 file / +3 tests | `npm test` |
 | Typecheck | 2 projects (server, client) | 3 projects (+ Convex) | +1 project gated | `npm run doctor` |
-| Browser workflow passes | rendered 100/100, exit 0 | rendered 100/100 in 131.4 s, exit 0, `consoleErrors: []`, `failedRequests: []` | held | `BASE_URL=http://127.0.0.1:4506 node scripts/prove-count-to-100.mjs` |
+| Browser workflow passes | rendered 100/100, exit 0 *(not measured in this wave — quoted from `promotion/PROMOTION_LOG.md` iteration 1, commit `06b4198`, 124.8 s)* | rendered 100/100 in 131.4 s, exit 0, `consoleErrors: []`, `failedRequests: []` | held | `BASE_URL=http://127.0.0.1:4506 node scripts/prove-count-to-100.mjs` |
 | Production bundle size | 384.08 kB js / 79.15 kB css | 384.23 kB js / 78.73 kB css | +0.15 kB js / −0.42 kB css | `npm run build` |
 | Additions/deletions | — | 26 files changed, +293 / −5,734 (plus 4 new files) | — | `git diff --shortstat HEAD` |
 
@@ -33,6 +33,27 @@ Evidence for the browser row is committed at
 port 4506 before that capture, so the evidence describes the tree that now
 exists. The `promotion/evidence/iteration-1/` files were left untouched so the
 numbers quoted in `promotion/PROMOTION_LOG.md` stay true.
+
+## Verified against a fresh clone of the pushed commit, not the working tree
+
+The whole point of this wave is that a stranger can clone and go, so the final
+check was done that way rather than in the tree the edits were made in:
+
+```
+git clone --depth 1 https://github.com/HomenShum/NodeVoice.git
+npm ci                 # added 104 packages in 14 s
+npm run doctor         # 4 checks (server, client, Convex, tours) — exit 0
+npm test               # 8 files, 38 tests — exit 0
+npm run build          # exit 0
+PORT=4506 npx tsx src/server.ts
+BASE_URL=http://127.0.0.1:4506 node scripts/prove-count-to-100.mjs
+                       # rendered final progress: 100/100 after 127.8 s — exit 0
+```
+
+The `client_not_built` behavior described below was observed, not reasoned
+about: with `dist/` moved aside, startup prints the note, `GET /` and `GET /demo`
+return `{"ok":false,"error":"client_not_built","hint":"run \`npm run build\` (or \`npm run ui\`)"}`,
+and `/health` still answers.
 
 **The bundle did not shrink, and that is the finding.** Eleven of the seventeen
 direct dependencies were never imported by any source file, so they cost install
