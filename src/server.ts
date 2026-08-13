@@ -1,15 +1,17 @@
-import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { createServer, type ServerResponse } from "node:http";
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createVoiceRoom } from "./core/roomReducer.js";
+import { validTurns } from "./core/agents.js";
+import { validCountTarget } from "./core/steering.js";
 import { VOICE_AGENT_IDS } from "./core/types.js";
 import { runVoiceStep } from "./voice/voiceAgent.js";
 import { runLocalNodeAgentLoop } from "./nodeagents/nodeAgentLocalMvp.js";
 import { CLOUD_ONLY_REFERENCE_MODELS, DEFAULT_NODEAGENT_MODEL_ID, DEFAULT_VOICE_MODEL_ID, LOCAL_MODEL_OPTIONS, MODEL_CATALOG_REFRESHED_AT, getModelsFor, getOllamaModelName } from "./providers/localModels.js";
 import { runSideBySideComparison, type ComparisonSource } from "./compare/badGoodDemo.js";
-import { handleLive } from "./live/roomServer.js";
+import { handleLive, readJson } from "./live/roomServer.js";
 
 // Load server-side API keys (OpenAI / ElevenLabs) from a gitignored .env.local.
 const envPath = resolve(fileURLToPath(new URL("../.env.local", import.meta.url)));
@@ -100,8 +102,8 @@ const server = createServer(async (req, res) => {
     if (req.method === "POST" && path === "/voice/demo") {
       const body = await readJson<{ target?: number; turns?: number; useOllama?: boolean; model?: string }>(req);
       const model = getOllamaModelName(body.model, DEFAULT_VOICE_MODEL_ID);
-      let state = createVoiceRoom(body.target ?? 20);
-      const maxTurns = body.turns ?? 20;
+      let state = createVoiceRoom(validCountTarget(body.target, 20));
+      const maxTurns = validTurns(body.turns, 20);
       for (let i = 0; i < maxTurns && state.task.kind === "count_to_n" && !state.task.completed; i += 1) {
         const actorId = state.nextSpeaker ?? VOICE_AGENT_IDS[0]!;
         state = await runVoiceStep(state, {
@@ -131,7 +133,15 @@ const server = createServer(async (req, res) => {
 
     return json(res, 404, { ok: false, error: "not_found" });
   } catch (error) {
-    return json(res, 500, { ok: false, error: error instanceof Error ? error.message : String(error) });
+    const message = error instanceof Error ? error.message : String(error);
+    if (message === "body too large") {
+      // The caller's fault, so say 413 rather than resetting the connection —
+      // and close it, because the rest of their upload is still arriving and
+      // the socket cannot be reused for the next request.
+      res.writeHead(413, corsHeaders({ "content-type": "application/json; charset=utf-8", connection: "close" }));
+      return res.end(JSON.stringify({ ok: false, error: message }, null, 2));
+    }
+    return json(res, 500, { ok: false, error: message });
   }
 });
 
@@ -167,14 +177,6 @@ async function serveStatic(path: string, res: ServerResponse): Promise<void> {
       json(res, 404, { ok: false, error: "client_not_built", hint: "run `npm run build` (or `npm run ui`)" });
     }
   }
-}
-
-async function readJson<T>(req: IncomingMessage): Promise<T> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) chunks.push(Buffer.from(chunk));
-  const raw = Buffer.concat(chunks).toString("utf8").trim();
-  if (!raw) return {} as T;
-  return JSON.parse(raw) as T;
 }
 
 function json(res: ServerResponse, statusCode: number, payload: unknown): void {

@@ -85,9 +85,20 @@ finding 2.
 3. **The server owns the floor.** `scheduleNextSpeaker` decides who is next, not
    the agents. This is what stops the acknowledgement loop.
 4. **Untrusted input is narrowed at the boundary.** `validProfile`,
-   `validModel`, `validAgentCount` and the `source` narrowing in
-   `src/server.ts:76 const source: ComparisonSource` each map anything
+   `validModel`, `validAgentCount`, `validCountTarget`, `validTurns` and the
+   `source` narrowing in
+   `src/server.ts:78 const source: ComparisonSource` each map anything
    unrecognised onto a safe default rather
-   than passing it through.
+   than passing it through. The two count fields are narrowed at the seam every
+   caller shares rather than in each route: `validTurns` bounds a run by
+   `MAX_RUN_TURNS`, the cap the live room already used, and `validCountTarget`
+   bounds `task.target` by `MAX_COUNT_TARGET` inside
+   `src/core/roomReducer.ts:8 export function createVoiceRoom` and
+   `src/compare/badGoodDemo.ts:80 const target = validCountTarget`. A string
+   reaching `task.target` used to make `current >= target` permanently false, so
+   the room could never complete.
+   Request bodies have ONE reader with ONE cap:
+   `src/live/roomServer.ts:658 export async function readJson`, 20 MB, used by
+   every POST route in both servers.
 5. **What two runtimes must agree on lives in `src/core/`.** Enforced by an
    identity assertion in `tests/liveSteering.test.ts`.

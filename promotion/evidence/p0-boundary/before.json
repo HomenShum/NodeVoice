@@ -1,0 +1,90 @@
+{
+  "label": "before",
+  "capturedAt": "2026-08-13T22:57:02.401Z",
+  "commit": "9dd0300a16e0d2c99426cc36b03e2da331f33c44",
+  "node": "v22.22.2",
+  "probes": {
+    "server": {
+      "port": 4701,
+      "pid": 65432,
+      "health": {
+        "ok": true,
+        "service": "nodevoice",
+        "live": {
+          "openai": false,
+          "elevenlabs": false
+        }
+      },
+      "idleRssMB": 89.77734375
+    },
+    "P2_target_string": {
+      "probe": "POST /compare/demo {\"target\":\"abc\"}",
+      "status": 200,
+      "taskTargetType": "string",
+      "taskTarget": "abc",
+      "taskCompleted": false
+    },
+    "P2b_target_huge": {
+      "probe": "POST /compare/demo {\"target\":1e9,\"turns\":5}",
+      "status": 200,
+      "taskTarget": 1000000000
+    },
+    "P2c_completes_after_narrowing": {
+      "probe": "POST /compare/demo {\"target\":\"abc\",\"turns\":20}",
+      "status": 200,
+      "taskTarget": "abc",
+      "taskCurrent": 20,
+      "taskCompleted": false
+    },
+    "P1b_body_cap": {
+      "probe": "POST /compare/demo with a 25 MB JSON body (live path caps at 20 MB)",
+      "bodyBytes": 26214400,
+      "status": 200,
+      "head": "{\n  \"bad\": [\n    {\n      \"turn\": 1,\n      \"actorId\": \"voice-a\",\n      \"text\": \"I’ll count from 1 to 100, and you guys can continue off where I started from. One...\",\n      \"speechAct\": \"instruction\",\n",
+      "elapsedMs": 1928,
+      "serverPeakRssMB": 117.8
+    },
+    "P1c_voice_demo_sibling": {
+      "probe": "POST /voice/demo {\"target\":\"abc\",\"turns\":20000}",
+      "status": 200,
+      "responseBytes": 4975601,
+      "elapsedMs": 3282,
+      "serverPeakRssMB": 176
+    },
+    "P1_turns_flood": {
+      "probe": "POST /compare/demo {\"turns\":3000000}",
+      "status": 500,
+      "responseBytes": 53,
+      "stepsReturned": 0,
+      "elapsedMs": 12024,
+      "serverPeakRssMB": 2869.7
+    },
+    "P3_provenance_after_midrun_failure": {
+      "probe": "runSideBySideComparison({source:'openai'}) with the provider failing after the bad side",
+      "openaiCalls": 6,
+      "openaiCallsFailed": 3,
+      "provenance": {
+        "mode": "openai",
+        "modelId": "gpt-5.4-mini",
+        "bad": "openai · gpt-5.4-mini · live · raw transcripts only, no reducer, no scheduler",
+        "good": "openai · gpt-5.4-mini · live · real reducer & scheduler"
+      },
+      "goodTexts": [
+        "One",
+        "Two",
+        "Three"
+      ],
+      "goodStepCount": 3
+    },
+    "P4_silent_provider_swallow": {
+      "probe": "runVoiceStep({source:'openai'}) with OPENAI_API_KEY unset",
+      "threw": null,
+      "committedText": "One",
+      "committedSpeechAct": "task_action",
+      "taskCurrent": 1,
+      "fallbackReportedToCaller": 0,
+      "warningsLogged": 0,
+      "firstWarning": null
+    }
+  }
+}

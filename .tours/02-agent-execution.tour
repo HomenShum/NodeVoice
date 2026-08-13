@@ -5,31 +5,31 @@
   "steps": [
     {
       "file": "src/live/roomServer.ts",
-      "line": 660,
+      "line": 669,
       "anchor": "export async function handleLive",
       "description": "**Every `/live/*` route enters here.** One function, one router, no framework. It returns `false` for anything that is not a live-room path so `src/server.ts` can carry on."
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 665,
+      "line": 674,
       "anchor": "if (method === \"POST\" && path === \"/live/rooms\")",
       "description": "**Create a room.** The laptop calls this. The room id doubles as the six-character join code a phone types or scans."
     },
     {
       "file": "src/core/agents.ts",
-      "line": 86,
+      "line": 99,
       "anchor": "export function agentIdentity",
       "description": "**Who sits where — one copy, three readers.** The Node server, the hosted Convex backend and the browser all import this file, so a room created on a laptop and joined by a phone shows the same person in seat 2. Seat 1 is the host's laptop; every later seat is a phone."
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 765,
+      "line": 774,
       "anchor": "if (method === \"POST\" && sub === \"join\")",
       "description": "**A device joins.** `allocateJoinSlot` hands out the next free seat. The room broadcasts its new state to everyone already connected."
     },
     {
       "file": "src/core/steering.ts",
-      "line": 155,
+      "line": 166,
       "anchor": "export function deriveHumanSteeringIntentFallback",
       "description": "**What did the human mean?** Someone says 'actually, count to one hundred'. This decides whether that was a new goal, a constraint, a question, or nothing. It never guesses a number the speaker did not say. Both backends import this exact function — `tests/liveSteering.test.ts` asserts it by object identity."
     },

@@ -101,9 +101,9 @@ in the transcript (Step 8), so a missing key is visible, not silent.
 
 ## Step 3 — The request is checked before anything runs
 
-**File:** `src/server.ts:67 path === "/compare/demo"`
+**File:** `src/server.ts:69 path === "/compare/demo"`
 **Symbol:** the `POST /compare/demo` branch, and the `source` narrowing below it
-(`src/server.ts:76 const source: ComparisonSource`)
+(`src/server.ts:78 const source: ComparisonSource`)
 **Called by:** `runCompare`
 **Calls next:** `runSideBySideComparison`
 
@@ -139,7 +139,7 @@ unknown ids.
 
 ## Step 4 — Two rooms are run against each other
 
-**File:** `src/compare/badGoodDemo.ts:58 export async function runSideBySideComparison`
+**File:** `src/compare/badGoodDemo.ts:69 export async function runSideBySideComparison`
 **Symbol:** `runSideBySideComparison`
 **Called by:** the `/compare/demo` route
 **Calls next:** `runBadTranscriptLoop` (left room) and `runGoodRoomStateLoop`
@@ -155,25 +155,33 @@ between them, which is what makes the comparison honest.
 **Core code**
 ```ts
 export async function runSideBySideComparison(options: { target?: number; turns?: number; source?: ComparisonSource; … }) {
+  const target = validCountTarget(options.target, 12);    // narrowed here, once
+  const turns = validTurns(options.turns, 9);
   const bad = await runBadTranscriptLoop(turns);          // transcript only
   const good = await runGoodRoomStateLoop({ target, turns, … }); // shared record
-  return { bad, good, badFinalState, goodFinalState, provenance };
+  return { bad, good: good.steps, goodFinalState: good.state, selectedModel, provenance, diagnosis };
 }
 ```
 
-**Input** — validated options.
-**Output** — two step lists plus both final states and a `provenance` record
-saying which source produced the text.
-**Failure behavior** — a provider error propagates to the route's `try/catch`
-and becomes an HTTP 500 with the message; no partial result is presented as a
-success.
+**Input** — `target` and `turns` are narrowed here, at the seam every caller
+(the route, the CLI, the tests) passes through, so no request can ask for three
+million turns or a `target` that is not a number. There is no `badFinalState`:
+the left-hand room has no shared state to end in — that is the whole point of
+it.
+**Output** — two step lists, the shared room's final state, the selected model,
+a `diagnosis`, and a `provenance` record saying what actually produced the text.
+**Failure behavior** — a provider error on the left side propagates to the
+route's `try/catch` and becomes an HTTP 500 with the message. On the right side
+each turn falls back to the deterministic answer, and every fallback is counted
+into `provenance.fallbackTurns` and named in `provenance.good`, so a fallback is
+never presented as a model result.
 **Next** — each turn of the right-hand room goes through Step 5.
 
 ---
 
 ## Step 5 — An agent takes one turn, and a model is (optionally) called
 
-**File:** `src/voice/voiceAgent.ts:60 export async function runVoiceStep`
+**File:** `src/voice/voiceAgent.ts:73 export async function runVoiceStep`
 **Symbol:** `runVoiceStep` → `decideVoiceUtterance` → `openaiChat` / `ollamaChat`
 **Called by:** `runGoodRoomStateLoop`
 **Calls next:** `enforceRoomPolicy` (`src/core/guards.ts`), then
@@ -213,7 +221,7 @@ and surfaces in Step 8.
 
 ## Step 6 — The shared record is updated. This is the product.
 
-**File:** `src/core/roomReducer.ts:47 export function applyUtterance`
+**File:** `src/core/roomReducer.ts:50 export function applyUtterance`
 **Symbol:** `applyUtterance` → `classifyUtterance` → `applyTaskMutation`
 **Called by:** `runVoiceStep`, and every live-room turn
 **Calls next:** `applyLoopGuard`, `scheduleNextSpeaker`

@@ -13,6 +13,13 @@ export type VoiceAgentConfig = {
   model?: string;
   source?: "deterministic" | "ollama" | "openai";
   openaiModel?: string;
+  /**
+   * Called when the requested provider did not produce this turn's text and
+   * the deterministic answer was used instead. Falling back is fine; letting
+   * the caller go on claiming a model wrote it is not, so every fallback is
+   * announced here and logged, and the caller decides what to say about it.
+   */
+  onProviderError?: (error: unknown) => void;
 };
 
 async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig): Promise<AgentDecision> {
@@ -28,8 +35,14 @@ async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig):
   };
 
   const source = config.source ?? (config.useOllama ? "ollama" : "deterministic");
+  const fellBack = (error: unknown): AgentDecision => {
+    console.warn(`[voice] ${source} did not produce ${config.actorId}'s turn; deterministic fallback used: ${String(error).slice(0, 160)}`);
+    config.onProviderError?.(error);
+    return deterministic;
+  };
+
   if (source === "deterministic") return deterministic;
-  if (source === "ollama" && !(await isOllamaAvailable())) return deterministic;
+  if (source === "ollama" && !(await isOllamaAvailable())) return fellBack(new Error("ollama is not reachable"));
 
   const prompt = [
     "You are inside a multi-agent realtime voice room.",
@@ -52,8 +65,8 @@ async function decideVoiceUtterance(state: RoomState, config: VoiceAgentConfig):
         : await ollamaChat(messages, { model: config.model });
     const cleaned = sanitizeNumberOnly(text, requiredNumber);
     return { actorId: config.actorId, text: cleaned, intendedSpeechAct: "task_action" };
-  } catch {
-    return deterministic;
+  } catch (error) {
+    return fellBack(error);
   }
 }
 

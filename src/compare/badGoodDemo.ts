@@ -1,5 +1,7 @@
+import { validTurns } from "../core/agents.js";
 import { createVoiceRoom } from "../core/roomReducer.js";
 import { classifyUtterance } from "../core/speechActClassifier.js";
+import { validCountTarget } from "../core/steering.js";
 import { VOICE_AGENT_IDS, type ActorId, type RoomState, type SpeechAct } from "../core/types.js";
 import { runVoiceStep } from "../voice/voiceAgent.js";
 import { getOllamaModelName } from "../providers/localModels.js";
@@ -27,10 +29,19 @@ export type BadAgentPrivateState = {
 
 /** Honest disclosure of what produced the utterance text on each side. */
 type ComparisonProvenance = {
+  /**
+   * What actually produced the GOOD side's text — the side that carries the
+   * product's claim. `deterministic` here means no model text reached the room,
+   * however the run was requested; it is decided AFTER the run, because a
+   * provider that fails on turn 2 cannot be detected before turn 1.
+   */
   mode: ComparisonSource;
   modelId: string | null;
   bad: string;
   good: string;
+  /** Good-side turns whose text came from the deterministic fallback after a
+   *  provider error. Non-zero means a model did not write those turns. */
+  fallbackTurns: number;
 };
 
 type ComparisonStep = {
@@ -63,8 +74,11 @@ export async function runSideBySideComparison(options: {
   source?: ComparisonSource;
   openaiModel?: string;
 } = {}): Promise<ComparisonResult> {
-  const target = options.target ?? 12;
-  const turns = options.turns ?? 9;
+  // Every caller reaches the loops through here — the HTTP route, the CLI
+  // (which reads Number(env) and can hand over NaN) and the tests — so the
+  // counts are narrowed once, at this seam, and never again downstream.
+  const target = validCountTarget(options.target, 12);
+  const turns = validTurns(options.turns, 9);
   const ollamaModel = getOllamaModelName(options.model, "llama3_2_3b");
   const openaiModel = getOpenAIModelName(options.openaiModel);
 
@@ -79,37 +93,23 @@ export async function runSideBySideComparison(options: {
     requestedSource === "ollama" && !(await isOllamaAvailable()) ? "deterministic" : requestedSource;
   const selectedModel = source === "openai" ? openaiModel : ollamaModel;
 
-  const badScriptedLabel = "deterministic sim — scripted utterances · no reducer, no scheduler";
-  const provenance: ComparisonProvenance =
-    source === "openai"
-      ? {
-          mode: "openai",
-          modelId: openaiModel,
-          bad: `openai · ${openaiModel} · live · raw transcripts only, no reducer, no scheduler`,
-          good: `openai · ${openaiModel} · live · real reducer & scheduler`,
-        }
-      : source === "ollama"
-        ? {
-            mode: "ollama",
-            modelId: ollamaModel,
-            bad: badScriptedLabel,
-            good: `real model — ${ollamaModel} via Ollama · real reducer & scheduler`,
-          }
-        : {
-            mode: "deterministic",
-            modelId: null,
-            bad: badScriptedLabel,
-            good:
-              requestedSource === "ollama"
-                ? "deterministic sim — Ollama unreachable, scripted utterances · real reducer & scheduler"
-                : "deterministic sim — scripted utterances · real reducer & scheduler",
-          };
-
   const bad =
     source === "openai"
       ? await runBadTranscriptLoopWithModel({ turns, target, model: openaiModel })
       : runBadTranscriptLoop(turns);
   const good = await runGoodRoomStateLoop({ target, turns, source, ollamaModel, openaiModel });
+
+  // Only now is it knowable what wrote the good side's text: a provider can
+  // fail on any turn, and the fallback that covers for it must not be reported
+  // as a model result.
+  const provenance = describeProvenance({
+    source,
+    requestedSource,
+    openaiModel,
+    ollamaModel,
+    fallbackTurns: good.fallbackTurns,
+    goodTurns: good.steps.length,
+  });
 
   return {
     bad,
@@ -124,6 +124,65 @@ export async function runSideBySideComparison(options: {
       "Good: the room reducer commits only task actions, suppresses acknowledgements, and schedules exactly one next speaker.",
       "Good: each agent receives the authoritative next action, not a raw transcript to politely react to.",
     ],
+  };
+}
+
+const BAD_SCRIPTED_LABEL = "deterministic sim — scripted utterances · no reducer, no scheduler";
+
+/**
+ * Provenance is a claim about the past, so it is written after the run.
+ * `fallbackTurns` is how many good-side turns the deterministic answer had to
+ * cover for; when it covers all of them no model text reached the room, and
+ * the mode says so. That is the same honesty the Ollama path already had,
+ * extended to a provider that dies part-way instead of being absent up front.
+ */
+function describeProvenance(run: {
+  source: ComparisonSource;
+  requestedSource: ComparisonSource;
+  openaiModel: string;
+  ollamaModel: string;
+  fallbackTurns: number;
+  goodTurns: number;
+}): ComparisonProvenance {
+  const { source, fallbackTurns, goodTurns } = run;
+  const modelId = source === "openai" ? run.openaiModel : source === "ollama" ? run.ollamaModel : null;
+  const bad =
+    source === "openai"
+      ? `openai · ${run.openaiModel} · live · raw transcripts only, no reducer, no scheduler`
+      : BAD_SCRIPTED_LABEL;
+
+  if (source === "deterministic") {
+    return {
+      mode: "deterministic",
+      modelId: null,
+      bad,
+      good:
+        run.requestedSource === "ollama"
+          ? "deterministic sim — Ollama unreachable, scripted utterances · real reducer & scheduler"
+          : "deterministic sim — scripted utterances · real reducer & scheduler",
+      fallbackTurns,
+    };
+  }
+
+  const live = source === "openai" ? `openai · ${run.openaiModel} · live` : `real model — ${run.ollamaModel} via Ollama`;
+  if (fallbackTurns === 0) {
+    return { mode: source, modelId, bad, good: `${live} · real reducer & scheduler`, fallbackTurns };
+  }
+  if (fallbackTurns >= goodTurns && goodTurns > 0) {
+    return {
+      mode: "deterministic",
+      modelId: null,
+      bad,
+      good: `deterministic fallback — ${modelId} produced no turn (${fallbackTurns}/${goodTurns} failed) · real reducer & scheduler`,
+      fallbackTurns,
+    };
+  }
+  return {
+    mode: source,
+    modelId,
+    bad,
+    good: `${live} · partial — ${fallbackTurns} of ${goodTurns} turns fell back to deterministic · real reducer & scheduler`,
+    fallbackTurns,
   };
 }
 
@@ -342,9 +401,10 @@ async function runGoodRoomStateLoop(options: {
   source: ComparisonSource;
   ollamaModel: string;
   openaiModel: string;
-}): Promise<{ state: RoomState; steps: ComparisonStep[] }> {
+}): Promise<{ state: RoomState; steps: ComparisonStep[]; fallbackTurns: number }> {
   let state = createVoiceRoom(options.target);
   const steps: ComparisonStep[] = [];
+  let fallbackTurns = 0;
 
   for (let i = 0; i < options.turns && state.task.kind === "count_to_n" && !state.task.completed; i += 1) {
     const actorId = state.nextSpeaker ?? VOICE_AGENT_IDS[0]!;
@@ -355,6 +415,9 @@ async function runGoodRoomStateLoop(options: {
       useOllama: options.source === "ollama",
       model: options.ollamaModel,
       openaiModel: options.openaiModel,
+      onProviderError: () => {
+        fallbackTurns += 1;
+      },
     });
     const last = state.utterances.at(-1)!;
     steps.push({
@@ -371,5 +434,5 @@ async function runGoodRoomStateLoop(options: {
     });
   }
 
-  return { state, steps };
+  return { state, steps, fallbackTurns };
 }

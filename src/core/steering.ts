@@ -64,7 +64,18 @@ export function profileUsesAgentOs(profile?: string): boolean {
   return validProfile(profile) === "v3_agent_ecosystem";
 }
 
-const MAX_COUNT_TARGET = 300;
+export const MAX_COUNT_TARGET = 300;
+
+/**
+ * The one narrowing for a requested count target. `task.target` is typed
+ * `number` and the reducer completes a room by comparing `current >= target`,
+ * so a string that reaches it makes the comparison permanently false and the
+ * room can never finish. Anything unrecognised maps onto `fallback`.
+ */
+export function validCountTarget(value: unknown, fallback = 100): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
+  return Math.max(1, Math.min(MAX_COUNT_TARGET, Math.trunc(value)));
+}
 
 // "count to a hundred" — a command may use the article; a spoken turn may not.
 const SMALL: Record<string, number> = { ...ONES, a: 1 };

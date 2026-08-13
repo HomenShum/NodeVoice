@@ -32,6 +32,7 @@ function validModel(m?: string): string {
 import {
   DEFAULT_GOAL,
   MAX_AGENT_COUNT,
+  MAX_RUN_TURNS,
   activeSlots,
   agentIdentity,
   agentIndexFromSlot,
@@ -133,7 +134,6 @@ const MAX_UTTERANCES = 300;
 const MAX_TRACES = 60;
 const MAX_AUDIO_PER_ROOM = 60;
 const MAX_SSE_PER_ROOM = 30;
-const MAX_RUN_TURNS = 320;
 const ROOM_TTL_MS = 2 * 60 * 60 * 1000;
 const MAX_BODY_BYTES = 20 * 1024 * 1024;
 
@@ -631,22 +631,31 @@ function sleep(ms: number) {
 // ── request helpers ───────────────────────────────────────────────────
 function readBody(req: IncomingMessage, maxBytes = MAX_BODY_BYTES): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    const chunks: Buffer[] = [];
+    let chunks: Buffer[] = [];
     let size = 0;
+    let tooLarge = false;
     req.on("data", (c: Buffer) => {
       size += c.length;
       if (size > maxBytes) {
-        reject(new Error("body too large"));
-        req.destroy();
+        // Past the cap nothing more is KEPT, so memory stops here. The bytes
+        // still on the wire are read and dropped, because closing a socket the
+        // client is still writing to can reset the connection before it reads
+        // the 413 — measured, and it is why this does not just destroy.
+        if (!tooLarge) ((tooLarge = true), (chunks = []));
+        // A caller still sending at twice the cap is not going to read a status
+        // code either; that one gets the connection back in pieces.
+        if (size > maxBytes * 2) req.destroy(new Error("body too large"));
         return;
       }
       chunks.push(c);
     });
-    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("end", () => (tooLarge ? reject(new Error("body too large")) : resolve(Buffer.concat(chunks))));
     req.on("error", reject);
   });
 }
-async function readJson<T>(req: IncomingMessage): Promise<T> {
+/** The ONE JSON body reader. Exported because `src/server.ts` had a second
+ *  copy with no size cap on a public route; there is one cap, and it is here. */
+export async function readJson<T>(req: IncomingMessage): Promise<T> {
   const buf = await readBody(req);
   return buf.length ? (JSON.parse(buf.toString("utf8")) as T) : ({} as T);
 }

@@ -1,0 +1,91 @@
+{
+  "label": "after",
+  "capturedAt": "2026-08-13T22:57:28.860Z",
+  "commit": "9dd0300a16e0d2c99426cc36b03e2da331f33c44",
+  "node": "v22.22.2",
+  "probes": {
+    "server": {
+      "port": 4701,
+      "pid": 39416,
+      "health": {
+        "ok": true,
+        "service": "nodevoice",
+        "live": {
+          "openai": false,
+          "elevenlabs": false
+        }
+      },
+      "idleRssMB": 89.75390625
+    },
+    "P2_target_string": {
+      "probe": "POST /compare/demo {\"target\":\"abc\"}",
+      "status": 200,
+      "taskTargetType": "number",
+      "taskTarget": 12,
+      "taskCompleted": false
+    },
+    "P2b_target_huge": {
+      "probe": "POST /compare/demo {\"target\":1e9,\"turns\":5}",
+      "status": 200,
+      "taskTarget": 300
+    },
+    "P2c_completes_after_narrowing": {
+      "probe": "POST /compare/demo {\"target\":\"abc\",\"turns\":20}",
+      "status": 200,
+      "taskTarget": 12,
+      "taskCurrent": 12,
+      "taskCompleted": true
+    },
+    "P1b_body_cap": {
+      "probe": "POST /compare/demo with a 25 MB JSON body (live path caps at 20 MB)",
+      "bodyBytes": 26214400,
+      "status": 413,
+      "head": "{\n  \"ok\": false,\n  \"error\": \"body too large\"\n}",
+      "elapsedMs": 2053,
+      "serverPeakRssMB": 91.7
+    },
+    "P1c_voice_demo_sibling": {
+      "probe": "POST /voice/demo {\"target\":\"abc\",\"turns\":20000}",
+      "status": 200,
+      "responseBytes": 5669,
+      "elapsedMs": 1293,
+      "serverPeakRssMB": 91.7
+    },
+    "P1_turns_flood": {
+      "probe": "POST /compare/demo {\"turns\":3000000}",
+      "status": 200,
+      "responseBytes": 343026,
+      "stepsReturned": 332,
+      "elapsedMs": 1314,
+      "serverPeakRssMB": 91.7
+    },
+    "P3_provenance_after_midrun_failure": {
+      "probe": "runSideBySideComparison({source:'openai'}) with the provider failing after the bad side",
+      "openaiCalls": 6,
+      "openaiCallsFailed": 3,
+      "provenance": {
+        "mode": "deterministic",
+        "modelId": null,
+        "bad": "openai · gpt-5.4-mini · live · raw transcripts only, no reducer, no scheduler",
+        "good": "deterministic fallback — gpt-5.4-mini produced no turn (3/3 failed) · real reducer & scheduler",
+        "fallbackTurns": 3
+      },
+      "goodTexts": [
+        "One",
+        "Two",
+        "Three"
+      ],
+      "goodStepCount": 3
+    },
+    "P4_silent_provider_swallow": {
+      "probe": "runVoiceStep({source:'openai'}) with OPENAI_API_KEY unset",
+      "threw": null,
+      "committedText": "One",
+      "committedSpeechAct": "task_action",
+      "taskCurrent": 1,
+      "fallbackReportedToCaller": 1,
+      "warningsLogged": 1,
+      "firstWarning": "[voice] openai did not produce voice-a's turn; deterministic fallback used: Error: OPENAI_API_KEY is not configured on the server"
+    }
+  }
+}

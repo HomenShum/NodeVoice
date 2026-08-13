@@ -29,7 +29,7 @@
     },
     {
       "file": "src/server.ts",
-      "line": 133,
+      "line": 135,
       "anchor": "catch (error)",
       "description": "**The server's outer boundary.** Any unhandled throw becomes a 500 with the message, never a 200 with an empty body."
     },
@@ -53,7 +53,7 @@
     },
     {
       "file": "src/server.ts",
-      "line": 167,
+      "line": 177,
       "anchor": "error: \"client_not_built\"",
       "description": "**`npm start` before `npm run build`.** The API works, page requests say exactly this, and the startup log tells you which command to run. There is exactly one browser client; an older one is never served instead."
     },

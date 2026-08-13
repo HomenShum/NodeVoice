@@ -17,37 +17,37 @@
     },
     {
       "file": "src/server.ts",
-      "line": 67,
+      "line": 69,
       "anchor": "if (req.method === \"POST\" && path === \"/compare/demo\")",
       "description": "**Where input becomes trusted.** `source` is narrowed to the three values the code understands; anything else quietly becomes `deterministic` instead of reaching a provider. Asking for OpenAI with no server key is refused here with a 400 that names what is missing — before any work starts."
     },
     {
       "file": "src/compare/badGoodDemo.ts",
-      "line": 58,
+      "line": 69,
       "anchor": "export async function runSideBySideComparison",
       "description": "**The product's argument, executed.** The same task runs in two rooms that differ in exactly one thing: whether a shared record of progress exists. Everything else is held constant, which is what makes the comparison honest."
     },
     {
       "file": "src/compare/badGoodDemo.ts",
-      "line": 339,
+      "line": 398,
       "anchor": "async function runGoodRoomStateLoop",
       "description": "The right-hand room. It loops until the task completes or the turn budget runs out — it cannot finish early, because completion is decided by the reducer, not by this loop."
     },
     {
       "file": "src/voice/voiceAgent.ts",
-      "line": 60,
+      "line": 73,
       "anchor": "export async function runVoiceStep",
       "description": "**One agent's turn.** Note the order: the deterministic answer is computed first, a model is consulted only if the request asked for one, and `enforceRoomPolicy` gets the last word. A model never decides the count."
     },
     {
       "file": "src/core/roomReducer.ts",
-      "line": 47,
+      "line": 50,
       "anchor": "export function applyUtterance",
       "description": "**This is the product.** Speaking is not progress. The utterance is classified, the task is advanced only if it should be, the loop guard runs, and the next speaker is chosen by the server. A new state object is returned — nothing is mutated in place."
     },
     {
       "file": "src/core/roomReducer.ts",
-      "line": 87,
+      "line": 90,
       "anchor": "function applyTaskMutation",
       "description": "The commit itself. If the number spoken is not the number the room was waiting for, the count stays exactly where it was and the room asks for a correction. That single rule is why the left-hand room stalls and the right one reaches 100."
     },

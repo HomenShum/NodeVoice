@@ -17,6 +17,13 @@ export const MIN_AGENT_COUNT = 1;
 export const DEFAULT_AGENT_COUNT = 2;
 export const MAX_AGENT_COUNT = 100;
 
+/**
+ * How many turns one run may take. The live room has always paused an auto-run
+ * here; the demo routes now clamp to the same number, so no request can ask for
+ * three million turns and get three million allocated steps back.
+ */
+export const MAX_RUN_TURNS = 320;
+
 const LEGACY_SLOT_INDEX: Record<string, number> = { a: 1, b: 2, c: 3, d: 4, e: 5 };
 
 const AGENT_NAMES = [
@@ -49,6 +56,12 @@ export interface AgentIdentity {
 export function validAgentCount(value?: number): number {
   if (typeof value !== "number" || !Number.isFinite(value)) return DEFAULT_AGENT_COUNT;
   return Math.max(MIN_AGENT_COUNT, Math.min(MAX_AGENT_COUNT, Math.trunc(value)));
+}
+
+/** Same shape as validAgentCount, for a requested turn count from JSON. */
+export function validTurns(value: unknown, fallback: number): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return fallback;
+  return Math.max(0, Math.min(MAX_RUN_TURNS, Math.trunc(value)));
 }
 
 export function slotForIndex(index: number): Slot {
