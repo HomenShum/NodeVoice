@@ -98,7 +98,11 @@ finding 2.
    reaching `task.target` used to make `current >= target` permanently false, so
    the room could never complete.
    Request bodies have ONE reader with ONE cap:
-   `src/live/roomServer.ts:658 export async function readJson`, 20 MB, used by
-   every POST route in both servers.
+   `src/live/roomServer.ts:677 export async function readJson`, 20 MB, used by
+   every POST route in both servers. Over the cap it answers 413 within
+   `DRAIN_GRACE_MS` whether or not the client ever finishes uploading — a
+   refused request must not be able to hold a socket. That there is no second
+   reader is checked by walking `src/`, not by keeping a list of callers:
+   `tests/p0Boundary.test.ts:83 finds no second request-body reader`.
 5. **What two runtimes must agree on lives in `src/core/`.** Enforced by an
    identity assertion in `tests/liveSteering.test.ts`.

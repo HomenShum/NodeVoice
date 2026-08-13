@@ -10,6 +10,11 @@
  *       turn, so a 3,000,000-turn request is a memory bomb
  *   P1b `/compare/demo` read the whole request body with no size cap, while
  *       the live path has capped at 20 MB all along
+ *   P1d the cap answered only when the client said it had finished, so a client
+ *       that crossed the cap and then went silent got no answer at all and held
+ *       the socket until Node's 300 s `requestTimeout` (found by a verifier
+ *       re-running P1b on a raw socket; it is a regression P1b's own fix
+ *       introduced, which is why it is probed beside it)
  *   P2  `target` reached `RoomState.task.target` (typed `number`) unvalidated,
  *       so a string came back out of the API and `current >= "abc"` was never
  *       true — the room could never complete
@@ -29,6 +34,7 @@
  * exists.
  */
 import { execFileSync, spawn, type ChildProcess } from "node:child_process";
+import { connect } from "node:net";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -134,6 +140,71 @@ async function drain(res: Response): Promise<{ bytes: number; steps: number; hea
   return { bytes, steps, head };
 }
 
+/**
+ * A client that crosses the body cap and then STOPS sending. It never emits
+ * `end`, so a reader whose only exit is `end` never answers and the socket sits
+ * until Node's `server.requestTimeout` (300 s by default). Written on a raw
+ * socket because `fetch` cannot declare a content-length it does not intend to
+ * send, and cannot go silent mid-body.
+ *
+ * Measures the two things that decide whether this is a refusal or a held
+ * socket: time to the first response byte, and time to close.
+ */
+function overCapThenSilent(
+  port: number,
+  bytesToWrite = 21 * 1024 * 1024,
+  declaredLength = 1024 * 1024 * 1024,
+  windowMs = 20_000,
+): Promise<Record<string, unknown>> {
+  return new Promise((resolveProbe) => {
+    const started = Date.now();
+    let firstByteMs: number | null = null;
+    let statusLine: string | null = null;
+    let closedMs: number | null = null;
+    let settled = false;
+    const sock = connect(port, "127.0.0.1");
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      sock.destroy();
+      resolveProbe({
+        probe: `raw socket: POST /live/rooms, content-length ${declaredLength}, write ${bytesToWrite} B, then send nothing`,
+        declaredContentLength: declaredLength,
+        bytesWritten: bytesToWrite,
+        observationWindowMs: windowMs,
+        msToFirstResponseByte: firstByteMs,
+        msToSocketClose: closedMs,
+        statusLine,
+        answeredWithinWindow: firstByteMs !== null,
+        socketStillOpenAtWindowEnd: closedMs === null,
+      });
+    };
+    const timer = setTimeout(finish, windowMs);
+    sock.on("connect", () => {
+      sock.write(
+        `POST /live/rooms HTTP/1.1\r\nHost: 127.0.0.1:${port}\r\ncontent-type: application/json\r\ncontent-length: ${declaredLength}\r\n\r\n`,
+      );
+      sock.write(Buffer.alloc(bytesToWrite, "x")); // …and then never another byte
+    });
+    sock.on("data", (b: Buffer) => {
+      if (firstByteMs === null) {
+        firstByteMs = Date.now() - started;
+        statusLine = b.toString("latin1").split("\r\n")[0] ?? null;
+      }
+    });
+    sock.on("close", () => {
+      closedMs ??= Date.now() - started;
+      finish();
+    });
+    sock.on("error", (err: Error) => {
+      statusLine ??= `socket ${err.message.slice(0, 80)}`;
+      closedMs ??= Date.now() - started;
+      finish();
+    });
+  });
+}
+
 async function postJson(body: unknown): Promise<Response> {
   return fetch(`${BASE}/compare/demo`, {
     method: "POST",
@@ -200,6 +271,47 @@ async function httpProbes(pid: number | null): Promise<void> {
       ...result,
       elapsedMs: Date.now() - started,
       serverPeakRssMB: peakRssMB,
+    };
+  }
+  // P1b2 — well past the cap, from a client that does finish uploading. The
+  // reader used to destroy the socket at twice the cap; 45 MB is the size that
+  // branch was measured at, kept as a probe now that it answers instead.
+  {
+    const pad = "x".repeat(45 * 1024 * 1024);
+    const started = Date.now();
+    const { result, peakRssMB } = await withRssPeak(pid, async () => {
+      try {
+        const res = await postJson(JSON.stringify({ target: 12, turns: 1, source: "deterministic", pad }));
+        return { status: res.status, head: (await res.text()).slice(0, 200) };
+      } catch (err) {
+        return { status: "transport_error", head: String(err).slice(0, 200) };
+      }
+    });
+    probes.P1b2_body_cap_45mb = {
+      probe: "POST /compare/demo with a 45 MB JSON body (over twice the 20 MB cap)",
+      bodyBytes: 45 * 1024 * 1024,
+      ...result,
+      elapsedMs: Date.now() - started,
+      serverPeakRssMB: peakRssMB,
+    };
+  }
+  // P1d — over the cap, then silent. The cap must refuse promptly, not hold the
+  // socket open waiting for an upload the client has abandoned.
+  {
+    const rssBefore = pid === null ? null : rssMB(pid);
+    const result = await overCapThenSilent(PORT);
+    const rssAfter = pid === null ? null : rssMB(pid);
+    let healthAfter: number | string = "unreachable";
+    try {
+      healthAfter = (await fetch(`${BASE}/health`)).status;
+    } catch (err) {
+      healthAfter = String(err).slice(0, 120);
+    }
+    probes.P1d_over_cap_then_silent = {
+      ...result,
+      serverRssBeforeMB: rssBefore === null ? null : Number(rssBefore.toFixed(1)),
+      serverRssAfterMB: rssAfter === null ? null : Number(rssAfter.toFixed(1)),
+      healthAfter,
     };
   }
   // P1c — the sibling route. /voice/demo stops when the task completes, so an

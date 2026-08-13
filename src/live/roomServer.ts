@@ -629,28 +629,47 @@ function sleep(ms: number) {
 }
 
 // ── request helpers ───────────────────────────────────────────────────
+/** How long an over-cap request may keep draining before it is refused anyway.
+ *  Long enough for the bytes already in flight to land; short enough that a
+ *  refusal is a refusal. */
+const DRAIN_GRACE_MS = 2_000;
+
 function readBody(req: IncomingMessage, maxBytes = MAX_BODY_BYTES): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     let chunks: Buffer[] = [];
     let size = 0;
-    let tooLarge = false;
+    let draining: NodeJS.Timeout | undefined;
+    const refuse = () => {
+      clearTimeout(draining);
+      reject(new Error("body too large"));
+    };
     req.on("data", (c: Buffer) => {
       size += c.length;
-      if (size > maxBytes) {
-        // Past the cap nothing more is KEPT, so memory stops here. The bytes
-        // still on the wire are read and dropped, because closing a socket the
-        // client is still writing to can reset the connection before it reads
-        // the 413 — measured, and it is why this does not just destroy.
-        if (!tooLarge) ((tooLarge = true), (chunks = []));
-        // A caller still sending at twice the cap is not going to read a status
-        // code either; that one gets the connection back in pieces.
-        if (size > maxBytes * 2) req.destroy(new Error("body too large"));
+      if (size <= maxBytes) {
+        chunks.push(c);
         return;
       }
-      chunks.push(c);
+      // Past the cap nothing more is KEPT, so memory stops at `maxBytes` however
+      // much more arrives. The bytes still on the wire are read and dropped,
+      // because closing a socket the client is still writing to can reset the
+      // connection before it reads the 413 — measured, and it is why this does
+      // not just destroy. The drain is BOUNDED, because the answer is already
+      // decided and nothing the client sends next can change it: a client that
+      // crosses the cap and then goes silent never emits `end`, and waiting for
+      // one held the socket open for Node's full 300 s `requestTimeout`.
+      // Ceiling: a client still uploading when the grace expires can see a reset
+      // instead of the 413 — the same race the drain avoids for everyone who
+      // finishes within it.
+      if (draining) return;
+      chunks = [];
+      draining = setTimeout(refuse, DRAIN_GRACE_MS);
+      draining.unref();
     });
-    req.on("end", () => (tooLarge ? reject(new Error("body too large")) : resolve(Buffer.concat(chunks))));
-    req.on("error", reject);
+    req.on("end", () => (draining ? refuse() : resolve(Buffer.concat(chunks))));
+    req.on("error", (err) => {
+      clearTimeout(draining);
+      reject(err);
+    });
   });
 }
 /** The ONE JSON body reader. Exported because `src/server.ts` had a second

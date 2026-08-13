@@ -78,6 +78,7 @@ reproduction; a hunch is not a defect.
 | D5 | Critical | J1 | **A public route with `access-control-allow-origin: *` will allocate as much memory as it is asked to.** `POST /compare/demo {"turns":3000000}` → the bad-side loop builds one `ComparisonStep` (with three private-state snapshots) per requested turn. Measured on a freshly started server: idle RSS **89.8 MB → peak 2869.7 MB in 12.0 s**, then HTTP 500 because the reply could not even be stringified. Nothing in the request needs a key. `POST /voice/demo` is the same hole with one extra step: its loop also stops when the task completes, so it needs D6 to stay open — `{"target":"abc","turns":20000}` never completes and returned **4 975 601 bytes** of transcript at peak **176 MB** in 3.3 s (`applyUtterance` copies the utterance array every turn, so the cost is quadratic). Reproduction and every number: `scripts/prove-p0-boundary.ts`, `evidence/p0-boundary/before.json` → `P1_turns_flood`, `P1c_voice_demo_sibling`. | **CLOSED — iteration 2** |
 | D6 | Critical | J1 | **A string crossed the boundary into a field typed `number`, and the room could then never complete.** `POST /compare/demo {"target":"abc"}` → HTTP 200 with `goodFinalState.task.target === "abc"` (a *string*, straight back out of the API). The reducer finishes a count with `current >= target`, and `1 >= "abc"` is never true, so the shared room counts forever: with `turns: 20` it reached `current: 20` against target `"abc"` and `completed: false`. `{"target":1e9}` was accepted verbatim too. `evidence/p0-boundary/before.json` → `P2_target_string`, `P2b_target_huge`, `P2c_completes_after_narrowing`. | **CLOSED — iteration 2** |
 | D7 | Major | J1 | **Provenance claimed a model wrote text the model did not write.** `runSideBySideComparison({source:"openai"})` computed provenance *before* the run, so when the provider failed after the left-hand side finished, the result still read `mode: "openai"`, `modelId: "gpt-5.4-mini"`, and `good: "openai · gpt-5.4-mini · live · real reducer & scheduler"` — while all three right-hand turns were the deterministic fallback. The authors' own comment two lines above says provenance must reflect what generated the text; the Ollama case was handled, the mid-run OpenAI failure was not. `evidence/p0-boundary/before.json` → `P3_provenance_after_midrun_failure`. | **CLOSED — iteration 2** |
+| D9 | Critical | J1 | **A refused request could hold a socket for five minutes — introduced by iteration 2's own fix.** The 20 MB cap stops KEEPING bytes past the cap but answered only on the client's `end` event, and a client that crosses the cap and then stops sending never sends one. Raw socket: `POST /live/rooms`, `content-length: 1073741824`, write 21 MB, then silence → **no response byte and no close for the full 20 000 ms observation window**; the socket clears only on Node's default `server.requestTimeout` (300 s) or when the client gives up. Memory stayed bounded (server RSS 81.1 MB after the probe against 90.1 idle) and `/health` still answered 200, so this is not D5 returning: it is a fast refusal turned into a held socket, which is a denial-of-service shape of its own. `scripts/prove-p0-boundary.ts` → `evidence/p0-boundary/drain-hang-before.json` → `P1d_over_cap_then_silent`. | **CLOSED — iteration 3** |
 | D8 | Major | J1 | **Every provider error was swallowed silently and the fallback was committed as a model turn.** `runVoiceStep({source:"openai"})` with `OPENAI_API_KEY` unset (so `openaiChat` throws before any network call) did **not** throw: it returned normally, committed the utterance "One" as a real `speechAct: "task_action"`, advanced `task.current` to 1, and logged nothing — `warningsLogged: 0`, nothing reported to the caller. `evidence/p0-boundary/before.json` → `P4_silent_provider_swallow`. | **CLOSED — iteration 2** |
 
 ### Verified working, so a later wave does not "fix" it twice
@@ -215,11 +216,11 @@ reproduction; a hunch is not a defect.
     stops *keeping* bytes but keeps draining, because destroying the socket
     while the client is still uploading resets the connection before it can read
     the 413 (measured: the probe got `transport_error` and a hand-run got `413`
-    — a race, not a flake). A caller still sending at twice the cap gets the
-    socket destroyed; measured rather than assumed, because a defensive branch
-    nothing has ever executed is not a defence: a 45 MB body on port 4704 →
-    `ECONNRESET`, server peak RSS **92.0 MB** against 89.5 idle, and `/health`
-    still 200 afterwards.
+    — a race, not a flake). **The unbounded form of that drain shipped a
+    regression (D9) and iteration 3 replaced it**; two sentences that described
+    the twice-the-cap destroy branch were deleted from this bullet rather than
+    annotated, because that branch no longer exists and the numbers under it
+    described code that is gone.
   - `src/voice/voiceAgent.ts` — the bare `catch` now logs and calls
     `onProviderError`; the fallback text itself is unchanged.
 - **Preserved on purpose:** the deterministic and all-model provenance strings
@@ -287,3 +288,100 @@ reproduction; a hunch is not a defect.
   own `MAX_AUTO_RUN_TURNS = 320` — a pre-existing duplicate of the same number;
   collapsing it means touching the Convex runtime, which no probe here
   exercises.
+
+### Iteration 3 — 2026-08-13
+
+- **Journey exercised:** J1 from the hostile side again, but pointed at
+  iteration 2's own fix. An independent verifier re-ran every P0 probe, confirmed
+  D5–D8 closed, and measured one thing iteration 2 never probed: what happens
+  when a client crosses the body cap and then **stops sending**.
+- **Observed (reproduced before touching anything):** the verifier's report holds
+  exactly as written. Raw socket to `POST /live/rooms`, `content-length:
+  1073741824`, write 21 MB, then send nothing: **no response byte and no socket
+  close for the full 20 000 ms window**. Not memory — server RSS was 81.1 MB
+  after the probe against 90.1 idle, and `/health` answered 200 throughout. A
+  socket held until Node's default `server.requestTimeout` (300 s).
+- **Root cause, one layer down:** `readBody`'s promise had exactly two exits,
+  `end` and `error`, and **both belong to the client**. Past the cap the answer
+  is already decided — nothing the client sends next can change it — but the
+  reader still waited for the client to say it was finished. A client that
+  crosses the cap and goes quiet never emits either event, so the promise never
+  settled, the route never returned, and the response was never written. The
+  drain's *rationale* was sound (destroying a socket mid-upload resets it before
+  the 413 can be read, measured in iteration 2); its *termination condition* was
+  the caller's cooperation.
+- **Fixed:** `src/live/roomServer.ts` — crossing the cap now starts a
+  `DRAIN_GRACE_MS` (2 s) timer that refuses the request whether or not `end` ever
+  arrives. Same `Error("body too large")`, so it lands on the 413-and-close path
+  `src/server.ts` already owns — no second response path was written, and the
+  `end`-arrives-in-time case is byte-for-byte what it was. The twice-the-cap
+  `req.destroy()` branch was **deleted**: with the drain bounded in time it only
+  converted a clean 413 into an `ECONNRESET`, and one rule for one policy beats
+  two.
+
+  | Probe (both trees, port 4802, Node v22.22.2) | Before | After |
+  |---|---|---|
+  | raw socket, 1 GB declared, 21 MB written, then silent — time to first response byte | **none in 20 000 ms** | **2 045 ms** |
+  | …time to socket close | **none in 20 000 ms** (still open) | **2 046 ms** |
+  | …status line | none | `HTTP/1.1 413 Payload Too Large` |
+  | …server RSS after / `/health` after | 81.1 MB / 200 | 92.8 MB / 200 |
+  | `POST /compare/demo`, 45 MB body (over twice the cap) | `transport_error` — `TypeError: fetch failed` | HTTP **413** `body too large` |
+  | …server peak RSS | 132.9 MB | 105.5 MB |
+  | `POST /compare/demo`, 25 MB body | HTTP 413, peak 116.5 MB | HTTP 413, peak 92.8 MB |
+  | `POST /compare/demo {"turns":3000000}` | 200, 332 steps, peak 81.4 MB | 200, 332 steps, peak 86.0 MB |
+
+  The memory bound iteration 2 won is intact: every peak above sits within
+  ~16 MB of the 90 MB idle baseline, against 2 869.7 MB at the original D5
+  measurement.
+- **Deleted rather than annotated:** iteration 2's bullet claimed "a caller still
+  sending at twice the cap gets the socket destroyed" and quoted a 45 MB →
+  `ECONNRESET` measurement for it. That branch no longer exists, so both
+  sentences are gone from that bullet. `ARCHITECTURE.md` invariant 4 no longer
+  describes the cap as a size limit alone; it names the time bound too.
+- **Re-proved:** `evidence/p0-boundary/drain-hang-after.json` →
+  `P1d_over_cap_then_silent`, `P1b2_body_cap_45mb`. The shipped path is
+  unchanged where it should be: `POST /compare/demo {"target":100,"turns":100}`
+  → 200 in 51 ms, `{"target":100,"current":100,"completed":true}`, 100 good and
+  100 bad steps, provenance still `deterministic sim — scripted utterances ·
+  real reducer & scheduler`; `POST /live/rooms {"goal":"count to 10"}` → 200 with
+  a room id, read through the same reader. **D9 is not reachable from the
+  browser** — no page can declare a content-length it does not send — so its
+  proof is at the socket, which is where the defect is.
+- **Producer (committed, re-runnable from a fresh clone):** the same
+  `scripts/prove-p0-boundary.ts`, extended with `P1d_over_cap_then_silent` (raw
+  socket, because `fetch` cannot declare a content-length it does not intend to
+  send, nor go silent mid-body) and `P1b2_body_cap_45mb`. Both files below came
+  from that one script, `before` with `git stash push -- src` applied so only the
+  source differs:
+
+      npx tsx scripts/prove-p0-boundary.ts --label=drain-hang-before --port=4802 --out=promotion/evidence/p0-boundary/drain-hang-before.json
+      npx tsx scripts/prove-p0-boundary.ts --label=drain-hang-after  --port=4802 --out=promotion/evidence/p0-boundary/drain-hang-after.json
+
+- **Regression check:** two more tests in `tests/p0Boundary.test.ts` (13 now,
+  was 11).
+  - *"answers a client that crosses the cap and then stops sending"* — a
+    `PassThrough` that writes 21 MB and never ends, asserting the reject arrives
+    under 5 s. **Confirmed failing on the pre-fix tree**: with `git stash push --
+    src/live/roomServer.ts`, `vitest run --root . tests/p0Boundary.test.ts` →
+    **1 failed | 12 passed**, `Error: Test timed out in 5000ms` on exactly that
+    test. `git stash pop`, all 13 pass.
+  - *"finds no second request-body reader that could carry a different cap"* —
+    **discovered, not listed**: it walks `src/` with `readdirSync(recursive)` and
+    fails if any file other than `roomServer.ts` reads a request body. A guard
+    that consults a list of known callers cannot see the caller nobody
+    remembered, which is precisely how `src/server.ts` kept an uncapped reader
+    through D5. **Confirmed failing on the tree that had one**: restoring
+    `b0bf497^:src/server.ts` makes it fail naming `src/server.ts`, with no list
+    anywhere in the test.
+- **Tests:** `npm test` → **9 files, 51 tests passed**, exit 0 (was 9/49).
+  `npm run doctor` → exit 0; 4 tour/doc citations broken by the line shift in
+  `roomServer.ts` were re-pointed, `50 citations checked, 0 broken`.
+  `npm run build` → exit 0, `dist/assets/index-*.js` 384.23 kB.
+- **Conditions newly PASS:** **none.** D9 was a regression inside work already
+  counted, so closing it restores a claim rather than adding one.
+- **Not done, on purpose:** D2, D3, D4 remain open. `DRAIN_GRACE_MS` is a fixed
+  2 s, not a setting — no measurement asks for a second value, and a knob with
+  one caller is a knob nobody tunes. Its ceiling is stated where it lives: a
+  client still uploading when the grace expires can see a reset instead of the
+  413, which is the same race the drain avoids for everyone who finishes inside
+  it.

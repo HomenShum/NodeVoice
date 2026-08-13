@@ -11,8 +11,10 @@
  *   4. a bare `catch { return deterministic; }` presented the fallback as a
  *      model result with nothing recorded anywhere
  */
-import { Readable } from "node:stream";
+import { readdirSync, readFileSync } from "node:fs";
+import { PassThrough, Readable } from "node:stream";
 import type { IncomingMessage } from "node:http";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MAX_RUN_TURNS, validTurns } from "../src/core/agents.js";
 import { MAX_COUNT_TARGET, validCountTarget } from "../src/core/steering.js";
@@ -63,6 +65,35 @@ describe("P1b — one body-size cap, shared with the live path", () => {
   it("still reads an ordinary body", async () => {
     const req = Readable.from([Buffer.from(JSON.stringify({ target: 12 }))]) as unknown as IncomingMessage;
     await expect(readJson<{ target: number }>(req)).resolves.toEqual({ target: 12 });
+  });
+
+  it("answers a client that crosses the cap and then stops sending", async () => {
+    // No `end`, ever — the shape a raw socket produces when it declares a
+    // gigabyte, writes 21 MB and goes quiet. The reader used to wait for an
+    // `end` that never came, holding the socket for Node's 300 s
+    // `requestTimeout`; it must refuse on its own.
+    const req = new PassThrough();
+    req.write(Buffer.alloc(21 * 1024 * 1024, "x"));
+    const started = Date.now();
+    await expect(readJson(req as unknown as IncomingMessage)).rejects.toThrow(/body too large/);
+    expect(Date.now() - started).toBeLessThan(5_000);
+    req.destroy();
+  });
+
+  it("finds no second request-body reader that could carry a different cap", () => {
+    // Discovered, not listed: `src/server.ts` once had its own uncapped copy of
+    // this reader, and a guard that consults a list of known callers cannot see
+    // the one nobody remembered. This walks the tree instead.
+    const srcRoot = fileURLToPath(new URL("../src/", import.meta.url)).replace(/\\/g, "/");
+    const files = readdirSync(srcRoot, { recursive: true, encoding: "utf8" })
+      .map((name) => `${srcRoot}${name.replace(/\\/g, "/")}`)
+      .filter((file) => file.endsWith(".ts"));
+    expect(files.length).toBeGreaterThan(20); // the scan walked a tree, not an empty dir
+    expect(files).toContain(`${srcRoot}live/roomServer.ts`); // …including the one legal reader
+    const readsRequestBodies = files
+      .filter((file) => file !== `${srcRoot}live/roomServer.ts`)
+      .filter((file) => /\.on\(\s*["']data["']|for await\s*\([^)]*\bof\s+req\b/.test(readFileSync(file, "utf8")));
+    expect(readsRequestBodies).toEqual([]);
   });
 });
 
