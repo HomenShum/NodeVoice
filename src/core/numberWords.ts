@@ -39,19 +39,43 @@ export function extractNumber(text: string): number | undefined {
 
   const tokens = normalized.split(/\s+/).filter(Boolean);
   for (let i = 0; i < tokens.length; i += 1) {
-    const token = tokens[i];
-    if (!token) continue;
-    if (SMALL[token] !== undefined) return SMALL[token];
-    if (TENS[token] !== undefined) {
-      const next = tokens[i + 1];
-      if (next && SMALL[next] !== undefined && SMALL[next] > 0 && SMALL[next] < 10) {
-        return TENS[token] + SMALL[next];
-      }
-      return TENS[token];
-    }
-    if (token === "hundred") return 100;
+    const parsed = parseNumberPhrase(tokens, i);
+    if (parsed !== undefined) return parsed;
   }
   return undefined;
+}
+
+// "One hundred" is TWO tokens. Returning on the first number word read it as 1,
+// so a room counting to 100 asked for 100, heard 1, demanded a correction, and
+// stalled at 99 forever. "hundred" is a multiplier over the phrase to its left,
+// so the whole phrase has to be consumed before a value is returned.
+function parseNumberPhrase(tokens: string[], start: number): number | undefined {
+  const head = tokens[start];
+  if (head === undefined) return undefined;
+
+  let i = start + 1;
+  let value: number;
+  if (SMALL[head] !== undefined) {
+    value = SMALL[head];
+  } else if (TENS[head] !== undefined) {
+    value = TENS[head];
+    const ones = tokens[i];
+    if (ones !== undefined && SMALL[ones] !== undefined && SMALL[ones] > 0 && SMALL[ones] < 10) {
+      value += SMALL[ones];
+      i += 1;
+    }
+  } else if (head === "hundred") {
+    return 100;
+  } else {
+    return undefined;
+  }
+
+  if (tokens[i] !== "hundred") return value;
+  value *= 100;
+  i += 1;
+  if (tokens[i] === "and") i += 1;
+  const remainder = parseNumberPhrase(tokens, i);
+  return remainder !== undefined && remainder < 100 ? value + remainder : value;
 }
 
 export function numberToWords(n: number): string {

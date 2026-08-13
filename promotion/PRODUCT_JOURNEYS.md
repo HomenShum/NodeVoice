@@ -41,10 +41,16 @@ Each journey states, in this order:
 - **Done when:** SHARED-ROOM PROGRESS reads **100/100**, the right pane's
   `roomState.task.completed` is `true`, and the left pane's three private states
   are still `believesCurrent: 1 STUCK`.
-- **Evidence:** `evidence/baseline/07-demo-result.png` (28/100, both panes live),
-  `evidence/baseline/11-demo-stalled-99of100.png` (99/100 — the run's real end state).
-  **The done-when is NOT met: progress stalls at 99/100.** See defect D1.
-  Left pane stuck-at-1 and the live JSON are proven; completion is not.
+- **Evidence:** `evidence/iteration-1/01-demo-100of100.png` — SHARED-ROOM
+  PROGRESS `100/100 ● complete`, right-pane `roomState.task` shows
+  `current: 100, completed: true`, left pane still `believesCurrent: 1 STUCK`
+  on all three private states. `evidence/iteration-1/count-to-100.json` carries
+  the 100 timed progress samples (100/100 first observed at 124.8 s) with
+  `consoleErrors: []` and `failedRequests: []`.
+  Producer: `scripts/prove-count-to-100.mjs` (exits non-zero if progress is not
+  100). **PASSES** as of iteration 1; defect D1 is closed.
+  Historical: `evidence/baseline/11-demo-stalled-99of100.png` is the pre-fix
+  99/100 end state, kept so the regression is recognisable.
 
 ## J2 — "Start a room on my laptop and get a second device into it"
 

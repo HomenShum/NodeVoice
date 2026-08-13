@@ -71,7 +71,7 @@ reproduction; a hunch is not a defect.
 
 | # | Severity | Journey | Reproduction | Status |
 |---|----------|---------|--------------|--------|
-| D1 | Critical | J1 | The demo that carries the product's headline claim can never reach 100. **UI:** `/demo` → **Run the comparison** at defaults (N 100, TURNS 100, SOURCE Sim, 1280×800). SHARED-ROOM PROGRESS reaches `99/100` at 125 s and never changes; polled every 2 s to 322 s. **API:** `POST /compare/demo {"target":100,"turns":100,"source":"deterministic"}` → HTTP 200, last good step `{"turn":100,"text":"One hundred","current":99,"next":100}`, `goodFinalState.task.completed === false`, `requiredNextAct: "correction"`. Raising `turns` to 101 does not help — same `current: 99`. **Root cause:** `src/core/numberWords.ts:extractNumber` scans tokens left to right and returns on the first small-number word, so `extractNumber("One hundred")` returns **1** (measured directly via `tsx`; `"Ninety nine"` → 99, `"100"` → 100 both correct). The reducer expects 100, receives 1, rejects the utterance and asks for a correction, so the shared room stalls one short forever while the pane still asserts "3 iPhones + 1 shared room + scheduler = count to 100". | OPEN |
+| D1 | Critical | J1 | The demo that carries the product's headline claim can never reach 100. **UI:** `/demo` → **Run the comparison** at defaults (N 100, TURNS 100, SOURCE Sim, 1280×800). SHARED-ROOM PROGRESS reaches `99/100` at 125 s and never changes; polled every 2 s to 322 s. **API:** `POST /compare/demo {"target":100,"turns":100,"source":"deterministic"}` → HTTP 200, last good step `{"turn":100,"text":"One hundred","current":99,"next":100}`, `goodFinalState.task.completed === false`, `requiredNextAct: "correction"`. Raising `turns` to 101 does not help — same `current: 99`. **Root cause:** `src/core/numberWords.ts:extractNumber` scans tokens left to right and returns on the first small-number word, so `extractNumber("One hundred")` returns **1** (measured directly via `tsx`; `"Ninety nine"` → 99, `"100"` → 100 both correct). The reducer expects 100, receives 1, rejects the utterance and asks for a correction, so the shared room stalls one short forever while the pane still asserts "3 iPhones + 1 shared room + scheduler = count to 100". | **CLOSED — iteration 1** |
 | D2 | Major | J2/J3 | At 390×844 in a live room, the header's action group (`div.ml-auto.flex.items-center.gap-2`) ends at x=399 against a 390 px viewport, clipping the **Invite** button (measured right edge 399, width 73). The document does not scroll horizontally, so the control is simply cut off with no way to reach it. Reproduce: create a room, set viewport 390×844. Capture: `evidence/baseline/10-room-mobile-390.png`, `16-room-mobile-header-clip.png`; measurement in `findings-pass2.json` → `mobileClip`. | OPEN |
 | D3 | Minor | J2 | Two form controls have no programmatic label: the "Shared goal" textarea (its `<label>` is a sibling with neither `for` nor a wrapping relationship) and the join-code input (`placeholder="e.g. x7k2mp"` only). A screen-reader user tabbing the lobby hears an unnamed text field twice. Measured in-page over `input,textarea,select`; `findings.json` → `a11y.audit.inputsNoLabel`. | OPEN |
 | D4 | Minor | J1 | README promises "**Quickstart (30 seconds)** … click **Run the comparison**", but the visible walkthrough is paced at roughly one turn per 1.25 s and takes 125 s to reach its (stalled) end state. The API itself answers in 13.8 ms — this is presentation pacing, not compute. A stranger following the README waits four times longer than promised for a result that never completes. | OPEN |
@@ -89,4 +89,66 @@ reproduction; a hunch is not a defect.
 
 ## Iterations
 
-_none yet — Wave 1 is baseline only; no product change was made._
+### Iteration 1 — 2026-08-13
+
+- **Journey exercised:** J1 "Show me that the shared record is what fixes it,
+  don't tell me" — the demo that carries the product's headline claim.
+- **Observed (reproduced before touching anything):** the D1 reproduction holds
+  exactly as written. `POST /compare/demo {"target":100,"turns":100,"source":"deterministic"}`
+  → HTTP 200 in 15.1 ms with `goodFinalState.task.completed === false`,
+  `current: 99`. Directly at the unit boundary,
+  `extractNumber(numberToWords(100))` → `1`, while 1, 21 and 99 all round-trip
+  correctly.
+- **Root cause:** `src/core/numberWords.ts:extractNumber` returned on the FIRST
+  number-word it met. "One hundred" is two tokens, so it returned `1` and never
+  read `hundred`. `hundred` is a multiplier over the phrase to its left, so the
+  phrase has to be consumed before a value is returned. The reducer asked for
+  100, heard 1, classified the utterance as needing a `correction`, and the room
+  stalled one short forever. Two sibling implementations of the same parse —
+  `src/live/steering.ts:parseLeadingNumberPhrase` and
+  `convex/shared.ts:parseLeadingNumberPhrase` — already did this correctly;
+  core's was the odd one out, which is why the bug was invisible to the live
+  steering tests.
+- **Why the suite never caught it:** every existing test counts to 6 or fewer,
+  so nothing ever spoke the word "hundred". `comparisonMvp.test.ts` already
+  asserted `goodFinalState.task.completed === true` — at `target: 6`.
+- **Fixed:** `src/core/numberWords.ts` — the token scan now calls a
+  `parseNumberPhrase(tokens, start)` helper that consumes a whole phrase
+  (`one hundred` → 100, `one hundred and one` → 101), leaving every other
+  behaviour intact (`a hundred` → 100, `ninety nine` → 99, `seven eight` → 7,
+  not 15). One guard in the shared function: `extractNumber` is reached by
+  `speechActClassifier` → `roomReducer`, which serves BOTH the `/demo`
+  comparison and every live room, so no caller was patched individually.
+- **Re-proved in the rendered app:** `promotion/evidence/iteration-1/01-demo-100of100.png`
+  — `/demo` at defaults (N 100, TURNS 100, SOURCE Sim, 1280×800) reaches
+  **SHARED-ROOM PROGRESS 100/100 ● complete**, right pane `roomState.task`
+  `current: 100, completed: true`, left pane still `believesCurrent: 1 STUCK`.
+  `promotion/evidence/iteration-1/count-to-100.json` holds all 100 timed
+  progress samples (100/100 first observed at 124.8 s, ×2 runs),
+  `consoleErrors: []`, `failedRequests: []`.
+  **Producer (committed, re-runnable from a fresh clone):**
+  `scripts/prove-count-to-100.mjs`; it exits non-zero unless the rendered
+  progress reaches 100. Header documents the four commands. Playwright is
+  installed `--no-save` exactly as `scripts/record-readme-hero.mjs` already
+  documents, so `package.json` gains no dependency.
+- **Regression check:** `tests/countToOneHundred.test.ts` (3 tests) — a 1..100
+  speak/hear round-trip, the hundreds-phrase cases with the unchanged cases
+  beside them, and the comparison demo run at the shipped default `target: 100`.
+  **Confirmed failing on the pre-fix tree**: with `src/core/numberWords.ts`
+  stashed, `vitest run tests/countToOneHundred.test.ts` → **3 failed (3)**,
+  including `expected 99 to be 100`. Restored, all 3 pass.
+- **Tests:** `npm test` → **7 files, 35 tests passed**, exit 0 (was 6/32).
+  `npm run doctor` (`tsc --noEmit` ×2) → exit 0. `npm run build` → exit 0,
+  `dist/` 384.08 kB js.
+- **Server:** rebuilt and restarted on `PORT=4307` before capture, so the
+  evidence is about the tree that now exists.
+- **Conditions newly PASS:** **12** (an improvement was verified in the rendered
+  app rather than inferred from code — this iteration is the first that has
+  anything to verify). Condition 1 moves FAIL → UNVERIFIED, not PASS: J1's
+  blocker is gone and J1 now has both halves of evidence, but J2–J5 rest on
+  Wave-1 output whose driver scripts were never committed, so the condition as a
+  whole is not fully evidenced. Condition 2 stays FAIL — D2 (Invite clipped at
+  390px) is still open.
+- **Not done, on purpose:** D2, D3 and D4 were left open. One defect per
+  iteration; D4 in particular (the 125 s walkthrough pacing) is now measured
+  again here — 124.8 s to reach 100 — but changing pacing is a separate change.
