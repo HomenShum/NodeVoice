@@ -1,12 +1,12 @@
 {
   "label": "after",
-  "capturedAt": "2026-08-13T22:57:28.860Z",
-  "commit": "9dd0300a16e0d2c99426cc36b03e2da331f33c44",
+  "capturedAt": "2026-08-13T23:00:18.763Z",
+  "commit": "b0bf4978776bc97792d12bf5c41305740ac47671",
   "node": "v22.22.2",
   "probes": {
     "server": {
       "port": 4701,
-      "pid": 39416,
+      "pid": 52372,
       "health": {
         "ok": true,
         "service": "nodevoice",
@@ -15,7 +15,7 @@
           "elevenlabs": false
         }
       },
-      "idleRssMB": 89.75390625
+      "idleRssMB": 89.71484375
     },
     "P2_target_string": {
       "probe": "POST /compare/demo {\"target\":\"abc\"}",
@@ -41,23 +41,23 @@
       "bodyBytes": 26214400,
       "status": 413,
       "head": "{\n  \"ok\": false,\n  \"error\": \"body too large\"\n}",
-      "elapsedMs": 2053,
-      "serverPeakRssMB": 91.7
+      "elapsedMs": 2089,
+      "serverPeakRssMB": 116
     },
     "P1c_voice_demo_sibling": {
       "probe": "POST /voice/demo {\"target\":\"abc\",\"turns\":20000}",
       "status": 200,
       "responseBytes": 5669,
-      "elapsedMs": 1293,
-      "serverPeakRssMB": 91.7
+      "elapsedMs": 1270,
+      "serverPeakRssMB": 116
     },
     "P1_turns_flood": {
       "probe": "POST /compare/demo {\"turns\":3000000}",
       "status": 200,
       "responseBytes": 343026,
       "stepsReturned": 332,
-      "elapsedMs": 1314,
-      "serverPeakRssMB": 91.7
+      "elapsedMs": 1285,
+      "serverPeakRssMB": 92.3
     },
     "P3_provenance_after_midrun_failure": {
       "probe": "runSideBySideComparison({source:'openai'}) with the provider failing after the bad side",

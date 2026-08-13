@@ -170,9 +170,9 @@ reproduction; a hunch is not a defect.
 
   | Probe | Before | After |
   |---|---|---|
-  | `POST /compare/demo {"turns":3000000}` — server peak RSS | **2869.7 MB** (idle 89.8) | **91.7 MB** |
-  | …steps returned / status / elapsed | 0 / HTTP 500 / 12 024 ms | 332 / HTTP 200 / 1 314 ms |
-  | `POST /voice/demo {"target":"abc","turns":20000}` — the sibling route | 200, **4 975 601 B** of transcript, peak **176 MB**, 3 282 ms | 200, **5 669 B**, peak 91.7 MB, 1 293 ms |
+  | `POST /compare/demo {"turns":3000000}` — server peak RSS | **2869.7 MB** (idle 89.8) | **92.3 MB** (idle 89.7) |
+  | …steps returned / status / elapsed | 0 / HTTP 500 / 12 024 ms | 332 / HTTP 200 / 1 285 ms |
+  | `POST /voice/demo {"target":"abc","turns":20000}` — the sibling route | 200, **4 975 601 B** of transcript, peak **176 MB**, 3 282 ms | 200, **5 669 B**, peak 116 MB, 1 270 ms |
   | `POST /compare/demo` with a 25 MB body | HTTP **200**, buffered whole | HTTP **413** `body too large` |
   | `POST /compare/demo {"target":"abc"}` → `task.target` | `"abc"` (**string**) | `12` (**number**) |
   | `{"target":1e9}` → `task.target` | `1000000000` | `300` (`MAX_COUNT_TARGET`) |
@@ -242,7 +242,12 @@ reproduction; a hunch is not a defect.
   process's working set while each request is in flight, drains the flood
   response without holding it in memory, and writes one JSON file. Both files
   here were produced by the same script minutes apart — the `before` run with
-  `git stash push -- src` applied, so only the source differs between them:
+  `git stash push -- src` applied, so only the source differs between them.
+  `after.json` was re-captured on the fix commit, which is why its `commit`
+  field names it rather than the pre-fix parent. The peak-RSS figures in the
+  `after` column include whatever the probes before them left on the heap (the
+  server is never re-started mid-file); the point is the order of magnitude,
+  89.7 MB idle → 2869.7 MB before, → ~116 MB after:
 
       npx tsx scripts/prove-p0-boundary.ts --label=before --out=promotion/evidence/p0-boundary/before.json
       npx tsx scripts/prove-p0-boundary.ts --label=after  --out=promotion/evidence/p0-boundary/after.json
