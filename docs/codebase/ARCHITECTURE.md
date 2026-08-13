@@ -86,7 +86,8 @@ finding 2.
    the agents. This is what stops the acknowledgement loop.
 4. **Untrusted input is narrowed at the boundary.** `validProfile`,
    `validModel`, `validAgentCount` and the `source` narrowing in
-   `src/server.ts:67` each map anything unrecognised onto a safe default rather
+   `src/server.ts:76 const source: ComparisonSource` each map anything
+   unrecognised onto a safe default rather
    than passing it through.
 5. **What two runtimes must agree on lives in `src/core/`.** Enforced by an
    identity assertion in `tests/liveSteering.test.ts`.

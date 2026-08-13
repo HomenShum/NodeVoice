@@ -27,6 +27,12 @@ jobs:
       - name: Typecheck (client)
         run: npm run check:client
 
+      # A citation that points at the wrong symbol is a defect a reader hits
+      # before any test does. This asserts every .tours step and every
+      # `path:line anchor` in the docs still lands on the text it names.
+      - name: Citations (.tours + docs)
+        run: npm run check:citations
+
       - name: Unit tests
         run: npm test
 

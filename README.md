@@ -25,8 +25,9 @@ npm install
 npm run ui          # build the client + start the server
 ```
 
-Open **http://localhost:8787** and click **Run the comparison**. No API keys needed for the
-core demo. Full details (hot reload, voice rooms, model router, Ollama):
+Open **http://localhost:8787/demo** and click **Run the comparison**. (`http://localhost:8787`
+is the live-room lobby; the demo is one click away behind *“or watch the bad-vs-good demo →”*.)
+No API keys needed for the core demo. Full details (hot reload, voice rooms, model router, Ollama):
 [Quick start](#quick-start) below.
 
 **Working on the code rather than trying the product?** Read
@@ -1217,7 +1218,8 @@ npm install
 npm run ui          # build the client + start the server
 ```
 
-Open **http://localhost:8787** and click **Run the comparison**.
+Open **http://localhost:8787/demo** and click **Run the comparison**. The bare
+**http://localhost:8787** is the live-room lobby, which links to the demo.
 
 For UI development with hot reload:
 
@@ -1410,6 +1412,6 @@ that by object identity.
 | `npm run start` | Start server only (serves `dist/`) |
 | `npm test` | Run Vitest tests |
 | `npm run check` / `check:client` / `check:convex` | TypeScript type-check (server / client / Convex) |
-| `npm run check:tours` | Verify every `.tours/` step still points at the code it describes |
+| `npm run check:citations` | Verify every `.tours/` step and every `path:line anchor` citation in the docs still lands on the code it names |
 | `npm run doctor` | All four checks above |
 | `npm run demo:compare` / `demo:voice` / `demo:node` | CLI demos |

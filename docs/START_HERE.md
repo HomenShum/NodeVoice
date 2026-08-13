@@ -71,8 +71,8 @@ survive a reload; if `dist/` does not exist the response is
 ## Step 2 — The browser boots and the person presses the button
 
 **File:** `src/client/main.tsx`, then `src/client/App.tsx`
-**Symbol:** `App` → `runCompare` (`src/client/App.tsx:156`)
-**Called by:** the **Run the comparison** button (`CompareHero`, `App.tsx:897`)
+**Symbol:** `App` → `runCompare` (`src/client/App.tsx:156 async function runCompare()`)
+**Called by:** the **Run the comparison** button (`src/client/App.tsx:897 function CompareHero`)
 **Calls next:** `POST /compare/demo`
 
 **Why this exists**
@@ -101,8 +101,9 @@ in the transcript (Step 8), so a missing key is visible, not silent.
 
 ## Step 3 — The request is checked before anything runs
 
-**File:** `src/server.ts:67`
-**Symbol:** the `POST /compare/demo` branch
+**File:** `src/server.ts:67 path === "/compare/demo"`
+**Symbol:** the `POST /compare/demo` branch, and the `source` narrowing below it
+(`src/server.ts:76 const source: ComparisonSource`)
 **Called by:** `runCompare`
 **Calls next:** `runSideBySideComparison`
 
@@ -138,7 +139,7 @@ unknown ids.
 
 ## Step 4 — Two rooms are run against each other
 
-**File:** `src/compare/badGoodDemo.ts:58`
+**File:** `src/compare/badGoodDemo.ts:58 export async function runSideBySideComparison`
 **Symbol:** `runSideBySideComparison`
 **Called by:** the `/compare/demo` route
 **Calls next:** `runBadTranscriptLoop` (left room) and `runGoodRoomStateLoop`
@@ -172,7 +173,7 @@ success.
 
 ## Step 5 — An agent takes one turn, and a model is (optionally) called
 
-**File:** `src/voice/voiceAgent.ts:60`
+**File:** `src/voice/voiceAgent.ts:60 export async function runVoiceStep`
 **Symbol:** `runVoiceStep` → `decideVoiceUtterance` → `openaiChat` / `ollamaChat`
 **Called by:** `runGoodRoomStateLoop`
 **Calls next:** `enforceRoomPolicy` (`src/core/guards.ts`), then
@@ -212,7 +213,7 @@ and surfaces in Step 8.
 
 ## Step 6 — The shared record is updated. This is the product.
 
-**File:** `src/core/roomReducer.ts:47`
+**File:** `src/core/roomReducer.ts:47 export function applyUtterance`
 **Symbol:** `applyUtterance` → `classifyUtterance` → `applyTaskMutation`
 **Called by:** `runVoiceStep`, and every live-room turn
 **Calls next:** `applyLoopGuard`, `scheduleNextSpeaker`
@@ -252,8 +253,10 @@ reason `tests/countToOneHundred.test.ts` exists.
 ## Step 7 — Progress reaches the screen
 
 **File:** `src/client/App.tsx`
-**Symbol:** `speakGoodSteps` (`App.tsx:191`), `CompareView` (`437`),
-`RoomStatePanel` (`748`), `AgentPrivateStatePanel` (`815`)
+**Symbol:** `speakGoodSteps` (`src/client/App.tsx:192 async function speakGoodSteps`),
+`CompareView` (`src/client/App.tsx:437 function CompareView`),
+`RoomStatePanel` (`src/client/App.tsx:748 function RoomStatePanel`),
+`AgentPrivateStatePanel` (`src/client/App.tsx:815 function AgentPrivateStatePanel`)
 **Called by:** `runCompare`, after the response arrives
 **Calls next:** browser `speechSynthesis`
 
@@ -288,8 +291,8 @@ at build time in `src/client/live/roomClient.ts`.
 ## Step 8 — When something fails, the room says so
 
 **File:** `src/client/App.tsx` (the `catch` in `runCompare`),
-`src/live/pipeline.ts:52` (`keyOrThrow`), `src/live/pipeline.ts:58`
-(`withTimeout`)
+`src/live/pipeline.ts:52 function keyOrThrow`,
+`src/live/pipeline.ts:58 async function withTimeout`
 **Symbol:** `keyOrThrow`, `withTimeout`
 **Called by:** every outbound model / speech call
 **Calls next:** nothing — these are the edges
