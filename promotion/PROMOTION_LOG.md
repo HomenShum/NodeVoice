@@ -385,3 +385,10 @@ reproduction; a hunch is not a defect.
   client still uploading when the grace expires can see a reset instead of the
   413, which is the same race the drain avoids for everyone who finishes inside
   it.
+  A client that stays **under** the cap and then goes silent is a different
+  case and is untouched here: it has violated nothing, so the body reader has
+  no answer to give, and it sits until Node's own `server.requestTimeout`.
+  That is stock Node behaviour for every request this server serves, it is not
+  something the cap introduced, and — stated plainly because it is the one
+  sentence in this entry with no measurement under it — no probe here exercises
+  it.
