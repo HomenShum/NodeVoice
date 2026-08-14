@@ -613,6 +613,16 @@ existed. Both are now run, with committed output and a committed producer, and
   against interaction, not against first paint) is unaffected. The remaining axe
   findings are `landmark-one-main` and `region` (both **moderate**, 24 nodes
   across the two pages): no `<main>`, so no page content sits in a landmark.
+
+  **How stable are those two columns?** Both tools were re-run against the same
+  server immediately after, and they do not behave the same way. **axe is
+  deterministic**: 3 rules / 13 nodes / 2 serious / the same three rule ids, twice
+  over. **Lighthouse is not** — the second run of `/` gave performance **72**
+  (was 73), LCP **4.5 s** (was 4.4), TBT **40 ms** (was 20), accessibility 98 and
+  CLS 0 unchanged. So read the Lighthouse row as a single run with roughly a
+  point of drift, not as an exact figure: a verifier who gets 72 has reproduced
+  this, not broken it. What is stable, and is what the FAIL rests on, is the
+  *band* — LCP over 4 s on both surfaces, and two serious axe violations.
 - **Condition 7 — Web Interface Guidelines review.** A review, not a tool, and
   deliberately not a Lighthouse score wearing a different label: the two measure
   different things, and condition 7 is about interface *behaviour*. The Vercel
@@ -621,20 +631,22 @@ existed. Both are now run, with committed output and a committed producer, and
   390×844 on both `/` and `/demo` — `scripts/review-web-interface-guidelines.mjs`
   → `evidence/wig-review/wig-findings.json` plus four screenshots. **33 findings:
   12 major, 21 minor**, each carrying the DOM measurement that produced it. The
-  major ones reduce to four distinct guidelines:
+  12 major rows are the same **three** guidelines seen on four surface/width
+  combinations (5 + 3 + 4):
 
-  | Guideline | Measurement |
-  |---|---|
-  | Forms — *"Labels everywhere"* | 2 controls on `/` reach the accessibility tree with **no name at all** (the Shared-goal `<textarea>` and the join-code `<input>` — this is open defect **D3**, found independently); 3 controls on `/demo` are named **only by `title`**, which axe flags separately as serious |
-  | Interactions — *"Match visual & hit targets ≥24px"* | the N and TURNS number inputs on `/demo` are **40×16 px**; the only link from the lobby to the demo is **198×16 px** |
-  | Animations — *"Honor `prefers-reduced-motion`"* | **0** occurrences of `prefers-reduced-motion` in the whole built stylesheet, against 6 rules that animate and 5 `@keyframes` blocks. A user who has asked their OS to stop motion still gets all of it |
-  | Content — *"Accurate page titles"* | `/` and `/demo` report the **same** `<title>`, so a tab, a bookmark and the Back menu cannot tell them apart |
+  | Guideline | Major rows | Measurement |
+  |---|---|---|
+  | Forms — *"Labels everywhere"* | 5 | 2 controls on `/` reach the accessibility tree with **no name at all** (the Shared-goal `<textarea>` and the join-code `<input>` — this is open defect **D3**, found independently); 3 controls on `/demo` are named **only by `title`**, which axe flags separately as serious |
+  | Interactions — *"Match visual & hit targets ≥24px"* | 3 | the N and TURNS number inputs on `/demo` are **40×16 px**; the only link from the lobby to the demo is **198×16 px** |
+  | Animations — *"Honor `prefers-reduced-motion`"* | 4 | **0** occurrences of `prefers-reduced-motion` anywhere in `src/` or the built stylesheet, against 6 rules that animate and 5 `@keyframes` blocks. A user who has asked their OS to stop motion still gets all of it |
 
-  Minor findings, kept because they are cheap and real: no `<main>` landmark and
-  no skip link on either page; 9 lobby buttons and 4 demo buttons leave
-  `touch-action: auto`; 3 controls render below 16 px so iOS Safari zooms on
-  focus; the two agent-count steppers are icon-only and named only by `title`;
-  one button ships disabled before the user has typed anything.
+  Minor findings, kept because they are cheap and real: `/` and `/demo` report
+  the **same** `<title>`, so a tab, a bookmark and the Back menu cannot tell them
+  apart (*"Accurate page titles"* — minor because it misleads rather than
+  blocks); no `<main>` landmark and no skip link on either page; 9 lobby buttons
+  and 4 demo buttons leave `touch-action: auto`; 3 controls render below 16 px so
+  iOS Safari zooms on focus; the two agent-count steppers are icon-only and named
+  only by `title`; one button ships disabled before the user has typed anything.
 - **What the review did NOT find, measured rather than assumed.** *"Clear focus —
   every focusable element shows a visible focus ring"* **passes**: all 12 lobby
   tab stops and all 10 demo tab stops change pixels when focused. That answer
@@ -669,6 +681,41 @@ existed. Both are now run, with committed output and a committed producer, and
 - **Tests:** `npm test` → **9 files, 55 tests passed**, exit 0 (unchanged —
   nothing in `src/` or `convex/` was edited). `npm run doctor` → exit 0,
   `56 citations checked, 0 broken`. `npm run build` → exit 0.
+#### 3. The adversarial pass on this entry, and what it changed
+
+Run against this iteration's own claims before it was reported done. Six of the
+eight held under re-execution; two did not, and both were corrected here rather
+than argued away.
+
+- **Held.** The Convex probe re-runs to the same numbers from the committed
+  producer (`accepted: 0`, `read413: 3`, 420 steps, `C5: 400`, exit 0). The
+  committed `before.json` records `accepted: 3` on both routes with
+  `expectationFailures: ["C1 accepted: expected 0, got 3", …]` — so the
+  three-attempt assertion **fails the pre-fix tree 3/3**, which is what separates
+  a sharpened claim from a loosened one. The WIG review re-runs to a
+  byte-identical finding set (12 major / 21 minor) and still exits 1. axe re-runs
+  identically. `npm test` → 9 files, 55 tests. And the commit touches **no file
+  under `src/`, `convex/` or `tests/`** — there is no test in it to have weakened.
+- **The `carry` fix does not move any committed number**, which had to be
+  measured rather than assumed: re-running `scripts/prove-p0-boundary.ts` on the
+  fixed producer returns `stepsReturned: 332` and `responseBytes: 343026`,
+  identical to iteration 3's committed `drain-hang-after.json`. The double-count
+  needed a needle to land inside the carry, which the Node server's chunking
+  never did; the bug was latent there and firing on Convex.
+- **Corrected — the review was over-reported.** This entry and the scorecard both
+  said the majors "reduce to **four** distinct guidelines" and listed *Accurate
+  page titles* among them. The artifact says **three**: the producer emits the
+  shared-`<title>` finding at severity **minor**, and it always did. The prose was
+  counting a row the measurement does not support. Fixed in both documents by
+  correcting the prose to three and moving the title finding to the minor list —
+  not by promoting its severity to make the sentence true.
+- **Corrected — one instrument is not deterministic and the docs read as if it
+  were.** Lighthouse's second run of `/` gave performance 72 / LCP 4.5 s / TBT
+  40 ms against the 73 / 4.4 s / 20 ms quoted. Nothing changed between the runs.
+  Both documents now state the drift and say the FAIL rests on the band, because
+  a reader who re-runs and gets 72 must be able to tell that from a broken tree —
+  the same reason this repo moved its test count to one owner.
+
 - **Not done, on purpose:** none of the 12 major WIG findings or the 2 serious
   axe violations were fixed. This pass was asked to *run* the audits that had
   never been run, and fixing 14 findings in the same pass that first measured
