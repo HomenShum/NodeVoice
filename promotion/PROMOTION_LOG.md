@@ -79,7 +79,7 @@ reproduction; a hunch is not a defect.
 | D6 | Critical | J1 | **A string crossed the boundary into a field typed `number`, and the room could then never complete.** `POST /compare/demo {"target":"abc"}` → HTTP 200 with `goodFinalState.task.target === "abc"` (a *string*, straight back out of the API). The reducer finishes a count with `current >= target`, and `1 >= "abc"` is never true, so the shared room counts forever: with `turns: 20` it reached `current: 20` against target `"abc"` and `completed: false`. `{"target":1e9}` was accepted verbatim too. `evidence/p0-boundary/before.json` → `P2_target_string`, `P2b_target_huge`, `P2c_completes_after_narrowing`. | **CLOSED — iteration 2** |
 | D7 | Major | J1 | **Provenance claimed a model wrote text the model did not write.** `runSideBySideComparison({source:"openai"})` computed provenance *before* the run, so when the provider failed after the left-hand side finished, the result still read `mode: "openai"`, `modelId: "gpt-5.4-mini"`, and `good: "openai · gpt-5.4-mini · live · real reducer & scheduler"` — while all three right-hand turns were the deterministic fallback. The authors' own comment two lines above says provenance must reflect what generated the text; the Ollama case was handled, the mid-run OpenAI failure was not. `evidence/p0-boundary/before.json` → `P3_provenance_after_midrun_failure`. | **CLOSED — iteration 2** |
 | D9 | Critical | J1 | **A refused request could hold a socket for five minutes — introduced by iteration 2's own fix.** The 20 MB cap stops KEEPING bytes past the cap but answered only on the client's `end` event, and a client that crosses the cap and then stops sending never sends one. Raw socket: `POST /live/rooms`, `content-length: 1073741824`, write 21 MB, then silence → **no response byte and no close for the full 20 000 ms observation window**; the socket clears only on Node's default `server.requestTimeout` (300 s) or when the client gives up. Memory stayed bounded (server RSS 81.1 MB after the probe against 90.1 idle) and `/health` still answered 200, so this is not D5 returning: it is a fast refusal turned into a held socket, which is a denial-of-service shape of its own. `scripts/prove-p0-boundary.ts` → `evidence/p0-boundary/drain-hang-before.json` → `P1d_over_cap_then_silent`. | **CLOSED — iteration 3** |
-| D10 | Critical | J1 | **The whole public API exists twice, and only one copy was bounded.** `convex/http.ts` is a second complete implementation of the same routes — `httpRouter` registers `POST /compare/demo`, `POST /nodeagents/run`, `POST /live/rooms` and `pathPrefix POST /live/rooms/` — and every one of them read its body with a bare `req.json()` (10 raw reads in the file at `git HEAD`, measured). So the 20 MB cap and the `turns`/`target` narrowing closed in iterations 2–3 protected the Node servers and **nothing** on the hosted deployment, which is the copy a permanent URL actually serves. It carried its own `clampTarget` (2..300) and `clampTurns` (3..320) — the caps written a second time, the drift waiting to happen. The guard that was supposed to make this impossible could not see it twice over: `tests/p0Boundary.test.ts` walked `src/` only, and its detector matched `.on("data")` / `for await` only, so a web-`Request` read was invisible even inside the tree it did walk (`OLD detector flags pre-fix convex/http.ts: false`, `NEW: true` — `promotion/evidence/p0-boundary/convex-bypass-guard.txt` §4). Found by an adversarial verifier, not by the suite. | **CLOSED — iteration 4 (code-level; no live Convex probe, see entry)** |
+| D10 | Critical | J1 | **The whole public API exists twice, and only one copy was bounded.** `convex/http.ts` is a second complete implementation of the same routes — `httpRouter` registers `POST /compare/demo`, `POST /nodeagents/run`, `POST /live/rooms` and `pathPrefix POST /live/rooms/` — and every one of them read its body with a bare `req.json()` (10 raw reads in the file at `git HEAD`, measured). So the 20 MB cap and the `turns`/`target` narrowing closed in iterations 2–3 protected the Node servers and **nothing** on the hosted deployment, which is the copy a permanent URL actually serves. It carried its own `clampTarget` (2..300) and `clampTurns` (3..320) — the caps written a second time, the drift waiting to happen. The guard that was supposed to make this impossible could not see it twice over: `tests/p0Boundary.test.ts` walked `src/` only, and its detector matched `.on("data")` / `for await` only, so a web-`Request` read was invisible even inside the tree it did walk (`OLD detector flags pre-fix convex/http.ts: false`, `NEW: true` — `promotion/evidence/p0-boundary/convex-bypass-guard.txt` §4). Found by an adversarial verifier, not by the suite. | **CLOSED — iteration 4, and MEASURED on a live Convex deployment in iteration 5.** The status that stood here for one iteration, "code-level only; no live Convex probe", is gone because the probe now exists: `POST /compare/demo` with a 25 MB body answers **HTTP 413 `body too large`** on the hosted router (it answered **200** and buffered the whole thing on the pre-fix tree, same deployment, measured minutes apart), `{"target":"abc"}` comes back as the **number** 100 with `completed: true`, `{"turns":3000000}` returns **420 steps**, and a body that is not JSON answers **400** where it used to answer 200 having silently read `{}`. `scripts/prove-convex-boundary.mjs` → `evidence/convex-live/convex-boundary-before.json` / `-after.json`. |
 | D8 | Major | J1 | **Every provider error was swallowed silently and the fallback was committed as a model turn.** `runVoiceStep({source:"openai"})` with `OPENAI_API_KEY` unset (so `openaiChat` throws before any network call) did **not** throw: it returned normally, committed the utterance "One" as a real `speechAct: "task_action"`, advanced `task.current` to 1, and logged nothing — `warningsLogged: 0`, nothing reported to the caller. `evidence/p0-boundary/before.json` → `P4_silent_provider_swallow`. | **CLOSED — iteration 2** |
 
 ### Verified working, so a later wave does not "fix" it twice
@@ -463,7 +463,9 @@ reproduction; a hunch is not a defect.
       source assertion that `convex/http.ts` does not restate `1024 * 1024`,
       `320` or `300`.
   - **Code-level only, NOT measured — stated plainly because this pass creates
-    no accounts, keys or deployments:** no request was ever issued to a running
+    no accounts, keys or deployments** (this bullet is left standing because it
+    was true of iteration 4; **iteration 5 issued the requests and the answer is
+    below**): no request was ever issued to a running
     Convex deployment. The claim "the hosted `/compare/demo` now answers 413 to
     a 25 MB body" is **not** proved here the way its Node twin was in iteration
     2 (`before`/`after` against a live server). What is proved is that every
@@ -494,3 +496,183 @@ reproduction; a hunch is not a defect.
   faked. `POST /nodeagents/run` on Convex reads no body at all (it answers 501
   immediately); it is left that way, since not reading a body is a stronger
   bound than reading one carefully.
+
+### Iteration 5 — 2026-08-13
+
+Two things happened here and they are separate: the one open verification from
+iteration 4 was closed by measurement, and the two audit conditions that had
+never been run were run. The second produced a **worse** scorecard, which is the
+correct outcome — UNVERIFIED was never a pass, and measuring a thing for the
+first time is allowed to find it broken.
+
+#### 1. D10's open verification — the hosted routes, probed live
+
+- **Journey exercised:** J1 from the hostile side, on the copy a permanent URL
+  actually serves. Iteration 4 bounded `convex/http.ts` and said so plainly: *"no
+  request was ever issued to a running Convex deployment"*. That sentence is now
+  answered rather than repeated.
+- **How:** an **isolated Convex DEV deployment** created for this probe
+  (`npx convex dev --once --configure new --project nodevoice-live`), never
+  production, never `convex deploy --prod`. `.env.local` holds the deployment
+  name and URLs and is gitignored (`.gitignore:33`, `.env*.local`); it was not
+  committed. No API keys were set on the deployment — none of these routes need
+  one, which is the whole reason they are worth probing.
+- **Both trees, same deployment, twenty-six seconds apart.** The `before` capture
+  is the pre-fix router restored into the working tree
+  (`git show 30253b4^:convex/http.ts > convex/http.ts`) and pushed to the same
+  deployment; the `after` capture is `git diff --quiet convex/http.ts` clean
+  against HEAD. Both files therefore record the same `commit` — only the
+  deployed source differs, exactly as iteration 2's `git stash push -- src` pair
+  did.
+
+  | Probe (hosted `httpAction`, x3 where the refusal has two shapes) | Before | After |
+  |---|---|---|
+  | `POST /compare/demo`, 25 MB body | **3/3 accepted, HTTP 200**, 2251/2301/2252 ms | **0/3 accepted, 3/3 `413 body too large`**, 514/761/629 ms |
+  | `POST /live/rooms`, 25 MB body | **3/3 accepted, HTTP 200 — and a room was WRITTEN** (`roomId: jn792g1m…`) | **0/3 accepted, 3/3 `413 body too large`** |
+  | `POST /compare/demo`, body that is not JSON | **HTTP 200** — silently read as `{}` and ran the default 100-count | **HTTP 400** with the parse error |
+  | `POST /compare/demo {"target":"abc"}` → `task.target` | `100` (**number**), `completed: true` | `100` (**number**), `completed: true` |
+  | `{"target":1e9,"turns":5}` → `task.target` | `300` | `300` |
+  | `{"turns":3000000}` → steps returned | `420` (320 bad + 100 good), 230 832 B | `420`, 230 832 B |
+  | `{"target":100,"turns":100}` → the shipped default | 200, 100 good / 100 bad, `completed: true` | unchanged |
+
+- **What that table says that a summary would hide.** Two of the three things
+  this probe was asked to check were **already bounded on Convex before the
+  fix** — `{"target":"abc"}` came back as a number and `{"turns":3000000}` was
+  clamped to 320 — because `convex/http.ts` carried its **own** `clampTarget`
+  (2..300) and `clampTurns` (3..320). That is D10's actual shape: not "the
+  hosted copy was unbounded", but "the hosted copy was bounded by a second
+  written-down copy of the numbers, which is the drift waiting to happen". What
+  was genuinely open on the hosted router, and is now closed, is the **body
+  cap** (a 25 MB upload was buffered whole, and on `/live/rooms` it also wrote a
+  row) and the **silent `{}` parse**. Saying "the flood is now bounded" would be
+  true and misleading; it was bounded before, by the copy iteration 4 deleted.
+- **Producer (committed, re-runnable from a fresh clone):**
+  `scripts/prove-convex-boundary.mjs`. It exits non-zero on any failed
+  expectation — the `before` run exits 1 naming three, the `after` run exits 0.
+  It reads its base URL from the runner's own gitignored `.env.local`, so a
+  verifier probes **their** deployment, not one named here:
+
+      npx convex dev --once --configure new --project nodevoice-live --team <team>
+      node scripts/prove-convex-boundary.mjs --label=convex-live-after --out=promotion/evidence/convex-live/convex-boundary-after.json
+
+- **The deployment host is redacted in both artifacts, on purpose and stated
+  here so it is not mistaken for something hidden.** These routes are public and
+  take no key, so a live dev URL committed to a public repo is a write endpoint
+  anyone can drive; and the gate's re-runnability comes from the producer, which
+  gives the verifier their own deployment. Everything measured — statuses,
+  bodies, returned values, timings — is in the files.
+- **Two defects found in the measuring instruments themselves, both fixed
+  before any number here was quoted:**
+  - The streaming step counter double-counted. It carried 8 characters between
+    chunks while the needle `"turn":` is 7, so a needle landing entirely inside
+    the carry was counted in its own chunk and again in the next — **421 steps
+    reported where 420 were returned**, and which number you got depended on
+    where the network split the response. The carry must be `needle - 1`. Fixed
+    in the new script and in the same line of `scripts/prove-p0-boundary.ts`,
+    which had it first. No committed number in iterations 2–3 depended on it
+    being exact, but a producer that answers differently on re-run is a producer
+    nobody can check.
+  - The refusal has two shapes. Cancelling a web request stream can reset the
+    connection before the client reads the response — the same race iteration 2
+    measured on the Node reader and answered there with a bounded drain, which a
+    web stream has no equivalent of. One `after` run therefore saw
+    `TypeError: fetch failed` on `/live/rooms` where the next saw `413`. Rather
+    than retry until it looked clean, the probe now issues each over-cap upload
+    **three times** and asserts what is both stable and the thing that matters:
+    **no attempt is accepted.** That is a sharper claim, not a weaker one — the
+    pre-fix tree fails it 3/3, and the accompanying `read413` / `connectionReset`
+    counts are recorded so the split is visible rather than averaged away.
+- **Conditions newly PASS:** **none.** Same reasoning iteration 4 gave: D10 was a
+  hole in work already counted. What changed is that the claim is now a
+  measurement instead of a reading.
+
+#### 2. Conditions 7 and 8 — the two audits that had never been run
+
+Both had stood UNVERIFIED since baseline for the honest reason that no audit
+existed. Both are now run, with committed output and a committed producer, and
+**both are FAIL.**
+
+- **Condition 8 — web-quality audit.** `scripts/run-web-audit.sh` runs the two
+  pinned tools the gate names against the built client on port 4901:
+
+      npm run build && PORT=4901 npx tsx src/server.ts &
+      bash scripts/run-web-audit.sh    # promotion/evidence/web-audit/
+
+  | Surface | Lighthouse 13.4.1 perf / a11y / best-practices / SEO | LCP | CLS | TBT | axe 4.13.0 |
+  |---|---|---|---|---|---|
+  | `/` lobby | **73** / 98 / 100 / 82 | **4.4 s** | 0 | 20 ms | 2 rules, 14 nodes, **0 serious** |
+  | `/demo` | **70** / 98 / 100 / 82 | **4.8 s** | 0 | 40 ms | 3 rules, 13 nodes, **2 serious** |
+
+  Two majors, and they are different in kind. **(a)** axe raises
+  `label-title-only` (**serious**) twice on `/demo`: two `<select>` controls are
+  named only by their `title` attribute, with no visible label. **(b)** Largest
+  Contentful Paint is 4.4 s and 4.8 s under Lighthouse's default mobile
+  emulation, which is the "poor" band; the render-blocking and
+  network-dependency-tree insights fail with it. CLS is 0 and TBT is 20–40 ms —
+  the page does not *jank*, it arrives late, which is why condition 10 (measured
+  against interaction, not against first paint) is unaffected. The remaining axe
+  findings are `landmark-one-main` and `region` (both **moderate**, 24 nodes
+  across the two pages): no `<main>`, so no page content sits in a landmark.
+- **Condition 7 — Web Interface Guidelines review.** A review, not a tool, and
+  deliberately not a Lighthouse score wearing a different label: the two measure
+  different things, and condition 7 is about interface *behaviour*. The Vercel
+  Web Interface Guidelines were fetched from https://vercel.com/design/guidelines
+  on 2026-08-13 and the rendered app was driven against them at 1280×800 and
+  390×844 on both `/` and `/demo` — `scripts/review-web-interface-guidelines.mjs`
+  → `evidence/wig-review/wig-findings.json` plus four screenshots. **33 findings:
+  12 major, 21 minor**, each carrying the DOM measurement that produced it. The
+  major ones reduce to four distinct guidelines:
+
+  | Guideline | Measurement |
+  |---|---|
+  | Forms — *"Labels everywhere"* | 2 controls on `/` reach the accessibility tree with **no name at all** (the Shared-goal `<textarea>` and the join-code `<input>` — this is open defect **D3**, found independently); 3 controls on `/demo` are named **only by `title`**, which axe flags separately as serious |
+  | Interactions — *"Match visual & hit targets ≥24px"* | the N and TURNS number inputs on `/demo` are **40×16 px**; the only link from the lobby to the demo is **198×16 px** |
+  | Animations — *"Honor `prefers-reduced-motion`"* | **0** occurrences of `prefers-reduced-motion` in the whole built stylesheet, against 6 rules that animate and 5 `@keyframes` blocks. A user who has asked their OS to stop motion still gets all of it |
+  | Content — *"Accurate page titles"* | `/` and `/demo` report the **same** `<title>`, so a tab, a bookmark and the Back menu cannot tell them apart |
+
+  Minor findings, kept because they are cheap and real: no `<main>` landmark and
+  no skip link on either page; 9 lobby buttons and 4 demo buttons leave
+  `touch-action: auto`; 3 controls render below 16 px so iOS Safari zooms on
+  focus; the two agent-count steppers are icon-only and named only by `title`;
+  one button ships disabled before the user has typed anything.
+- **What the review did NOT find, measured rather than assumed.** *"Clear focus —
+  every focusable element shows a visible focus ring"* **passes**: all 12 lobby
+  tab stops and all 10 demo tab stops change pixels when focused. That answer
+  cost two rewrites and is the reason this section exists at all —
+  - a first pass read `outline` and `box-shadow` from the computed style and
+    reported **5 of 10 demo stops with no ring**. That was wrong. Tailwind leaves
+    a fully transparent ring placeholder (`rgba(0,0,0,0) 0px 0px 0px 0px`) on
+    every button, which reads as "has a shadow" and paints nothing, and
+    `outline: auto` reads as present on controls where nothing is drawn. The
+    check now **photographs the control's box focused, blurs it, photographs the
+    same box, and compares the bytes** — a ring that changes no pixel is not a
+    ring. The caret, CSS animation and transition are suppressed first, each
+    because it made the diff lie once, and a region that does not photograph
+    identically twice while nothing is focused is recorded **UNMEASURED**, not
+    passed.
+  - the same pass walked the page with `blur()` between stops, which leaves the
+    sequential-navigation starting point where it was; the walk re-visited the
+    same four controls instead of advancing. Returning focus to `document.body`
+    fixed it, and the lobby then yielded **12** stops — the same 12 the Wave-1
+    `a11y.tabOrder` measurement found by a different method.
+  - two other detectors were also wrong and were corrected before anything was
+    quoted: the two agent-count steppers were reported as **unnamed** icon-only
+    buttons when they carry `title` attributes that do reach the accessibility
+    tree (which is why axe's `button-name` rule passes on them) — downgraded to
+    a minor "named only by title"; and the animated-rule count read the
+    `transition:` shorthand only, reporting **1** animated rule in a stylesheet
+    that has 6, because Tailwind emits longhands.
+- **Conditions moved:** **7 UNVERIFIED → FAIL**, **8 UNVERIFIED → FAIL**. Nothing
+  moved to PASS. The scorecard goes from 6 PASS / 3 FAIL / 3 UNVERIFIED to
+  **6 PASS / 5 FAIL / 1 UNVERIFIED**, and it is a more honest board than the one
+  before it.
+- **Tests:** `npm test` → **9 files, 55 tests passed**, exit 0 (unchanged —
+  nothing in `src/` or `convex/` was edited). `npm run doctor` → exit 0,
+  `56 citations checked, 0 broken`. `npm run build` → exit 0.
+- **Not done, on purpose:** none of the 12 major WIG findings or the 2 serious
+  axe violations were fixed. This pass was asked to *run* the audits that had
+  never been run, and fixing 14 findings in the same pass that first measured
+  them would leave nobody able to tell which number belonged to which tree. D2,
+  D3 and D4 remain open; D3 is now confirmed twice over by two independent
+  instruments. Condition 1 still needs one committed driver for J2–J5, which
+  none of this touched.

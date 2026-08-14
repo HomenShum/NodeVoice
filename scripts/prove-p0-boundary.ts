@@ -134,7 +134,7 @@ async function drain(res: Response): Promise<{ bytes: number; steps: number; hea
     bytes += value.byteLength;
     const text = carry + decoder.decode(value, { stream: true });
     steps += (text.match(/"turn":/g) ?? []).length;
-    carry = text.slice(-8);
+    carry = text.slice(-6); // needle - 1: an 8-char carry can hold `"turn":` whole and count it twice
     if (head.length < 400) head += text.slice(0, 400 - head.length);
   }
   return { bytes, steps, head };
