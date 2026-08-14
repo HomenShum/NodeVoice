@@ -97,12 +97,39 @@ finding 2.
    `src/compare/badGoodDemo.ts:80 const target = validCountTarget`. A string
    reaching `task.target` used to make `current >= target` permanently false, so
    the room could never complete.
-   Request bodies have ONE reader with ONE cap:
-   `src/live/roomServer.ts:677 export async function readJson`, 20 MB, used by
-   every POST route in both servers. Over the cap it answers 413 within
-   `DRAIN_GRACE_MS` whether or not the client ever finishes uploading — a
-   refused request must not be able to hold a socket. That there is no second
-   reader is checked by walking `src/`, not by keeping a list of callers:
-   `tests/p0Boundary.test.ts:83 finds no second request-body reader`.
+   Request bodies have ONE cap and TWO readers, one per stream type. The cap is
+   `src/core/requestBody.ts:18 export const MAX_BODY_BYTES`, 20 MB, and it is
+   imported by both readers rather than written down twice, because a cap that
+   exists twice drifts. The readers are
+   `src/live/roomServer.ts:679 export async function readJson` for the Node
+   server's `node:http` stream, and
+   `src/core/requestBody.ts:84 export async function readJsonRequest` for the
+   web `Request` the Convex HTTP router hands its actions. Every POST route in
+   both servers goes through one of them: the Node routes via `readJson`, and
+   all four Convex registrations via the single
+   `convex/http.ts:37 async function body` helper (plus
+   `convex/http.ts:49 async function binaryBody` for the one audio route that
+   takes bytes rather than JSON). They are two readers because a socket and a
+   web stream refuse differently — over the cap the Node reader answers 413
+   within `DRAIN_GRACE_MS` whether or not the client ever finishes uploading,
+   since a refused request must not be able to hold a socket, while the web
+   reader cancels the stream, which is that platform's way to say the same
+   thing.
+
+   That no THIRD reader appears is checked by walking `src/` and `convex/`, not
+   by keeping a list of callers:
+   `tests/p0Boundary.test.ts:90 finds no third request-body reader`. The walk
+   covered `src/` only until an adversarial verifier pointed at `convex/http.ts`
+   — a second complete implementation of the same public routes, whose every
+   POST read its body with an uncapped `req.json()` while this paragraph claimed
+   one reader with one cap. The detector missed it twice over: it also only knew
+   the `.on("data")` and `for await` shapes, so a web-`Request` read was
+   invisible to it. Both are fixed, and the fix was proved by adding a bypassing
+   route and watching the guard fail. The Convex router also takes `validTurns`
+   and `validCountTarget` from `convex/shared.ts` instead of the private
+   `clampTarget` (2..300) / `clampTurns` (3..320) it used to carry, which were
+   the same caps written a second time;
+   `tests/p0Boundary.test.ts:162 hands the Convex router the same validators`
+   asserts identical function objects and that the numbers are not restated.
 5. **What two runtimes must agree on lives in `src/core/`.** Enforced by an
    identity assertion in `tests/liveSteering.test.ts`.

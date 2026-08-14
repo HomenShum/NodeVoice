@@ -5,13 +5,13 @@
   "steps": [
     {
       "file": "src/live/roomServer.ts",
-      "line": 688,
+      "line": 690,
       "anchor": "export async function handleLive",
       "description": "**Every `/live/*` route enters here.** One function, one router, no framework. It returns `false` for anything that is not a live-room path so `src/server.ts` can carry on."
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 693,
+      "line": 695,
       "anchor": "if (method === \"POST\" && path === \"/live/rooms\")",
       "description": "**Create a room.** The laptop calls this. The room id doubles as the six-character join code a phone types or scans."
     },
@@ -23,7 +23,7 @@
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 793,
+      "line": 795,
       "anchor": "if (method === \"POST\" && sub === \"join\")",
       "description": "**A device joins.** `allocateJoinSlot` hands out the next free seat. The room broadcasts its new state to everyone already connected."
     },
@@ -47,7 +47,7 @@
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 313,
+      "line": 315,
       "anchor": "function broadcastState",
       "description": "**How progress reaches the interface.** Server-Sent Events to every connected browser, with polling as the fallback — which is what makes this work through a tunnel and on iOS Safari."
     },

@@ -1,0 +1,21 @@
+# The guard, proved by making it fail — 2026-08-13
+# Each block adds ONE bypassing reader, runs the guard, and shows it named.
+
+## 1. a new file under convex/ that reads a body with req.json()
+AssertionError: expected [ Array(1) ] to deeply equal []
++   "<repo>/convex/bypassProbe.ts",
+      Tests  1 failed | 16 skipped (17)
+
+## 2. the shape that actually shipped: req.json() back inside convex/http.ts
+AssertionError: expected [ Array(1) ] to deeply equal []
++   "<repo>/convex/http.ts",
+      Tests  1 failed | 16 skipped (17)
+
+## 3. neither bypass present — the tree as committed
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+
+## 4. the detector itself, run against the pre-fix convex/http.ts (git HEAD)
+uncapped raw body reads in that file: 10
+OLD detector (.on(data) / for-await only) flags it: false
+NEW detector flags it: true

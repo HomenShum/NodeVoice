@@ -22,6 +22,8 @@ export {
   AGENT_SLOTS,
   DEFAULT_GOAL,
   validAgentCount,
+  validTurns,
+  MAX_RUN_TURNS,
   slotForIndex,
   agentIndexFromSlot,
   activeSlots,
@@ -49,8 +51,14 @@ export {
   deriveHumanSteeringIntentFallback,
   normalizeHumanSteeringIntent,
   coerceCountTurn,
+  validCountTarget,
+  MAX_COUNT_TARGET,
 } from "../src/core/steering.js";
 export type { CapabilityProfile, CountTask, CountTurnLike, HumanSteeringIntent } from "../src/core/steering.js";
+
+/** The request-body cap and reader the Node server also uses — one cap, two
+ *  stream types. See `src/core/requestBody.ts`. */
+export { MAX_BODY_BYTES, BODY_TOO_LARGE, readBoundedBody, readJsonRequest } from "../src/core/requestBody.js";
 
 export { numberToWords } from "../src/core/numberWords.js";
 

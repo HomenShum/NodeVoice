@@ -10,6 +10,11 @@
  *      still reported `mode:"openai"` and "live"
  *   4. a bare `catch { return deterministic; }` presented the fallback as a
  *      model result with nothing recorded anywhere
+ *
+ * And one an adversarial verifier found afterwards, in the guard itself: the
+ * anti-enumeration walk covered `src/` only, so `convex/http.ts` — a second
+ * complete implementation of the same public routes — kept an uncapped
+ * `req.json()` on every POST while the tree "proved" one reader with one cap.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { PassThrough, Readable } from "node:stream";
@@ -22,6 +27,8 @@ import { createVoiceRoom } from "../src/core/roomReducer.js";
 import { runSideBySideComparison } from "../src/compare/badGoodDemo.js";
 import { runVoiceStep } from "../src/voice/voiceAgent.js";
 import { readJson } from "../src/live/roomServer.js";
+import { MAX_BODY_BYTES, readBoundedBody, readJsonRequest } from "../src/core/requestBody.js";
+import * as convexShared from "../convex/shared.js";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -80,20 +87,103 @@ describe("P1b — one body-size cap, shared with the live path", () => {
     req.destroy();
   });
 
-  it("finds no second request-body reader that could carry a different cap", () => {
-    // Discovered, not listed: `src/server.ts` once had its own uncapped copy of
-    // this reader, and a guard that consults a list of known callers cannot see
-    // the one nobody remembered. This walks the tree instead.
-    const srcRoot = fileURLToPath(new URL("../src/", import.meta.url)).replace(/\\/g, "/");
-    const files = readdirSync(srcRoot, { recursive: true, encoding: "utf8" })
-      .map((name) => `${srcRoot}${name.replace(/\\/g, "/")}`)
-      .filter((file) => file.endsWith(".ts"));
+  it("finds no third request-body reader that could carry a different cap", () => {
+    // Discovered, not listed, twice now. `src/server.ts` once had its own
+    // uncapped copy of this reader — a guard that consults a list of known
+    // callers cannot see the one nobody remembered, so this walks the tree.
+    // Then the walk itself turned out to be the list: it covered `src/` only,
+    // and `convex/http.ts` is a SECOND COMPLETE IMPLEMENTATION of the same
+    // public API (POST /compare/demo, /nodeagents/run, /live/rooms and
+    // /live/rooms/*) whose every route read its body with an uncapped
+    // `req.json()`. Both roots are walked now, and the detector knows the web
+    // `Request` shapes as well as the `node:http` stream ones.
+    const roots = ["../src/", "../convex/"].map((r) => fileURLToPath(new URL(r, import.meta.url)).replace(/\\/g, "/"));
+    const files = roots.flatMap((root) =>
+      readdirSync(root, { recursive: true, encoding: "utf8" })
+        .map((name) => `${root}${name.replace(/\\/g, "/")}`)
+        .filter((file) => file.endsWith(".ts") && !file.includes("/_generated/")),
+    );
+    const srcRoot = roots[0]!;
+    const convexRoot = roots[1]!;
     expect(files.length).toBeGreaterThan(20); // the scan walked a tree, not an empty dir
-    expect(files).toContain(`${srcRoot}live/roomServer.ts`); // …including the one legal reader
+    expect(files).toContain(`${srcRoot}live/roomServer.ts`); // the node:http reader
+    expect(files).toContain(`${srcRoot}core/requestBody.ts`); // the web Request reader
+    expect(files).toContain(`${convexRoot}http.ts`); // and the router the walk used to miss
+
+    // One legal reader per stream type; both take their cap from
+    // src/core/requestBody.ts, so neither can drift from the other.
+    const legal = [`${srcRoot}live/roomServer.ts`, `${srcRoot}core/requestBody.ts`];
+    // `req.json()` and friends consume a whole body with no cap at all — the
+    // exact shape the previous detector, which only knew `.on("data")` and
+    // `for await`, let through.
+    const READS_A_BODY =
+      /\b(?:req|request)\s*\.\s*(?:json|text|arrayBuffer|formData|blob|bytes)\s*\(|\.on\(\s*["']data["']|for await\s*\([^)]*\bof\s+(?:req|request)\b/;
     const readsRequestBodies = files
-      .filter((file) => file !== `${srcRoot}live/roomServer.ts`)
-      .filter((file) => /\.on\(\s*["']data["']|for await\s*\([^)]*\bof\s+req\b/.test(readFileSync(file, "utf8")));
+      .filter((file) => !legal.includes(file))
+      .filter((file) => READS_A_BODY.test(readFileSync(file, "utf8")));
     expect(readsRequestBodies).toEqual([]);
+  });
+
+  it("bounds a web Request the same way, at the same number", async () => {
+    // The Convex router gets a web `Request`, not a `node:http` stream, so it
+    // has its own reader — but not its own cap: this is the identical constant
+    // the Node reader imports. A body arriving as a stream carries no
+    // content-length to check, which is the case that matters.
+    const streamed = (bytes: number) =>
+      new Request("http://convex.test/live/rooms", {
+        method: "POST",
+        body: new ReadableStream<Uint8Array>({
+          start(c) {
+            c.enqueue(new Uint8Array(bytes));
+            c.close();
+          },
+        }),
+        // @ts-expect-error — required by undici for a stream body, not in the DOM lib
+        duplex: "half",
+      });
+
+    await expect(readJsonRequest(streamed(MAX_BODY_BYTES + 1))).rejects.toThrow(/body too large/);
+    await expect(readBoundedBody(streamed(MAX_BODY_BYTES))).resolves.toHaveLength(MAX_BODY_BYTES);
+    expect(MAX_BODY_BYTES).toBe(20 * 1024 * 1024);
+  });
+
+  it("refuses an oversized body on its declared length, before reading it", async () => {
+    // A caller that announces a gigabyte is refused without that gigabyte ever
+    // being read. The claim is not TRUSTED — the streamed size above is what
+    // actually decides — it is only allowed to make the refusal cheap.
+    const req = new Request("http://convex.test/compare/demo", {
+      method: "POST",
+      headers: { "content-length": String(MAX_BODY_BYTES + 1), "content-type": "application/json" },
+      body: "{}",
+    });
+    await expect(readJsonRequest(req)).rejects.toThrow(/body too large/);
+  });
+
+  it("hands the Convex router the same validators and the same cap, not copies", () => {
+    // `convex/http.ts` used to carry its own `clampTarget` (2..300) and
+    // `clampTurns` (3..320): the same numbers written a second time, which is
+    // how they drift. It now imports these, and identical function objects
+    // cannot disagree.
+    expect(convexShared.MAX_BODY_BYTES).toBe(MAX_BODY_BYTES);
+    expect(convexShared.readJsonRequest).toBe(readJsonRequest);
+    expect(convexShared.readBoundedBody).toBe(readBoundedBody);
+    expect(convexShared.validTurns).toBe(validTurns);
+    expect(convexShared.validCountTarget).toBe(validCountTarget);
+    expect(convexShared.MAX_RUN_TURNS).toBe(MAX_RUN_TURNS);
+    expect(convexShared.MAX_COUNT_TARGET).toBe(MAX_COUNT_TARGET);
+
+    // …and the router takes them from that seam rather than restating them.
+    const httpTs = readFileSync(fileURLToPath(new URL("../convex/http.ts", import.meta.url)), "utf8");
+    expect(httpTs).toMatch(/from "\.\/shared"/);
+    expect(httpTs).not.toMatch(/1024 \* 1024|\b320\b|\b300\b/);
+  });
+
+  it("still reads an ordinary web Request, and an empty one", async () => {
+    const post = (body?: string) => new Request("http://convex.test/compare/demo", { method: "POST", body });
+    await expect(readJsonRequest<{ target: number }>(post(JSON.stringify({ target: 12 })))).resolves.toEqual({
+      target: 12,
+    });
+    await expect(readJsonRequest(post())).resolves.toEqual({}); // no body — same as the Node reader
   });
 });
 

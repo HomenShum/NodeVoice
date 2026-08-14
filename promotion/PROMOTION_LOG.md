@@ -79,6 +79,7 @@ reproduction; a hunch is not a defect.
 | D6 | Critical | J1 | **A string crossed the boundary into a field typed `number`, and the room could then never complete.** `POST /compare/demo {"target":"abc"}` → HTTP 200 with `goodFinalState.task.target === "abc"` (a *string*, straight back out of the API). The reducer finishes a count with `current >= target`, and `1 >= "abc"` is never true, so the shared room counts forever: with `turns: 20` it reached `current: 20` against target `"abc"` and `completed: false`. `{"target":1e9}` was accepted verbatim too. `evidence/p0-boundary/before.json` → `P2_target_string`, `P2b_target_huge`, `P2c_completes_after_narrowing`. | **CLOSED — iteration 2** |
 | D7 | Major | J1 | **Provenance claimed a model wrote text the model did not write.** `runSideBySideComparison({source:"openai"})` computed provenance *before* the run, so when the provider failed after the left-hand side finished, the result still read `mode: "openai"`, `modelId: "gpt-5.4-mini"`, and `good: "openai · gpt-5.4-mini · live · real reducer & scheduler"` — while all three right-hand turns were the deterministic fallback. The authors' own comment two lines above says provenance must reflect what generated the text; the Ollama case was handled, the mid-run OpenAI failure was not. `evidence/p0-boundary/before.json` → `P3_provenance_after_midrun_failure`. | **CLOSED — iteration 2** |
 | D9 | Critical | J1 | **A refused request could hold a socket for five minutes — introduced by iteration 2's own fix.** The 20 MB cap stops KEEPING bytes past the cap but answered only on the client's `end` event, and a client that crosses the cap and then stops sending never sends one. Raw socket: `POST /live/rooms`, `content-length: 1073741824`, write 21 MB, then silence → **no response byte and no close for the full 20 000 ms observation window**; the socket clears only on Node's default `server.requestTimeout` (300 s) or when the client gives up. Memory stayed bounded (server RSS 81.1 MB after the probe against 90.1 idle) and `/health` still answered 200, so this is not D5 returning: it is a fast refusal turned into a held socket, which is a denial-of-service shape of its own. `scripts/prove-p0-boundary.ts` → `evidence/p0-boundary/drain-hang-before.json` → `P1d_over_cap_then_silent`. | **CLOSED — iteration 3** |
+| D10 | Critical | J1 | **The whole public API exists twice, and only one copy was bounded.** `convex/http.ts` is a second complete implementation of the same routes — `httpRouter` registers `POST /compare/demo`, `POST /nodeagents/run`, `POST /live/rooms` and `pathPrefix POST /live/rooms/` — and every one of them read its body with a bare `req.json()` (10 raw reads in the file at `git HEAD`, measured). So the 20 MB cap and the `turns`/`target` narrowing closed in iterations 2–3 protected the Node servers and **nothing** on the hosted deployment, which is the copy a permanent URL actually serves. It carried its own `clampTarget` (2..300) and `clampTurns` (3..320) — the caps written a second time, the drift waiting to happen. The guard that was supposed to make this impossible could not see it twice over: `tests/p0Boundary.test.ts` walked `src/` only, and its detector matched `.on("data")` / `for await` only, so a web-`Request` read was invisible even inside the tree it did walk (`OLD detector flags pre-fix convex/http.ts: false`, `NEW: true` — `promotion/evidence/p0-boundary/convex-bypass-guard.txt` §4). Found by an adversarial verifier, not by the suite. | **CLOSED — iteration 4 (code-level; no live Convex probe, see entry)** |
 | D8 | Major | J1 | **Every provider error was swallowed silently and the fallback was committed as a model turn.** `runVoiceStep({source:"openai"})` with `OPENAI_API_KEY` unset (so `openaiChat` throws before any network call) did **not** throw: it returned normally, committed the utterance "One" as a real `speechAct: "task_action"`, advanced `task.current` to 1, and logged nothing — `warningsLogged: 0`, nothing reported to the caller. `evidence/p0-boundary/before.json` → `P4_silent_provider_swallow`. | **CLOSED — iteration 2** |
 
 ### Verified working, so a later wave does not "fix" it twice
@@ -392,3 +393,104 @@ reproduction; a hunch is not a defect.
   something the cap introduced, and — stated plainly because it is the one
   sentence in this entry with no measurement under it — no probe here exercises
   it.
+
+### Iteration 4 — 2026-08-13
+
+- **Journey exercised:** J1 from the hostile side a third time, pointed at
+  iterations 2 and 3's own fixes. An adversarial verifier returned **REFUTED**
+  with `seam_actually_closed: false` for exactly one reason, and it was right.
+- **Observed (D10, reproduced before touching anything):** the public API exists
+  **twice**. `convex/http.ts` registers the same four POST routes the Node
+  servers serve — `/compare/demo`, `/nodeagents/run`, `/live/rooms`, and
+  `pathPrefix /live/rooms/` — and every one read its body with a bare
+  `req.json()`: **10 raw uncapped reads in that file at `git HEAD`**, measured
+  by regex over `git show HEAD:convex/http.ts`. The 20 MB cap and the
+  `turns`/`target` narrowing therefore protected `src/` and nothing on the
+  hosted deployment, which is the copy a permanent URL actually serves.
+  `convex/http.ts` also carried its own `clampTarget` (2..300) and `clampTurns`
+  (3..320) — the same caps, written down a second time.
+- **Root cause, one layer down — and it is the guard, not the router.**
+  Iteration 2 replaced a list of known callers with a walk of the tree,
+  precisely so the caller nobody remembered would be found. The walk then became
+  a list of its own: `readdirSync("../src/")`. `convex/` was never in it, so the
+  guard's green tick meant "no second reader **in `src/`**" while
+  `ARCHITECTURE.md` invariant 4 read it as "one reader with one cap in both
+  servers". The detector had a second, independent hole: it matched
+  `.on("data")` and `for await … of req` — the two `node:http` stream shapes —
+  so a web `Request` read was invisible to it even inside `src/`. Both had to be
+  wrong at once for this to survive, and both were. Measured:
+  `OLD detector flags the pre-fix convex/http.ts: false` / `NEW: true`
+  (`promotion/evidence/p0-boundary/convex-bypass-guard.txt` §4).
+- **Fixed** (at the seam every route routes through, not per route):
+  - `src/core/requestBody.ts` — **new**, and the only new file. Holds
+    `MAX_BODY_BYTES` (20 MB) plus `readBoundedBody` / `readJsonRequest` for a
+    web-standard `Request`. `src/live/roomServer.ts` now **imports** the cap
+    instead of declaring it, so there is ONE cap and it cannot drift. There are
+    two READERS, because there are two stream types and they refuse
+    differently: a socket must be drained for a bounded grace or the client sees
+    a reset instead of the 413 (measured in iteration 3), while a web stream is
+    cancelled. Invariant 5 already said what two runtimes must agree on lives in
+    `src/core/`; the cap now does.
+  - `convex/http.ts` — all four registrations read their body through one
+    `body<T>(req)` helper (plus `binaryBody(req)` for the single audio route
+    that takes bytes, which was an uncapped `req.arrayBuffer()`). Over the cap
+    it answers **413**; unparseable JSON now answers **400** instead of being
+    silently rounded to `{}` and carrying on. `clampTarget` / `clampTurns` are
+    **deleted** in favour of the shared `validCountTarget` / `validTurns`,
+    imported through `convex/shared.ts`, the seam this repo already uses for
+    everything two runtimes must agree on. Only the hosted demo's DEFAULTS
+    (100 / the target) stayed local — a default is not a cap.
+  - `tests/p0Boundary.test.ts` — the walk now covers `src/` **and** `convex/`
+    (minus `_generated`), and the detector knows the web shapes:
+    `req.json|text|arrayBuffer|formData|blob|bytes`. Two files are legal, one
+    per stream type, and both take the cap from `src/core/requestBody.ts`.
+- **Re-proved — and this is where the honesty line falls.**
+  - **Measured, executable, in this pass:**
+    - The guard fails on a bypass, twice, proved by adding one and watching it
+      name the file: a new `convex/bypassProbe.ts` reading `req.json()`, and the
+      shape that actually shipped — `req.json()` put back inside
+      `convex/http.ts`. Both failing runs, and the clean run after removing
+      them, are captured verbatim in
+      `promotion/evidence/p0-boundary/convex-bypass-guard.txt`.
+    - The web reader itself, against real `Request` objects: a 21 MB body
+      arriving as a `ReadableStream` **with no content-length** is refused
+      (`body too large`); exactly `MAX_BODY_BYTES` is accepted; a declared
+      oversize `content-length` is refused before the body is read; an ordinary
+      body parses and an absent body reads as `{}`, matching the Node reader.
+    - Identity, not paraphrase: `convex/shared.ts` re-exports the **same
+      function objects** (`validTurns`, `validCountTarget`, `readJsonRequest`,
+      `readBoundedBody`) and the same constants, asserted with `toBe`, plus a
+      source assertion that `convex/http.ts` does not restate `1024 * 1024`,
+      `320` or `300`.
+  - **Code-level only, NOT measured — stated plainly because this pass creates
+    no accounts, keys or deployments:** no request was ever issued to a running
+    Convex deployment. The claim "the hosted `/compare/demo` now answers 413 to
+    a 25 MB body" is **not** proved here the way its Node twin was in iteration
+    2 (`before`/`after` against a live server). What is proved is that every
+    Convex route reads through the bounded reader, and that the bounded reader
+    refuses. The residual assumption is that Convex's `httpAction` `Request`
+    exposes `.body` as a `ReadableStream` per the Fetch standard — its type is
+    the standard `Request`
+    (`node_modules/convex/dist/cjs-types/server/registration.d.ts:890`
+    `HttpActionBuilder`). If a runtime handed us a null `.body` for a request
+    that declared bytes, `readBoundedBody` **throws** rather than returning
+    `{}`, so that assumption failing is loud, not silent.
+- **Tests:** `npm test` → **9 files, 55 tests passed**, exit 0 (was 9/51).
+  `npm run doctor` → exit 0, `56 citations checked, 0 broken`; five tour/doc
+  citations broken by the two-line shift in `roomServer.ts` were re-pointed.
+  `npm run build` → exit 0, `dist/assets/index-DVfdxqPP.js` 384.23 kB.
+- **Prose corrected:** `docs/codebase/ARCHITECTURE.md` invariant 4 claimed one
+  reader with one cap "used by every POST route in both servers". That sentence
+  was false for as long as `convex/http.ts` existed. It now says one cap and two
+  readers, names both, names the Convex helper every route goes through, and
+  records how the guard missed it.
+- **Conditions newly PASS:** **none.** D10 is a hole in work already counted —
+  closing it restores the claim iterations 2–3 were credited for rather than
+  adding a new one. The scorecard should not move on a fix whose headline
+  behaviour was never observed running.
+- **Not done, on purpose:** D2, D3, D4 remain open. No Convex deployment was
+  created to probe the hosted routes live — that needs an account and a
+  deployment, so it is left as the one open verification on D10 rather than
+  faked. `POST /nodeagents/run` on Convex reads no body at all (it answers 501
+  immediately); it is left that way, since not reading a body is a stronger
+  bound than reading one carefully.

@@ -13,6 +13,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { generateAgentTurn, interpretHumanSteer, synthesizeSpeech, transcribeAudio, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
 import { ROUTER_MODELS } from "../core/routerModels.js";
+import { BODY_TOO_LARGE, MAX_BODY_BYTES } from "../core/requestBody.js";
 import {
   CAPABILITY_PROFILES,
   deriveCountTask,
@@ -135,7 +136,8 @@ const MAX_TRACES = 60;
 const MAX_AUDIO_PER_ROOM = 60;
 const MAX_SSE_PER_ROOM = 30;
 const ROOM_TTL_MS = 2 * 60 * 60 * 1000;
-const MAX_BODY_BYTES = 20 * 1024 * 1024;
+// MAX_BODY_BYTES is imported, not declared: the Convex router serves the same
+// public routes and must refuse at the same size (src/core/requestBody.ts).
 
 function evictIfNeeded() {
   const now = Date.now();
@@ -641,7 +643,7 @@ function readBody(req: IncomingMessage, maxBytes = MAX_BODY_BYTES): Promise<Buff
     let draining: NodeJS.Timeout | undefined;
     const refuse = () => {
       clearTimeout(draining);
-      reject(new Error("body too large"));
+      reject(new Error(BODY_TOO_LARGE));
     };
     req.on("data", (c: Buffer) => {
       size += c.length;
