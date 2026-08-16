@@ -1,0 +1,6 @@
+{
+  "required": [
+    "nodevoice-voice-room"
+  ],
+  "schemaVersion": "nodeagent.evaluation-plan/v1"
+}

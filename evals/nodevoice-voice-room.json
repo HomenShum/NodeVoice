@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "nodeagent.evaluation-binding/v1",
+  "id": "nodevoice-voice-room",
+  "status": "repo-local-deterministic",
+  "command": "npm run test:nodekit",
+  "sources": [
+    "tests/comparisonMvp.test.ts",
+    "tests/roomReducer.test.ts",
+    "tests/nodeAgentMvp.test.ts"
+  ]
+}

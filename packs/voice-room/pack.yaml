@@ -1,0 +1,54 @@
+# Logical ownership map for the existing NodeVoice room-state and NodeAgent
+# implementations. Runtime code stays at its current src paths.
+schemaVersion: nodeagent.pack/v1
+id: voice-room
+version: 0.1.0
+name: Voice Room Coordination
+description: >-
+  Reducer-authoritative voice turns and a four-stage local NodeAgent artifact
+  loop that advance shared work without transcript-driven acknowledgement loops.
+
+skill: ./SKILL.md
+
+artifacts:
+  - room-state
+  - classified-utterance
+  - context-bundle
+  - grounded-answer
+  - spreadsheet-delta
+  - notebook-memo
+
+tools:
+  - nodevoice.room-reducer
+  - nodevoice.voice-step
+  - nodevoice.local-nodeagent-loop
+
+jobs:
+  - nodevoice.deterministic-count-room
+  - nodevoice.nodeagent-artifact-loop
+
+validators:
+  - nodevoice.sequential-count
+  - nodevoice.single-floor-owner
+  - nodevoice.exact-target-completion
+  - nodevoice.artifact-order
+
+fixtures:
+  - ../../src/nodeagents/fixtures.ts
+
+examples:
+  - ../../src/nodeagents/runNodeAgentMvp.ts
+  - ../../src/voice/runVoiceMvp.ts
+
+evals:
+  - ../../evals/nodevoice-voice-room.json
+
+permissions:
+  migrationStatus: logical-owner
+  runtimeAuthority: repo-local-nodevoice
+  deterministicNetworkAccess: none
+  implementationSources:
+    - ../../src/nodeagents/nodeAgentLocalMvp.ts
+    - ../../src/core/roomReducer.ts
+    - ../../src/voice/voiceAgent.ts
+    - ../../src/compare/badGoodDemo.ts

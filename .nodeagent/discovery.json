@@ -1,0 +1,35 @@
+{
+  "files": [
+    {
+      "bytes": 287,
+      "digest": "b1b534e86c3786c7e97631d715eeb69b01307720dc31a1dd80813134dd605fae",
+      "path": "evals/nodevoice-voice-room.json"
+    },
+    {
+      "bytes": 1376,
+      "digest": "94b3f7082138a9c92d35a43717c755d3ba687e542566fe83c294191169abfcab",
+      "path": "packs/voice-room/pack.yaml"
+    },
+    {
+      "bytes": 1334,
+      "digest": "c6054e486674d34fe3d1ffcbf43d65c792b9ea4e374052365716ed553d960580",
+      "path": "packs/voice-room/SKILL.md"
+    },
+    {
+      "bytes": 1791,
+      "digest": "0a8ec416f7e9fee3e400de4716454c40f7550bb9e78876324b0225a07e7838a2",
+      "path": "src/nodeagents/fixtures.ts"
+    },
+    {
+      "bytes": 6629,
+      "digest": "00d7e03b0d39f0710a86b7df4882e02691ca7edf0e8a1ceaa39644a66631dbb9",
+      "path": "src/nodeagents/nodeAgentLocalMvp.ts"
+    },
+    {
+      "bytes": 1101,
+      "digest": "822f17f11d383d9c7f830fa530a52f0fb59b37f26cc3b9bea02eb1c381946c21",
+      "path": "src/nodeagents/runNodeAgentMvp.ts"
+    }
+  ],
+  "schemaVersion": "nodeagent.discovery/v1"
+}

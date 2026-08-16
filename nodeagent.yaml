@@ -1,0 +1,62 @@
+# NodeVoice brownfield application map. The existing TypeScript runtime remains
+# authoritative at src/nodeagents; this manifest does not relocate or replace it.
+schemaVersion: nodeagent.application/v1
+
+application:
+  id: nodevoice-voice-room
+  name: NodeVoice Voice Room
+  purpose: >-
+    Coordinate voice agents through authoritative room state and continue work
+    through the existing local NodeAgent artifact loop without acknowledgement
+    loops.
+
+authoring:
+  directory: ./src/nodeagents
+
+runtime:
+  engine: repo-local-nodevoice
+  profile: deterministic-no-key
+
+# The deterministic profile does not read this secret. This block records the
+# real optional hosted-model path required by the v1 application contract.
+provider:
+  adapter: repo-local-openai-ollama-router
+  model:
+    provider: openai
+    id: gpt-5.4-mini
+  secretRef: OPENAI_API_KEY
+
+backend:
+  adapter: process-local-room-reducer
+  config:
+    implementation: ./src/core/roomReducer.ts
+    persistence: in-memory
+
+orchestration:
+  mode: server-authoritative-room-state
+  entrypoint: ./src/nodeagents/runNodeAgentMvp.ts
+  implementationSources:
+    - ./src/nodeagents/nodeAgentLocalMvp.ts
+    - ./src/nodeagents/fixtures.ts
+    - ./src/core/roomReducer.ts
+    - ./src/voice/voiceAgent.ts
+    - ./src/compare/badGoodDemo.ts
+  optionalProviderSources:
+    - ./src/providers/ollama.ts
+    - ./src/providers/openai.ts
+
+packs:
+  - ./packs/voice-room/pack.yaml
+
+policies:
+  authority: room-reducer
+  acknowledgementScheduling: suppressed
+  externalProviders: opt-in
+
+evaluations:
+  required:
+    - nodevoice-voice-room
+
+contracts:
+  event: nodeagent.event/v1
+  trace: nodeagent.trace/v1
