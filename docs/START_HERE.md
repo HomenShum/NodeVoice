@@ -334,7 +334,7 @@ partial state is committed.
 ## Step 9 — The tests that prove this flow
 
 **File:** `tests/`
-**Command:** `npm test` — 8 files, 38 tests, no network, no keys
+**Command:** `npm test` — the full repository suite. Inspect exact-revision results and remaining limits in [HANDOFF.md](../HANDOFF.md) and [the current runtime map](nodekit-runtime-map.md).
 
 | What it proves | File |
 |---|---|

@@ -1,5 +1,20 @@
 # NodeVoice changelog
 
+## 2026-10-07 — Make setup and proof limits reachable
+
+Developers and coding agents can reach the existing `HANDOFF.md` from the README
+starting point beside the current runtime map. `docs/START_HERE.md` directs them
+to exact-revision evidence instead of presenting the old eight-file, 38-test
+count as the current full-suite result. The `npm test` command is unchanged.
+
+**Before:** main `6c64fa1b88b821e8a208d832b7693dfd72d5ae2d` had no README
+handoff link and retained the stale suite description in the walkthrough.
+**After:** this documentation-only candidate preserves the runtime, tests,
+dependencies, historical evidence and all other source text.
+**Validation:** pinned source and manifest readback only. Application execution,
+fresh CI, visual/SEO grading, providers and production verification are NOT_RUN
+in this documentation pass; no pipeline-performance improvement is claimed.
+
 ## 2026-10-07 — Reconcile the NodeKit handoff with the current runtime
 
 Developers and coding agents can follow the existing room reducer and local

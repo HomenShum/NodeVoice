@@ -49,6 +49,9 @@ entry point, read [docs/nodekit-runtime-map.md](docs/nodekit-runtime-map.md).
 Its archived compiler metadata is historical; the current runtime and full
 repository checks remain authoritative.
 
+For the local setup, recorded evidence and remaining UI, provider, microphone
+and hosted-recovery limits, read [HANDOFF.md](HANDOFF.md).
+
 ## Read the V0 -> V3 live proof
 
 The production comparison below was captured from four fresh live rooms, now available on
