@@ -44,6 +44,11 @@ in [docs/codebase/](docs/codebase): [STACK](docs/codebase/STACK.md),
 What was deleted and why is in
 [docs/SIMPLIFICATION_REPORT.md](docs/SIMPLIFICATION_REPORT.md).
 
+For the existing runtime's NodeKit application/pack map and focused no-key test
+entry point, read [docs/nodekit-runtime-map.md](docs/nodekit-runtime-map.md).
+Its archived compiler metadata is historical; the current runtime and full
+repository checks remain authoritative.
+
 ## Read the V0 -> V3 live proof
 
 The production comparison below was captured from four fresh live rooms, now available on

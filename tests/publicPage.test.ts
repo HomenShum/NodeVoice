@@ -40,7 +40,7 @@ describe("a search visitor reaches the real public lobby before JavaScript", () 
     }
   });
 
-  it("delivers real copy, initial disabled controls, metadata and directly linked styles", async () => {
+  it("delivers real copy, initial disabled controls, metadata and directly linked application styles", async () => {
     const response = await fetch(base);
     expect(response.status).toBe(200);
     const html = await response.text();
@@ -53,12 +53,17 @@ describe("a search visitor reaches the real public lobby before JavaScript", () 
     expect(html).toContain(`rel="canonical" href="${canonical}"`);
     expect(html).toContain(`property="og:url" content="${canonical}"`);
     expect(html).toMatch(/<meta name="description" content="[^"]{40,}"/);
-    const cssPath = html.match(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/)?.[1];
-    expect(cssPath).toBeTruthy();
-    const css = await fetch(new URL(cssPath!, base));
-    expect(css.status).toBe(200);
-    expect(css.headers.get("content-type")).toContain("text/css");
-    expect((await css.text()).length).toBeGreaterThan(1000);
+    // App CSS must be served by this preview; the first link can be an external font.
+    const styles = [...html.matchAll(/<link[^>]*rel="stylesheet"[^>]*href="([^"]+)"/g)]
+      .map(match => new URL(match[1]!, base))
+      .filter(url => url.origin === new URL(base).origin);
+    expect(styles.length).toBeGreaterThan(0);
+    for (const stylesheet of styles) {
+      const css = await fetch(stylesheet);
+      expect(css.status).toBe(200);
+      expect(css.headers.get("content-type")).toContain("text/css");
+      expect((await css.text()).length).toBeGreaterThan(1000);
+    }
   });
 
   it("serves crawler documents as text/XML and lists only the public canonical", async () => {
