@@ -90,6 +90,10 @@ node <NodeKit-checkout>/src/cli.mjs compile --repo-root .
 node <NodeKit-checkout>/src/cli.mjs compile --repo-root . --check
 ```
 
+The public-page scenario checks all directly linked same-origin stylesheets from
+the real built preview. It does not fetch third-party font CSS; external font
+availability still requires separate evidence. Product styling is unchanged.
+
 Current CI checks and compiler verification have different scope. Review
 exact-revision evidence separately; no matched pipeline improvement, fresh
 visual/SEO grade, provider behavior or production result is claimed here.
