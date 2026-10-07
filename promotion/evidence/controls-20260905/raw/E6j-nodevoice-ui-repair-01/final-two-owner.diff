@@ -1,0 +1,72 @@
+diff --git a/src/client/App.tsx b/src/client/App.tsx
+index 2bd5739..13efc6d 100644
+--- a/src/client/App.tsx
++++ b/src/client/App.tsx
+@@ -284,7 +284,7 @@ export default function App() {
+   return (
+     <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+       {/* ── Top bar ─────────────────────────────────────────────── */}
+-      <header className="z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/80 px-4 py-2.5 backdrop-blur">
++      <header className="z-20 flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/80 px-4 py-2.5 backdrop-blur">
+         <div className="flex shrink-0 items-center gap-2.5">
+           <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70 shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.8)]">
+             <Radio className="size-4.5 text-primary-foreground" strokeWidth={2.25} />
+@@ -295,7 +295,7 @@ export default function App() {
+           </div>
+         </div>
+ 
+-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
++        <div role="group" aria-label="Comparison controls" className="flex w-full min-w-0 flex-none flex-wrap items-center justify-start gap-2 pb-1 [&>*]:shrink-0 sm:w-auto sm:flex-1">
+           <Select
+             label="Voice"
+             value={voiceModelId}
+@@ -414,7 +414,7 @@ function NumberField({
+   max: number;
+ }) {
+   return (
+-    <label className="flex h-9 items-center gap-1.5 rounded-md border border-border bg-elevated/70 pl-2.5 pr-1 transition-colors hover:border-border-strong focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/40">
++    <label className="flex min-h-9 items-center gap-1.5 rounded-md border border-border bg-elevated/70 py-1 pl-2.5 pr-1 transition-colors hover:border-border-strong focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-ring/40">
+       <span className="select-none text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+         {label}
+       </span>
+@@ -424,7 +424,7 @@ function NumberField({
+         max={max}
+         value={value}
+         onChange={(e) => onChange(Number(e.target.value))}
+-        className="w-10 bg-transparent text-right text-xs font-semibold tabular-nums text-foreground outline-none"
++        className="w-[4.5em] bg-transparent text-right text-xs font-semibold leading-normal tabular-nums text-foreground outline-none"
+       />
+     </label>
+   );
+@@ -491,12 +491,12 @@ function CompareView({
+ 
+       {/* Progress */}
+       <div className="shrink-0 border-b border-border bg-card/50 px-4 py-2">
+-        <div className="flex items-center gap-3">
+-          <span className="flex shrink-0 items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
++        <div className="flex flex-wrap items-center gap-3">
++          <span className="flex max-w-full items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+             <Zap className="size-3 text-success" />
+             Shared-room progress
+           </span>
+-          <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-muted/60 ring-1 ring-inset ring-border">
++          <div className="relative h-2.5 min-w-16 flex-1 overflow-hidden rounded-full bg-muted/60 ring-1 ring-inset ring-border">
+             <div
+               className="h-full rounded-full bg-gradient-to-r from-success/70 to-success shadow-[0_0_12px_hsl(var(--success)/0.7)] transition-all duration-300 ease-out"
+               style={{ width: `${progressPct}%` }}
+diff --git a/src/client/live/LiveRoom.tsx b/src/client/live/LiveRoom.tsx
+index 87b2175..a4cb30a 100644
+--- a/src/client/live/LiveRoom.tsx
++++ b/src/client/live/LiveRoom.tsx
+@@ -534,9 +534,9 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
+   return (
+     <Shell locked>
+       {/* top bar */}
+-      <header className="z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/85 px-4 py-2.5 backdrop-blur">
++      <header className="z-20 flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/85 px-4 py-2.5 backdrop-blur">
+         <Brand tag={`room ${room.code ?? room.id} · ${connectedLabel}`} />
+-        <div className="ml-auto flex items-center gap-2">
++        <div className="ml-auto flex max-w-full flex-wrap items-center gap-2">
+           <span
+             className={cn(
+               "inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium",

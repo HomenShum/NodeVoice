@@ -1,0 +1,1000 @@
+{
+  "name": "NODEVOICE-ROOM-AND-COMPARISON-CONTROLS-01",
+  "startedAt": "2026-09-05T22:26:51.851Z",
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "current service; both providers unavailable",
+      "passed": true
+    },
+    {
+      "name": "shipped source deterministic",
+      "passed": true
+    },
+    {
+      "name": "shipped two count fields100",
+      "passed": true
+    },
+    {
+      "name": "320-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "360-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab0 complete box and native hit",
+      "passed": false
+    }
+  ],
+  "captures": [
+    {
+      "name": "1440-root-entry",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-before",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "320-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "320-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "320-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "320-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 7
+    },
+    {
+      "name": "360-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 7
+    },
+    {
+      "name": "360-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 7
+    },
+    {
+      "name": "360-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 7
+    },
+    {
+      "name": "failure-0-0",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    }
+  ],
+  "actions": [
+    {
+      "phase": "root-to-demo",
+      "action": "Native root demo link click"
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "320-rail",
+      "field": 0,
+      "point": {
+        "x": 235.09375,
+        "y": 67.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "320-rail",
+      "field": 1,
+      "point": {
+        "x": 235.1875,
+        "y": 67.5
+      }
+    }
+  ],
+  "events": [],
+  "requests": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/demo"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/api/models"
+    }
+  ],
+  "responses": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/demo",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/api/models",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    }
+  ],
+  "samples": [],
+  "blockedEgress": [],
+  "failures": [
+    {
+      "phase": "control-rail-interactions",
+      "error": "Error: 360-rail ShiftTab0 complete box and native hit",
+      "stack": "Error: 360-rail ShiftTab0 complete box and native hit\n    at check (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-ui-controls-after-03/observe.mjs:20:102)\n    at fit (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-ui-controls-after-03/observe.mjs:187:3)\n    at async railProof (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-ui-controls-after-03/observe.mjs:225:25)\n    at async file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-ui-controls-after-03/observe.mjs:311:5"
+    }
+  ],
+  "limits": [
+    "Local deterministic emulated Chromium; no physical device, native zoom, microphone, hosted Convex, provider, durable restart or full grade."
+  ],
+  "layout": [
+    {
+      "name": "320-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail last full control",
+      "rect": {
+        "x": 154.1875,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1",
+      "rect": {
+        "x": 186.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper",
+      "rect": {
+        "x": 161,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2",
+      "rect": {
+        "x": 133.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper",
+      "rect": {
+        "x": 79.09375,
+        "y": 54,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab3",
+      "rect": {
+        "x": 217.6875,
+        "y": 55,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab3 full wrapper",
+      "rect": {
+        "x": 154.1875,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab2",
+      "rect": {
+        "x": 87.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 33.09375,
+        "y": 54,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab1",
+      "rect": {
+        "x": 133.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 108,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab0",
+      "rect": {
+        "x": 68.28125,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail number0 including spinner",
+      "rect": {
+        "x": 186.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail number1 including spinner",
+      "rect": {
+        "x": 186.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail last full control",
+      "rect": {
+        "x": 194.1875,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab1",
+      "rect": {
+        "x": 226.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab1 full wrapper",
+      "rect": {
+        "x": 201,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab2",
+      "rect": {
+        "x": 153.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab2 full wrapper",
+      "rect": {
+        "x": 99.09375,
+        "y": 54,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab3",
+      "rect": {
+        "x": 257.6875,
+        "y": 55,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab3 full wrapper",
+      "rect": {
+        "x": 194.1875,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab2",
+      "rect": {
+        "x": 127.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 73.09375,
+        "y": 54,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab1",
+      "rect": {
+        "x": 153.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 128,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab0",
+      "rect": {
+        "x": -17.71875,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 40
+      },
+      "centerHit": true
+    }
+  ],
+  "browserVersion": "149.0.7827.55",
+  "finishedAt": "2026-09-05T22:26:56.407Z",
+  "closedOwnedBrowser": true
+}

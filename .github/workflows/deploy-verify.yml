@@ -1,0 +1,41 @@
+name: Deploy verify
+
+# Vercel's GitHub integration posts deployment_status events with no secrets needed to read
+# them. This repo's own deployments (checked via `gh api repos/HomenShum/NodeVoice/deployments`)
+# show the nodevoice project's production environment as "Production – nodevoice" (a sibling
+# Vercel project "local-collab-mvp" also deploys from this repo and must not gate this check).
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  verify-live-identity:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment_status.environment, 'Production') &&
+      contains(github.event.deployment_status.environment, 'nodevoice')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Poll the live meta tag for the deployed commit sha
+        env:
+          EXPECTED_SHA: ${{ github.event.deployment.sha }}
+          LIVE_URL: https://nodevoice.vercel.app/
+        run: |
+          set -euo pipefail
+          deadline=$((SECONDS + 180))
+          found=""
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            body="$(curl -fsS --max-time 10 "$LIVE_URL" || true)"
+            found="$(printf '%s' "$body" | grep -oE '<meta name="nodevoice-build-sha" content="[0-9a-f]{40}"' | grep -oE '[0-9a-f]{40}' || true)"
+            if [ "$found" = "$EXPECTED_SHA" ]; then
+              echo "Live meta matches deployed commit: $found"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::nodevoice-build-sha never matched the deployed commit ($EXPECTED_SHA); last seen: '${found:-<none>}'" >&2
+          exit 1

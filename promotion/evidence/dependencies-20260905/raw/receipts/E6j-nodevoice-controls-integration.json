@@ -1,0 +1,17 @@
+{
+  "status": "NORMAL_REMOTE_MERGE_EXACT_REVIEWED_TREE",
+  "at": "2026-09-05T23:20:50.817869+00:00",
+  "source": "1a1593661f393cfdcd6dea79bf3a28e7d38248cd",
+  "merge": "6544eb482787099280825eb932f1c5bb7a99f01f",
+  "tree": "a2e1f0405634d985195548f03a7b8b19e45585ae",
+  "parents": [
+    "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+    "1a1593661f393cfdcd6dea79bf3a28e7d38248cd"
+  ],
+  "mergedAt": "2026-09-05T23:20:48Z",
+  "url": "https://github.com/HomenShum/NodeVoice/pull/6",
+  "localCheckoutChanged": false,
+  "sourceBranchDeleted": false,
+  "postmergeChecks": "PENDING",
+  "publicContent": "PENDING"
+}

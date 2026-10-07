@@ -1,0 +1,17 @@
+# NodeVoice external handoff/evidence judgment
+
+**Builder — external draft approved within scope; actual transfer and shared checks remain pending.** A new developer can follow the listed keyless first-use steps and inspect the selected native evidence without mistaking it for hosted or full-product acceptance.
+
+**Re your request:** make each repository usable for developer/user handoff — this checks the instructions, exact evidence copies, selected responsive coverage and publication privacy.
+
+- Proposal`a67e6448...` stays unchanged.367packet files/360exactrawcopies;366manifestpayloads verified. All1075operator artifacts are mapped:352copied,723explicitlylocal-only;8additional historical copies are exact. Manifest`49495d95fcc0716bfb276e58fb41f621ffaff5aeb6236eaa6efa715bb78de54d`.
+- All94current DOM/font records and54complete PNG/DOM/font sets are present. Required49sets cover all seven normal control keyboard directions/numeric100/Invite-focus/completion cells and390/1440enlarged/reduced cells.40otherPNGs andallfullHTML are explicitly omitted, with original hashes retained. No full94PNG/HTML portability claim.
+- `npm ci`, doctor/proof/build then deterministic start match actualpackage/server entrypoints. Default8787, `/`lobby, `/demo`comparison, healthproviderflagsfalse and unspecifiedlistener are accurately described. CLI target12/nine turns is distinct from actual native100. Node/Vite engine and narrower existing sharedCI scope match source.
+- Standard-library verifier passes from an unrelated directory; optionalsource-root passes exact177historical sources. It verifies rawbytes, not Gitfilter/index equality, provenance or a browser replay.23active links resolve; historical scripts/docs are inert. Existingcitationcollector is unchanged and does not collect these newactiveHANDOFF/promotion README paths.
+- Raw runtime/name inventories stay operator-local. The derivative matches15explicitlywhitelisted fields and binds itsoriginal hash. Finite content scan finds no matching secret patterns; this is not comprehensive security certification. Original artifacts remain untouched.
+
+No blocking draft finding. Update only the accepted-source/actual-transfer status prose and bind the next actual transferred files separately; the original proposal truthfully says external/pending. Currentsource judgment is approved under`3a87b99f...`, with whole panes, optionellipsis, short-height/mobile reading, nativezoom/device/audio/provider/durable/fullgrades and3highdependencyholds retained.
+
+Evidence: [draft checks](E6j-nodevoice-external-publication-independent-01/draft-checks.json), [capture coverage](E6j-nodevoice-external-publication-independent-01/native-capture-coverage.json), [entrypoint review](E6j-nodevoice-external-publication-independent-01/entrypoint-contract-review.json), [manifest](E6j-nodevoice-external-publication-independent-01/manifest.json), SHA256`3936cdf5aa0c2eba685c250802ace528ca1c9ed46abf458ed93f30342cd4ed4a`. A preliminary metadata reader assumed anobject for a list-shaped copy map; corrected to its actualschema, with no artifact mutation.
+
+External draft guard closed. No source/proposal edits, runtime replay, install, tests, staging, commit, push or deployment by this reviewer.

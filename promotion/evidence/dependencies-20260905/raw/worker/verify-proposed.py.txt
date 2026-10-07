@@ -1,0 +1,59 @@
+from pathlib import Path
+import hashlib, json, os, subprocess, time
+
+S = Path(__file__).resolve().parent
+C, E = S / 'consumer', S / 'evidence'
+P = Path('C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904')
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+def write(path, value):
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n', encoding='utf-8', newline='\n')
+
+source = json.loads((E / 'source-origin.json').read_text(encoding='utf-8'))
+lock_sha = '65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b'
+def guard():
+    failures = []
+    for row in source['source']:
+        expected = lock_sha if row['path'] == 'package-lock.json' else row['sha256']
+        if sha((C / row['path']).read_bytes()) != expected:
+            failures.append(row['path'])
+    assert not failures, failures
+    assert (C / 'package.json').read_bytes() == (E / 'original-package.json.txt').read_bytes()
+    assert not [f for f in C.iterdir() if f.name.startswith('.env') and f.name != '.env.example']
+
+names = json.loads((P / 'E6j-nodevoice-current-recon-01/public-source-environment-names.json').read_text(encoding='utf-8'))['names']
+prefixes = ('VITE_', 'OPENAI_', 'OPENROUTER_', 'ANTHROPIC_', 'GEMINI_', 'GOOGLE_', 'ELEVENLABS_', 'OLLAMA_', 'CONVEX_', 'NODEVOICE_', 'NODEAGENT_', 'NODEBENCH_', 'HF_', 'HUGGINGFACE_', 'AZURE_', 'AWS_', 'DOTENV_', 'TSX_', 'LIVEKIT_', 'PLAYWRIGHT_', 'BROWSERSLIST_')
+env = os.environ.copy()
+for key in list(env):
+    if key in names or key.upper().startswith(prefixes) or key.upper() in ['NODE_OPTIONS', 'NODE_PATH', 'NODE_EXTRA_CA_CERTS', 'NODE_TLS_REJECT_UNAUTHORIZED', 'HTTP_PROXY', 'HTTPS_PROXY', 'ALL_PROXY', 'NO_PROXY', 'CI', 'FORCE_COLOR', 'API_KEY', 'BASE_URL', 'API_BASE_URL', 'API_ENDPOINT', 'ENDPOINT']:
+        del env[key]
+env.update(SOURCE='deterministic', USE_OLLAMA='0')
+commands = []
+node = 'C:/nvm4w/nodejs/node.exe'
+npm = [node, 'C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js']
+def run(label, args, budget=180, audit=False):
+    guard()
+    stdout = E / (label + ('.stdout.json' if audit else '.log'))
+    stderr = E / (label + '.stderr.txt')
+    assert not stdout.exists() and not stderr.exists()
+    started = time.monotonic()
+    with stdout.open('wb') as out, stderr.open('wb') as err:
+        try:
+            result = subprocess.run(args, cwd=C, env=env, stdout=out, stderr=err, timeout=budget)
+            code, expired = result.returncode, False
+        except subprocess.TimeoutExpired:
+            code, expired = None, True
+    row = {'label': label, 'argv': args, 'exitCode': code, 'timedOut': expired, 'budgetSeconds': budget, 'seconds': round(time.monotonic() - started, 3), 'stdoutSha256': sha(stdout.read_bytes()), 'stderrSha256': sha(stderr.read_bytes())}
+    commands.append(row)
+    write(E / 'proposed-commands.json', commands)
+    guard()
+    print(json.dumps(row), flush=True)
+    assert not expired and (audit or code == 0), label
+
+run('proposed-npm-ci', npm + ['ci'])
+run('proposed-npm-audit', npm + ['audit', '--json'], audit=True)
+run('proposed-npm-audit-omit-dev', npm + ['audit', '--omit=dev', '--json'], audit=True)
+run('proposed-canaries', ['python', '-X', 'utf8', str(S / 'canaries/run.py'), 'proposed'], 120)
+run('proposed-doctor', npm + ['run', 'doctor'])
+run('proposed-proof', npm + ['run', 'proof'])
+run('proposed-build', npm + ['run', 'build'])
+write(E / 'proposed-command-finish.json', {'status': 'COMMANDS_COMPLETED', 'commands': commands, 'sourceCount': len(source['source']), 'sourceGuard': 'All 176 non-lock source files unchanged; package.json byte-exact; seven-row proposed lock unchanged.', 'environment': 'Public-source names plus provider and endpoint prefixes scrubbed internally. No names or values persisted. SOURCE deterministic and USE_OLLAMA 0.', 'note': 'Canary observations and audit severities require separate evaluation; command completion is not the final acceptance verdict.'})

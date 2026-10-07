@@ -1,0 +1,10 @@
+[
+  "",
+  "node_modules/caniuse-lite",
+  "node_modules/browserslist",
+  "node_modules/postcss",
+  "node_modules/node-releases",
+  "node_modules/baseline-browser-mapping",
+  "node_modules/nanoid",
+  "node_modules/electron-to-chromium"
+]

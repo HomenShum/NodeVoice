@@ -1,0 +1,41 @@
+[
+  {
+    "script": "doctor",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "doctor"
+    ],
+    "exitCode": 0,
+    "seconds": 5.515,
+    "log": "doctor-04.log",
+    "sha256": "fcc0480e6c6e03d1d4a4d8728b3241e1515f3bfa4e38e4c94e66b2856c8274db"
+  },
+  {
+    "script": "proof",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "proof"
+    ],
+    "exitCode": 0,
+    "seconds": 4.485,
+    "log": "proof-04.log",
+    "sha256": "263d795db5f37a31135ed4fc166e8d16901c840777d15e7dcf18e9ea2eb68bc5"
+  },
+  {
+    "script": "build",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 1.047,
+    "log": "build-04.log",
+    "sha256": "1e64e8773b5daed627b35dd9292b1ec308ed228091ea22a34b8837d4264a28ba"
+  }
+]

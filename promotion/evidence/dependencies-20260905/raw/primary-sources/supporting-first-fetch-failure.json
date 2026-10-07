@@ -1,0 +1,5 @@
+{
+  "error": "urllib.error.HTTPError: HTTP Error406: Not Acceptable",
+  "attempt": "Supporting metadata batch with Accept application/vnd.npm.install-v1+json; batch exception prevented individual response receipt. Any successful raw files remain.",
+  "correction": "Use application/json and retain every individual response/failure."
+}

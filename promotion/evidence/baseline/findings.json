@@ -1,0 +1,174 @@
+{
+  "base": "http://localhost:8791",
+  "startedAt": "2026-08-13T09:10:38.585Z",
+  "steps": [
+    {
+      "k": "lobby.title",
+      "v": "NodeVoice — shared-state voice agent console"
+    },
+    {
+      "k": "lobby.h2",
+      "v": "Start a live room. Voice agents actually talk it out."
+    },
+    {
+      "k": "lobby.createRoomVisible",
+      "v": true
+    },
+    {
+      "k": "overflow@1280(lobby)",
+      "v": "scrollWidth=1280 clientWidth=1280 offenders=0"
+    },
+    {
+      "k": "overflow@768(lobby)",
+      "v": "scrollWidth=768 clientWidth=768 offenders=0"
+    },
+    {
+      "k": "overflow@390(lobby)",
+      "v": "scrollWidth=390 clientWidth=390 offenders=0"
+    },
+    {
+      "k": "keyboard.tabOrder",
+      "v": "12 stops"
+    },
+    {
+      "k": "a11y.audit",
+      "v": {
+        "imgsNoAlt": 0,
+        "btnNoName": 0,
+        "inputsNoLabel": [
+          "textarea[What should the agents work on together?]",
+          "input[e.g. x7k2mp]"
+        ],
+        "h1": [
+          "NodeVoice · Live"
+        ],
+        "lang": "en"
+      }
+    },
+    {
+      "k": "demoLink.visible",
+      "v": true
+    },
+    {
+      "k": "demo.url",
+      "v": "http://localhost:8791/demo"
+    },
+    {
+      "k": "overflow@390(demo)",
+      "v": "scrollWidth=390 clientWidth=390 offenders=0"
+    },
+    {
+      "k": "demo.runningLabel",
+      "v": "?"
+    },
+    {
+      "k": "demo.runMs",
+      "v": 31143
+    },
+    {
+      "k": "room.url",
+      "v": "http://localhost:8791/"
+    },
+    {
+      "k": "room.stepButtonVisible",
+      "v": false
+    },
+    {
+      "k": "overflow@390(room)",
+      "v": "scrollWidth=390 clientWidth=390 offenders=2"
+    }
+  ],
+  "console": [],
+  "failedRequests": [],
+  "overflow": [
+    {
+      "label": "lobby",
+      "w": 1280,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "offenders": [],
+      "overflows": false
+    },
+    {
+      "label": "lobby",
+      "w": 768,
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "offenders": [],
+      "overflows": false
+    },
+    {
+      "label": "lobby",
+      "w": 390,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "offenders": [],
+      "overflows": false
+    },
+    {
+      "label": "demo",
+      "w": 390,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "offenders": [],
+      "overflows": false
+    },
+    {
+      "label": "room",
+      "w": 390,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "offenders": [
+        {
+          "tag": "div",
+          "cls": "ml-auto flex items-center gap-2",
+          "right": 399,
+          "left": 141
+        },
+        {
+          "tag": "button",
+          "cls": "relative inline-flex items-center justify-center gap-1.5 whitespace-no",
+          "right": 399,
+          "left": 326
+        }
+      ],
+      "overflows": false
+    }
+  ],
+  "a11y": {
+    "tabOrder": [
+      "textarea:Plan a great Saturday for tw|outline=none/1px|ring=true",
+      "button:V0raw transcript|outline=auto/3px|ring=false",
+      "button:V1shared reducer|outline=auto/3px|ring=true",
+      "button:V2intent router|outline=auto/3px|ring=false",
+      "button:V3goal graph|outline=auto/3px|ring=false",
+      "button:|outline=none/3px|ring=true",
+      "input:Starting agent count|outline=none/1px|ring=true",
+      "button:|outline=none/3px|ring=true",
+      "button:Public roomListed in the lob|outline=auto/1px|ring=false",
+      "button:Create room|outline=none/3px|ring=true",
+      "a:or watch the bad-vs-good dem|outline=auto/1px|ring=false",
+      "input:|outline=none/1px|ring=true"
+    ],
+    "audit": {
+      "imgsNoAlt": 0,
+      "btnNoName": 0,
+      "inputsNoLabel": [
+        "textarea[What should the agents work on together?]",
+        "input[e.g. x7k2mp]"
+      ],
+      "h1": [
+        "NodeVoice · Live"
+      ],
+      "lang": "en"
+    }
+  },
+  "timings": {
+    "lobbyLoadMs": 993,
+    "compareRunMs": 31143,
+    "createRoomMs": 3575
+  },
+  "demoBodyExcerpt": "NodeVoice\n\nshared-state agent console\n\nVOICE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nNODE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nLATEST · Gemma 4 12B — latest laptop/workstation NodeAgent default\nLATEST · Gemma 4 26B-A4B — MoE local reasoning/agent model\nLATEST · Gemma 4 31B — dense local/lab reasoning model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nLATEST · Ministral 3 14B — stronger edge NodeAgent/vision model\nLATEST · Qwen3.6 27B — latest Qwen agentic coding/thinking model\nLATEST · Qwen3.6 35B-A3B — MoE coding/reasoning variant\nLATEST · Nemotron-Cascade-2 30B-A3B — open MoE reasoning/agent model\nLATEST · Mistral Medium 3.5 128B — latest local/lab flagship\nLATEST · GLM-4.7-Flash 30B-A3B — latest lightweight Z.ai agent model\nLATEST · GLM-5 — huge open-weight agentic engineering model\nLATEST · GLM-5.1 — flagship agentic engineering model\nLATEST · Mistral Small 3.2 24B — repetition/function-calling fix\nLATEST · Magistral 24B — Mistral reasoning reviewer/planner\nLATEST · gpt-oss 20B — open-weight local reasoning/agent model\nLATEST · gpt-oss 120B — larger open-weight local/lab reasoning model\nLATEST · Qwen3-Coder-Next — latest efficient coding-agent model\nLATEST · Qwen3-Coder 30B — practical agentic code model\nLATEST · Qwen3-Coder 480B — most agentic Qwen code model, lab only\nLATEST · Devstral Small 2 24B — current software-engineering agent\nLATEST · Devstral 2 123B — larger codebase agent, lab only\nLATEST · DeepSeek-R1 0528 8B — practical distilled reasoner\nPhi-4 Mini Reasoning — tiny logic-intensive model\nPhi-4 Reasoning Vision 15B — compact multimodal UI/doc reasoner\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nOLMo 3.1 32B Instruct — open science model\nLlama 4 ",
+  "roomBodyExcerpt": "NodeVoice · Live\n\nroom 066607 · waiting for another device\n\nlive\nyou: Ada\nState\nInvite\nGOAL\nPlan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.\nopenai · gpt-5.4-mini · V1\nturn 0\nAGENT VERSIONS\nactive V1\nSwitches the live room behavior for every joined device.\nAgent\nV0\nV0 Failure\nraw transcript\n\ncoord: No room counter\n\nsteer: Steer stays transcript-only\n\nV1\nV1 Room State\nshared reducer\n\ncoord: Floor + count state\n\nsteer: Goal changes are durable\n\nV2\nV2 Work Room\nintent router\n\ncoord: Reducer + typed intent\n\nsteer: LLM interprets interrupts\n\nV3\nV3 Agent OS\ngoal graph\n\ncoord: Goals + workers + artifacts\n\nsteer: Adds workstreams by default\n\nLIVE ROOMSTATE\nversion\nV1\nagents\n2\nfloor\nAda\nact\ntask_action\nturn\n0\nack\nsuppressed\nrisk\nfalse\n\nScan from your phone to join another agent\n\nDevices join the same room. Keep them near each other to hear the conversation.\n\nNo camera? Open the site and type code 066607 under “Join a room”.\n\nShare invite\nhttp://localhost:8791/?room=066607\nRoom created. Share code 066607 or scan the QR to add another device.\nRoom created. Ada joined on this device.\nStart\nHold to talk",
+  "finishedAt": "2026-08-13T09:11:26.850Z"
+}

@@ -1,0 +1,429 @@
+{
+  "capturedAt": "2026-08-13T19:02:30.307Z",
+  "baseUrl": "http://127.0.0.1:4506",
+  "defect": "D1 — shared-room demo stalled at 99/100 and could never reach 100",
+  "api": {
+    "status": 200,
+    "lastGoodStep": {
+      "turn": 100,
+      "actorId": "voice-a",
+      "text": "One hundred",
+      "speechAct": "task_action",
+      "current": 100,
+      "next": 100,
+      "loopRisk": false,
+      "roomStateSummary": "committed current=100; next=100; scheduled=none"
+    },
+    "goodFinalCurrent": 100,
+    "goodFinalCompleted": true
+  },
+  "rendered": {
+    "finalProgress": 100,
+    "reached100": true,
+    "firstHundredMs": 131422,
+    "progressSamples": [
+      {
+        "current": 1,
+        "atMs": 107
+      },
+      {
+        "current": 2,
+        "atMs": 2144
+      },
+      {
+        "current": 3,
+        "atMs": 3166
+      },
+      {
+        "current": 4,
+        "atMs": 4195
+      },
+      {
+        "current": 5,
+        "atMs": 5199
+      },
+      {
+        "current": 6,
+        "atMs": 6227
+      },
+      {
+        "current": 7,
+        "atMs": 7234
+      },
+      {
+        "current": 8,
+        "atMs": 9276
+      },
+      {
+        "current": 9,
+        "atMs": 10297
+      },
+      {
+        "current": 10,
+        "atMs": 11331
+      },
+      {
+        "current": 11,
+        "atMs": 12357
+      },
+      {
+        "current": 12,
+        "atMs": 13386
+      },
+      {
+        "current": 13,
+        "atMs": 14404
+      },
+      {
+        "current": 14,
+        "atMs": 15431
+      },
+      {
+        "current": 15,
+        "atMs": 16443
+      },
+      {
+        "current": 16,
+        "atMs": 18466
+      },
+      {
+        "current": 17,
+        "atMs": 19516
+      },
+      {
+        "current": 18,
+        "atMs": 20535
+      },
+      {
+        "current": 19,
+        "atMs": 21559
+      },
+      {
+        "current": 20,
+        "atMs": 23607
+      },
+      {
+        "current": 21,
+        "atMs": 24645
+      },
+      {
+        "current": 22,
+        "atMs": 25671
+      },
+      {
+        "current": 23,
+        "atMs": 26682
+      },
+      {
+        "current": 24,
+        "atMs": 28711
+      },
+      {
+        "current": 25,
+        "atMs": 29722
+      },
+      {
+        "current": 26,
+        "atMs": 30726
+      },
+      {
+        "current": 27,
+        "atMs": 32754
+      },
+      {
+        "current": 28,
+        "atMs": 33769
+      },
+      {
+        "current": 29,
+        "atMs": 35789
+      },
+      {
+        "current": 30,
+        "atMs": 36804
+      },
+      {
+        "current": 31,
+        "atMs": 37824
+      },
+      {
+        "current": 32,
+        "atMs": 38845
+      },
+      {
+        "current": 33,
+        "atMs": 39887
+      },
+      {
+        "current": 34,
+        "atMs": 41910
+      },
+      {
+        "current": 35,
+        "atMs": 42930
+      },
+      {
+        "current": 36,
+        "atMs": 43942
+      },
+      {
+        "current": 37,
+        "atMs": 45977
+      },
+      {
+        "current": 38,
+        "atMs": 46999
+      },
+      {
+        "current": 39,
+        "atMs": 48033
+      },
+      {
+        "current": 40,
+        "atMs": 50061
+      },
+      {
+        "current": 41,
+        "atMs": 51071
+      },
+      {
+        "current": 42,
+        "atMs": 52080
+      },
+      {
+        "current": 43,
+        "atMs": 54106
+      },
+      {
+        "current": 44,
+        "atMs": 55116
+      },
+      {
+        "current": 45,
+        "atMs": 56128
+      },
+      {
+        "current": 46,
+        "atMs": 58167
+      },
+      {
+        "current": 47,
+        "atMs": 59190
+      },
+      {
+        "current": 48,
+        "atMs": 61244
+      },
+      {
+        "current": 49,
+        "atMs": 62257
+      },
+      {
+        "current": 50,
+        "atMs": 63270
+      },
+      {
+        "current": 51,
+        "atMs": 64280
+      },
+      {
+        "current": 52,
+        "atMs": 66320
+      },
+      {
+        "current": 53,
+        "atMs": 67340
+      },
+      {
+        "current": 54,
+        "atMs": 68347
+      },
+      {
+        "current": 55,
+        "atMs": 70367
+      },
+      {
+        "current": 56,
+        "atMs": 71380
+      },
+      {
+        "current": 57,
+        "atMs": 73423
+      },
+      {
+        "current": 58,
+        "atMs": 74443
+      },
+      {
+        "current": 59,
+        "atMs": 75457
+      },
+      {
+        "current": 60,
+        "atMs": 77493
+      },
+      {
+        "current": 61,
+        "atMs": 78511
+      },
+      {
+        "current": 62,
+        "atMs": 79561
+      },
+      {
+        "current": 63,
+        "atMs": 81591
+      },
+      {
+        "current": 64,
+        "atMs": 82596
+      },
+      {
+        "current": 65,
+        "atMs": 84624
+      },
+      {
+        "current": 66,
+        "atMs": 85643
+      },
+      {
+        "current": 67,
+        "atMs": 87685
+      },
+      {
+        "current": 68,
+        "atMs": 88703
+      },
+      {
+        "current": 69,
+        "atMs": 89717
+      },
+      {
+        "current": 70,
+        "atMs": 91752
+      },
+      {
+        "current": 71,
+        "atMs": 92772
+      },
+      {
+        "current": 72,
+        "atMs": 93791
+      },
+      {
+        "current": 73,
+        "atMs": 95827
+      },
+      {
+        "current": 74,
+        "atMs": 96845
+      },
+      {
+        "current": 75,
+        "atMs": 98877
+      },
+      {
+        "current": 76,
+        "atMs": 99896
+      },
+      {
+        "current": 77,
+        "atMs": 101939
+      },
+      {
+        "current": 78,
+        "atMs": 102959
+      },
+      {
+        "current": 79,
+        "atMs": 104992
+      },
+      {
+        "current": 80,
+        "atMs": 106018
+      },
+      {
+        "current": 81,
+        "atMs": 107031
+      },
+      {
+        "current": 82,
+        "atMs": 108049
+      },
+      {
+        "current": 83,
+        "atMs": 109064
+      },
+      {
+        "current": 84,
+        "atMs": 111095
+      },
+      {
+        "current": 85,
+        "atMs": 112103
+      },
+      {
+        "current": 86,
+        "atMs": 113118
+      },
+      {
+        "current": 87,
+        "atMs": 114162
+      },
+      {
+        "current": 88,
+        "atMs": 116199
+      },
+      {
+        "current": 89,
+        "atMs": 117206
+      },
+      {
+        "current": 90,
+        "atMs": 118225
+      },
+      {
+        "current": 91,
+        "atMs": 119243
+      },
+      {
+        "current": 92,
+        "atMs": 121269
+      },
+      {
+        "current": 93,
+        "atMs": 122286
+      },
+      {
+        "current": 94,
+        "atMs": 123294
+      },
+      {
+        "current": 95,
+        "atMs": 125330
+      },
+      {
+        "current": 96,
+        "atMs": 126348
+      },
+      {
+        "current": 97,
+        "atMs": 127366
+      },
+      {
+        "current": 98,
+        "atMs": 129386
+      },
+      {
+        "current": 99,
+        "atMs": 130411
+      },
+      {
+        "current": 100,
+        "atMs": 131422
+      }
+    ]
+  },
+  "consoleErrors": [],
+  "failedRequests": []
+}

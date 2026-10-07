@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Voice model",
+    "value": "gemma4_e2b",
+    "type": "select-one"
+  },
+  {
+    "title": "NodeAgent model",
+    "value": "gemma4_12b",
+    "type": "select-one"
+  },
+  {
+    "title": "",
+    "value": "100",
+    "type": "number"
+  },
+  {
+    "title": "",
+    "value": "100",
+    "type": "number"
+  },
+  {
+    "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+    "value": "deterministic",
+    "type": "select-one"
+  }
+]

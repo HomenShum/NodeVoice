@@ -1,0 +1,293 @@
+{
+  "url": "http://127.0.0.1:4993/demo",
+  "width": 1920,
+  "height": 1080,
+  "body": "NodeVoice\n\nshared-state agent console\n\nVOICE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nNODE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nLATEST · Gemma 4 12B — latest laptop/workstation NodeAgent default\nLATEST · Gemma 4 26B-A4B — MoE local reasoning/agent model\nLATEST · Gemma 4 31B — dense local/lab reasoning model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nLATEST · Ministral 3 14B — stronger edge NodeAgent/vision model\nLATEST · Qwen3.6 27B — latest Qwen agentic coding/thinking model\nLATEST · Qwen3.6 35B-A3B — MoE coding/reasoning variant\nLATEST · Nemotron-Cascade-2 30B-A3B — open MoE reasoning/agent model\nLATEST · Mistral Medium 3.5 128B — latest local/lab flagship\nLATEST · GLM-4.7-Flash 30B-A3B — latest lightweight Z.ai agent model\nLATEST · GLM-5 — huge open-weight agentic engineering model\nLATEST · GLM-5.1 — flagship agentic engineering model\nLATEST · Mistral Small 3.2 24B — repetition/function-calling fix\nLATEST · Magistral 24B — Mistral reasoning reviewer/planner\nLATEST · gpt-oss 20B — open-weight local reasoning/agent model\nLATEST · gpt-oss 120B — larger open-weight local/lab reasoning model\nLATEST · Qwen3-Coder-Next — latest efficient coding-agent model\nLATEST · Qwen3-Coder 30B — practical agentic code model\nLATEST · Qwen3-Coder 480B — most agentic Qwen code model, lab only\nLATEST · Devstral Small 2 24B — current software-engineering agent\nLATEST · Devstral 2 123B — larger codebase agent, lab only\nLATEST · DeepSeek-R1 0528 8B — practical distilled reasoner\nPhi-4 Mini Reasoning — tiny logic-intensive model\nPhi-4 Reasoning Vision 15B — compact multimodal UI/doc reasoner\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nOLMo 3.1 32B Instruct — open science model\nLlama 4 Scout — large multimodal MoE, not newest but current Meta line\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nSTABLE · Qwen3 30B-A3B — stable MoE agent fallback\nSTABLE · Qwen2.5-Coder 7B — stable practical code model\nSTABLE · Qwen2.5-Coder 32B — stable stronger code model\nN\nTURNS\nSOURCE\nSim (scripted)\nOllama (local)\nOpenAI (live)\nIdle · listening\ngemma4:e2b · 2.3B effective / 5.1B loaded · laptop · local\nlocal-first · no API keys\nWhy multi-agent voice loops get stuck\n— and how a shared room fixes it\n\nThree voice agents try to count together. With transcripts alone they loop on “yeah, exactly…” forever. Give them one server-authoritative room state and they count all the way up.\n\nvoice-a\nvoice-b\nvoice-c\nShared Room\nauthoritative state\nroomState\nscheduler\nclassifier\nRun the comparison\n\nRuns the bad vs. good demo side-by-side and narrates the good run aloud.\n\nCompare\nNodeAgent\nRun",
+  "scrollWidth": 1920,
+  "scrollHeight": 1080,
+  "reducedMotion": false,
+  "controls": [
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback",
+      "ariaLabel": null,
+      "title": "Voice model",
+      "placeholder": null,
+      "value": "gemma4_e2b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34,
+        "right": 356.703125,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nLATEST · Gemma 4 12B — latest laptop/workstation NodeAgent default\nLATEST · Gemma 4 26B-A4B — MoE local reasoning/agent model\nLATEST · Gemma 4 31B — dense local/lab reasoning model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nLATEST · Ministral 3 14B — stronger edge NodeAgent/vision model\nLATEST · Qwen3.6 27B — latest Qwen agentic coding/thinking model\nLATEST · Qwen3.6 35B-A3B — MoE coding/reasoning variant\nLATEST · Nemotron-Cascade-2 30B-A3B — open MoE reasoning/agent model\nLATEST · Mistral Medium 3.5 128B — latest local/lab flagship\nLATEST · GLM-4.7-Flash 30B-A3B — latest lightweight Z.ai agent model\nLATEST · GLM-5 — huge open-weight agentic engineering model\nLATEST · GLM-5.1 — flagship agentic engineering model\nLATEST · Mistral Small 3.2 24B — repetition/function-calling fix\nLATEST · Magistral 24B — Mistral reasoning reviewer/planner\nLATEST · gpt-oss 20B — open-weight local reasoning/agent model\nLATEST · gpt-oss 120B — larger open-weight local/lab reasoning model\nLATEST · Qwen3-Coder-Next — latest efficient coding-agent model\nLATEST · Qwen3-Coder 30B — practical agentic code model\nLATEST · Qwen3-Coder 480B — most agentic Qwen code model, lab only\nLATEST · Devstral Small 2 24B — current software-engineering agent\nLATEST · Devstral 2 123B — larger codebase agent, lab only\nLATEST · DeepSeek-R1 0528 8B — practical distilled reasoner\nPhi-4 Mini Reasoning — tiny logic-intensive model\nPhi-4 Reasoning Vision 15B — compact multimodal UI/doc reasoner\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nOLMo 3.1 32B Instruct — open science model\nLlama 4 Scout — large multimodal MoE, not newest but current Meta line\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nSTABLE · Qwen3 30B-A3B — stable MoE agent fallback\nSTABLE · Qwen2.5-Coder 7B — stable practical code model\nSTABLE · Qwen2.5-Coder 32B — stable stronger code model",
+      "ariaLabel": null,
+      "title": "NodeAgent model",
+      "placeholder": null,
+      "value": "gemma4_12b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34,
+        "right": 554.703125,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "N"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18,
+        "right": 674.796875,
+        "bottom": 37
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "TURNS"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18,
+        "right": 795.890625,
+        "bottom": 37
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SELECT",
+      "text": "Sim (scripted)\nOllama (local)\nOpenAI (live)",
+      "ariaLabel": null,
+      "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+      "placeholder": null,
+      "value": "deterministic",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 872.390625,
+        "y": 11,
+        "width": 53.5,
+        "height": 34,
+        "right": 925.890625,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": true,
+      "focusVisible": true
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run the comparison",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 853.984375,
+        "y": 711.875,
+        "width": 212,
+        "height": 44,
+        "right": 1065.984375,
+        "bottom": 755.875
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Compare",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 263,
+        "y": 1032,
+        "width": 96.515625,
+        "height": 28,
+        "right": 359.515625,
+        "bottom": 1060
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgb(24, 28, 37)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "NodeAgent",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 361.515625,
+        "y": 1032,
+        "width": 108.59375,
+        "height": 28,
+        "right": 470.109375,
+        "bottom": 1060
+      },
+      "fontSize": "12px",
+      "color": "rgb(147, 158, 174)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": "Press Run to start the side-by-side comparison demo…",
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 483.109375,
+        "y": 1026,
+        "width": 1070.96875,
+        "height": 40,
+        "right": 1554.078125,
+        "bottom": 1066
+      },
+      "fontSize": "14px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.261176 -0.00153025 -0.0153386 / 0.7)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 1564.078125,
+        "y": 1024,
+        "width": 95.921875,
+        "height": 44,
+        "right": 1660,
+        "bottom": 1068
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": [
+      {
+        "name": "Microsoft David - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Mark - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Zira - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Huihui - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Kangkang - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Yaoyao - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      }
+    ]
+  }
+}

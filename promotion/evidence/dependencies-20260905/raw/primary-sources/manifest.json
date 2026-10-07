@@ -1,0 +1,205 @@
+{
+  "files": [
+    {
+      "path": "application-import-search.command.json",
+      "bytes": 310,
+      "sha256": "7ef5380e74280d93b33ddf76179a66c7cd5bae8b4988b49d3b132201574420f1"
+    },
+    {
+      "path": "application-import-search.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "application-import-search.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "baseline-browser-mapping-2.10.44-full.json",
+      "bytes": 3830,
+      "sha256": "f4f8ced3862e8ec269a4be476c09da9c9c18537e4e5111cfb263687e5bc60101"
+    },
+    {
+      "path": "browserslist-4.28.7.json",
+      "bytes": 2309,
+      "sha256": "2d1264c2976acf7c9e781ebb20723cd0709c0f5dbb3c496b1062555ff7dcf366"
+    },
+    {
+      "path": "browserslist-packument-full.json",
+      "bytes": 521015,
+      "sha256": "4d891a5617dec4b94f3b323549d23b317927acc7e9dc5b0dcc9b383e8a5d9841"
+    },
+    {
+      "path": "browserslist-packument.json",
+      "bytes": 278387,
+      "sha256": "c173b334ea58f77f91b4bdf26d7e360e60e549158b7ccca5ff1f82bd2756fc29"
+    },
+    {
+      "path": "browserslist-release.json",
+      "bytes": 2302,
+      "sha256": "b93996fd9d9d8e997e66ec2d872c0a77e16ba29a1a194efc4814a18f86568b46"
+    },
+    {
+      "path": "caniuse-lite-1.0.30001806-full.json",
+      "bytes": 1928,
+      "sha256": "2edf60da76a9fb824d59e12d3ea79052f7040e074f90122dabd9222ea5b0396d"
+    },
+    {
+      "path": "electron-to-chromium-1.5.393-full.json",
+      "bytes": 2007,
+      "sha256": "de5394b0125169345b126c77295d94c4089a5d3baf7c06c585186336003da004"
+    },
+    {
+      "path": "exact-rows-and-parents.json",
+      "bytes": 8545,
+      "sha256": "d5d09950f43fcba319d040af0d2cb4e6a5ca7b88755108dd3fdca3a6feee5588"
+    },
+    {
+      "path": "GHSA-28wg-ghj8-5hjv.json",
+      "bytes": 2460,
+      "sha256": "f6585f0f283a4e146731880912dea3c678adffa199d61222ecc4c2a68bb0a5c8"
+    },
+    {
+      "path": "GHSA-2v37-7h3g-55p8.json",
+      "bytes": 4362,
+      "sha256": "2e4d40936b1501f8b41f5361eaec2c9301618429341570c4d3dda1fe74b6e631"
+    },
+    {
+      "path": "GHSA-73wf-gq98-2v4g.json",
+      "bytes": 9208,
+      "sha256": "82784d919b3a8b4fad17b0fc72e05021ba0024d5f6cd7756893124a1a235bae6"
+    },
+    {
+      "path": "GHSA-c83g-rgw3-j3cx.json",
+      "bytes": 7586,
+      "sha256": "a031cd6d6e3dd3e1639bc9e4edf9a6c06543cf3247f7fd21ef985314b31c88ef"
+    },
+    {
+      "path": "GHSA-fxqj-rqcc-2cmp.json",
+      "bytes": 7154,
+      "sha256": "616e9ac39682030948b95e68d5cafc80752728181194db0a951f97a05e0b9e6e"
+    },
+    {
+      "path": "GHSA-r28c-9q8g-f849.json",
+      "bytes": 7940,
+      "sha256": "153b44239442f93df686feb835b9bea3f306360ef6732fbd2b02a3fdab5be9b4"
+    },
+    {
+      "path": "GHSA-xwg4-73v4-xw9w.json",
+      "bytes": 6188,
+      "sha256": "7c44785ca0e0cf7ded77e50b26d454885a19b4579c0e035780c8c6726b99058e"
+    },
+    {
+      "path": "guard-after.json",
+      "bytes": 471,
+      "sha256": "e915c346574dd89de6c06edeebee0f3076083b697aa4746aa6fdd69df576827e"
+    },
+    {
+      "path": "guard-before.json",
+      "bytes": 471,
+      "sha256": "e915c346574dd89de6c06edeebee0f3076083b697aa4746aa6fdd69df576827e"
+    },
+    {
+      "path": "nanoid-3.3.18.json",
+      "bytes": 3107,
+      "sha256": "e068b45312ea854dd1b79c57aff7b7bc19966a7a36e3ccf2f5799c02a65710e4"
+    },
+    {
+      "path": "nanoid-packument-full.json",
+      "bytes": 342705,
+      "sha256": "6b9da2e8fd9a3c7cb077d2e3caeedb5f0e707ca3a4ffa7921d46e3bd22277bad"
+    },
+    {
+      "path": "nanoid-packument.json",
+      "bytes": 158420,
+      "sha256": "6e6f11c69e25f49ffbd50f5e3e61d658a66f54891bb08403f633bd78d30cda74"
+    },
+    {
+      "path": "nanoid-release.json",
+      "bytes": 1942,
+      "sha256": "0b35a29dadc530fb00a3aad2b35aa0b53394b89c06176cea57d0e271602da25a"
+    },
+    {
+      "path": "node-releases-2.0.51-full.json",
+      "bytes": 1714,
+      "sha256": "e63e3f135dfb118c47a7f8941183d2c1a978ee00a174ba35c06fd75a944239c5"
+    },
+    {
+      "path": "node_modules__postcss__lib__input.js.txt",
+      "bytes": 6844,
+      "sha256": "0e89674a33ee97536293c1c1e70a2758995bd5fe9ac347840a30df187027e533"
+    },
+    {
+      "path": "node_modules__tsx__package.json.txt",
+      "bytes": 1600,
+      "sha256": "40fdd6ae4d0976431f92e7e8a0c16181ea4c1cb24c5283751db4b2a443ea6656"
+    },
+    {
+      "path": "node_modules__vite__package.json.txt",
+      "bytes": 5083,
+      "sha256": "f0999a86a4f852ef04de700f4dc42e43e40408b14bc8ee8a365c7defd3f90be6"
+    },
+    {
+      "path": "package-lock.json.txt",
+      "bytes": 102769,
+      "sha256": "bdbd22a06f566749eaa1aa2c8207f3bb67bf1840336cb2e50ea8c0ad4555fa94"
+    },
+    {
+      "path": "package.json.txt",
+      "bytes": 1724,
+      "sha256": "bdee976d75f0c6d84dd4b6be1a7e2aca4bbb8df91288822bfc050df1e0988272"
+    },
+    {
+      "path": "postcss-8.5.23.json",
+      "bytes": 3292,
+      "sha256": "b33e1ab1884aa470afb3811f1fc80aebd60732caefd845e37437139453fa91ab"
+    },
+    {
+      "path": "postcss-packument-full.json",
+      "bytes": 766699,
+      "sha256": "8489169776a9208416f158b4e9d5a2037adcadcfdb25c837c91a62ad4313db9f"
+    },
+    {
+      "path": "postcss-packument.json",
+      "bytes": 357674,
+      "sha256": "680cb2bed397d24b4fd96cdf21d864c7a1e629d9cfc1609a169dc3dfbd97e439"
+    },
+    {
+      "path": "postcss-release.json",
+      "bytes": 2141,
+      "sha256": "552efb88c164e9f2b315391945f9383acd239d47c71c081818d31250c12ccd56"
+    },
+    {
+      "path": "postcss.config.js.txt",
+      "bytes": 92,
+      "sha256": "c14012cb0c28be42b5f7f84ff408983939df2597d4037c5409ee47814fc17b10"
+    },
+    {
+      "path": "primary-fetches.json",
+      "bytes": 3960,
+      "sha256": "caa95112e7cbe49a0bcce39639be69f90dafad4c5269c9f57857a39335701396"
+    },
+    {
+      "path": "supporting-first-fetch-failure.json",
+      "bytes": 341,
+      "sha256": "f894cf4c40bacf4eaeb108df0aebccca93579f7ffcc3cdfc905d72f885db13b8"
+    },
+    {
+      "path": "supporting-registry-fetches.json",
+      "bytes": 2371,
+      "sha256": "b7a1eeb2c0939c282ef717f3e0d3867110fb3428695a5f1f333e99c37e78156c"
+    },
+    {
+      "path": "three-package-advisories-current.json",
+      "bytes": 2045,
+      "sha256": "675cda9355bc7df1e209969b37e8530a2dbee582e8badb46da7eb7a85bba568c"
+    },
+    {
+      "path": "vite.config.ts.txt",
+      "bytes": 853,
+      "sha256": "99cf93b0b2973f858e7150831870d5828d9c85fe648a5d756ebbc6243b6a6874"
+    }
+  ],
+  "selfExcluded": true
+}

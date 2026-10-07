@@ -1,0 +1,27 @@
+{
+  "historicalSourceSha256": "c0563ac735e98a7420752c2ab5385755401925c544fff54b1885803c08e16789",
+  "historicalJudgeSha256": "3a87b99fc9cc2790024a22d217461f6092655e9fdca9f62a33b85780c238695f",
+  "currentActualFiles": [
+    {
+      "path": "dist/assets/index-B4ZxCWpG.js",
+      "bytes": 384362,
+      "sha256": "015fa6d9922b18d40d7d977f189c2b8f29dd7e6babb535f677225d5855ddb958",
+      "rawGitBlobSha1": "96e1f059f590dba800d5a0859cbda921917293a3"
+    },
+    {
+      "path": "dist/assets/index-DGAuW_yU.css",
+      "bytes": 80400,
+      "sha256": "edf553215308bcafefc16d59d886e4314295100428c308410d60434436f22e10",
+      "rawGitBlobSha1": "7ce232e8591d84f674ada18c586f3d405861ab73"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 862,
+      "sha256": "2347ffd4bda2a550cb6d219c0937bd06b36694ba8f22bab5028bf5a4d6961572",
+      "rawGitBlobSha1": "95f52bfbd2466b3204880ad9c5f65a245a7cab52"
+    }
+  ],
+  "allThreeRawFilesExact": true,
+  "all176NonLockSourceFilesExact": true,
+  "meaning": "Historical native browser evidence is compatible with identical compiled app files and unchanged server/application source. No new execution or renewed font/network/backend/provider observation."
+}

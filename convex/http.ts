@@ -2,12 +2,22 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { api } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
+import { BODY_TOO_LARGE, readBoundedBody, readJsonRequest, validCountTarget, validTurns } from "./shared";
 
 /**
  * HTTP bridge: mirrors the Node server's /live/* API so the existing frontend
  * works against Convex by only changing its base URL. There is no /events (SSE)
  * route — the client's polling fallback (GET /live/rooms/:id) takes over, which
  * is what we want anyway (Convex + Vercel = permanent URL, laptop can sleep).
+ *
+ * These are the SAME public routes as `src/server.ts` and
+ * `src/live/roomServer.ts`, so they get the same bounds. This file reads a
+ * request body in exactly two places — `body()` and `binaryBody()` below — and
+ * both go through `src/core/requestBody.ts`, which holds the one 20 MB cap the
+ * Node reader also imports. It narrows with the same `validTurns` /
+ * `validCountTarget` the Node routes use, rather than a second copy of the
+ * numbers. `tests/p0Boundary.test.ts` walks `src/` and `convex/` to check that
+ * no third reader appears.
  */
 const CORS: Record<string, string> = {
   "access-control-allow-origin": "*",
@@ -17,6 +27,32 @@ const CORS: Record<string, string> = {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json", ...CORS } });
 const preflight = httpAction(async () => new Response(null, { status: 204, headers: CORS }));
+
+/**
+ * Every POST handler in this file reads its body here. A `Response` coming back
+ * instead of a body IS the answer — return it. The refusal is a status, not a
+ * silently-empty object: a 20 MB+ upload used to be parsed into `{}` and the
+ * route carried on as if the caller had sent nothing.
+ */
+async function body<T>(req: Request): Promise<T | Response> {
+  try {
+    return await readJsonRequest<T>(req);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return message === BODY_TOO_LARGE
+      ? json({ ok: false, error: BODY_TOO_LARGE }, 413)
+      : json({ ok: false, error: message.slice(0, 200) }, 400);
+  }
+}
+
+/** The same cap for the one route that takes bytes rather than JSON (audio). */
+async function binaryBody(req: Request): Promise<Uint8Array | Response> {
+  try {
+    return await readBoundedBody(req);
+  } catch {
+    return json({ ok: false, error: BODY_TOO_LARGE }, 413);
+  }
+}
 
 const DEMO_VOICE_MODELS = [
   {
@@ -78,24 +114,18 @@ function numberWord(n: number): string {
   return String(n);
 }
 
-function clampTarget(value: unknown): number {
-  const n = typeof value === "number" && Number.isFinite(value) ? Math.trunc(value) : 100;
-  return Math.max(2, Math.min(300, n));
-}
-
-function clampTurns(value: unknown, target: number): number {
-  const n = typeof value === "number" && Number.isFinite(value) ? Math.trunc(value) : Math.min(target, 100);
-  return Math.max(3, Math.min(320, n));
-}
-
 function demoStateSummary(current: number, target: number, scheduled: string): string {
   const next = Math.min(current + 1, target);
   return `current=${current} next=${next} target=${target} scheduled=${scheduled}`;
 }
 
 function runHostedComparison(body: { target?: number; turns?: number; source?: string }) {
-  const target = clampTarget(body.target);
-  const turns = clampTurns(body.turns, target);
+  // The same two narrowings the Node routes use — `validCountTarget` bounds by
+  // MAX_COUNT_TARGET and `validTurns` by MAX_RUN_TURNS. Only the hosted demo's
+  // DEFAULTS are local (100 / the target); the caps are not restated here,
+  // because a cap written down twice drifts.
+  const target = validCountTarget(body.target);
+  const turns = validTurns(body.turns, Math.min(target, 100));
   const agents = ["voice-a", "voice-b", "voice-c"];
   const ack = [
     "Yeah exactly, let's do that. I'll start off from where you leave off...",
@@ -187,8 +217,9 @@ function runHostedComparison(body: { target?: number; turns?: number; source?: s
 }
 
 const compareDemo = httpAction(async (_ctx, req) => {
-  const body = (await req.json().catch(() => ({}))) as { target?: number; turns?: number; source?: string };
-  return json(runHostedComparison(body));
+  const parsed = await body<{ target?: number; turns?: number; source?: string }>(req);
+  if (parsed instanceof Response) return parsed;
+  return json(runHostedComparison(parsed));
 });
 
 const nodeAgentRun = httpAction(async () =>
@@ -202,13 +233,17 @@ const nodeAgentRun = httpAction(async () =>
 );
 
 const create = httpAction(async (ctx, req) => {
-  const body = (await req.json().catch(() => ({}))) as { goal?: string; model?: string; private?: boolean; profile?: string; agentCount?: number };
+  const parsed = await body<{ goal?: string; model?: string; private?: boolean; profile?: string; agentCount?: number }>(req);
+  if (parsed instanceof Response) return parsed;
+  // goal/model/profile/agentCount are narrowed by `api.rooms.createRoom`
+  // (validProfile / validModel / validAgentCount) — the seam every caller of
+  // the room, HTTP or Convex client, already shares.
   const roomId = await ctx.runMutation(api.rooms.createRoom, {
-    goal: body.goal,
-    model: body.model,
-    private: body.private === true,
-    profile: body.profile,
-    agentCount: body.agentCount,
+    goal: parsed.goal,
+    model: parsed.model,
+    private: parsed.private === true,
+    profile: parsed.profile,
+    agentCount: parsed.agentCount,
   });
   const room = await ctx.runQuery(api.rooms.watchRoom, { roomId });
   return json({ ok: true, roomId, room });
@@ -236,28 +271,33 @@ const roomsPost = httpAction(async (ctx, req) => {
   if (!id) return json({ ok: false, error: "bad room id" }, 400);
   try {
     if (sub === "join") {
-      const b = (await req.json().catch(() => ({}))) as { slot?: string; kind?: string };
+      const b = await body<{ slot?: string; kind?: string }>(req);
+      if (b instanceof Response) return b;
       const joined = await ctx.runMutation(api.rooms.joinRoom, { roomId: id, slot: b.slot, kind: b.kind });
       const joinedRoom = await ctx.runQuery(api.rooms.watchRoom, { roomId: id });
       return json({ ok: true, participantId: joined.participantId, slot: joined.slot, room: joinedRoom });
     }
     if (sub === "goal") {
-      const b = (await req.json().catch(() => ({}))) as { goal?: string };
+      const b = await body<{ goal?: string }>(req);
+      if (b instanceof Response) return b;
       if (b.goal) await ctx.runMutation(api.rooms.setGoal, { roomId: id, goal: b.goal });
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "model") {
-      const b = (await req.json().catch(() => ({}))) as { model?: string };
+      const b = await body<{ model?: string }>(req);
+      if (b instanceof Response) return b;
       await ctx.runMutation(api.rooms.setModel, { roomId: id, model: b.model ?? "" });
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "profile") {
-      const b = (await req.json().catch(() => ({}))) as { profile?: string };
+      const b = await body<{ profile?: string }>(req);
+      if (b instanceof Response) return b;
       await ctx.runMutation(api.rooms.setProfile, { roomId: id, profile: b.profile ?? "" });
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "agents") {
-      const b = (await req.json().catch(() => ({}))) as { agentCount?: number; delta?: number };
+      const b = await body<{ agentCount?: number; delta?: number }>(req);
+      if (b instanceof Response) return b;
       const room = await ctx.runQuery(api.rooms.watchRoom, { roomId: id });
       const current = room?.state?.agentCount ?? 2;
       const agentCount = typeof b.agentCount === "number" ? b.agentCount : current + (typeof b.delta === "number" ? b.delta : 1);
@@ -265,7 +305,8 @@ const roomsPost = httpAction(async (ctx, req) => {
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "run") {
-      const b = (await req.json().catch(() => ({}))) as { running?: boolean };
+      const b = await body<{ running?: boolean }>(req);
+      if (b instanceof Response) return b;
       await ctx.runMutation(api.rooms.setRunning, { roomId: id, running: Boolean(b.running) });
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
@@ -277,13 +318,14 @@ const roomsPost = httpAction(async (ctx, req) => {
     if (sub === "human") {
       const ct = req.headers.get("content-type") ?? "";
       if (ct.includes("application/json")) {
-        const b = (await req.json().catch(() => ({}))) as { text?: string };
+        const b = await body<{ text?: string }>(req);
+        if (b instanceof Response) return b;
         if (b.text) await ctx.runMutation(api.rooms.submitHuman, { roomId: id, text: b.text });
         return json({ ok: true });
       }
-      const buf = await req.arrayBuffer();
+      const bytes = await binaryBody(req);
+      if (bytes instanceof Response) return bytes;
       let bin = "";
-      const bytes = new Uint8Array(buf);
       for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]!);
       const audioBase64 = btoa(bin);
       const res = await ctx.runAction(api.coordinator.transcribeHuman, { roomId: id, audioBase64, mime: ct || "audio/webm" });

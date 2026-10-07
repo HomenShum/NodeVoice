@@ -1,0 +1,21 @@
+# NodeVoice controls/status source judgment
+
+**Builder — approved within the two-owner layout scope; publication and shared CI remain pending.** A person trying the comparison can now reach the existing controls and read100/100 plus completion on the named phone views. A room participant can reach focused Invite/State without the earlier header clipping. The complete application still has reading and coverage gaps.
+
+**Re your request:** use planner-worker-judge execution and make every repository usable for handoff, including visual, responsive and interaction standards — this independently verifies this bounded local repair.
+
+- Base`d225bcaf64008ee522bc66d40aa72eb0381b95a6`; AppSHA`63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc`, LiveRoomSHA`517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174`. Actual baseline bytes plus the recorded class/ARIA group substitutions reconstruct both complete files. All175other source files and177current/3dist bindings match;1075raw operator artifacts are exact. Handlers, state, provider/playback behavior and shared primitives remain byte-identical.
+- Ordinary doctor, proof and build pass on these inputs. Doctor covers server/client/Convex typechecks plus56citations; proof is55tests/9files plus deterministic CLI target12/nine turns, not full100completion. The actual browser comparison independently supplies that higher-layer proof.
+- Final native run records337scoped checks/94captures, one real100/100 deterministic POST,100 sequential observed counts, visible100 at125.736s and Run enabled126.829s under the unchanged300s budget. Provider modelId is null; selected model text is metadata. No repeated125s run or whole matrix was needed for this nonauthor review.
+- Complete control wrappers and inputs fit after native forward/reverse Tab, not merely their interiors. Pointer first/last controls, spinner99→100 and ArrowDown/Up restore inputs; Invite/State pointer/keyboard/double/repeated toggles preserve room state. Two-context correction produces1missing-key error, explicit Start1distinct additional error, turn0/next5 and retained IDs. This is no provider/durable-restart proof.
+- Ten actual before/after PNGs were viewed. Normal320 and computed-text200390 show count/badge/input repair; focused Voice360 and Invite390 show visible boundaries; desktop1440 remains compact.94actual glyph records and PNG/DOM dimensions are checked. Computed text scaling is not native browser zoom.
+
+The first raw afterPASS missed full wrapper clipping; subsequent padding/margin failures and diagnostic snapshots remain unchanged. Final group wrapping removes horizontal focus-scroll dependence without focus handlers. Reader serialization/path errors are retained separately and did not indicate source defects.
+
+Detailed comparison/room panes, selected-option ellipsis, phone enlarged-text reading/error/QR regions and short-height layouts remain held. Raw evidence retains11captures with off-viewport descendants; no whole-page overflow-free claim. Physical devices, native zoom, full accessibility/audio/provider/production and all full grades remain unassigned. The server still binds unspecified host, and the original3high dependency entries remain.
+
+Publication must keep raw environment-name inventories operator-local and use explicit whitelisted derivatives or exclusions with original hashes. This source approval does not approve the proposed packet, committed byte filters, HANDOFF or shared CI; those are separate gates.
+
+Evidence: [independent manifest](E6j-nodevoice-ui-independent-02/manifest.json), SHA256`bd606865e441db8c9dd35aea77bf874c9a19a8ef2777359cb79ab49b2d79c417`; [raw semantics](E6j-nodevoice-ui-independent-02/raw-semantics.json), [viewed pixels](E6j-nodevoice-ui-independent-02/independently-viewed-pixels.json), [closed custody](E6j-nodevoice-ui-independent-02/source-custody-closed.json). Historical147font-blocked,174native-font and37boundary artifacts reverify unchanged. Reused nonauthor reviewer context is disclosed.
+
+Guard closed:177source/3dist/1075operator bytes exact, candidate/original HEAD/refs/index/status unchanged and4993closed. No source edits, runtime replay, provider action, commit, push or deployment by the judge.

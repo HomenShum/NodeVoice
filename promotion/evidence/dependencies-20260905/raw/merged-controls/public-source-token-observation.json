@@ -1,0 +1,31 @@
+{
+  "expectedSource": "1a1593661f393cfdcd6dea79bf3a28e7d38248cd",
+  "sourceSha256": "63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc",
+  "publicModuleSha256": "80d4a0d308c9a28becf75abe4bbd1bcf4361d61a4b03b91bd0d0c2755380e7a5",
+  "newSourceTokens": [
+    {
+      "token": "Comparison controls",
+      "reviewedSourceContains": true,
+      "baselineContains": false,
+      "publicModuleContains": false
+    },
+    {
+      "token": "w-[4.5em]",
+      "reviewedSourceContains": true,
+      "baselineContains": false,
+      "publicModuleContains": false
+    },
+    {
+      "token": "flex w-full min-w-0 flex-none flex-wrap items-center justify-start gap-2 pb-1",
+      "reviewedSourceContains": true,
+      "baselineContains": false,
+      "publicModuleContains": false
+    }
+  ],
+  "baselineClassTokensPresentInPublicModule": [
+    "flex min-w-0 flex-1 items-center justify-end gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+    "w-10 bg-transparent text-right text-xs font-semibold tabular-nums text-foreground outline-none",
+    "overflow-x-auto text-[10.5px] leading-[1.5]"
+  ],
+  "inference": "The anonymous alias does not show the changed source tokens in its delivered module. This is evidence against claiming the repaired controls are available there, not an exact identification of the alias commit."
+}

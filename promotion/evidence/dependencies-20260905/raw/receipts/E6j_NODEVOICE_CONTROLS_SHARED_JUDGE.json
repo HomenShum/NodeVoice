@@ -1,0 +1,127 @@
+{
+  "status": "READY_FOR_ROOT_NORMAL_MERGE_SCOPED",
+  "at": "2026-09-05T23:16:01.107684+00:00",
+  "requestTrace": "Make each repository usable and handoff-ready, including visual/responsive/interaction standards, using planner-worker-judge; this is the exact shared integration gate for the previously judged NodeVoice controls slice.",
+  "reviewer": "provider_ci_closure_judge",
+  "independence": "Nonauthor of implementation. Earlier source/publication reports by this same reviewer are custody-bound prior judgments, not new independent authors. No local test/browser replay here.",
+  "pr": {
+    "number": 6,
+    "url": "https://github.com/HomenShum/NodeVoice/pull/6",
+    "title": "Make comparison controls and room actions readable on phones",
+    "head": "1a1593661f393cfdcd6dea79bf3a28e7d38248cd",
+    "tree": "a2e1f0405634d985195548f03a7b8b19e45585ae",
+    "base": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+    "syntheticMerge": "f1b0e5cfe4a8a5594bc7bd3deba9b9823c722988",
+    "syntheticMergeTree": "a2e1f0405634d985195548f03a7b8b19e45585ae",
+    "state": "open",
+    "draft": false,
+    "mergeable": true,
+    "mergeableState": "clean",
+    "bodySha256": "55cf70c2f07b8e0f85ac08241b2e27b9b9852032fa363898ff32a4d5a52cad16",
+    "bodyAssessment": "Accurate current source/local evidence/limitations; shared-CI-pending sentence is historical publication status and can now be updated. All seven linked immutable evidence paths exist."
+  },
+  "immutableBindings": {
+    "count": 374,
+    "owners": 3,
+    "packet": 371,
+    "actualCatFileByteAndHashVerification": true,
+    "rawGitBlobSha1Match": true,
+    "exactDiffNameSet": true,
+    "remoteSourceCommitTreeMatch": true,
+    "mergeTreeMatch": true,
+    "packageLockAndWorkflowsBaselineExact": true,
+    "workingTreeReadOrGuard": false
+  },
+  "ci": {
+    "run": 33997769753,
+    "job": 101391180914,
+    "url": "https://github.com/HomenShum/NodeVoice/actions/runs/33997769753",
+    "conclusion": "success",
+    "attempt": 1,
+    "event": "pull_request",
+    "actualCheckout": "f1b0e5cfe4a8a5594bc7bd3deba9b9823c722988",
+    "completedAt": "2026-09-05T23:07:13Z",
+    "node": "20.20.2",
+    "checks": [
+      "normal npm ci",
+      "server typecheck",
+      "client typecheck",
+      "56 citations, 0 broken",
+      "55 tests / 9 files passed, no tests skipped",
+      "deterministic CLI COUNT_TARGET=10, nine committed values 1..9, next=10"
+    ],
+    "scopeLimits": [
+      "CLI does not complete target 10; neither target-100 nor browser playback is tested here.",
+      "No Convex typecheck, Vite build, responsive/keyboard browser matrix, microphone, provider, or hosted room durability step in this workflow."
+    ],
+    "advisories": [
+      "Unchanged application install reports 3 high vulnerabilities.",
+      "Checkout/setup actions warn their Node 20 action runtime is forced to Node 24; application setup explicitly installs Node 20.20.2.",
+      "url.parse deprecation warning during action cleanup."
+    ]
+  },
+  "conformance": {
+    "run": 33997769996,
+    "job": 101391181492,
+    "url": "https://github.com/HomenShum/NodeVoice/actions/runs/33997769996",
+    "conclusion": "success",
+    "attempt": 1,
+    "actualConsumerCheckout": "f1b0e5cfe4a8a5594bc7bd3deba9b9823c722988",
+    "completedAt": "2026-09-05T23:07:01Z",
+    "reusableWorkflow": "HomenShum/NodeKit/.github/workflows/repo-conformance.yml@ef4ac8a011b230efa3324892a193abe02ff2d673",
+    "innerProducerRepository": "HomenShum/node-platform",
+    "innerProducerRef": "main",
+    "actualInnerProducerCommit": "a2d2e8ce36cc3e87a6a8133469dd55d8b7580588",
+    "scope": "Manifest/catalog/lifecycle/support/command existence and declared source-contract checks only; 0/0 classified declarations and 0/0 excepted source rules. It is not a new installed factory/browser acceptance.",
+    "producerInstallAdvisory": "3 vulnerabilities: 1 moderate, 2 high; separate from NodeVoice install findings."
+  },
+  "scanner": {
+    "check": 101391179378,
+    "conclusion": "success",
+    "coverage": "SCANNED_ONE_COMMIT",
+    "summary": "**1** commit was scanned without uncovering any secrets.",
+    "annotations": 0,
+    "limit": "Secret-detection result only, not dependency security or full application security acceptance."
+  },
+  "otherChecks": {
+    "vercelStatus": "success: Deployment has completed",
+    "vercelPreviewComments": "success; 0 unresolved, 0 resolved",
+    "limit": "Recorded provider status only; no public HTML/build identity or hydrated UI was fetched, so no deployment/product claim."
+  },
+  "mergePolicy": {
+    "branchProtection": "404 Branch not protected",
+    "effectiveBranchRules": [],
+    "rulesets": [],
+    "allowMergeCommit": true,
+    "allowSquashMerge": true,
+    "allowRebaseMerge": true,
+    "deleteBranchOnMerge": false,
+    "normalIntegrationAllowed": true,
+    "requiredAction": "Root may use a normal allowed merge matched to exact head, preserving existing PR4 and source branch. No bypass, rule change or rerun required."
+  },
+  "holds": [
+    "This PR retains the original lockfile and its three high development dependency findings; an external seven-row proposal is not part of PR6.",
+    "Prior local source acceptance covers only named controls and current deterministic/no-key behavior. Eleven captures retain off-viewport detail descendants; selected-option ellipsis, detailed panes and short-height reading remain held.",
+    "Physical devices/native zoom, full accessibility/visual grades, audible speech/microphone, executed providers/agents, hosted Convex, durable restart and production functional behavior are not certified.",
+    "Local server unspecified-host binding remains unchanged."
+  ],
+  "fullGrades": null,
+  "blockingFindings": [],
+  "guard": "No working-tree guard was taken. Immutable commit review is closed; root can continue separate authorized work.",
+  "evidence": {
+    "directory": "E6j-nodevoice-controls-shared-independent",
+    "manifest": "manifest.json",
+    "manifestSha256": "868c077582bc6d8a09f133885406a2169b1e1cd6b221021eb695ca92fdb66883",
+    "artifactCount": 82,
+    "priorPublicationJudgeSha256": "5691aca473f44373795daef2823a9a6d6f6645683310e05dd79275a515c8b119",
+    "publicationFreezeSha256": "66e62287a360b519f5d6166a008022a4bd81a94eab832e21386989d7fce09d78"
+  },
+  "notPerformed": [
+    "source/index/ref mutation",
+    "install or local tests",
+    "browser or 125-second playback rerun",
+    "provider/credential/microphone access",
+    "workflow dispatch/rerun",
+    "merge/deploy"
+  ]
+}

@@ -1,0 +1,297 @@
+﻿2026-09-05T23:20:54.9544798Z Current runner version: '2.337.0'
+2026-09-05T23:20:54.9568430Z ##[group]Runner Image Provisioner
+2026-09-05T23:20:54.9569500Z Hosted Compute Agent
+2026-09-05T23:20:54.9569977Z Version: 20260828.587
+2026-09-05T23:20:54.9570574Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-05T23:20:54.9571175Z Build Date: 2026-08-28T16:44:25Z
+2026-09-05T23:20:54.9571705Z Worker ID: {1730127b-ec41-45ff-bd72-c3ea55bb2034}
+2026-09-05T23:20:54.9572308Z Azure Region: centralus
+2026-09-05T23:20:54.9572781Z ##[endgroup]
+2026-09-05T23:20:54.9573983Z ##[group]Operating System
+2026-09-05T23:20:54.9574473Z Ubuntu
+2026-09-05T23:20:54.9574884Z 24.04.4
+2026-09-05T23:20:54.9575303Z LTS
+2026-09-05T23:20:54.9575712Z ##[endgroup]
+2026-09-05T23:20:54.9576204Z ##[group]Runner Image
+2026-09-05T23:20:54.9576699Z Image: ubuntu-24.04
+2026-09-05T23:20:54.9577198Z Version: 20260831.293.1
+2026-09-05T23:20:54.9578245Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-05T23:20:54.9580032Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+2026-09-05T23:20:54.9580848Z ##[endgroup]
+2026-09-05T23:20:54.9581761Z ##[group]GITHUB_TOKEN Permissions
+2026-09-05T23:20:54.9583812Z Contents: read
+2026-09-05T23:20:54.9584290Z Metadata: read
+2026-09-05T23:20:54.9584757Z Packages: read
+2026-09-05T23:20:54.9585213Z ##[endgroup]
+2026-09-05T23:20:54.9586927Z Secret source: Actions
+2026-09-05T23:20:54.9588091Z Prepare workflow directory
+2026-09-05T23:20:54.9902229Z Prepare all required actions
+2026-09-05T23:20:54.9945688Z Getting action download info
+2026-09-05T23:20:55.2028182Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-09-05T23:20:55.3683897Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-09-05T23:20:55.5785602Z Complete job name: ci
+2026-09-05T23:20:55.6396930Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-05T23:20:55.6404157Z ##[group]Run actions/checkout@v4
+2026-09-05T23:20:55.6404783Z with:
+2026-09-05T23:20:55.6405238Z   repository: HomenShum/NodeVoice
+2026-09-05T23:20:55.6408374Z   token: ***
+2026-09-05T23:20:55.6408989Z   ssh-strict: true
+2026-09-05T23:20:55.6409435Z   ssh-user: git
+2026-09-05T23:20:55.6409876Z   persist-credentials: true
+2026-09-05T23:20:55.6410353Z   clean: true
+2026-09-05T23:20:55.6410798Z   sparse-checkout-cone-mode: true
+2026-09-05T23:20:55.6411315Z   fetch-depth: 1
+2026-09-05T23:20:55.6411727Z   fetch-tags: false
+2026-09-05T23:20:55.6412163Z   show-progress: true
+2026-09-05T23:20:55.6412603Z   lfs: false
+2026-09-05T23:20:55.6413121Z   submodules: false
+2026-09-05T23:20:55.6413551Z   set-safe-directory: true
+2026-09-05T23:20:55.6414070Z   allow-unsafe-pr-checkout: false
+2026-09-05T23:20:55.6414720Z ##[endgroup]
+2026-09-05T23:20:55.7288493Z Syncing repository: HomenShum/NodeVoice
+2026-09-05T23:20:55.7290740Z ##[group]Getting Git version info
+2026-09-05T23:20:55.7291450Z Working directory is '/home/runner/work/NodeVoice/NodeVoice'
+2026-09-05T23:20:55.7292409Z [command]/usr/bin/git version
+2026-09-05T23:20:55.7341229Z git version 2.55.0
+2026-09-05T23:20:55.7356919Z ##[endgroup]
+2026-09-05T23:20:55.7371175Z Temporarily overriding HOME='/home/runner/work/_temp/06b2b7fb-adc5-4d13-9d88-c3c967cf08a5' before making global git config changes
+2026-09-05T23:20:55.7372833Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-05T23:20:55.7376268Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeVoice/NodeVoice
+2026-09-05T23:20:55.7419937Z Deleting the contents of '/home/runner/work/NodeVoice/NodeVoice'
+2026-09-05T23:20:55.7422942Z ##[group]Initializing the repository
+2026-09-05T23:20:55.7426447Z [command]/usr/bin/git init /home/runner/work/NodeVoice/NodeVoice
+2026-09-05T23:20:55.7525059Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-05T23:20:55.7526422Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-05T23:20:55.7527552Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-05T23:20:55.7528385Z hint: call:
+2026-09-05T23:20:55.7529067Z hint:
+2026-09-05T23:20:55.7529724Z hint: 	git config --global init.defaultBranch <name>
+2026-09-05T23:20:55.7530383Z hint:
+2026-09-05T23:20:55.7531129Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-05T23:20:55.7531999Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-05T23:20:55.7532685Z hint:
+2026-09-05T23:20:55.7533161Z hint: 	git branch -m <name>
+2026-09-05T23:20:55.7533794Z hint:
+2026-09-05T23:20:55.7534526Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-05T23:20:55.7535403Z Initialized empty Git repository in /home/runner/work/NodeVoice/NodeVoice/.git/
+2026-09-05T23:20:55.7536992Z [command]/usr/bin/git remote add origin https://github.com/HomenShum/NodeVoice
+2026-09-05T23:20:55.7574043Z ##[endgroup]
+2026-09-05T23:20:55.7574798Z ##[group]Disabling automatic garbage collection
+2026-09-05T23:20:55.7575909Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-05T23:20:55.7600213Z ##[endgroup]
+2026-09-05T23:20:55.7600987Z ##[group]Setting up auth
+2026-09-05T23:20:55.7605267Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-05T23:20:55.7628532Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-05T23:20:55.8161362Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-05T23:20:55.8186188Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-05T23:20:55.8366291Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-05T23:20:55.8393956Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-05T23:20:55.8570837Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-05T23:20:55.8599860Z ##[endgroup]
+2026-09-05T23:20:55.8600792Z ##[group]Fetching the repository
+2026-09-05T23:20:55.8607715Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +6544eb482787099280825eb932f1c5bb7a99f01f:refs/remotes/origin/main
+2026-09-05T23:20:57.4468164Z From https://github.com/HomenShum/NodeVoice
+2026-09-05T23:20:57.4470713Z  * [new ref]         6544eb482787099280825eb932f1c5bb7a99f01f -> origin/main
+2026-09-05T23:20:57.4476293Z ##[endgroup]
+2026-09-05T23:20:57.4478122Z ##[group]Determining the checkout info
+2026-09-05T23:20:57.4480330Z ##[endgroup]
+2026-09-05T23:20:57.4481376Z [command]/usr/bin/git sparse-checkout disable
+2026-09-05T23:20:57.4521806Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-05T23:20:57.4547534Z ##[group]Checking out the ref
+2026-09-05T23:20:57.4550136Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-09-05T23:20:57.7668846Z Switched to a new branch 'main'
+2026-09-05T23:20:57.7670374Z branch 'main' set up to track 'origin/main'.
+2026-09-05T23:20:57.7682598Z ##[endgroup]
+2026-09-05T23:20:57.7722508Z [command]/usr/bin/git log -1 --format=%H
+2026-09-05T23:20:57.7743953Z 6544eb482787099280825eb932f1c5bb7a99f01f
+2026-09-05T23:20:57.7991674Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-05T23:20:57.7993645Z ##[group]Run actions/setup-node@v4
+2026-09-05T23:20:57.7993993Z with:
+2026-09-05T23:20:57.7994292Z   node-version: 20
+2026-09-05T23:20:57.7994578Z   cache: npm
+2026-09-05T23:20:57.7994920Z   always-auth: false
+2026-09-05T23:20:57.7995213Z   check-latest: false
+2026-09-05T23:20:57.7997246Z   token: ***
+2026-09-05T23:20:57.7997532Z ##[endgroup]
+2026-09-05T23:20:57.9215327Z Attempting to download 20...
+2026-09-05T23:20:57.9308330Z (node:2040) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-05T23:20:57.9309679Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-05T23:20:58.6378178Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+2026-09-05T23:20:59.2220526Z Extracting ...
+2026-09-05T23:20:59.2316416Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e7408072-5cbe-4cfb-9383-9d3e619f7536 -f /home/runner/work/_temp/da7cdc27-5ab6-4b7d-a57b-914a894f3165
+2026-09-05T23:21:00.1593021Z Adding to the cache ...
+2026-09-05T23:21:02.8873015Z ##[group]Environment details
+2026-09-05T23:21:03.2766170Z node: v20.20.2
+2026-09-05T23:21:03.2766810Z npm: 10.8.2
+2026-09-05T23:21:03.2767110Z yarn: 1.22.22
+2026-09-05T23:21:03.2767767Z ##[endgroup]
+2026-09-05T23:21:03.2785643Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+2026-09-05T23:21:03.3646449Z /home/runner/.npm
+2026-09-05T23:21:03.6096334Z npm cache is not found
+2026-09-05T23:21:03.6243513Z ##[group]Run npm ci
+2026-09-05T23:21:03.6243932Z [36;1mnpm ci[0m
+2026-09-05T23:21:03.6272835Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:03.6273213Z ##[endgroup]
+2026-09-05T23:21:07.6713076Z 
+2026-09-05T23:21:07.6723009Z added 107 packages, and audited 108 packages in 4s
+2026-09-05T23:21:07.6723530Z 
+2026-09-05T23:21:07.6723824Z 28 packages are looking for funding
+2026-09-05T23:21:07.6724476Z   run `npm fund` for details
+2026-09-05T23:21:07.6751559Z 
+2026-09-05T23:21:07.6752474Z 3 high severity vulnerabilities
+2026-09-05T23:21:07.6752836Z 
+2026-09-05T23:21:07.6753167Z To address all issues, run:
+2026-09-05T23:21:07.6753593Z   npm audit fix
+2026-09-05T23:21:07.6753826Z 
+2026-09-05T23:21:07.6754030Z Run `npm audit` for details.
+2026-09-05T23:21:07.6883410Z ##[group]Run npm run check
+2026-09-05T23:21:07.6883758Z [36;1mnpm run check[0m
+2026-09-05T23:21:07.6907802Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:07.6908197Z ##[endgroup]
+2026-09-05T23:21:07.8386561Z 
+2026-09-05T23:21:07.8387451Z > nodevoice@0.1.0 check
+2026-09-05T23:21:07.8387852Z > tsc --noEmit
+2026-09-05T23:21:07.8388020Z 
+2026-09-05T23:21:09.4086537Z ##[group]Run npm run check:client
+2026-09-05T23:21:09.4086916Z [36;1mnpm run check:client[0m
+2026-09-05T23:21:09.4108867Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:09.4109293Z ##[endgroup]
+2026-09-05T23:21:09.5803463Z 
+2026-09-05T23:21:09.5804822Z > nodevoice@0.1.0 check:client
+2026-09-05T23:21:09.5805582Z > tsc --noEmit -p tsconfig.client.json
+2026-09-05T23:21:09.5805980Z 
+2026-09-05T23:21:12.8053733Z ##[group]Run npm run check:citations
+2026-09-05T23:21:12.8054129Z [36;1mnpm run check:citations[0m
+2026-09-05T23:21:12.8076299Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:12.8076630Z ##[endgroup]
+2026-09-05T23:21:12.9003357Z 
+2026-09-05T23:21:12.9004223Z > nodevoice@0.1.0 check:citations
+2026-09-05T23:21:12.9004853Z > node scripts/check-citations.mjs
+2026-09-05T23:21:12.9005164Z 
+2026-09-05T23:21:12.9373289Z 56 citations checked, 0 broken
+2026-09-05T23:21:12.9473408Z ##[group]Run npm test
+2026-09-05T23:21:12.9473810Z [36;1mnpm test[0m
+2026-09-05T23:21:12.9500884Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:12.9501278Z ##[endgroup]
+2026-09-05T23:21:13.0621826Z 
+2026-09-05T23:21:13.0650268Z > nodevoice@0.1.0 test
+2026-09-05T23:21:13.0650732Z > vitest run --root .
+2026-09-05T23:21:13.0651221Z 
+2026-09-05T23:21:13.3257526Z 
+2026-09-05T23:21:13.3261845Z [1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90m/home/runner/work/NodeVoice/NodeVoice[39m
+2026-09-05T23:21:13.3262596Z 
+2026-09-05T23:21:13.8177679Z  [32m✓[39m tests/liveSteering.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+2026-09-05T23:21:13.9324332Z  [32m✓[39m tests/openaiCompare.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+2026-09-05T23:21:14.1171165Z  [32m✓[39m tests/liveRoomSeats.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 98[2mms[22m[39m
+2026-09-05T23:21:14.1792182Z  [32m✓[39m tests/comparisonMvp.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+2026-09-05T23:21:14.2999180Z  [32m✓[39m tests/badFooter.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-05T23:21:14.3793703Z  [32m✓[39m tests/countToOneHundred.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+2026-09-05T23:21:14.4516974Z  [32m✓[39m tests/roomReducer.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+2026-09-05T23:21:14.5430380Z  [32m✓[39m tests/nodeAgentMvp.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 11[2mms[22m[39m
+2026-09-05T23:21:16.0303857Z  [32m✓[39m tests/p0Boundary.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 2072[2mms[22m[39m
+2026-09-05T23:21:16.0305224Z      [33m[2m✓[22m[39m answers a client that crosses the cap and then stops sending [33m 2008[2mms[22m[39m
+2026-09-05T23:21:16.0344318Z 
+2026-09-05T23:21:16.0348827Z [2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+2026-09-05T23:21:16.0350555Z [2m      Tests [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+2026-09-05T23:21:16.0351512Z [2m   Start at [22m 23:21:13
+2026-09-05T23:21:16.0352467Z [2m   Duration [22m 2.70s[2m (transform 610ms, setup 0ms, import 888ms, tests 2.29s, environment 1ms)[22m
+2026-09-05T23:21:16.0352996Z 
+2026-09-05T23:21:16.0942146Z ##[group]Run npm run demo:compare
+2026-09-05T23:21:16.0942629Z [36;1mnpm run demo:compare[0m
+2026-09-05T23:21:16.0964098Z shell: /usr/bin/bash -e {0}
+2026-09-05T23:21:16.0964517Z env:
+2026-09-05T23:21:16.0964780Z   COUNT_TARGET: 10
+2026-09-05T23:21:16.0965019Z ##[endgroup]
+2026-09-05T23:21:16.2079395Z 
+2026-09-05T23:21:16.2080327Z > nodevoice@0.1.0 demo:compare
+2026-09-05T23:21:16.2080823Z > tsx src/compare/runComparisonMvp.ts
+2026-09-05T23:21:16.2081046Z 
+2026-09-05T23:21:16.5017713Z 
+2026-09-05T23:21:16.5019040Z nodevoice / side-by-side comparison
+2026-09-05T23:21:16.5019831Z Model: deterministic fallback
+2026-09-05T23:21:16.5020896Z Provenance (bad):  deterministic sim — scripted utterances · no reducer, no scheduler
+2026-09-05T23:21:16.5021763Z Provenance (good): deterministic sim — scripted utterances · real reducer & scheduler
+2026-09-05T23:21:16.5022194Z 
+2026-09-05T23:21:16.5022381Z BAD: raw peer transcript reaction
+2026-09-05T23:21:16.5023533Z  1 voice-a  I’ll count from 1 to 100, and you guys can continue off where I started from. One...
+2026-09-05T23:21:16.5024296Z      voice-a  believes=1 heard=0 spoke=1 classified=none        intent=wait-for-someone
+2026-09-05T23:21:16.5025022Z      voice-b  believes=1 heard=1 spoke=0 classified=instruction intent=acknowledge
+2026-09-05T23:21:16.5025557Z      voice-c  believes=1 heard=1 spoke=0 classified=instruction intent=acknowledge
+2026-09-05T23:21:16.5026112Z  2 voice-b  Yep exactly, let’s do that, we can continue from there...
+2026-09-05T23:21:16.5026642Z      voice-a  believes=1 heard=1 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5027254Z      voice-b  believes=1 heard=1 spoke=1 classified=instruction intent=wait-for-someone
+2026-09-05T23:21:16.5027850Z      voice-c  believes=1 heard=2 spoke=0 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5028469Z  3 voice-c  Yeah exactly, I agree with that plan and I’ll continue when it is my turn...
+2026-09-05T23:21:16.5029250Z      voice-a  believes=1 heard=2 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5030215Z      voice-b  believes=1 heard=2 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5030885Z      voice-c  believes=1 heard=2 spoke=1 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5031667Z  4 voice-a  Yep, exactly, let’s keep going from where the last agent leaves off...
+2026-09-05T23:21:16.5032308Z      voice-a  believes=1 heard=2 spoke=2 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5032914Z      voice-b  believes=1 heard=3 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5033726Z      voice-c  believes=1 heard=3 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5034523Z  5 voice-b  Sounds good, I’m aligned, and I’ll start after you finish...
+2026-09-05T23:21:16.5035277Z      voice-a  believes=1 heard=3 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5036100Z      voice-b  believes=1 heard=3 spoke=2 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5036916Z      voice-c  believes=1 heard=4 spoke=1 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5037684Z  6 voice-c  Exactly, we should count together and continue the sequence...
+2026-09-05T23:21:16.5050306Z      voice-a  believes=1 heard=4 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5059129Z      voice-b  believes=1 heard=4 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5060229Z      voice-c  believes=1 heard=4 spoke=2 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5061476Z  7 voice-a  Yeah exactly, let’s do that. I’ll start off from where you leave off...
+2026-09-05T23:21:16.5062374Z      voice-a  believes=1 heard=4 spoke=3 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5063238Z      voice-b  believes=1 heard=5 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5064635Z      voice-c  believes=1 heard=5 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5065630Z  8 voice-b  Yep exactly, let’s do that, we can continue from there...
+2026-09-05T23:21:16.5066619Z      voice-a  believes=1 heard=5 spoke=3 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5067730Z      voice-b  believes=1 heard=5 spoke=3 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5068901Z      voice-c  believes=1 heard=6 spoke=2 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5070225Z  9 voice-c  Yeah exactly, I agree with that plan and I’ll continue when it is my turn...
+2026-09-05T23:21:16.5071043Z      voice-a  believes=1 heard=6 spoke=3 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5071884Z      voice-b  believes=1 heard=6 spoke=3 classified=backchannel intent=acknowledge
+2026-09-05T23:21:16.5072628Z      voice-c  believes=1 heard=6 spoke=3 classified=backchannel intent=wait-for-someone
+2026-09-05T23:21:16.5073149Z 
+2026-09-05T23:21:16.5074155Z Divergence: 3 private beliefs (voice-a=1 voice-b=1 voice-c=1) with no shared truth — every agent waits for another to commit 2; none ever does.
+2026-09-05T23:21:16.5074841Z 
+2026-09-05T23:21:16.5075075Z GOOD: server-authoritative room state
+2026-09-05T23:21:16.5075598Z  1 voice-a  One                committed current=1; next=2; scheduled=voice-b
+2026-09-05T23:21:16.5076262Z  2 voice-b  Two                committed current=2; next=3; scheduled=voice-c
+2026-09-05T23:21:16.5076730Z  3 voice-c  Three              committed current=3; next=4; scheduled=voice-a
+2026-09-05T23:21:16.5077200Z  4 voice-a  Four               committed current=4; next=5; scheduled=voice-b
+2026-09-05T23:21:16.5077643Z  5 voice-b  Five               committed current=5; next=6; scheduled=voice-c
+2026-09-05T23:21:16.5078114Z  6 voice-c  Six                committed current=6; next=7; scheduled=voice-a
+2026-09-05T23:21:16.5078570Z  7 voice-a  Seven              committed current=7; next=8; scheduled=voice-b
+2026-09-05T23:21:16.5079207Z  8 voice-b  Eight              committed current=8; next=9; scheduled=voice-c
+2026-09-05T23:21:16.5079889Z  9 voice-c  Nine               committed current=9; next=10; scheduled=voice-a
+2026-09-05T23:21:16.5080157Z 
+2026-09-05T23:21:16.5080260Z Diagnosis:
+2026-09-05T23:21:16.5080770Z - Bad: every agent treats every heard utterance as a fresh invitation to respond socially.
+2026-09-05T23:21:16.5081744Z - Bad: each agent has only a private belief (current=1) and an intent that oscillates between acknowledge and wait-for-someone — three private states, no shared truth.
+2026-09-05T23:21:16.5082606Z - Bad: acknowledgement and handoff language becomes new conversational fuel, so no concrete task state advances.
+2026-09-05T23:21:16.5083392Z - Good: the room reducer commits only task actions, suppresses acknowledgements, and schedules exactly one next speaker.
+2026-09-05T23:21:16.5084161Z - Good: each agent receives the authoritative next action, not a raw transcript to politely react to.
+2026-09-05T23:21:16.5269194Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-05T23:21:16.5270318Z Post job cleanup.
+2026-09-05T23:21:16.6356963Z (node:2368) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-09-05T23:21:16.6357729Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-09-05T23:21:16.6529223Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/NodeVoice/NodeVoice --files-from manifest.txt --use-compress-program zstdmt
+2026-09-05T23:21:16.9132200Z (node:2368) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-09-05T23:21:17.9073317Z Sent 53673984 of 59973322 (89.5%), 51.1 MBs/sec
+2026-09-05T23:21:18.5120921Z Sent 59973322 of 59973322 (100.0%), 35.6 MBs/sec
+2026-09-05T23:21:18.6587319Z Cache saved with the key: node-cache-Linux-x64-npm-ae3c4de9ed8f92f499c348784df9171da44692ae1c6ebc015e409ce80c3c02a4
+2026-09-05T23:21:18.6733818Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-09-05T23:21:18.6734944Z Post job cleanup.
+2026-09-05T23:21:18.7452449Z [command]/usr/bin/git version
+2026-09-05T23:21:18.7486663Z git version 2.55.0
+2026-09-05T23:21:18.7515843Z Temporarily overriding HOME='/home/runner/work/_temp/6af5207a-c300-4426-a9bf-c10cbadba313' before making global git config changes
+2026-09-05T23:21:18.7516693Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-05T23:21:18.7521805Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeVoice/NodeVoice
+2026-09-05T23:21:18.7555201Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-05T23:21:18.7584254Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-05T23:21:18.7761416Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-05T23:21:18.7785461Z http.https://github.com/.extraheader
+2026-09-05T23:21:18.7794855Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-09-05T23:21:18.7824783Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-05T23:21:18.8001392Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-05T23:21:18.8030599Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-05T23:21:18.8326297Z Cleaning up orphan processes
+2026-09-05T23:21:18.8546217Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

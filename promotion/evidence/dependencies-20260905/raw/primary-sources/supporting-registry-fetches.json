@@ -1,0 +1,79 @@
+[
+  {
+    "url": "https://registry.npmjs.org/caniuse-lite/1.0.30001806",
+    "file": "caniuse-lite-1.0.30001806-full.json",
+    "status": 200,
+    "sha256": "2edf60da76a9fb824d59e12d3ea79052f7040e074f90122dabd9222ea5b0396d",
+    "version": "1.0.30001806",
+    "dependencies": {},
+    "tags": null,
+    "major3Latest": null
+  },
+  {
+    "url": "https://registry.npmjs.org/node-releases/2.0.51",
+    "file": "node-releases-2.0.51-full.json",
+    "status": 200,
+    "sha256": "e63e3f135dfb118c47a7f8941183d2c1a978ee00a174ba35c06fd75a944239c5",
+    "version": "2.0.51",
+    "dependencies": {},
+    "tags": null,
+    "major3Latest": null
+  },
+  {
+    "url": "https://registry.npmjs.org/electron-to-chromium/1.5.393",
+    "file": "electron-to-chromium-1.5.393-full.json",
+    "status": 200,
+    "sha256": "de5394b0125169345b126c77295d94c4089a5d3baf7c06c585186336003da004",
+    "version": "1.5.393",
+    "dependencies": {},
+    "tags": null,
+    "major3Latest": null
+  },
+  {
+    "url": "https://registry.npmjs.org/baseline-browser-mapping/2.10.44",
+    "file": "baseline-browser-mapping-2.10.44-full.json",
+    "status": 200,
+    "sha256": "f4f8ced3862e8ec269a4be476c09da9c9c18537e4e5111cfb263687e5bc60101",
+    "version": "2.10.44",
+    "dependencies": {},
+    "tags": null,
+    "major3Latest": null
+  },
+  {
+    "url": "https://registry.npmjs.org/browserslist",
+    "file": "browserslist-packument-full.json",
+    "status": 200,
+    "sha256": "4d891a5617dec4b94f3b323549d23b317927acc7e9dc5b0dcc9b383e8a5d9841",
+    "version": null,
+    "dependencies": {},
+    "tags": {
+      "latest": "4.28.9"
+    },
+    "major3Latest": null
+  },
+  {
+    "url": "https://registry.npmjs.org/nanoid",
+    "file": "nanoid-packument-full.json",
+    "status": 200,
+    "sha256": "6b9da2e8fd9a3c7cb077d2e3caeedb5f0e707ca3a4ffa7921d46e3bd22277bad",
+    "version": null,
+    "dependencies": {},
+    "tags": {
+      "legacy": "3.3.18",
+      "latest": "6.0.1"
+    },
+    "major3Latest": "3.3.18"
+  },
+  {
+    "url": "https://registry.npmjs.org/postcss",
+    "file": "postcss-packument-full.json",
+    "status": 200,
+    "sha256": "8489169776a9208416f158b4e9d5a2037adcadcfdb25c837c91a62ad4313db9f",
+    "version": null,
+    "dependencies": {},
+    "tags": {
+      "latest": "8.5.28"
+    },
+    "major3Latest": null
+  }
+]

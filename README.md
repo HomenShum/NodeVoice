@@ -12,7 +12,42 @@ The one line that matters:
 
 > **Physically in the same room is not the same as computationally in the same room.**
 
+<img src="docs/media/readme-hero.gif" alt="The quickstart, recorded: localhost:8787 opens on the live-room lobby, the bad-vs-good demo is opened, Run the comparison is clicked, and the split view runs — the transcript-only room loops stuck at 1 while the shared-state room counts upward with its authoritative roomState JSON live on screen" width="940">
+
+*The quickstart path, recorded headless with Playwright ([`scripts/record-readme-hero.mjs`](scripts/record-readme-hero.mjs)): click **Run the comparison** and watch the transcript-only room loop at 1 while the shared-state room actually counts. Deterministic no-key demo — exactly what a fresh clone does.*
+
 **▶ Try NodeVoice live (no laptop needed): [nodevoice.vercel.app](https://nodevoice.vercel.app)** — frontend on Vercel, state + voice on Convex.
+
+## Quickstart (30 seconds)
+
+```bash
+npm install
+npm run ui          # build the client + start the server
+```
+
+Open **http://localhost:8787/demo** and click **Run the comparison**. (`http://localhost:8787`
+is the live-room lobby; the demo is one click away behind *“or watch the bad-vs-good demo →”*.)
+No API keys needed for the core demo. Full details (hot reload, voice rooms, model router, Ollama):
+[Quick start](#quick-start) below.
+
+**Working on the code rather than trying the product?** Read
+**[docs/START_HERE.md](docs/START_HERE.md)** — one button press followed through
+the code in the order it runs — then open the three walkthroughs in
+[`.tours/`](.tours) with the VS Code CodeTour extension. Reference material lives
+in [docs/codebase/](docs/codebase): [STACK](docs/codebase/STACK.md),
+[STRUCTURE](docs/codebase/STRUCTURE.md),
+[ARCHITECTURE](docs/codebase/ARCHITECTURE.md),
+[CONVENTIONS](docs/codebase/CONVENTIONS.md),
+[INTEGRATIONS](docs/codebase/INTEGRATIONS.md),
+[TESTING](docs/codebase/TESTING.md), and
+[CONCERNS](docs/codebase/CONCERNS.md) — the known problems, with reproductions.
+What was deleted and why is in
+[docs/SIMPLIFICATION_REPORT.md](docs/SIMPLIFICATION_REPORT.md).
+
+For the existing runtime's NodeKit application/pack map and focused no-key test
+entry point, read [docs/nodekit-runtime-map.md](docs/nodekit-runtime-map.md).
+Its archived compiler metadata is historical; the current runtime and full
+repository checks remain authoritative.
 
 ## Read the V0 -> V3 live proof
 
@@ -31,12 +66,12 @@ state crop, and the full version-specific JSON captured from the live State draw
 
 ### V0 Failure: transcript-only coordination
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-proof.gif" alt="NodeVoice V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
+<img src="docs/media/nodevoice-v0-proof.gif" alt="NodeVoice V0 slow proof loop: live room starts with transcript coordination, receives the count interrupt, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-state-json.png" alt="NodeVoice V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
+<img src="docs/media/nodevoice-v0-state-json.png" alt="NodeVoice V0 version-specific JSON state showing transcript-only coordination, null durable room state, recent utterances, and scheduling shell" width="940">
 
 <!-- nodevoice-v0-json-start -->
-<details><summary><b>Full V0 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V0 JSON state</b> (<a href="docs/media/nodevoice-v0-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -193,12 +228,12 @@ count target, no count progress object, and no durable control event.
 
 ### V1 Room State: reducer-owned progress
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-proof.gif" alt="NodeVoice V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
+<img src="docs/media/nodevoice-v1-proof.gif" alt="NodeVoice V1 slow proof loop: live room counts with reducer-owned floor and progress, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-state-json.png" alt="NodeVoice V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
+<img src="docs/media/nodevoice-v1-state-json.png" alt="NodeVoice V1 version-specific JSON state showing reducer-owned goal, count task, schedule, durable guards, and reducer trace" width="940">
 
 <!-- nodevoice-v1-json-start -->
-<details><summary><b>Full V1 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v1-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V1 JSON state</b> (<a href="docs/media/nodevoice-v1-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -320,12 +355,12 @@ explicit state instead of being inferred from agent prose.
 
 ### V2 Work Room: typed human interrupts
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-proof.gif" alt="NodeVoice V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
+<img src="docs/media/nodevoice-v2-proof.gif" alt="NodeVoice V2 slow proof loop: live room routes the same interrupt as typed intent, counts, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-state-json.png" alt="NodeVoice V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
+<img src="docs/media/nodevoice-v2-state-json.png" alt="NodeVoice V2 version-specific JSON state showing intent router, latest interpreted steer payload, reducer state, and missing control-plane fields" width="940">
 
 <!-- nodevoice-v2-json-start -->
-<details><summary><b>Full V2 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v2-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V2 JSON state</b> (<a href="docs/media/nodevoice-v2-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -455,12 +490,12 @@ becomes a state transition, not loose chat that the next model turn may ignore.
 
 ### V3 Agent OS: governed agent work
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-proof.gif" alt="NodeVoice V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
+<img src="docs/media/nodevoice-v3-proof.gif" alt="NodeVoice V3 slow proof loop: live room shows goal graph, workers, artifacts, policy, cost and latency, then opens the version-specific state drawer" width="940">
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-state-json.png" alt="NodeVoice V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
+<img src="docs/media/nodevoice-v3-state-json.png" alt="NodeVoice V3 version-specific JSON state showing agent OS control plane, goal graph, task queue, workers, artifacts, policy, world beliefs, and cost-latency budget" width="940">
 
 <!-- nodevoice-v3-json-start -->
-<details><summary><b>Full V3 JSON state</b> (<a href="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v3-state.json">raw JSON</a>)</summary>
+<details><summary><b>Full V3 JSON state</b> (<a href="docs/media/nodevoice-v3-state.json">raw JSON</a>)</summary>
 
 ```json
 {
@@ -864,7 +899,7 @@ cost, expected latency, observed runtime, and trace payloads.
 
 ### Final comparison
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-final-scorecard.png" alt="NodeVoice final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
+<img src="docs/media/nodevoice-final-scorecard.png" alt="NodeVoice final scorecard comparing V0, V1, V2, and V3 across memory, interrupt handling, progress, parallel work, cost latency, and auditability" width="940">
 
 | Axis | V0 Failure | V1 Room State | V2 Work Room | V3 Agent OS |
 |---|---|---|---|---|
@@ -877,10 +912,10 @@ cost, expected latency, observed runtime, and trace payloads.
 
 <details><summary><b>Optional motion capture</b></summary>
 
-<img src="https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-v1-v2-v3.gif" alt="NodeVoice V0 to V3 live production comparison GIF" width="940">
+<img src="docs/media/nodevoice-v0-v1-v2-v3.gif" alt="NodeVoice V0 to V3 live production comparison GIF" width="940">
 
 For a clearer moving version, open the high-resolution
-[MP4 version](https://raw.githubusercontent.com/HomenShum/FeatureClipStudio/main/assets/nodevoice-v0-v1-v2-v3.mp4).
+[MP4 version](docs/media/nodevoice-v0-v1-v2-v3.mp4).
 
 </details>
 
@@ -1118,19 +1153,24 @@ with latency + token cost measured per call.
 
 ![Model quality vs latency](docs/model-chart.svg)
 
-| Model | Proofloop quality (1–5) | Latency (single turn) | $ / turn | Best for |
+| Model | Proofloop quality (1–5) | Latency (p50, full turn) | $ / turn | Best for |
 |---|---|---|---|---|
-| **gpt-5.4-mini** · default | **4.75** | **1.3s** | $0.00072 | smartest mini that stays fast |
-| gpt-4.1-nano | 4.15 | **0.7s** | **$0.000033** | cheapest + fastest |
-| gpt-4.1-mini | 4.1 | 0.7s | $0.00014 | fast, balanced |
-| gpt-4o-mini | 4.5 | 1.0s | $0.000051 | legacy baseline |
-| gpt-5-nano | 4.6 | 3.2s | $0.00013 | cheap + smart, but slow |
-| gpt-5-mini | 5.0 | 3.0s | $0.00079 | top quality — too slow for live voice |
+| **gpt-5.4-mini** · default | **4.75** | **2.8s** | $0.00072 | smartest mini that stays fast |
+| gpt-4.1-nano | 4.15 | **2.0s** | **$0.000033** | cheapest + fastest |
+| gpt-4.1-mini | 4.1 | 2.0s | $0.00014 | fast, balanced |
+| gpt-4o-mini | 4.5 | 2.4s | $0.000051 | legacy baseline |
+| gpt-5-nano | 4.6 | 3.4s | $0.00013 | cheap + smart, but slow |
+| gpt-5-mini | 5.0 | 6.3s | $0.00079 | top quality — too slow for live voice |
+
+Latency is `p50ms` from the eval receipt, [`docs/model-eval-results.json`](docs/model-eval-results.json)
+(median wall-clock time for the full completion call, measured per turn during the eval run;
+absolute numbers include eval-run contention, so treat them as relative, not best-case).
 
 **Takeaways:** these are all capable models, so quality clusters tightly (4.1–5.0) — the
 decisive axes are **latency** and **cost**. `gpt-5-mini`/`nano` reason before answering
-(~3s, 250-300 reasoning tokens); `gpt-5.4-mini` adaptively *skips* reasoning on simple turns
-(~60 tokens, 1.3s) so it's the only "smartest-tier" model fast enough for a live loop.
+(250–320 reasoning tokens; 3.4–6.3s p50); `gpt-5.4-mini` adaptively *skips* reasoning on
+simple turns (~60 tokens, 2.8s p50) so it's the only "smartest-tier" model fast enough for
+a live loop.
 Reproduce anytime: `node scripts/model-eval.mjs` → writes `docs/model-eval-results.json`.
 
 ## Realtime vs. this STT → LLM → TTS pipeline
@@ -1183,7 +1223,8 @@ npm install
 npm run ui          # build the client + start the server
 ```
 
-Open **http://localhost:8787** and click **Run the comparison**.
+Open **http://localhost:8787/demo** and click **Run the comparison**. The bare
+**http://localhost:8787** is the live-room lobby, which links to the demo.
 
 For UI development with hot reload:
 
@@ -1346,19 +1387,27 @@ src/
 │   └── components/
 │       ├── agents-ui/              # trace-tree-view, control bar, visualizer, indicator, transcript
 │       └── ui/                     # Button, Badge, Input, Select
-├── core/                           # types, speechActClassifier, roomReducer, guards — the heart of the system
+├── core/                           # the rules of a room. ONE copy, imported by the
+│                                   # Node server, the Convex backend AND the browser:
+│                                   # roomReducer, agents, steering, numberWords,
+│                                   # routerModels, speechActClassifier, guards, types
+├── live/                           # the local live room: roomServer (HTTP + SSE), pipeline
 ├── compare/badGoodDemo.ts          # side-by-side bad/good step generator
 ├── voice/voiceAgent.ts             # voice agent loop
 ├── nodeagents/nodeAgentLocalMvp.ts # NodeAgent four-frame artifact chain
-├── providers/localModels.ts        # local model catalog
+├── providers/                      # outbound calls: openai, ollama, localModels catalog
 └── server.ts                       # HTTP server (API + static)
+
+convex/                             # the hosted backend. Room RULES are imported from
+                                    # src/core/ — convex/shared.ts holds only the
+                                    # Convex-specific glue.
 ```
 
-## Commands
+The one structural rule: **anything two runtimes must agree on lives in
+`src/core/` and is imported, never copied.** `tests/liveSteering.test.ts` asserts
+that by object identity.
 
-The additive P1 NodeKit mapping is documented in
-[`docs/nodekit-runtime-map.md`](docs/nodekit-runtime-map.md). It maps the existing
-`src/nodeagents` runtime and voice-room reducer without moving either one.
+## Commands
 
 | Command | Description |
 |---------|-------------|
@@ -1367,5 +1416,7 @@ The additive P1 NodeKit mapping is documented in
 | `npm run build` | Build client for production |
 | `npm run start` | Start server only (serves `dist/`) |
 | `npm test` | Run Vitest tests |
-| `npm run check` / `check:client` | TypeScript type-check (server / client) |
+| `npm run check` / `check:client` / `check:convex` | TypeScript type-check (server / client / Convex) |
+| `npm run check:citations` | Verify every `.tours/` step and every `path:line anchor` citation in the docs still lands on the code it names |
+| `npm run doctor` | All four checks above |
 | `npm run demo:compare` / `demo:voice` / `demo:node` | CLI demos |

@@ -1,0 +1,269 @@
+{
+  "url": "http://127.0.0.1:4993/demo",
+  "width": 360,
+  "height": 800,
+  "body": "NodeVoice\nVOICE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nN\nTURNS\nSOURCE\nSim (scripted)\nOllama (local)\nOpenAI (live)\nIdle · listening\nlocal-first · no API keys\nWhy multi-agent voice loops get stuck — and how a shared room fixes it\n\nThree voice agents try to count together. With transcripts alone they loop on “yeah, exactly…” forever. Give them one server-authoritative room state and they count all the way up.\n\nvoice-a\nvoice-b\nvoice-c\nShared Room\nauthoritative state\nroomState\nscheduler\nclassifier\nRun the comparison\n\nRuns the bad vs. good demo side-by-side and narrates the good run aloud.\n\nCompare\nNodeAgent\nRun",
+  "scrollWidth": 360,
+  "scrollHeight": 800,
+  "reducedMotion": false,
+  "controls": [
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback",
+      "ariaLabel": null,
+      "title": "Voice model",
+      "placeholder": null,
+      "value": "gemma4_e2b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 68.28125,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34,
+        "right": 173,
+        "bottom": 89
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": true,
+      "focusVisible": true
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "N"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18,
+        "right": 293.09375,
+        "bottom": 81
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "TURNS"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18,
+        "right": 124.09375,
+        "bottom": 125
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SELECT",
+      "text": "Sim (scripted)\nOllama (local)\nOpenAI (live)",
+      "ariaLabel": null,
+      "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+      "placeholder": null,
+      "value": "deterministic",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 200.59375,
+        "y": 99,
+        "width": 53.5,
+        "height": 34,
+        "right": 254.09375,
+        "bottom": 133
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run the comparison",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 74,
+        "y": 628.25,
+        "width": 212,
+        "height": 44,
+        "right": 286,
+        "bottom": 672.25
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Compare",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 19,
+        "y": 703,
+        "width": 96.515625,
+        "height": 28,
+        "right": 115.515625,
+        "bottom": 731
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgb(24, 28, 37)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "NodeAgent",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 117.515625,
+        "y": 703,
+        "width": 108.59375,
+        "height": 28,
+        "right": 226.109375,
+        "bottom": 731
+      },
+      "fontSize": "12px",
+      "color": "rgb(147, 158, 174)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": "Press Run to start the side-by-side comparison demo…",
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 746,
+        "width": 222.078125,
+        "height": 40,
+        "right": 238.078125,
+        "bottom": 786
+      },
+      "fontSize": "14px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.261176 -0.00153025 -0.0153386 / 0.7)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 248.078125,
+        "y": 744,
+        "width": 95.921875,
+        "height": 44,
+        "right": 344,
+        "bottom": 788
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": [
+      {
+        "name": "Microsoft David - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Mark - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Zira - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Huihui - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Kangkang - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Yaoyao - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      }
+    ]
+  }
+}

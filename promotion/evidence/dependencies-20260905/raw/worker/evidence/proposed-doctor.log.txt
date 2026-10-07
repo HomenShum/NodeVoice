@@ -1,0 +1,21 @@
+
+> nodevoice@0.1.0 doctor
+> npm run check && npm run check:client && npm run check:convex && npm run check:citations
+
+
+> nodevoice@0.1.0 check
+> tsc --noEmit
+
+
+> nodevoice@0.1.0 check:client
+> tsc --noEmit -p tsconfig.client.json
+
+
+> nodevoice@0.1.0 check:convex
+> tsc --noEmit -p convex/tsconfig.json
+
+
+> nodevoice@0.1.0 check:citations
+> node scripts/check-citations.mjs
+
+56 citations checked, 0 broken

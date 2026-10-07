@@ -1,0 +1,106 @@
+from pathlib import Path
+import collections, datetime, difflib, hashlib, json, subprocess
+
+P=Path(r'C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904')
+S=Path(r'D:/ProjectRecovery/nodevoice-dependency-repair-20260905'); C=S/'consumer'; E=S/'evidence'
+R=Path(r'D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodevoice-current-consumer-20260905')
+O=P/'E6j-nodevoice-dependency-external-judge-01'; A=P/'E6j-nodevoice-dependency-recon-01'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def blob(b):return hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+def read(p):return json.loads(p.read_text(encoding='utf-8'))
+def write(n,d):(O/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+checks=[]
+def check(name,ok,detail=None):
+    checks.append({'name':name,'passed':bool(ok),'detail':detail})
+    if not ok:raise AssertionError(name)
+def verify(root,rows):
+    failures=[]
+    for x in rows:
+        p=root/x['path'];b=p.read_bytes()
+        if len(b)!=x['bytes'] or sha(b)!=x['sha256'] or ('rawGitBlobSha1' in x and blob(b)!=x['rawGitBlobSha1']):failures.append(x['path'])
+    return failures
+freeze=read(P/'E6j_NODEVOICE_DEPENDENCY_EXTERNAL_FREEZE.json'); plan=read(P/'E6j_NODEVOICE_DEPENDENCY_REPAIR_PLAN.json')
+check('Frozen proposal receipt identity',sha((P/'E6j_NODEVOICE_DEPENDENCY_EXTERNAL_FREEZE.json').read_bytes())=='caf442583e55278c31110ee93f6e49db4e50b57ceff1357e72514c32025e4041')
+check('Frozen manifest identity',sha((S/'freeze-manifest.json').read_bytes())=='e5dd75946a8c555c8fb4bae8434f46311318232f426fa19d6906f1f790bd233b')
+manifest=read(S/'freeze-manifest.json');check('All 268 manifest files exact raw bytes and Git blobs',len(manifest['files'])==268 and sum(x['bytes'] for x in manifest['files'])==47030242 and not verify(S,manifest['files']))
+check('Accepted plan semantic identity; raw Unicode escape variation retained',read(E/'accepted-plan.json')==plan,{'externalSha256':sha((E/'accepted-plan.json').read_bytes()),'originalSha256':sha((P/'E6j_NODEVOICE_DEPENDENCY_REPAIR_PLAN.json').read_bytes()),'rawByteEquality':False,'difference':'Two existing arrow-bearing text lines use JSON Unicode escapes. No values or constraints differ; both raw copies preserved.'})
+origin=read(E/'source-origin.json');current=read(E/'current-source-dist.json')
+historical=read(P/'E6j-nodevoice-ui-controls-after-04/after.json'); ui_freeze=read(P/'E6j_NODEVOICE_UI_REPAIR_FREEZE.json');ui_judge=read(P/'E6j_NODEVOICE_UI_REPAIR_FINAL_JUDGE.json')
+check('Original source and dist snapshot matches accepted final UI observation',origin['source']==historical['source'] and origin['dist']==historical['dist'])
+check('Historical UI freeze and independent judge exact',sha((P/'E6j_NODEVOICE_UI_REPAIR_FREEZE.json').read_bytes())=='8bc83985cdab617ecaf03e1ee80ae0264ab995dfbc0beae9aabc1c5e47a01eff' and sha((P/'E6j_NODEVOICE_UI_REPAIR_FINAL_JUDGE.json').read_bytes())=='3a87b99fc9cc2790024a22d217461f6092655e9fdca9f62a33b85780c238695f')
+check('Historical accepted current-source copy equals actual after observation',(P/ui_freeze['sourceBindings']['path']).read_bytes()==(P/'E6j-nodevoice-ui-controls-after-04/after.json').read_bytes())
+check('All 177 external current source files exact',len(current['source'])==177 and not verify(C,current['source']))
+before_by={x['path']:x for x in origin['source']};changed=[x['path'] for x in current['source'] if x['sha256']!=before_by[x['path']]['sha256']]
+check('Only lock changes among the 177 approved source files',changed==['package-lock.json'])
+check('All 177 reviewed original checkout source files remain exact',not verify(R,origin['source']))
+old_package=(E/'original-package.json.txt').read_bytes(); package=(C/'package.json').read_bytes()
+check('Original package.json restored byte-for-byte',old_package==package==(R/'package.json').read_bytes() and sha(package)==plan['packageSha256'])
+old_lock=(E/'original-package-lock.json.txt').read_bytes(); new_lock=(C/'package-lock.json').read_bytes(); old=json.loads(old_lock);new=json.loads(new_lock)
+check('Exact original and new lock identities',sha(old_lock)==freeze['oldLockSha256'] and sha(new_lock)==freeze['newLockSha256']=='65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b' and old_lock==(R/'package-lock.json').read_bytes() and new_lock==(E/'proposed-package-lock.json.txt').read_bytes())
+allowed={x['path'] for x in plan['rows']};delta=[k for k in sorted(set(old['packages'])|set(new['packages'])) if old['packages'].get(k)!=new['packages'].get(k)]
+check('Exactly seven native lock rows and no new/deleted row',set(delta)==allowed and set(old['packages'])==set(new['packages']))
+check('All root and other lock metadata unchanged',{k:v for k,v in old.items() if k!='packages'}=={k:v for k,v in new.items() if k!='packages'} and old['packages']['']==new['packages'][''])
+diff_rows=[]
+for row in plan['rows']:
+    n=new['packages'][row['path']];meta=read(A/row['targetMetadata']['path'])
+    check(row['path']+' exact official version/integrity',sha((A/row['targetMetadata']['path']).read_bytes())==row['targetMetadata']['sha256'] and n['version']==row['targetVersion']==meta['version'] and n['integrity']==row['targetIntegrity']==meta['dist']['integrity'] and n['resolved']==meta['dist']['tarball'] and n['dev'] is True)
+    diff_rows.append({'path':row['path'],'before':old['packages'][row['path']]['version'],'after':n['version'],'changedFields':[k for k in set(n)|set(old['packages'][row['path']]) if n.get(k)!=old['packages'][row['path']].get(k)]})
+check('Required browser data versions equal four raised lower bounds',all(new['packages']['node_modules/'+n]['version']==new['packages']['node_modules/browserslist']['dependencies'][n][1:] for n in ['caniuse-lite','node-releases','electron-to-chromium','baseline-browser-mapping']))
+check('Existing other shared dependencies unchanged',all(old['packages']['node_modules/'+n]==new['packages']['node_modules/'+n] for n in ['update-browserslist-db','picocolors','source-map-js']))
+temp=read(E/'temporary-exact-package.json.txt');tp=json.loads(package);expected=json.loads(package)
+for x in plan['rows']:expected['devDependencies'][x['path'].removeprefix('node_modules/')]=x['targetVersion']
+check('Temporary exact roots are precisely the planned resolver constraints',temp==expected)
+tl=read(E/'temporary-resolved-lock.json.txt');check('All final seven rows were produced by temporary native resolution',all(tl['packages'][x]==new['packages'][x] for x in allowed))
+resolution=read(E/'resolution-commands.json');check('Both native resolver commands passed without force/peer/override flags',len(resolution)==2 and all(x['exitCode']==0 and x['argv'][2:]==['install','--package-lock-only','--ignore-scripts','--no-audit','--no-fund'] and sha((E/(x['label']+'.log')).read_bytes())==x['logSha256'] for x in resolution))
+installed=read(E/'installed-proposed-seven-packages.json');check('Actual 956 installed seven-package files exact',len(installed)==956 and not verify(C,installed))
+actual_paths={f.relative_to(C).as_posix() for d in allowed for f in (C/d).rglob('*') if f.is_file()};check('Installed seven-package inventory has no omitted or extra file',actual_paths=={x['path'] for x in installed})
+check('Actual seven installed package versions match lock',all(read(C/x/'package.json')['version']==new['packages'][x]['version'] for x in allowed))
+official=read(O/'official-advisory-readback.json');sources={x['id']:x for x in plan['primarySources']}
+check('Six independently refreshed official advisory bytes equal recorded sources',len(official)==6 and all(x['sha256']==sources[x['id']]['sha256'] for x in official))
+check('Browserslist severity discrepancy preserved','Medium rather than High' in read(O/'GHSA-c83g-rgw3-j3cx.json')['description'] and read(O/'GHSA-c83g-rgw3-j3cx.json')['severity']=='high')
+commands=read(E/'proposed-commands.json')
+for row in commands:
+    name=row['label'];stdout=E/(name+('.stdout.json' if name in ['proposed-npm-audit','proposed-npm-audit-omit-dev'] else '.log'));stderr=E/(name+'.stderr.txt')
+    check('Actual normal command '+name,row['exitCode']==0 and not row['timedOut'] and sha(stdout.read_bytes())==row['stdoutSha256'] and sha(stderr.read_bytes())==row['stderrSha256'])
+check('Both actual audit reports have zero findings',all(read(E/(n+'.stdout.json'))['vulnerabilities']=={} and read(E/(n+'.stdout.json'))['metadata']['vulnerabilities']['total']==0 for n in ['proposed-npm-audit','proposed-npm-audit-omit-dev']))
+doctor=(E/'proposed-doctor.log').read_text();proof=(E/'proposed-proof.log').read_text();build=(E/'proposed-build.log').read_text()
+check('Doctor covers three projects and 56 valid citations',all(x in doctor for x in ['tsc --noEmit','tsc --noEmit -p tsconfig.client.json','tsc --noEmit -p convex/tsconfig.json','56 citations checked, 0 broken']))
+check('Proof actually reports 55 tests across nine files and deterministic comparison',all(x in proof for x in ['Test Files  9 passed (9)','Tests  55 passed (55)','Model: deterministic fallback','9 voice-c  Nine']))
+check('Ordinary commands remain unchanged package scripts',json.loads(package)['scripts']['doctor']=='npm run check && npm run check:client && npm run check:convex && npm run check:citations' and json.loads(package)['scripts']['proof']=='npm run test && npm run demo:compare' and json.loads(package)['scripts']['build']=='vite build')
+before=read(E/'canaries-baseline/report.json');after=read(E/'canaries-proposed/report.json');canary_sha=sha((S/'canaries/check.cjs').read_bytes())
+check('Identical actual-library observer bound before and after',before['scriptSha256']==after['scriptSha256']==canary_sha=='4b3e4ef3d295edb5afaa80274afbd7e92bc19ddd029d52083578ba22c4d84e11')
+for mode,d in [('baseline',before),('proposed',after)]:
+    check(mode+' raw JSONL is exactly the reported canary observations',all([json.loads(l) for l in (E/('canaries-'+mode)/(row['name']+'.stdout.jsonl')).read_text().splitlines() if l.strip()]==row['observations'] for row in d['rows']))
+b={x['name']:x for x in before['rows']};a={x['name']:x for x in after['rows']}
+for name in ['nanoid-negative','nanoid-zero']:
+    check(name+' bounded old started-timeout and new empty completion',b[name]['timedOut'] and b[name]['observations'][0]['phase']=='operation-started' and len(b[name]['observations'])==1 and a[name]['exitCode']==0 and not a[name]['timedOut'] and a[name]['observations'][-1]=={'phase':'completed','length':0} and b[name]['budgetSeconds']==a[name]['budgetSeconds']==0.6)
+check('128 fixed-six IDs still complete before and after',all(x['observations'][-1]=={'phase':'completed','count':128,'allSix':True,'distinct':128} for x in [b['nanoid-fixed6'],a['nanoid-fixed6']]))
+bm={x['name']:x for x in b['postcss-map']['observations']};am={x['name']:x for x in a['postcss-map']['observations']}
+check('Allowed real owned map read remains',all(x['reads']==['inside-owned-map'] and x['markerDisclosed'] and x['cssRetainsRule'] for x in [bm['allowed-relative'],am['allowed-relative']]))
+check('Relative escape and absolute/no-from owned reads stop',all(bm[n]['reads']==['outside-owned-map'] and bm[n]['markerDisclosed'] and am[n]['reads']==[] and not am[n]['markerDisclosed'] and am[n]['cssRetainsRule'] for n in ['outside-relative','outside-absolute-no-from']))
+bs={x['name']:x for x in b['browserslist-stats-cache']['observations']};aas={x['name']:x for x in a['browserslist-stats-cache']['observations']}
+check('Three inherited stats names no longer throw',all(not bs[n]['completed'] and aas[n]['completed'] and aas[n]['resultCount']>0 for n in ['stats-toString','stats-constructor','stats-__proto__']))
+bc=bs['sustained-cache'];ac=aas['sustained-cache'];check('Immediate cache retained and old entry evicted after 2050 queries',bc['distinctQueries']==ac['distinctQueries']==2050 and bc['immediateSameReference'] and ac['immediateSameReference'] and bc['afterSameReference'] and not ac['afterSameReference'] and bc['sameValues'] and ac['sameValues'])
+check('All five final canary processes completed',len(after['rows'])==5 and all(x['exitCode']==0 and not x['timedOut'] for x in after['rows']))
+check('All three actual new built files exactly match historical native assets',len(current['dist'])==3 and not verify(C,current['dist']) and not verify(C,historical['dist']) and {f.relative_to(C).as_posix() for f in (C/'dist').rglob('*') if f.is_file()}=={x['path'] for x in historical['dist']})
+check('The accepted historical checkout dist still matches',not verify(R,historical['dist']))
+check('Both authored UI owner hashes match earlier independent judgment',all(sha((C/x['path']).read_bytes())==x['afterSha256'] for x in ui_judge['owners']))
+check('No external private environment file copied',not any(f.name.startswith('.env') and f.name!='.env.example' for f in C.iterdir()))
+check('Original baseline audit and canary failures retained','3 high severity vulnerabilities' in (E/'baseline-npm-ci.log').read_text() and before['rows'][0]['timedOut'])
+diff=''.join(difflib.unified_diff(old_lock.decode().splitlines(True),new_lock.decode().splitlines(True),fromfile='original/package-lock.json',tofile='proposed/package-lock.json'))
+(O/'actual-lock.diff').write_text(diff,encoding='utf-8');write('independent-seven-row-analysis.json',{'rows':diff_rows,'totalRows':len(new['packages']),'otherRowsUnchanged':len(new['packages'])-7,'rootPackageBytesRestored':True})
+write('independent-build-rebind.json',{'historicalSourceSha256':sha((P/'E6j-nodevoice-ui-controls-after-04/after.json').read_bytes()),'historicalJudgeSha256':sha((P/'E6j_NODEVOICE_UI_REPAIR_FINAL_JUDGE.json').read_bytes()),'currentActualFiles':current['dist'],'allThreeRawFilesExact':True,'all176NonLockSourceFilesExact':True,'meaning':'Historical native browser evidence is compatible with identical compiled app files and unchanged server/application source. No new execution or renewed font/network/backend/provider observation.'})
+for name in ['proposed-doctor.log','proposed-proof.log','proposed-build.log','proposed-npm-ci.log','proposed-npm-audit.stdout.json','proposed-npm-audit-omit-dev.stdout.json','canary-before-after-verdict.json','resolution-receipt.json','proposed-commands.json','baseline-install.json','baseline-npm-ci.log']:(O/name).write_bytes((E/name).read_bytes())
+for mode in ['baseline','proposed']:
+    (O/('canaries-'+mode+'.json')).write_bytes((E/('canaries-'+mode)/'report.json').read_bytes())
+(O/'canary-observer.cjs.txt').write_bytes((S/'canaries/check.cjs').read_bytes());(O/'native-resolver.py.txt').write_bytes((S/'resolve-lock.py').read_bytes());(O/'normal-command-wrapper.py.txt').write_bytes((S/'verify-proposed.py').read_bytes())
+write('checks.json',checks)
+check('External 268-file closing guard remains exact',not verify(S,manifest['files']))
+check('Installed 956-file closing guard remains exact',not verify(C,installed))
+write('checks.json',checks);write('closing-guard.json',{'status':'CLOSED','externalManifestSha256':sha((S/'freeze-manifest.json').read_bytes()),'external268Exact':True,'installed956Exact':True,'Rvoice177OriginalSourceExact':not verify(R,origin['source']),'RvoiceDist3Exact':not verify(R,origin['dist']),'gitMutations':0,'sourceWrites':0,'runtimeReruns':0,'providerCalls':0,'scope':'Parent owns normal Git publication/merge separately; no requirement that its references equal the earlier uncommitted source snapshot.'})
+raw_manifest=[{'path':f.relative_to(O).as_posix(),'bytes':f.stat().st_size,'sha256':sha(f.read_bytes())} for f in sorted(O.rglob('*')) if f.is_file() and f.name!='artifact-manifest.json']
+write('artifact-manifest.json',{'files':raw_manifest,'count':len(raw_manifest),'bytes':sum(x['bytes'] for x in raw_manifest)})
+report={'status':'APPROVED_SCOPED_EXTERNAL_LOCK_TRANSFER','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'request':'Nonauthor review of the seven-row external NodeVoice dependency proposal, current audit/canary/build evidence and exact historical playback rebind.','independence':'Reused reviewer context; did not author this lock repair, its canaries or the accepted NodeVoice UI implementation. No new runtime, provider, installation or source mutation.','scratch':str(S),'sourceBase':freeze['sourceBase'],'freezeSha256':sha((P/'E6j_NODEVOICE_DEPENDENCY_EXTERNAL_FREEZE.json').read_bytes()),'manifestSha256':sha((S/'freeze-manifest.json').read_bytes()),'manifestFiles':268,'manifestBytes':47030242,'checksPassed':len(checks),'checks':checks,'changedRows':diff_rows,'oldLockSha256':sha(old_lock),'newLockSha256':sha(new_lock),'packageJsonByteIdentical':True,'nonLockSourceFilesExact':176,'installedFilesVerified':956,'ordinaryEvidence':{'npmCiExit':0,'fullAudit':0,'omitDevAudit':0,'doctorTypecheckProjects':3,'citations':56,'proofTests':55,'proofFiles':9,'CLIComparison':'Existing deterministic target-12, nine-turn illustration; not native count-100 playback.','build':'PASS; actual HTML/CSS/JS match accepted UI bytes.'},'canaryScope':['Actual installed modules and generated owned fixtures; same observer and deadlines before/after.','Two old operations started but exceeded 0.6-second child deadlines; new negative/zero generators return empty IDs. 128 fixed-six ID calls remain valid.','Allowed map reads remain; two disallowed owned map reads and marker disclosure disappear.','Inherited stats keys stop throwing; repeated query immediately reuses cache while initial entry is absent after 2050 distinct queries. Heap checkpoints are observations, not a performance guarantee.','No remote exploit, complete library certification, production-input reachability, OOM attempt or full sustained load measurement.'],'historicalRebind':{'assets':current['dist'],'exact':True,'freshPlayback':False,'historicalVisible100Ms':125736,'historicalRunEnabledMs':126829,'originalDeadlineMs':300000,'scope':'Previously independently judged local deterministic native proof only; no current external font/network/audio/provider/Convex guarantee.'},'officialAdvisories':official,'applicability':'Seven rows are development tooling. CSS tooling reaches Browserslist/PostCSS; PostCSS calls nanoid/non-secure with fixed size 6. No new direct dependency, override, source/API/config change. start still uses devDependency tsx; omit-dev-only deployment is not certified.','limits':['External source proposal only; actual future repository transfer, Git filtered/index/commit bindings, handoff/publication and normal shared checks remain separate.','The current audit feed reports zero; this does not imply absence of all vulnerabilities. Original three-high baseline stays retained.','Browserslist cache maintainer text rates Medium, while GitHub/npm classification is high; both classifications preserved. Already-fixed older nanoid integer-overflow advisory is not added as a current finding.','The upstream Browserslist patch cohort also includes query/regex fixes; this review does not certify every query behavior. Unchanged compiled CSS directly bounds this app build result.','Existing main-pane/short-height/selected-option limitations, unspecified-host server binding, physical-device/native-zoom/accessibility/audio/provider/durable-room/production acceptance remain open.','No all-268-files publication approval: active scratch code, tracked source fixtures and original local evidence require the separately bounded publication plan.'],'fullGrades':None,'overallGrade':None,'target':4.5,'blockers':[],'guard':'CLOSED','rawEvidence':{'directory':str(O),'manifestSha256':sha((O/'artifact-manifest.json').read_bytes()),'count':len(raw_manifest),'bytes':sum(x['bytes'] for x in raw_manifest)}}
+report['collectorCorrection']={'initial':'Raw equality assertion rejected different JSON Unicode serialization in accepted-plan copy.','resolved':'Parsed plans are exactly equal; two arrow-bearing text lines are escaped externally. Both exact raw hashes and delta retained. No proposal edit or weakened source hash condition.','retained':'collector-plan-byte-assertion-failure.py.txt, collector-plan-byte-assertion-failure.txt, accepted-plan-raw.diff'}
+report['readOnlyGitClosure']=read(O/'rvoice-read-only-close.json')
+(P/'E6j_NODEVOICE_DEPENDENCY_EXTERNAL_JUDGE.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps({'status':report['status'],'checks':len(checks),'jsonSha256':sha((P/'E6j_NODEVOICE_DEPENDENCY_EXTERNAL_JUDGE.json').read_bytes()),'rawManifestSha256':report['rawEvidence']['manifestSha256']}))

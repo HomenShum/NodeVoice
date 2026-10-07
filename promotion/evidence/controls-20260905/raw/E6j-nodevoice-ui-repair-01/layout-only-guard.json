@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "source": "Actual HEAD file bytes plus only the recorded class/accessible group attribute substitutions reconstruct each entire current file exactly. All handler, state, provider and playback bytes remain unchanged.",
+  "owners": [
+    {
+      "path": "src/client/App.tsx",
+      "beforeSha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21",
+      "afterSha256": "63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc",
+      "rawGitBlob": "13efc6df0d106632c7573e4be8fedc1414e87e3a",
+      "bytes": 39924,
+      "exactReplacementPairs": [
+        [
+          "z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/80",
+          "z-20 flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/80"
+        ],
+        [
+          "<div className=\"flex min-w-0 flex-1 items-center justify-end gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden\">",
+          "<div role=\"group\" aria-label=\"Comparison controls\" className=\"flex w-full min-w-0 flex-none flex-wrap items-center justify-start gap-2 pb-1 [&>*]:shrink-0 sm:w-auto sm:flex-1\">"
+        ],
+        [
+          "<label className=\"flex h-9 items-center gap-1.5 rounded-md border border-border bg-elevated/70 pl-2.5",
+          "<label className=\"flex min-h-9 items-center gap-1.5 rounded-md border border-border bg-elevated/70 py-1 pl-2.5"
+        ],
+        [
+          "w-10 bg-transparent text-right text-xs font-semibold tabular-nums text-foreground outline-none",
+          "w-[4.5em] bg-transparent text-right text-xs font-semibold leading-normal tabular-nums text-foreground outline-none"
+        ],
+        [
+          "<div className=\"flex items-center gap-3\">\n          <span className=\"flex shrink-0 items-center gap-1.5 text-[10px]",
+          "<div className=\"flex flex-wrap items-center gap-3\">\n          <span className=\"flex max-w-full items-center gap-1.5 text-[10px]"
+        ],
+        [
+          "relative h-2.5 flex-1 overflow-hidden rounded-full bg-muted/60",
+          "relative h-2.5 min-w-16 flex-1 overflow-hidden rounded-full bg-muted/60"
+        ]
+      ],
+      "allOtherBytesIdentical": true,
+      "lfOnly": true
+    },
+    {
+      "path": "src/client/live/LiveRoom.tsx",
+      "beforeSha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619",
+      "afterSha256": "517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174",
+      "rawGitBlob": "a4cb30a4473c1dbbc16da00af6d822710c4f3366",
+      "bytes": 71178,
+      "exactReplacementPairs": [
+        [
+          "z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/85",
+          "z-20 flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/85"
+        ],
+        [
+          "<div className=\"ml-auto flex items-center gap-2\">",
+          "<div className=\"ml-auto flex max-w-full flex-wrap items-center gap-2\">"
+        ]
+      ],
+      "allOtherBytesIdentical": true,
+      "lfOnly": true
+    }
+  ],
+  "diffSha256": "525513202f4bcb96bfedd90a6ce9d7b93727417c5435c2ffca8cc5ee04f9680a"
+}

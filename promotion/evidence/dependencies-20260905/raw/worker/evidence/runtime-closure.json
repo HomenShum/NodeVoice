@@ -1,0 +1,7 @@
+{
+  "activeOwnedScratchProcesses": [],
+  "allRecordedCommandsReturned": true,
+  "noLongLivedRuntimeLaunched": true,
+  "noPortReserved": true,
+  "note": "Short existing test HTTP listeners close with the completed proof process. No standalone application/browser/provider session was launched in this slice."
+}

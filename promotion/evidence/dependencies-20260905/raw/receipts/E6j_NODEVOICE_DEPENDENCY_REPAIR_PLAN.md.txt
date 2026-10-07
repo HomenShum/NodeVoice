@@ -1,0 +1,25 @@
+# NodeVoice dependency repair proposal
+
+A developer building the local demo should not inherit known parser/identifier defects through the build tools. Recommend one lockfile repair, preserving every application file and package.json range. This is read-only reconnaissance; the current handoff proposal remains frozen.
+
+| Lock row | Current | Smallest verified target |
+|---|---|---|
+| browserslist | 4.28.4 | 4.28.7 |
+| nanoid | 3.3.15 | 3.3.18 |
+| postcss | 8.5.16 | 8.5.23 |
+| caniuse-lite | 1.0.30001800 | 1.0.30001806 |
+| node-releases | 2.0.50 | 2.0.51 |
+| electron-to-chromium | 1.5.387 | 1.5.393 |
+| baseline-browser-mapping | 2.10.41 | 2.10.44 |
+
+The four browser-data updates are required by Browserslist 4.28.7, so a three-row-only promise would be false. Existing Autoprefixer, Vite, Tailwind/PostCSS and root PostCSS constraints accept this cohort. update-browserslist-db 1.2.3, picocolors 1.1.1 and source-map-js 1.2.1 already satisfy it and should stay unchanged. Current registry latest Browserslist 4.28.9 and PostCSS 8.5.28 would bring broader changes; avoid an unqualified update.
+
+The two Browserslist fixes are published in [4.28.7](https://github.com/browserslist/browserslist/releases/tag/4.28.7). The nanoid minimum is [3.3.18](https://github.com/advisories/GHSA-2v37-7h3g-55p8), which also covers the [negative-size issue](https://github.com/advisories/GHSA-28wg-ghj8-5hjv). PostCSS must reach [8.5.23](https://github.com/postcss/postcss/releases/tag/8.5.23), because the earlier path fix still allowed source-map reads when from was unset. Exact current registry, release and advisory responses are retained in E6j-nodevoice-dependency-recon-01; the bounded three-package npm feed still lists the same six advisory records.
+
+All three affected rows are dev:true. Autoprefixer reaches Browserslist during CSS builds; Vite and Tailwind's plugin use PostCSS. No direct import appears in inspected application/Convex/scripts source. Installed PostCSS calls nanoid/non-secure with a fixed size of 6, so no attacker-controlled negative/zero size was found at that seam. This does not excuse build-time findings: untrusted repository stats or CSS can affect tooling. No remote exploit or zero-production audit result is claimed. Also, npm start itself uses devDependency tsx, so an omit-dev-only application install is not certified.
+
+After root authorizes implementation, preserve the exact baseline and use native npm resolution, with temporary exact constraints only if required and explicitly restored before final install. Final package.json must be byte-identical; only the seven lock rows may change. Do not write resolution/integrity fields by hand. Stop on unrelated churn.
+
+Then run normal npm ci, full and omit-dev audits, bounded old/new identifier/source-map/stats canaries in harmless scratch fixtures, doctor, the 55-test proof and build. Compare rebuilt artifacts and affected native control pixels. Retain the original 100 proof as historical unless the relevant output can be exactly rebound; changed runtime output requires current proof or an explicit hold. Finish with nonauthor review, no publication action.
+
+Applicability limits: the maintainer rates the Browserslist cache issue moderate while the npm feed rates it high; preserve that discrepancy. The separate nanoid integer-overflow advisory is already fixed below current 3.3.15 and is not a new current finding. One metadata request with an abbreviated Accept header failed 406, then normal JSON reads succeeded. All 177 source files, 3 dist files, refs/index/status and the external HANDOFF hash remained exact. No install, source/lock mutation, provider or private environment access occurred.

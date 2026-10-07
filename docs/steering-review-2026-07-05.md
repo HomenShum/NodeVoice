@@ -4,6 +4,10 @@ Scope: goal-retarget + count-task layer shipped in 6ee8654. **22 confirmed / 0 r
 
 Status: REVIEW ONLY — nothing fixed yet. Triage before fixing.
 
+Archived snapshot: every `file:line` below describes the tree at `6ee8654`, not the
+current one. `src/live/steering.ts` has since been merged into `src/core/steering.ts`,
+so these citations are history and `npm run check:citations` does not check them.
+
 ## [1] HIGH · convex/shared.ts:157 · intent_parsing
 
 **Defect:** parseNumberPhrase returns the first DIGIT anywhere in the captured tail, beating a word-number that immediately follows 'count to', so trailing digits hijack the target. Identical bug in src/live/steering.ts:99.

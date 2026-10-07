@@ -1,0 +1,44 @@
+{
+  "status": "FUNCTIONAL_PASS_WITH_SCOPED_RAIL_FAILURE",
+  "rawBrowserStatus": "PASS",
+  "checks": 21,
+  "captures": 37,
+  "first100Ms": 123489,
+  "settledMs": 125076,
+  "limitation": "Initial assertion measured native select interior only. Styled control wrapper remains190px wide while rail is163.015625px; actual320 screenshot shows right border/chevron cut off. Interior reachability is not full control readability.",
+  "preflight": {
+    "railRect": {
+      "x": 140.984375,
+      "y": 10,
+      "width": 163.015625,
+      "height": 40
+    },
+    "firstRect": {
+      "x": 193.265625,
+      "y": 11,
+      "width": 104.71875,
+      "height": 34
+    },
+    "scrollLeft": 0
+  },
+  "sameOwnerCorrection": "Wrap App header and give existing rail full row width below sm; preserve C/NumberField/handlers.",
+  "sourceFirstPatch": {
+    "owners": [
+      {
+        "path": "src/client/App.tsx",
+        "beforeSha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21",
+        "afterSha256": "b0910ce06cc88c914faeabade66c041fb67588980bad99034c3b8900210a0185",
+        "bytes": 39913
+      },
+      {
+        "path": "src/client/live/LiveRoom.tsx",
+        "beforeSha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619",
+        "afterSha256": "517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174",
+        "bytes": 71178
+      }
+    ],
+    "onlyExpectedTwoWorkingPaths": true,
+    "allTouchedLF": true
+  },
+  "nextProof": "Current focused pointer/keyboard/spinner/toggle and room scope; actual100 result above remains bound to first-patch source, never relabelled after correction."
+}

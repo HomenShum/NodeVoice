@@ -1,77 +1,95 @@
-# NodeKit brownfield runtime map
+# NodeKit map of the existing NodeVoice runtime
 
-NodeVoice is mapped as a `nodeagent.application/v1` application without moving
-or replacing its existing TypeScript runtime. The root `nodeagent.yaml` points
-authoring at `src/nodeagents` and names the repo-local implementations that are
-already used by the product and tests.
+A developer extending a voice room needs to find the code that decides whether
+an agent actually advanced the task. Follow [START_HERE.md](START_HERE.md) for
+the running comparison, then use this map to locate the reducer and local
+four-artifact loop. A logical map is useful for handoff; it does not replace
+the runtime or turn old compiler output into proof of a current integration.
 
-## Mapped slice
+## Follow the code already in use
 
-The single `voice-room` capability pack covers one coherent runtime seam:
+The root `nodeagent.yaml` declares one `nodeagent.application/v1` application
+with `authoring.directory: ./src/nodeagents`. The `voice-room` pack describes
+this existing seam:
 
-1. `src/core/roomReducer.ts` owns task progress, floor selection, and loop
-   guards.
-2. `src/voice/voiceAgent.ts` advances deterministic voice turns through that
-   reducer.
-3. `src/compare/badGoodDemo.ts` exposes the deterministic room-state comparison
-   and its provenance.
-4. `src/nodeagents/nodeAgentLocalMvp.ts` commits the existing four-artifact work
-   loop into the same room-state model.
+1. `src/core/roomReducer.ts` owns task progress, floor selection and loop guards.
+2. `src/voice/voiceAgent.ts` advances voice turns through that reducer.
+3. `src/compare/badGoodDemo.ts` returns the comparison and its actual provenance.
+4. `src/nodeagents/nodeAgentLocalMvp.ts` completes the context, answer, model
+   delta and memo sequence using local room state.
 
-The pack is a logical ownership map. Its implementation sources remain in place
-and remain authoritative.
+Implementation stays at those paths. Current main's hosted Convex, local live
+room and browser flows remain separate existing entry points; this pack maps
+the local deterministic seam and does not migrate those flows.
 
-## Deterministic and no-key boundary
+The pack's tool/job/validator names are logical ownership labels, not registered
+executable tools. The manifest's event/trace schema references are declared
+targets. Current `RoomState`, `Utterance`, `Artifact`, comparison and local
+NodeAgent results are repository-local types; this change does not make the
+runtime emit `nodeagent.event/v1` or `nodeagent.trace/v1` envelopes.
 
-`npm run test:nodekit` runs the focused room reducer, deterministic comparison,
-and local NodeAgent tests. These paths pass `useOllama: false` or select the
-deterministic source explicitly, use repository fixtures, and require no API key
-or external account. `npm run demo` remains the repository's disclosed no-key
-comparison command.
+## Check the mapped path without selecting a provider
 
-The `provider` section in `nodeagent.yaml` records the real optional OpenAI and
-Ollama router already present in the repository because the v1 application
-schema requires a provider reference. The `deterministic-no-key` runtime profile
-does not read `OPENAI_API_KEY` and does not make a provider call.
-
-## Receipt boundary
-
-NodeVoice currently returns `ComparisonResult` and `NodeAgentRunResult` values in
-memory and prints CLI summaries. It does not persist a stable receipt envelope,
-content hash, verifier result, or sanitized reproduction record. Therefore:
-
-- `nodekit.yaml` intentionally keeps `proof.receiptSchema: null`;
-- this mapping does not introduce a receipt schema;
-- `.nodeagent` files are compiled composition metadata, not execution proof; and
-- `npm run proof` is a useful local gate, but its success is not presented as a
-  portable or release-ready receipt.
-
-A future receipt can be declared only after the runtime itself writes and
-verifies that artifact.
-
-## Compiler dependency
-
-The checked-in `.nodeagent` definition was generated with the NodeKit factory
-work from [node-platform PR #4](https://github.com/HomenShum/node-platform/pull/4),
-at compiler commit
-[`05b4e0e`](https://github.com/HomenShum/node-platform/commit/05b4e0e52623e3be14475ded96a7b7095548675d).
-That compiler follows the repository-relative `authoring.directory`, so the
-discovery record content-binds all three existing `src/nodeagents` files as well
-as this pack, skill, and evaluation binding. Earlier NodeKit drafts that scan
-only fixed top-level directories cannot reproduce this definition.
-
-The compiled hash covers the authored application directory and NodeKit
-manifests. It is not a transitive TypeScript dependency graph, build attestation,
-or execution receipt; the imported reducer, voice, comparison, and provider
-implementations remain repo-local brownfield dependencies.
-
-## Validation
+After installing the repository's dependencies, use:
 
 ```bash
 npm run test:nodekit
-npm run check
-npm run check:client
+npm run doctor
+npm test
 npm run build
-node <node-platform>/src/cli.mjs compile --repo-root .
-node <node-platform>/src/cli.mjs compile --repo-root . --check
 ```
+
+The focused alias selects the existing reducer, comparison and NodeAgent tests.
+Their runtime calls explicitly disable Ollama or use the deterministic source;
+they require no provider account or key. It is a subset, not a replacement for
+the full suite, server/client/Convex typechecks, citation checks or build.
+These commands are operator instructions, not a record that they passed on
+this revision.
+
+The manifest records the optional OpenAI/Ollama router because the application
+schema requires provider references. It does not activate a provider. For the
+CLI demo/proof path, use a fresh checkout and a clean shell without copied
+private `.env.local` configuration or inherited `SOURCE`/`USE_OLLAMA` choices.
+Those CLI paths can load local configuration; a configured provider run must
+be evaluated separately from the focused no-key tests.
+
+## Keep execution and receipt claims distinct
+
+The mapped local functions return typed results in memory and print CLI
+summaries. They do not write a canonical content-addressed execution receipt.
+The unchanged `nodekit.yaml` remains `preview` with
+`proof.receiptSchema: null`. Declared logical bindings, test output and compiled
+composition metadata are not durable execution receipts or release acceptance.
+
+## Historical compiler snapshot
+
+The [five archived compiler files](evidence/nodekit-compiler-05b4e0e/) are copied
+unchanged from [PR #4's July 20, 2026 branch](https://github.com/HomenShum/NodeVoice/tree/ee5e3f02dd206cce6658e9ec1274e3cbb5a009ee/.nodeagent).
+That branch records compiler commit
+[`05b4e0e`](https://github.com/HomenShum/NodeKit/commit/05b4e0e52623e3be14475ded96a7b7095548675d)
+and its six-file discovery/hash. [The original factory PR](https://github.com/HomenShum/NodeKit/pull/4)
+was closed without merging; its closure is not evidence of compiler acceptance.
+
+The three discovered NodeAgent TypeScript files are unchanged in current main,
+but the historical digests reflect CRLF bytes. Current NodeKit
+[`a2d2e8ce`](https://github.com/HomenShum/NodeKit/blob/a2d2e8ce36cc3e87a6a8133469dd55d8b7580588/src/lib/agent-definition.mjs)
+supports `authoring.directory`, normalizes text line endings and binds a broader
+identity including source, tests, scripts and root package/lock files, and writes
+additional identity outputs. Imported reducer/voice/comparison code has also evolved.
+The old six-file hash cannot certify the current application.
+
+The snapshots are archived under documentation rather than active
+`.nodeagent` paths. No hashes were hand-edited or generated during this
+reconciliation. Current compiler inspection, compilation and check are still
+**NOT_RUN**. When those checks can be performed with an identified NodeKit
+revision, generate fresh active output first, then check it:
+
+```bash
+node <NodeKit-checkout>/src/cli.mjs inspect --repo-root .
+node <NodeKit-checkout>/src/cli.mjs compile --repo-root .
+node <NodeKit-checkout>/src/cli.mjs compile --repo-root . --check
+```
+
+Current CI checks and compiler verification have different scope. Review
+exact-revision evidence separately; no matched pipeline improvement, fresh
+visual/SEO grade, provider behavior or production result is claimed here.

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useQuery, useMutation, useAction, useConvex } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import { isAgentSlot } from "./useRoom";
+import { isAgentSlot } from "../../core/agents.js";
 import type { ActiveRoom, AgentOsPolicy, CapabilityProfileId, MySlot, PublicRoom, RoomUtterance } from "./useRoom";
 
 /** Lobby list of joinable rooms — reactive over the Convex WebSocket. */

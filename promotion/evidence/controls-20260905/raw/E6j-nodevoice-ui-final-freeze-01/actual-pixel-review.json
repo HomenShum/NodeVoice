@@ -1,0 +1,60 @@
+{
+  "viewedBy": "implementation worker through actual PNG image viewer",
+  "files": [
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/320-demo-settled100.png",
+      "bytes": 105933,
+      "sha256": "d6217a8dd51769f8532be01219e9a8ce78d8ac1120df32c47b66ebf3ae8e1adf",
+      "rawGitBlobSha1": "b36165ffe2412a7d80ad6c5f72634b1a7aac539d"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/390-demo-settled100-computed-text200.png",
+      "bytes": 146844,
+      "sha256": "331649e056607e2e0c15eccb9f5b478c465b96f9d5e69212bf718821ad9ed0bc",
+      "rawGitBlobSha1": "004ce8d37733f1129acf51f59278be0158bdade2"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/390-waiting-room-invite-keyboard.png",
+      "bytes": 87246,
+      "sha256": "b7a1e62ac73129b0e8f89c5d4629a2abe4d55b46b977bdf519612648b38d9d5b",
+      "rawGitBlobSha1": "dafccebb1e2703fd695579a2a422e405aa272954"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/390-waiting-room-text200-invite-keyboard.png",
+      "bytes": 93012,
+      "sha256": "1774794e14b83182e87e9697170166b9da7280862167d9df06323a5225fcbc9f",
+      "rawGitBlobSha1": "1b970816af2a4506596462b34eadc40fac612b03"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/360-rail-first-keyboard.png",
+      "bytes": 84278,
+      "sha256": "266d5c544e3155af81f99ba4959c5923a0fd6f6bcc2b9b6e55e9df92690482ad",
+      "rawGitBlobSha1": "34acfca31afe2c147dce58d116dda0bdf153326a"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/1440-demo-settled100.png",
+      "bytes": 271840,
+      "sha256": "076c531982a25efd78d131bcb10225928bbedda39c9782d7b05c1c1c84444781",
+      "rawGitBlobSha1": "60bb4f0c90e51ea929f06234c440bbc379c941d1"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/1440-demo-settled100-computed-text200.png",
+      "bytes": 329440,
+      "sha256": "3fb46db8fb2fb013999b41214143f588bf30ffefb5d7db337e240ec87401f12b",
+      "rawGitBlobSha1": "6bac15e546aa037368de2457b33d653622a2a10a"
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/320-waiting-room-invite-keyboard.png",
+      "bytes": 74358,
+      "sha256": "96789d5a8b66913a6caeccd4191b36ab9e8e4cd020ad546b2d8a4014d19b62cc",
+      "rawGitBlobSha1": "8c09c7f1e1f5470e24ef221894b0e2842adf0912"
+    }
+  ],
+  "observations": [
+    "Actual100/100 and complete badge fit320 and390 doubled computed text; no simulated completion.",
+    "Complete first control is visible after native reverse Tab360.",
+    "Invite and State remain inside320/390 room header; focused Invite visible at390 doubled text.",
+    "1440 remains compact. Existing selected-option ellipsis, compressed detailed panes and main-pane/short-height reading remain limits."
+  ],
+  "grades": null
+}

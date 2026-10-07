@@ -1,0 +1,22 @@
+# NodeVoice scoped layout repair — frozen for independent review
+
+A developer can now reach each current comparison control with pointer or native Tab in either direction, read100/100 and completion on a phone, and operate the room Invite/State actions. Only App.tsx and LiveRoom.tsx changed; exact layout/attribute substitutions reconstruct both entire files, leaving handler and provider bytes intact.
+
+The final native count reached100 at 125.736s and Run re-enabled at 126.829s within the original300s. Final browser evidence passes337 scoped checks with94 captures. It includes all seven exact viewport pairs,390/1440 doubled computed text and reduced-motion observations, native controls/spinners, and the keyless two-context room failure/recovery path. Doctor,55tests/9files plus CLI smoke, and build passed. CLI smoke itself is target12/nine turns; it is not the actual browser100 proof.
+
+The original rail, padding and margin approaches had real failures. Final ordinary wrapping removes horizontal focus-scroll dependence; no focus handler or shared primitive was added. Every failed run remains raw and distinct. The first after-run's rawPASS was an insufficient interior-only oracle and is explicitly not a full control pass.
+
+Frozen evidence: [manifest](E6j-nodevoice-ui-final-freeze-01/artifact-manifest.json), [current177source/3dist](E6j-nodevoice-ui-final-freeze-01/current-source-dist.json), [layout-only guard](E6j-nodevoice-ui-repair-01/layout-only-guard.json), [337-check raw browser report](E6j-nodevoice-ui-controls-after-04/browser-01/report.json), [runtime closure](E6j-nodevoice-ui-controls-after-04/runtime-receipt.json), [pixel review](E6j-nodevoice-ui-final-freeze-01/actual-pixel-review.json). 1075 raw operator files are hash-bound; this is not yet a portable packet. Earlier147font-blocked and174normal-font artifacts plus37annotated-before files reverify unchanged.
+
+Source remains unstaged on d225bcaf64008ee522bc66d40aa72eb0381b95a6; App SHA63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc, LiveRoom SHA517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174. All175other source files, candidate and original refs/index/status are guarded; all owned runtime processes closed and4993 released. Reproduce ordinary commands with npm run doctor, npm run proof, npm run build; the external final recorder uses run-proof.py in the after04 folder and refuses to overwrite its output. Copy the recorder/controller to a new sibling packet output to replay, retaining the source-fourth-patch binding and original300s budget.
+
+Limits remain open:
+- Scoped Chromium emulation; no numeric full UI/UX grades, physical device, native zoom or comprehensive accessibility audit.
+- Computed-font200 is not native browser zoom. Detailed room/comparison panes, selected-option ellipsis, mobile/short-height reading and audio usability remain held.
+- Only local deterministic comparison and synthetic two-context rooms; no microphone, actual provider/model, shared Convex, real room, external agent, tunnel or durable restart proof.
+- Invite QR remains governed by existing showQr && waitingForAgent; proof occurs before second participant joins and does not certify the filled-seat Invite behavior.
+- Root baseline audit retains3 high package entries (browserslist/nanoid/postcss); no dependency change or fresh audit in this layout slice.
+- Server still listens on unspecified host: actual :: and0.0.0.0, not loopback-only.
+- No commit, staging, push or deployment. Product HANDOFF/portable packet will be a separately reviewed metadata step.
+
+Re your request: make each repo usable and handoff-ready, including visual/responsive/interaction standards — this completes the named local controls/status slice with actual source-bound proof; full repo readiness remains open.

@@ -1,0 +1,4 @@
+{"name":"stats-toString","completed":false,"error":"TypeError: Cannot read properties of undefined (reading 'length')"}
+{"name":"stats-constructor","completed":false,"error":"TypeError: Cannot read properties of undefined (reading 'length')"}
+{"name":"stats-__proto__","completed":false,"error":"TypeError: Cannot read properties of undefined (reading 'length')"}
+{"name":"sustained-cache","version":"4.28.4","distinctQueries":2050,"immediateSameReference":true,"afterSameReference":true,"sameValues":true,"checkpoints":[{"queries":512,"heapUsed":20316944},{"queries":1024,"heapUsed":34282440},{"queries":1536,"heapUsed":48314328},{"queries":2048,"heapUsed":62232992}],"limit":"Bounded2050-query cache-retention scenario; heap figures are observations, not a throughput benchmark or OOM attempt."}

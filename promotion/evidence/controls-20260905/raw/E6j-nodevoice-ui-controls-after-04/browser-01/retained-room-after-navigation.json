@@ -1,0 +1,306 @@
+{
+  "status": 200,
+  "body": {
+    "ok": true,
+    "room": {
+      "id": "5a752a",
+      "code": "5a752a",
+      "private": false,
+      "agents": {
+        "agent-001": {
+          "slot": "agent-001",
+          "name": "Ada",
+          "device": "laptop",
+          "color": "sky",
+          "persona": "A decisive planner. Proposes concrete, specific options with names and rough timing, and pushes to lock decisions."
+        },
+        "agent-002": {
+          "slot": "agent-002",
+          "name": "Ben",
+          "device": "phone",
+          "color": "violet",
+          "persona": "A thoughtful challenger. Asks one sharp question, checks constraints and budget, then refines the plan."
+        }
+      },
+      "state": {
+        "goal": "Count from 5 to 10 out loud, one number per agent turn, stopping exactly at 10.",
+        "model": "gpt-5.4-mini",
+        "agentCount": 2,
+        "profile": "v1_room_state",
+        "floorOwner": "agent-001",
+        "nextSpeaker": "agent-001",
+        "turn": 0,
+        "running": false,
+        "done": false,
+        "loopRisk": false,
+        "nextRequiredAct": "task_action",
+        "suppressAcknowledgements": true,
+        "task": {
+          "kind": "count_to_n",
+          "target": 10,
+          "next": 5,
+          "completed": false
+        }
+      },
+      "models": [
+        {
+          "id": "gpt-5.4-mini",
+          "label": "GPT-5.4 mini",
+          "tier": "smart + fast",
+          "note": "default · smartest mini that stays ~1.3s",
+          "expectedLatencyMs": 1300,
+          "expectedCostUsd": 0.0007164375,
+          "qualityScore": 4.75
+        },
+        {
+          "id": "gpt-4.1-nano",
+          "label": "GPT-4.1 nano",
+          "tier": "cheapest",
+          "note": "fastest (~0.7s) + cheapest",
+          "expectedLatencyMs": 700,
+          "expectedCostUsd": 0.000033425,
+          "qualityScore": 4.15
+        },
+        {
+          "id": "gpt-4.1-mini",
+          "label": "GPT-4.1 mini",
+          "tier": "balanced",
+          "note": "fast, mid capability",
+          "expectedLatencyMs": 700,
+          "expectedCostUsd": 0.0001409,
+          "qualityScore": 4.1
+        },
+        {
+          "id": "gpt-4o-mini",
+          "label": "GPT-4o mini",
+          "tier": "legacy",
+          "note": "older baseline",
+          "expectedLatencyMs": 1000,
+          "expectedCostUsd": 0.0000505875,
+          "qualityScore": 4.5
+        },
+        {
+          "id": "gpt-5-nano",
+          "label": "GPT-5 nano",
+          "tier": "cheap + smart",
+          "note": "smart but ~3s (reasoning)",
+          "expectedLatencyMs": 3200,
+          "expectedCostUsd": 0.0001320625,
+          "qualityScore": 4.6
+        },
+        {
+          "id": "gpt-5-mini",
+          "label": "GPT-5 mini",
+          "tier": "max quality",
+          "note": "top quality, ~3s+ (reasoning)",
+          "expectedLatencyMs": 3000,
+          "expectedCostUsd": 0.0007873125,
+          "qualityScore": 5
+        }
+      ],
+      "profiles": [
+        {
+          "id": "v0_no_room_state",
+          "label": "V0 Failure",
+          "shortLabel": "V0",
+          "note": "raw transcript agents; no durable room-state steering"
+        },
+        {
+          "id": "v1_room_state",
+          "label": "V1 Room State",
+          "shortLabel": "V1",
+          "note": "shared goal, floor owner, reducer, traces, durable steering"
+        },
+        {
+          "id": "v2_work_room",
+          "label": "V2 Work Room",
+          "shortLabel": "V2",
+          "note": "room-state plus typed intent routing for work/artifacts"
+        },
+        {
+          "id": "v3_agent_ecosystem",
+          "label": "V3 Ecosystem",
+          "shortLabel": "V3",
+          "note": "goal graph, world model, workers, artifacts, and subagents"
+        }
+      ],
+      "participants": [
+        {
+          "slot": "agent-001",
+          "kind": "creator"
+        },
+        {
+          "slot": "agent-002",
+          "kind": "device"
+        }
+      ],
+      "utterances": [
+        {
+          "id": "b1806d2d-f",
+          "slot": "system",
+          "name": "system",
+          "text": "Room created. Share code 5a752a or scan the QR to add another device.",
+          "speechAct": "system",
+          "ts": 1788647446177
+        },
+        {
+          "id": "b05aeb1d-f",
+          "slot": "system",
+          "name": "system",
+          "text": "Room created. Ada joined on this device.",
+          "speechAct": "system",
+          "ts": 1788647446188
+        },
+        {
+          "id": "ba11adb0-e",
+          "slot": "system",
+          "name": "system",
+          "text": "Ben joined the room.",
+          "speechAct": "system",
+          "ts": 1788647454090
+        },
+        {
+          "id": "30792f2f-d",
+          "slot": "human",
+          "name": "you",
+          "text": "Actually, count from 5 to 10",
+          "speechAct": "steer",
+          "ts": 1788647454312
+        },
+        {
+          "id": "6b157f60-0",
+          "slot": "system",
+          "name": "system",
+          "text": "turn failed: Error: OPENAI_API_KEY is not configured on the server",
+          "speechAct": "error",
+          "ts": 1788647454314
+        },
+        {
+          "id": "0764dbc0-f",
+          "slot": "system",
+          "name": "system",
+          "text": "turn failed: Error: OPENAI_API_KEY is not configured on the server",
+          "speechAct": "error",
+          "ts": 1788647454774
+        }
+      ],
+      "traces": [
+        {
+          "id": "0311abcfe0",
+          "kind": "state_reduced",
+          "summary": "Room created.",
+          "payload": {
+            "goal": "Count to 10",
+            "model": "gpt-5.4-mini",
+            "profile": "v1_room_state",
+            "agentCount": 2
+          },
+          "ts": 1788647446177
+        },
+        {
+          "id": "2d1c471503",
+          "kind": "state_reduced",
+          "summary": "Participant joined the room.",
+          "payload": {
+            "slot": "agent-001",
+            "kind": "creator"
+          },
+          "ts": 1788647446188
+        },
+        {
+          "id": "407871a53e",
+          "kind": "state_reduced",
+          "summary": "Participant joined the room.",
+          "payload": {
+            "slot": "agent-002",
+            "kind": "device"
+          },
+          "ts": 1788647454090
+        },
+        {
+          "id": "ffc82a5abf",
+          "kind": "utterance_received",
+          "summary": "you steered: Actually, count from 5 to 10",
+          "payload": {
+            "text": "Actually, count from 5 to 10",
+            "profile": "v1_room_state",
+            "intentPending": true,
+            "pendingHumanSeq": 1
+          },
+          "ts": 1788647454312
+        },
+        {
+          "id": "ecda338140",
+          "kind": "guardrail_evaluated",
+          "summary": "LLM intent interpreter failed; used deterministic fallback.",
+          "payload": {
+            "error": "Error: OPENAI_API_KEY is not configured on the server"
+          },
+          "ts": 1788647454313
+        },
+        {
+          "id": "0467780532",
+          "kind": "state_reduced",
+          "summary": "Human retargeted the room goal.",
+          "payload": {
+            "goal": "Count from 5 to 10 out loud, one number per agent turn, stopping exactly at 10.",
+            "source": "fallback",
+            "task": {
+              "kind": "count_to_n",
+              "target": 10,
+              "next": 5
+            }
+          },
+          "ts": 1788647454313
+        },
+        {
+          "id": "d387c281db",
+          "kind": "intent_interpreted",
+          "summary": "Human steer interpreted as count_task.",
+          "payload": {
+            "source": "fallback",
+            "intent": {
+              "kind": "count_task",
+              "start": 5,
+              "target": 10,
+              "confidence": 0.6,
+              "reason": "deterministic fallback count parse"
+            },
+            "goalOverride": "Count from 5 to 10 out loud, one number per agent turn, stopping exactly at 10.",
+            "stateChanged": true,
+            "profile": "v1_room_state"
+          },
+          "ts": 1788647454313
+        },
+        {
+          "id": "e6091bdfbc",
+          "kind": "scheduler_selected",
+          "summary": "Auto-run resumed by human intent.",
+          "payload": {
+            "floorOwner": "agent-001",
+            "intent": "count_task"
+          },
+          "ts": 1788647454313
+        },
+        {
+          "id": "679fdcec09",
+          "kind": "guardrail_evaluated",
+          "summary": "Auto-run halted on error.",
+          "payload": {
+            "error": "Error: OPENAI_API_KEY is not configured on the server"
+          },
+          "ts": 1788647454314
+        },
+        {
+          "id": "8f03cd9d2b",
+          "kind": "guardrail_evaluated",
+          "summary": "Auto-run halted on error.",
+          "payload": {
+            "error": "Error: OPENAI_API_KEY is not configured on the server"
+          },
+          "ts": 1788647454774
+        }
+      ]
+    }
+  }
+}

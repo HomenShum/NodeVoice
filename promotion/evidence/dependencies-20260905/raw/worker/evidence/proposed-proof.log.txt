@@ -1,0 +1,84 @@
+
+> nodevoice@0.1.0 proof
+> npm run test && npm run demo:compare
+
+
+> nodevoice@0.1.0 test
+> vitest run --root .
+
+
+ RUN  v4.1.9 D:/ProjectRecovery/nodevoice-dependency-repair-20260905/consumer
+
+
+ Test Files  9 passed (9)
+      Tests  55 passed (55)
+   Start at  16:06:08
+   Duration  11.49s (transform 1.03s, setup 0ms, import 2.06s, tests 2.21s, environment 1ms)
+
+
+> nodevoice@0.1.0 demo:compare
+> tsx src/compare/runComparisonMvp.ts
+
+
+nodevoice / side-by-side comparison
+Model: deterministic fallback
+Provenance (bad):  deterministic sim — scripted utterances · no reducer, no scheduler
+Provenance (good): deterministic sim — scripted utterances · real reducer & scheduler
+
+BAD: raw peer transcript reaction
+ 1 voice-a  I’ll count from 1 to 100, and you guys can continue off where I started from. One...
+     voice-a  believes=1 heard=0 spoke=1 classified=none        intent=wait-for-someone
+     voice-b  believes=1 heard=1 spoke=0 classified=instruction intent=acknowledge
+     voice-c  believes=1 heard=1 spoke=0 classified=instruction intent=acknowledge
+ 2 voice-b  Yep exactly, let’s do that, we can continue from there...
+     voice-a  believes=1 heard=1 spoke=1 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=1 spoke=1 classified=instruction intent=wait-for-someone
+     voice-c  believes=1 heard=2 spoke=0 classified=backchannel intent=acknowledge
+ 3 voice-c  Yeah exactly, I agree with that plan and I’ll continue when it is my turn...
+     voice-a  believes=1 heard=2 spoke=1 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=2 spoke=1 classified=backchannel intent=acknowledge
+     voice-c  believes=1 heard=2 spoke=1 classified=backchannel intent=wait-for-someone
+ 4 voice-a  Yep, exactly, let’s keep going from where the last agent leaves off...
+     voice-a  believes=1 heard=2 spoke=2 classified=backchannel intent=wait-for-someone
+     voice-b  believes=1 heard=3 spoke=1 classified=backchannel intent=acknowledge
+     voice-c  believes=1 heard=3 spoke=1 classified=backchannel intent=acknowledge
+ 5 voice-b  Sounds good, I’m aligned, and I’ll start after you finish...
+     voice-a  believes=1 heard=3 spoke=2 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=3 spoke=2 classified=backchannel intent=wait-for-someone
+     voice-c  believes=1 heard=4 spoke=1 classified=backchannel intent=acknowledge
+ 6 voice-c  Exactly, we should count together and continue the sequence...
+     voice-a  believes=1 heard=4 spoke=2 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=4 spoke=2 classified=backchannel intent=acknowledge
+     voice-c  believes=1 heard=4 spoke=2 classified=backchannel intent=wait-for-someone
+ 7 voice-a  Yeah exactly, let’s do that. I’ll start off from where you leave off...
+     voice-a  believes=1 heard=4 spoke=3 classified=backchannel intent=wait-for-someone
+     voice-b  believes=1 heard=5 spoke=2 classified=backchannel intent=acknowledge
+     voice-c  believes=1 heard=5 spoke=2 classified=backchannel intent=acknowledge
+ 8 voice-b  Yep exactly, let’s do that, we can continue from there...
+     voice-a  believes=1 heard=5 spoke=3 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=5 spoke=3 classified=backchannel intent=wait-for-someone
+     voice-c  believes=1 heard=6 spoke=2 classified=backchannel intent=acknowledge
+ 9 voice-c  Yeah exactly, I agree with that plan and I’ll continue when it is my turn...
+     voice-a  believes=1 heard=6 spoke=3 classified=backchannel intent=acknowledge
+     voice-b  believes=1 heard=6 spoke=3 classified=backchannel intent=acknowledge
+     voice-c  believes=1 heard=6 spoke=3 classified=backchannel intent=wait-for-someone
+
+Divergence: 3 private beliefs (voice-a=1 voice-b=1 voice-c=1) with no shared truth — every agent waits for another to commit 2; none ever does.
+
+GOOD: server-authoritative room state
+ 1 voice-a  One                committed current=1; next=2; scheduled=voice-b
+ 2 voice-b  Two                committed current=2; next=3; scheduled=voice-c
+ 3 voice-c  Three              committed current=3; next=4; scheduled=voice-a
+ 4 voice-a  Four               committed current=4; next=5; scheduled=voice-b
+ 5 voice-b  Five               committed current=5; next=6; scheduled=voice-c
+ 6 voice-c  Six                committed current=6; next=7; scheduled=voice-a
+ 7 voice-a  Seven              committed current=7; next=8; scheduled=voice-b
+ 8 voice-b  Eight              committed current=8; next=9; scheduled=voice-c
+ 9 voice-c  Nine               committed current=9; next=10; scheduled=voice-a
+
+Diagnosis:
+- Bad: every agent treats every heard utterance as a fresh invitation to respond socially.
+- Bad: each agent has only a private belief (current=1) and an intent that oscillates between acknowledge and wait-for-someone — three private states, no shared truth.
+- Bad: acknowledgement and handoff language becomes new conversational fuel, so no concrete task state advances.
+- Good: the room reducer commits only task actions, suppresses acknowledgements, and schedules exactly one next speaker.
+- Good: each agent receives the authoritative next action, not a raw transcript to politely react to.

@@ -11,7 +11,7 @@ export type OpenAIChatOptions = {
 };
 
 /** Repo-measured coordinator default (see src/live/pipeline.ts model notes). */
-export const FALLBACK_OPENAI_MODEL = "gpt-5.4-mini";
+const FALLBACK_OPENAI_MODEL = "gpt-5.4-mini";
 
 export function getOpenAIModelName(override?: string): string {
   const trimmedOverride = override?.trim();

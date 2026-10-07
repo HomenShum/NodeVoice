@@ -1,0 +1,181 @@
+{
+  "mode": "proposed",
+  "rows": [
+    {
+      "name": "nanoid-negative",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "proposed",
+        "nanoid-negative"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 0.6,
+      "seconds": 0.157,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-negative",
+          "version": "3.3.18"
+        },
+        {
+          "phase": "completed",
+          "length": 0
+        }
+      ]
+    },
+    {
+      "name": "nanoid-zero",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "proposed",
+        "nanoid-zero"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 0.6,
+      "seconds": 0.062,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-zero",
+          "version": "3.3.18"
+        },
+        {
+          "phase": "completed",
+          "length": 0
+        }
+      ]
+    },
+    {
+      "name": "nanoid-fixed6",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "proposed",
+        "nanoid-fixed6"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 0.062,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-fixed6",
+          "version": "3.3.18"
+        },
+        {
+          "phase": "completed",
+          "count": 128,
+          "allSix": true,
+          "distinct": 128
+        }
+      ]
+    },
+    {
+      "name": "postcss-map",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "proposed",
+        "postcss-map"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 1.125,
+      "observations": [
+        {
+          "name": "allowed-relative",
+          "version": "8.5.23",
+          "reads": [
+            "inside-owned-map"
+          ],
+          "markerDisclosed": true,
+          "cssRetainsRule": true
+        },
+        {
+          "name": "outside-relative",
+          "version": "8.5.23",
+          "reads": [],
+          "markerDisclosed": false,
+          "cssRetainsRule": true
+        },
+        {
+          "name": "outside-absolute-no-from",
+          "version": "8.5.23",
+          "reads": [],
+          "markerDisclosed": false,
+          "cssRetainsRule": true
+        }
+      ]
+    },
+    {
+      "name": "browserslist-stats-cache",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "proposed",
+        "browserslist-stats-cache"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 2.766,
+      "observations": [
+        {
+          "name": "stats-toString",
+          "completed": true,
+          "resultCount": 31
+        },
+        {
+          "name": "stats-constructor",
+          "completed": true,
+          "resultCount": 31
+        },
+        {
+          "name": "stats-__proto__",
+          "completed": true,
+          "resultCount": 31
+        },
+        {
+          "name": "sustained-cache",
+          "version": "4.28.7",
+          "distinctQueries": 2050,
+          "immediateSameReference": true,
+          "afterSameReference": false,
+          "sameValues": true,
+          "checkpoints": [
+            {
+              "queries": 512,
+              "heapUsed": 20195256
+            },
+            {
+              "queries": 1024,
+              "heapUsed": 20193424
+            },
+            {
+              "queries": 1536,
+              "heapUsed": 20197592
+            },
+            {
+              "queries": 2048,
+              "heapUsed": 20197160
+            }
+          ],
+          "limit": "Bounded2050-query cache-retention scenario; heap figures are observations, not a throughput benchmark or OOM attempt."
+        }
+      ]
+    }
+  ],
+  "scriptSha256": "4b3e4ef3d295edb5afaa80274afbd7e92bc19ddd029d52083578ba22c4d84e11",
+  "meaning": "Owned scratch fixtures only; no external or private data. Baseline defects are observations, not successful library behavior."
+}

@@ -1,0 +1,19 @@
+{
+  "derivative": true,
+  "originalReceipt": {
+    "name": "E6j-nodevoice-dependency-transfer.json",
+    "sha256": "8aab8cd4b9a527ebde1cea2167e00ab7916667d412913c5db81c231fa496754c"
+  },
+  "status": "REVIEWED_LOCK_TRANSFERRED_AND_NORMAL_INSTALL_PASSED",
+  "at": "2026-09-05T23:30:31.572157+00:00",
+  "base": "6544eb482787099280825eb932f1c5bb7a99f01f",
+  "branch": "codex/nodevoice-dependency-patch-20260905",
+  "preservedSource": "1a1593661f393cfdcd6dea79bf3a28e7d38248cd",
+  "paths": 549,
+  "unchangedFiles": 548,
+  "sharedCi": "NOT_YET_PUBLISHED",
+  "fullSuiteReplayed": false,
+  "browserReplayed": false,
+  "acceptedLockSha256": "65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b",
+  "limits": "This is a labelled summary. The omitted before/after path dictionaries remain operator-local. The normal install stdout/stderr are exact portable copies."
+}

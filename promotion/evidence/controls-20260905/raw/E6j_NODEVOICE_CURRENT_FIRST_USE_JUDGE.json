@@ -1,0 +1,186 @@
+{
+  "status": "ACCEPTED_CURRENT_FIRST_USE_EVIDENCE_WITH_UI_HANDOFF_AND_GRADE_HOLDS",
+  "mode": "Builder / independent read-only nonauthor judge",
+  "reviewer": "/root/provider_ci_closure_judge",
+  "reviewerContextReused": true,
+  "requestTraceability": "Re the request to execute planner-worker-judge consolidation and make each repo ready for usage and developer handoff: independently judge the actual current first-use records, preserve failures, and distinguish functional success from visual and handoff readiness.",
+  "head": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+  "tree": "4806fb331698856dc37e8901fd45d36bfd0a093c",
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+  "operatorReceiptSha256": "c14fe198ae3c992b1433bf34ed80903e6ec007ca7264ef9161af4f569b07ea87",
+  "scope": "Existing recorded current native first-use and custody; no third long run, no provider/runtime/browser replay or source edit.",
+  "checks": {
+    "independentAssertions": 2054,
+    "passed": 2054,
+    "rawRecorderChecks": 21,
+    "rawRecorderChecksAreNotIndependentScenarios": "Includes repeated HTTP polling assertions; do not call these21 distinct user journeys.",
+    "nativeActions": 7,
+    "captures": 36,
+    "independentlyViewedPixels": 8
+  },
+  "custody": {
+    "source": 177,
+    "sourceBytes": 45514478,
+    "dist": 3,
+    "distBytes": 465063,
+    "currentArtifacts": 174,
+    "currentArtifactBytes": 11475390,
+    "firstFailedArtifacts": 147,
+    "allExact": true,
+    "originalPrimaryHead": "2ce2d4be29190a34b698b9d4bf6cde07e21fdf28",
+    "draftPr4RefAndOldRefsPreserved": true,
+    "sourceChanged": false,
+    "indexRefStatusUnchanged": true
+  },
+  "functional": {
+    "actualNativeComparePosts": 1,
+    "effectiveRequest": {
+      "target": 100,
+      "turns": 100,
+      "source": "deterministic",
+      "useOllama": false,
+      "model": "gemma4_e2b"
+    },
+    "goodStates": 100,
+    "sampledNativeCounts": 100,
+    "apiFinalTask": {
+      "kind": "count_to_n",
+      "target": 100,
+      "current": 100,
+      "next": 100,
+      "completed": true
+    },
+    "first100Ms": 123564,
+    "runEnabledMs": 125203,
+    "deadlineMs": 300000,
+    "correctionErrorCount": 1,
+    "haltedErrorCount": 2,
+    "newStartErrors": 1,
+    "retainedErrorIdsExact": true,
+    "turn": 0,
+    "next": 5,
+    "fontResponses": 15,
+    "responseTypes": {
+      "css": 5,
+      "font": 10
+    },
+    "distinctFontPayloads": {
+      "6bcc408e50621e6bc4991f190d577d98b9030769d927f7deec0aec07f48e6064": "fonts/6bcc408e50621e6bc4991f190d577d98b9030769d927f7deec0aec07f48e6064.css.txt",
+      "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62": "fonts/3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62.woff2",
+      "83c005d49d8a6a50474c73a5a36ac0468076e9c4a29da7bdb14995d80560a5be": "fonts/83c005d49d8a6a50474c73a5a36ac0468076e9c4a29da7bdb14995d80560a5be.woff2"
+    },
+    "providerRequestObserved": false,
+    "networkScope": "Browser allowlist/request/event evidence plus server names-only isolation and pre-fetch missing-key source path; no server packet capture or human audible recording."
+  },
+  "firstRun": {
+    "status": "FAIL retained",
+    "cause": "Five source-declared font CSS requests intentionally blocked by original recorder, with five browser console errors; one navigation-related EventSource close also retained.",
+    "retryClassification": "Second observation corrects the public-font condition, does not turn the first run into a pass.",
+    "controllerBytesSame": true
+  },
+  "fonts": {
+    "status": "ACTUAL_SOURCE_FONTS_VERIFIED",
+    "responses": 15,
+    "allHttp200": true,
+    "uniquePayloads": 3,
+    "types": "One exact source stylesheet and two loaded font bodies; CSS references13 unique allowable font URLs, not13 downloaded files.",
+    "captureFontRecords": 36,
+    "cdpGlyphEvidence": 36,
+    "limits": "Named selectors prove custom glyph use, not that every glyph/fallback/unicode face in the application is certified. Exact public font GETs are permitted egress; do not claim zero network."
+  },
+  "room": {
+    "sameNativeRoomTwoContexts": true,
+    "distinctSlots": 2,
+    "correctionAutoResumeErrors": 1,
+    "explicitStartAddsDistinctError": 1,
+    "retainedTotalErrors": 2,
+    "turn": 0,
+    "next": 5,
+    "running": false,
+    "noKeyFailureIsNotCompletion": true,
+    "navigationRetention": "Same server memory only, explicit route navigation; neither discovered Back control nor restart durability."
+  },
+  "listener": {
+    "addresses": [
+      "::",
+      "0.0.0.0"
+    ],
+    "port": 4993,
+    "loopbackOnly": false,
+    "closed": true
+  },
+  "visualFindings": [
+    {
+      "id": "ROOM-PHONE-HEADER",
+      "status": "OPEN",
+      "capture": "390-created-room",
+      "observation": "Actual Invite button extends to x399.3125 at width390, clipping its right edge by9.3125px.",
+      "rect": {
+        "x": 326.0625,
+        "y": 34.75,
+        "width": 73.25,
+        "height": 28,
+        "right": 399.3125,
+        "bottom": 62.75
+      }
+    },
+    {
+      "id": "DEMO-PHONE-REFLOW",
+      "status": "OPEN",
+      "capture": "320-demo-settled100",
+      "observation": "Actual header controls and side-by-side state content clip; complete badge ends at x351.625 at width320. ScrollWidth reports no document overflow, so that measurement alone cannot certify readability."
+    },
+    {
+      "id": "DEMO-TEXT200-REFLOW",
+      "status": "OPEN",
+      "capture": "390-demo-settled100-computed-text200",
+      "observation": "At doubled computed font sizes the actual 100/100 span ends x461.75 and complete badge ends x605.234375 at width390; both are visibly cut off. Header and narrow state content also clip. This is text enlargement, not native browser zoom."
+    },
+    {
+      "id": "DESKTOP-TEXT200-CONTROLS",
+      "status": "OPEN",
+      "capture": "1440-demo-settled100-computed-text200",
+      "observation": "Completion/count remain readable, but fixed-size header selects and numeric controls visibly truncate their enlarged labels/values. No full enlargement pass."
+    },
+    {
+      "id": "LOBBY-REACHABILITY",
+      "status": "NOT_RUN",
+      "capture": "390-lobby-computed-text200",
+      "observation": "Top lobby copy wraps; much of the form is below the initial viewport. No separate keyboard/scroll audit of every below-fold action was run."
+    },
+    {
+      "id": "NO-KEY-ERROR-VISIBILITY",
+      "status": "OBSERVED_WITH_LIMIT",
+      "capture": "1440-no-key-halted",
+      "observation": "Desktop screenshot shows both actual missing-key errors. The phone capture is occupied by agent/version/state sections; it does not prove the later failure message or Start is visible without scrolling."
+    }
+  ],
+  "limits": [
+    "Current baseline audit has three high package entries; no dependency repair in this scope.",
+    "No provider, microphone, hosted Convex, real device, durable server restart, native zoom, or production proof.",
+    "One native count100 run in each distinct font condition, not burst/load or repeated room-execution certification.",
+    "SpeechSynthesis playback state settled, but this is not human-audited audible pronunciation or recorded audio quality.",
+    "Model names/expected latency/cost/quality shown by source are configuration metadata; this deterministic run did not measure those claims.",
+    "No new current product HANDOFF, package change, commit, push or release was made. This packet is the reviewable first-use observation.",
+    "The boundary count/playback observation is one run per font condition, not statistical latency, sustained load, burst concurrency or real speech quality.",
+    "Two-context room state is demonstrated, while phone error/Start and below-fold lobby reachability remain unproved.",
+    "Existing model-name/size/cost/quality display is selected configuration metadata; actual API provenance was deterministic with null executed model.",
+    "Raw operator packet includes names-only environment inventories and synthetic room/DOM records; public-release privacy review and portable product handoff are still pending."
+  ],
+  "fullDimensionScores": {
+    "visualScore": null,
+    "designScore": null,
+    "responsiveScore": null,
+    "interactionScore": null,
+    "accessibilityScore": null,
+    "performanceScore": null,
+    "usageScore": null,
+    "alignmentScore": null
+  },
+  "nextScope": "Read separately proposed two-owner room-header/demo-control/progress layout plan; existing actual native records can anchor before evidence. Fresh after native completion remains required if UI changes.",
+  "manifest": {
+    "path": "E6j-nodevoice-first-use-independent-02/manifest.json",
+    "sha256": "1d7ce27ad380370c4d517c43eac7e80d8f699c5c572867a3a81f95c1e5e31ac2"
+  },
+  "guard": "CLOSED. No source/config/index/ref edits, new runtime/provider/browser calls or long comparison rerun. Guard closure allows root to start only the separately accepted next slice."
+}

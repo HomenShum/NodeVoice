@@ -1,0 +1,13 @@
+{
+  "status": "CLOSED",
+  "externalManifestSha256": "e5dd75946a8c555c8fb4bae8434f46311318232f426fa19d6906f1f790bd233b",
+  "external268Exact": true,
+  "installed956Exact": true,
+  "Rvoice177OriginalSourceExact": true,
+  "RvoiceDist3Exact": true,
+  "gitMutations": 0,
+  "sourceWrites": 0,
+  "runtimeReruns": 0,
+  "providerCalls": 0,
+  "scope": "Parent owns normal Git publication/merge separately; no requirement that its references equal the earlier uncommitted source snapshot."
+}

@@ -1,0 +1,44 @@
+from pathlib import Path
+import hashlib, json
+
+S = Path(__file__).resolve().parent
+E = S / 'evidence'
+before = json.loads((E / 'canaries-baseline/report.json').read_text(encoding='utf-8'))
+after = json.loads((E / 'canaries-proposed/report.json').read_text(encoding='utf-8'))
+b = {row['name']: row for row in before['rows']}
+a = {row['name']: row for row in after['rows']}
+checks = []
+def check(name, passed, observed):
+    checks.append({'name': name, 'passed': bool(passed), 'observed': observed})
+
+actual_script = hashlib.sha256((S / 'canaries/check.cjs').read_bytes()).hexdigest()
+check('The same installed-library observer ran before and after', before['scriptSha256'] == after['scriptSha256'] == actual_script, actual_script)
+for name in ['nanoid-negative', 'nanoid-zero']:
+    old, new = b[name], a[name]
+    check(name + ': the old operation started and exceeded the bounded child deadline', old['timedOut'] and old['observations'][0]['phase'] == 'operation-started' and not any(o['phase'] == 'completed' for o in old['observations']), {'seconds': old['seconds'], 'budgetSeconds': old['budgetSeconds']})
+    check(name + ': the updated operation finishes with an empty ID', not new['timedOut'] and new['exitCode'] == 0 and new['observations'][-1] == {'phase': 'completed', 'length': 0}, {'seconds': new['seconds'], 'budgetSeconds': new['budgetSeconds']})
+for label, row in [('before', b['nanoid-fixed6']), ('after', a['nanoid-fixed6'])]:
+    observation = row['observations'][-1]
+    check('The existing fixed-six ID call remains valid ' + label, row['exitCode'] == 0 and observation['count'] == 128 and observation['allSix'] and observation['distinct'] == 128, observation)
+
+old_maps = {o['name']: o for o in b['postcss-map']['observations']}
+new_maps = {o['name']: o for o in a['postcss-map']['observations']}
+for label, observed in [('before', old_maps['allowed-relative']), ('after', new_maps['allowed-relative'])]:
+    check('A permitted adjacent source map remains readable ' + label, observed['reads'] == ['inside-owned-map'] and observed['markerDisclosed'] and observed['cssRetainsRule'], observed)
+for name in ['outside-relative', 'outside-absolute-no-from']:
+    old, new = old_maps[name], new_maps[name]
+    check(name + ': a real owned outside read is blocked after the update', old['reads'] == ['outside-owned-map'] and old['markerDisclosed'] and new['reads'] == [] and not new['markerDisclosed'] and new['cssRetainsRule'], {'before': old, 'after': new})
+
+old_stats = {o['name']: o for o in b['browserslist-stats-cache']['observations']}
+new_stats = {o['name']: o for o in a['browserslist-stats-cache']['observations']}
+for name in ['stats-toString', 'stats-constructor', 'stats-__proto__']:
+    check(name + ': inherited names no longer prevent the developer stats query', not old_stats[name]['completed'] and new_stats[name]['completed'] and new_stats[name]['resultCount'] > 0, {'before': old_stats[name], 'after': new_stats[name]})
+old, new = old_stats['sustained-cache'], new_stats['sustained-cache']
+check('Immediate caching still works while the old sustained entry is now evicted', old['distinctQueries'] == new['distinctQueries'] == 2050 and old['immediateSameReference'] and new['immediateSameReference'] and old['afterSameReference'] and not new['afterSameReference'] and old['sameValues'] and new['sameValues'], {'before': old, 'after': new})
+check('The five updated canary processes all finished', all(row['exitCode'] == 0 and not row['timedOut'] for row in after['rows']), [{'name': row['name'], 'exitCode': row['exitCode'], 'timedOut': row['timedOut']} for row in after['rows']])
+report = {'name': 'NODEVOICE-DEPENDENCY-OWNED-CANARIES-01', 'status': 'PASS' if all(c['passed'] for c in checks) else 'FAIL', 'checks': checks, 'count': len(checks), 'limits': ['Five bounded actual-library cases use only generated scratch data. They are not a remote exploit test or complete library security audit.', 'The 2,050-query heap checkpoints are raw observations, not a memory or speed guarantee.', 'The two 0.6-second deadlines are identical before and after; no production timeout was changed.']}
+target = E / 'canary-before-after-verdict.json'
+assert not target.exists()
+target.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8', newline='\n')
+print(json.dumps({'status': report['status'], 'count': len(checks)}))
+assert report['status'] == 'PASS'

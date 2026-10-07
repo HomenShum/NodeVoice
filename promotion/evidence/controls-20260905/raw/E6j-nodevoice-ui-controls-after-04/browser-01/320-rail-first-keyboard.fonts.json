@@ -1,0 +1,383 @@
+{
+  "fontFaceSet": {
+    "status": "loaded",
+    "declared": [
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "400",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "500",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "600",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "700",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "Inter",
+        "weight": "800",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "400",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "500",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "600",
+        "style": "normal",
+        "status": "loaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      },
+      {
+        "family": "JetBrains Mono",
+        "weight": "700",
+        "style": "normal",
+        "status": "unloaded"
+      }
+    ],
+    "bodyFamily": "Inter, \"Inter var\", system-ui, -apple-system, \"Segoe UI\", sans-serif"
+  },
+  "actual": [
+    {
+      "selector": "h1,h2",
+      "fonts": [
+        {
+          "familyName": "Inter",
+          "postScriptName": "Inter-Bold",
+          "isCustomFont": true,
+          "glyphCount": 9
+        }
+      ]
+    },
+    {
+      "selector": "p",
+      "fonts": []
+    },
+    {
+      "selector": ".font-mono",
+      "fonts": []
+    }
+  ]
+}

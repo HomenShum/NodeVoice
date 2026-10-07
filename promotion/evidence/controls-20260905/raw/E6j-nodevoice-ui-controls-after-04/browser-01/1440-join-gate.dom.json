@@ -1,0 +1,90 @@
+{
+  "url": "http://127.0.0.1:4993/",
+  "width": 1440,
+  "height": 960,
+  "body": "NodeVoice · Live\n\njoining room 5a752a\n\nJoin the room\n\nJoin with your own agent voice, or watch silently.\n\nMy agent\nauto-assigned\nWatch\nlisten only\nJoin & enable sound\n\nEnabling sound is required so the agent can speak on this phone.",
+  "scrollWidth": 1440,
+  "scrollHeight": 960,
+  "reducedMotion": false,
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "text": "My agent\nauto-assigned",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 528,
+        "y": 471.328125,
+        "width": 188,
+        "height": 57.328125,
+        "right": 716,
+        "bottom": 528.65625
+      },
+      "fontSize": "12px",
+      "color": "oklch(0.828 0.111 230.318)",
+      "background": "oklab(0.685 -0.0912435 -0.142252 / 0.1)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Watch\nlisten only",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 724,
+        "y": 471.328125,
+        "width": 188,
+        "height": 57.328125,
+        "right": 912,
+        "bottom": 528.65625
+      },
+      "fontSize": "12px",
+      "color": "rgb(147, 158, 174)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.6)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Join & enable sound",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 528,
+        "y": 552.65625,
+        "width": 384,
+        "height": 44,
+        "right": 912,
+        "bottom": 596.65625
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": []
+  }
+}

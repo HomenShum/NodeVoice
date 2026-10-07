@@ -1,0 +1,592 @@
+{
+  "status": "APPROVED_SCOPED_EXTERNAL_LOCK_TRANSFER",
+  "at": "2026-09-05T23:28:26.210411+00:00",
+  "request": "Nonauthor review of the seven-row external NodeVoice dependency proposal, current audit/canary/build evidence and exact historical playback rebind.",
+  "independence": "Reused reviewer context; did not author this lock repair, its canaries or the accepted NodeVoice UI implementation. No new runtime, provider, installation or source mutation.",
+  "scratch": "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905",
+  "sourceBase": {
+    "head": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+    "sourceCount": 177,
+    "approvedUiOwners": [
+      "src/client/App.tsx",
+      "src/client/live/LiveRoom.tsx"
+    ]
+  },
+  "freezeSha256": "caf442583e55278c31110ee93f6e49db4e50b57ceff1357e72514c32025e4041",
+  "manifestSha256": "e5dd75946a8c555c8fb4bae8434f46311318232f426fa19d6906f1f790bd233b",
+  "manifestFiles": 268,
+  "manifestBytes": 47030242,
+  "checksPassed": 60,
+  "checks": [
+    {
+      "name": "Frozen proposal receipt identity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Frozen manifest identity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All 268 manifest files exact raw bytes and Git blobs",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Accepted plan semantic identity; raw Unicode escape variation retained",
+      "passed": true,
+      "detail": {
+        "externalSha256": "1c93e09d5afd8b173a1a55098b7f97a97e90af2a71180026f025e15cc874b973",
+        "originalSha256": "507b59900259e4fa70ac9cb55d1d2d753695e61b9137fbe992d2ba27c762de15",
+        "rawByteEquality": false,
+        "difference": "Two existing arrow-bearing text lines use JSON Unicode escapes. No values or constraints differ; both raw copies preserved."
+      }
+    },
+    {
+      "name": "Original source and dist snapshot matches accepted final UI observation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Historical UI freeze and independent judge exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Historical accepted current-source copy equals actual after observation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All 177 external current source files exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Only lock changes among the 177 approved source files",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All 177 reviewed original checkout source files remain exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Original package.json restored byte-for-byte",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exact original and new lock identities",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Exactly seven native lock rows and no new/deleted row",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All root and other lock metadata unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/browserslist exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/nanoid exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/postcss exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/caniuse-lite exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/node-releases exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/electron-to-chromium exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "node_modules/baseline-browser-mapping exact official version/integrity",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Required browser data versions equal four raised lower bounds",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Existing other shared dependencies unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Temporary exact roots are precisely the planned resolver constraints",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All final seven rows were produced by temporary native resolution",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Both native resolver commands passed without force/peer/override flags",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual 956 installed seven-package files exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Installed seven-package inventory has no omitted or extra file",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual seven installed package versions match lock",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Six independently refreshed official advisory bytes equal recorded sources",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Browserslist severity discrepancy preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-npm-ci",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-npm-audit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-npm-audit-omit-dev",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-canaries",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-doctor",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-proof",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Actual normal command proposed-build",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Both actual audit reports have zero findings",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Doctor covers three projects and 56 valid citations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Proof actually reports 55 tests across nine files and deterministic comparison",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Ordinary commands remain unchanged package scripts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Identical actual-library observer bound before and after",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "baseline raw JSONL is exactly the reported canary observations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "proposed raw JSONL is exactly the reported canary observations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "nanoid-negative bounded old started-timeout and new empty completion",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "nanoid-zero bounded old started-timeout and new empty completion",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "128 fixed-six IDs still complete before and after",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Allowed real owned map read remains",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Relative escape and absolute/no-from owned reads stop",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Three inherited stats names no longer throw",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Immediate cache retained and old entry evicted after 2050 queries",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All five final canary processes completed",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "All three actual new built files exactly match historical native assets",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "The accepted historical checkout dist still matches",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Both authored UI owner hashes match earlier independent judgment",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "No external private environment file copied",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Original baseline audit and canary failures retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "External 268-file closing guard remains exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Installed 956-file closing guard remains exact",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "changedRows": [
+    {
+      "path": "node_modules/browserslist",
+      "before": "4.28.4",
+      "after": "4.28.7",
+      "changedFields": [
+        "version",
+        "resolved",
+        "dependencies",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/nanoid",
+      "before": "3.3.15",
+      "after": "3.3.18",
+      "changedFields": [
+        "version",
+        "resolved",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/postcss",
+      "before": "8.5.16",
+      "after": "8.5.23",
+      "changedFields": [
+        "version",
+        "resolved",
+        "dependencies",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/caniuse-lite",
+      "before": "1.0.30001800",
+      "after": "1.0.30001806",
+      "changedFields": [
+        "version",
+        "resolved",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/node-releases",
+      "before": "2.0.50",
+      "after": "2.0.51",
+      "changedFields": [
+        "version",
+        "resolved",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/electron-to-chromium",
+      "before": "1.5.387",
+      "after": "1.5.393",
+      "changedFields": [
+        "version",
+        "resolved",
+        "integrity"
+      ]
+    },
+    {
+      "path": "node_modules/baseline-browser-mapping",
+      "before": "2.10.41",
+      "after": "2.10.44",
+      "changedFields": [
+        "version",
+        "resolved",
+        "integrity"
+      ]
+    }
+  ],
+  "oldLockSha256": "bdbd22a06f566749eaa1aa2c8207f3bb67bf1840336cb2e50ea8c0ad4555fa94",
+  "newLockSha256": "65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b",
+  "packageJsonByteIdentical": true,
+  "nonLockSourceFilesExact": 176,
+  "installedFilesVerified": 956,
+  "ordinaryEvidence": {
+    "npmCiExit": 0,
+    "fullAudit": 0,
+    "omitDevAudit": 0,
+    "doctorTypecheckProjects": 3,
+    "citations": 56,
+    "proofTests": 55,
+    "proofFiles": 9,
+    "CLIComparison": "Existing deterministic target-12, nine-turn illustration; not native count-100 playback.",
+    "build": "PASS; actual HTML/CSS/JS match accepted UI bytes."
+  },
+  "canaryScope": [
+    "Actual installed modules and generated owned fixtures; same observer and deadlines before/after.",
+    "Two old operations started but exceeded 0.6-second child deadlines; new negative/zero generators return empty IDs. 128 fixed-six ID calls remain valid.",
+    "Allowed map reads remain; two disallowed owned map reads and marker disclosure disappear.",
+    "Inherited stats keys stop throwing; repeated query immediately reuses cache while initial entry is absent after 2050 distinct queries. Heap checkpoints are observations, not a performance guarantee.",
+    "No remote exploit, complete library certification, production-input reachability, OOM attempt or full sustained load measurement."
+  ],
+  "historicalRebind": {
+    "assets": [
+      {
+        "path": "dist/assets/index-B4ZxCWpG.js",
+        "bytes": 384362,
+        "sha256": "015fa6d9922b18d40d7d977f189c2b8f29dd7e6babb535f677225d5855ddb958",
+        "rawGitBlobSha1": "96e1f059f590dba800d5a0859cbda921917293a3"
+      },
+      {
+        "path": "dist/assets/index-DGAuW_yU.css",
+        "bytes": 80400,
+        "sha256": "edf553215308bcafefc16d59d886e4314295100428c308410d60434436f22e10",
+        "rawGitBlobSha1": "7ce232e8591d84f674ada18c586f3d405861ab73"
+      },
+      {
+        "path": "dist/index.html",
+        "bytes": 862,
+        "sha256": "2347ffd4bda2a550cb6d219c0937bd06b36694ba8f22bab5028bf5a4d6961572",
+        "rawGitBlobSha1": "95f52bfbd2466b3204880ad9c5f65a245a7cab52"
+      }
+    ],
+    "exact": true,
+    "freshPlayback": false,
+    "historicalVisible100Ms": 125736,
+    "historicalRunEnabledMs": 126829,
+    "originalDeadlineMs": 300000,
+    "scope": "Previously independently judged local deterministic native proof only; no current external font/network/audio/provider/Convex guarantee."
+  },
+  "officialAdvisories": [
+    {
+      "id": "GHSA-28wg-ghj8-5hjv",
+      "sha256": "f6585f0f283a4e146731880912dea3c678adffa199d61222ecc4c2a68bb0a5c8",
+      "severity": "high",
+      "summary": "nanoid: non-secure generators can loop indefinitely with negative size",
+      "ranges": [
+        [
+          "nanoid",
+          "< 3.3.16",
+          "3.3.16"
+        ],
+        [
+          "nanoid",
+          ">= 4.0.0, < 5.1.16",
+          "5.1.16"
+        ]
+      ]
+    },
+    {
+      "id": "GHSA-2v37-7h3g-55p8",
+      "sha256": "2e4d40936b1501f8b41f5361eaec2c9301618429341570c4d3dda1fe74b6e631",
+      "severity": "high",
+      "summary": "nanoid: custom generators can loop indefinitely when size is zero",
+      "ranges": [
+        [
+          "nanoid",
+          ">= 4.0.0, < 5.1.6",
+          "5.1.6"
+        ],
+        [
+          "nanoid",
+          "< 3.3.18",
+          "3.3.18"
+        ]
+      ]
+    },
+    {
+      "id": "GHSA-73wf-gq98-2v4g",
+      "sha256": "82784d919b3a8b4fad17b0fc72e05021ba0024d5f6cd7756893124a1a235bae6",
+      "severity": "high",
+      "summary": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "ranges": [
+        [
+          "browserslist",
+          "<= 4.28.6",
+          "4.28.7"
+        ]
+      ]
+    },
+    {
+      "id": "GHSA-c83g-rgw3-j3cx",
+      "sha256": "a031cd6d6e3dd3e1639bc9e4edf9a6c06543cf3247f7fd21ef985314b31c88ef",
+      "severity": "high",
+      "summary": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "ranges": [
+        [
+          "browserslist",
+          "<= 4.28.6",
+          "4.28.7"
+        ]
+      ]
+    },
+    {
+      "id": "GHSA-fxqj-rqcc-2cmp",
+      "sha256": "616e9ac39682030948b95e68d5cafc80752728181194db0a951f97a05e0b9e6e",
+      "severity": "medium",
+      "summary": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "ranges": [
+        [
+          "postcss",
+          "<= 8.5.22",
+          "8.5.23"
+        ]
+      ]
+    },
+    {
+      "id": "GHSA-r28c-9q8g-f849",
+      "sha256": "153b44239442f93df686feb835b9bea3f306360ef6732fbd2b02a3fdab5be9b4",
+      "severity": "high",
+      "summary": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "ranges": [
+        [
+          "postcss",
+          "<= 8.5.17",
+          "8.5.18"
+        ]
+      ]
+    }
+  ],
+  "applicability": "Seven rows are development tooling. CSS tooling reaches Browserslist/PostCSS; PostCSS calls nanoid/non-secure with fixed size 6. No new direct dependency, override, source/API/config change. start still uses devDependency tsx; omit-dev-only deployment is not certified.",
+  "limits": [
+    "External source proposal only; actual future repository transfer, Git filtered/index/commit bindings, handoff/publication and normal shared checks remain separate.",
+    "The current audit feed reports zero; this does not imply absence of all vulnerabilities. Original three-high baseline stays retained.",
+    "Browserslist cache maintainer text rates Medium, while GitHub/npm classification is high; both classifications preserved. Already-fixed older nanoid integer-overflow advisory is not added as a current finding.",
+    "The upstream Browserslist patch cohort also includes query/regex fixes; this review does not certify every query behavior. Unchanged compiled CSS directly bounds this app build result.",
+    "Existing main-pane/short-height/selected-option limitations, unspecified-host server binding, physical-device/native-zoom/accessibility/audio/provider/durable-room/production acceptance remain open.",
+    "No all-268-files publication approval: active scratch code, tracked source fixtures and original local evidence require the separately bounded publication plan."
+  ],
+  "fullGrades": null,
+  "overallGrade": null,
+  "target": 4.5,
+  "blockers": [],
+  "guard": "CLOSED",
+  "rawEvidence": {
+    "directory": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6j-nodevoice-dependency-external-judge-01",
+    "manifestSha256": "95bfbe9096a2b11b8270b40e9c00d3a18815cd9d07deaee2d62490bf7b925fd0",
+    "count": 49,
+    "bytes": 304125
+  },
+  "collectorCorrection": {
+    "initial": "Raw equality assertion rejected different JSON Unicode serialization in accepted-plan copy.",
+    "resolved": "Parsed plans are exactly equal; two arrow-bearing text lines are escaped externally. Both exact raw hashes and delta retained. No proposal edit or weakened source hash condition.",
+    "retained": "collector-plan-byte-assertion-failure.py.txt, collector-plan-byte-assertion-failure.txt, accepted-plan-raw.diff"
+  },
+  "readOnlyGitClosure": {
+    "scope": "Read-only reviewer; parent owns remote integration independently. Source 177 and dist 3 are separately exact.",
+    "observed": {
+      "head": {
+        "sha256": "f3a641a46faa7d3add9af3b3486ed98dd1fb610bd7949ca217385aec66c55085",
+        "bytes": 41,
+        "entryRawEqual": true
+      },
+      "refs": {
+        "sha256": "e9969f8d095a387add0f10c8270a71886f003d30a164dfddb2fabe600f28b489",
+        "bytes": 473,
+        "entryRawEqual": true
+      },
+      "index": {
+        "sha256": "cf1d8f90ecf6d5e5b8fc970671fde9d36baea4e4c1ad722b1d5e5ee12bf4948a",
+        "bytes": 75981,
+        "entryRawEqual": true
+      },
+      "status": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "entryRawEqual": true
+      }
+    }
+  }
+}

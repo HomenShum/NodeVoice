@@ -1,0 +1,57 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const {createRequire} = require('node:module');
+const root = path.resolve(__dirname, '..');
+const req = createRequire(path.join(root, 'consumer/package.json'));
+const [mode, name] = process.argv.slice(2);
+const fixture = path.join(__dirname, mode, name);
+fs.mkdirSync(fixture, {recursive:true});
+function emit(value) { process.stdout.write(JSON.stringify(value)+'\n'); }
+async function main() {
+  if (name.startsWith('nanoid-')) {
+    const nonsecure=req('nanoid/non-secure');const secure=req('nanoid');
+    emit({phase:'operation-started',name,version:req('nanoid/package.json').version});
+    if (name==='nanoid-negative') {const result=nonsecure.nanoid(-1);emit({phase:'completed',length:result.length});}
+    if (name==='nanoid-zero') {const result=secure.customAlphabet('abc',0)();emit({phase:'completed',length:result.length});}
+    if (name==='nanoid-fixed6') {
+      const values=Array.from({length:128},()=>nonsecure.nanoid(6));
+      emit({phase:'completed',count:values.length,allSix:values.every(x=>x.length===6),distinct:new Set(values).size});
+    }
+  } else if (name==='postcss-map') {
+    const inside=path.join(fixture,'input');fs.mkdirSync(inside);
+    const marker='NODEVOICE_OWNED_SENTINEL_MAP_CONTENT';
+    const map=JSON.stringify({version:3,file:'input.css',sources:['fixture-source.css'],sourcesContent:[marker],names:[],mappings:'AAAA'});
+    const outside=path.join(fixture,'outside.map');const local=path.join(inside,'inside.map');
+    fs.writeFileSync(outside,map);fs.writeFileSync(local,map);
+    const reads=[];const original=fs.readFileSync;
+    fs.readFileSync=function(file,...args){
+      const resolved=path.resolve(String(file));
+      if(resolved===outside||resolved===local)reads.push(resolved===outside?'outside-owned-map':'inside-owned-map');
+      return original.call(this,file,...args);
+    };
+    const postcss=req('postcss');
+    for (const cell of [{name:'allowed-relative',annotation:'inside.map',from:path.join(inside,'input.css')},{name:'outside-relative',annotation:'../outside.map',from:path.join(inside,'input.css')},{name:'outside-absolute-no-from',annotation:outside.replaceAll('\\','/')}]) {
+      const start=reads.length;
+      const result=await postcss([]).process('a{color:red}\n/*# sourceMappingURL='+cell.annotation+' */',{from:cell.from,to:path.join(inside,'out.css'),map:{inline:false}});
+      emit({name:cell.name,version:req('postcss/package.json').version,reads:reads.slice(start),markerDisclosed:!!result.map&&JSON.stringify(result.map.toJSON()).includes(marker),cssRetainsRule:result.css.includes('color:red')});
+    }
+    fs.readFileSync=original;
+  } else if (name==='browserslist-stats-cache') {
+    const browserslist=req('browserslist');
+    for(const key of ['toString','constructor','__proto__']){
+      const stats=JSON.parse('{"'+key+'":{"one":5},"chrome":{"100":50}}');
+      try{const result=browserslist('defaults',{path:fixture,stats});emit({name:'stats-'+key,completed:true,resultCount:result.length});}
+      catch(error){emit({name:'stats-'+key,completed:false,error:String(error)});}
+    }
+    const opts={path:fixture,stats:{}};const query='since 1900-01-01';
+    const first=browserslist(query,opts);const immediate=browserslist(query,opts)===first;
+    const checkpoints=[];
+    for(let i=2;i<=2050;i++){
+      browserslist('since 1900-01-'+i,opts);
+      if(i%512===0){global.gc?.();checkpoints.push({queries:i,heapUsed:process.memoryUsage().heapUsed});}
+    }
+    const again=browserslist(query,opts);
+    emit({name:'sustained-cache',version:req('browserslist/package.json').version,distinctQueries:2050,immediateSameReference:immediate,afterSameReference:again===first,sameValues:JSON.stringify(again)===JSON.stringify(first),checkpoints,limit:'Bounded2050-query cache-retention scenario; heap figures are observations, not a throughput benchmark or OOM attempt.'});
+  } else throw Error('unknown named canary');
+}
+main().catch(error=>{emit({phase:'threw',error:String(error)});process.exitCode=1});

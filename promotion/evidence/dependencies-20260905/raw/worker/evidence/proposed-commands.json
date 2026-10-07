@@ -1,0 +1,108 @@
+[
+  {
+    "label": "proposed-npm-ci",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "ci"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 7.656,
+    "stdoutSha256": "320310f0bbeed5c8b628f71743bd2bcecbd986cf754f2c1294e05c82c944b03c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-npm-audit",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "audit",
+      "--json"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 1.078,
+    "stdoutSha256": "792beea25a5b59b68cea90d786db8f222cd87fad46fb85434845587f7b46e65f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-npm-audit-omit-dev",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "audit",
+      "--omit=dev",
+      "--json"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 0.938,
+    "stdoutSha256": "792beea25a5b59b68cea90d786db8f222cd87fad46fb85434845587f7b46e65f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-canaries",
+    "argv": [
+      "python",
+      "-X",
+      "utf8",
+      "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\run.py",
+      "proposed"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 120,
+    "seconds": 4.297,
+    "stdoutSha256": "e1284e2a5f8f9504ea53de5620ab5305d5fc6b90dc6bc47f2cc38a21028e9efd",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-doctor",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "doctor"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 15.282,
+    "stdoutSha256": "fcc0480e6c6e03d1d4a4d8728b3241e1515f3bfa4e38e4c94e66b2856c8274db",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-proof",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "proof"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 18.031,
+    "stdoutSha256": "9c09992c7963aaa570cb8fa9467326852f8e13c244ab0d07fe61d6e20efe5223",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "proposed-build",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "timedOut": false,
+    "budgetSeconds": 180,
+    "seconds": 11.828,
+    "stdoutSha256": "76d0ac3e2831e27cb50529f1fda5a412d204e172ed0320ee48a0d89eb091df3a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

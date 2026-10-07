@@ -1,0 +1,409 @@
+{
+  "url": "http://127.0.0.1:4993/",
+  "width": 390,
+  "height": 844,
+  "body": "NodeVoice · Live\n\nroom 5a752a · waiting for another device\n\nlive\nyou: Ada\nState\nInvite\nGOAL\nCount to 10\nturn 0\nAGENT VERSIONS\nactive V1\nSwitches the live room behavior for every joined device.\nAgent\nV0\nV0 Failure\nraw transcript\n\ncoord: No room counter\n\nsteer: Steer stays transcript-only\n\nV1\nV1 Room State\nshared reducer\n\ncoord: Floor + count state\n\nsteer: Goal changes are durable\n\nV2\nV2 Work Room\nintent router\n\ncoord: Reducer + typed intent\n\nsteer: LLM interprets interrupts\n\nV3\nV3 Agent OS\ngoal graph\n\ncoord: Goals + workers + artifacts\n\nsteer: Adds workstreams by default\n\nLIVE ROOMSTATE\nversion\nV1\nagents\n2\nfloor\nAda\nact\ntask_action\ncount\n1/10\nturn\n0\nack\nsuppressed\nrisk\nfalse\n\nScan from your phone to join another agent\n\nDevices join the same room. Keep them near each other to hear the conversation.\n\nNo camera? Open the site and type code 5a752a under “Join a room”.\n\nShare invite\nhttp://127.0.0.1:4993/?room=5a752a\nRoom created. Share code 5a752a or scan the QR to add another device.\nRoom created. Ada joined on this device.\nInternal State\nversion-specific JSON state\n{\n  \"roomReducerState\": {\n    \"reducer\": {\n      \"goal\": \"Count to 10\",\n      \"task\": {\n        \"kind\": \"count_to_n\",\n        \"next\": 1,\n        \"target\": 10,\n        \"completed\": false\n      },\n      \"schedule\": {\n        \"floorOwner\": \"agent-001\",\n        \"nextSpeaker\": \"agent-001\",\n        \"nextRequiredAct\": \"task_action\",\n        \"turn\": 0,\n        \"running\": false,\n        \"done\": false,\n        \"loopRisk\": false,\n        \"suppressAcknowledgements\": true\n      },\n      \"model\": \"gpt-5.4-mini\"\n    },\n    \"durableGuards\": {\n      \"suppressAcknowledgements\": true,\n      \"doneGuard\": false,\n      \"loopRisk\": false\n    },\n    \"version\": {\n      \"label\": \"V1 Room State\",\n      \"layer\": \"shared reducer\",\n      \"newCapability\": \"Reducer owns count target, next value, floor, and done.\"\n    },\n    \"gap\": {\n      \"missing\": [\n        \"typed semantic intent lane\",\n        \"background workers\",\n        \"artifact ledger\"\n      ],\n      \"steerPath\": \"count steer retargets the reducer task\"\n    },\n    \"reducerTrace\": [\n      {\n        \"kind\": \"state_reduced\",\n        \"summary\": \"Room created.\",\n        \"payload\": {\n          \"goal\": \"Count to 10\",\n          \"model\": \"gpt-5.4-mini\",\n          \"profile\": \"v1_room_state\",\n          \"agentCount\": 2\n        },\n        \"ts\": 1788647446177\n      },\n      {\n        \"kind\": \"state_reduced\",\n        \"summary\": \"Participant joined the room.\",\n        \"payload\": {\n          \"slot\": \"agent-001\",\n          \"kind\": \"creator\"\n        },\n        \"ts\": 1788647446188\n      }\n    ]\n  },\n  \"_room\": {\n    \"id\": \"5a752a\",\n    \"code\": \"5a752a\",\n    \"private\": false,\n    \"profile\": \"v1_room_state\",\n    \"model\": \"gpt-5.4-mini\",\n    \"agents\": [\n      {\n        \"slot\": \"agent-001\",\n        \"name\": \"Ada\",\n        \"device\": \"laptop\",\n        \"color\": \"sky\"\n      },\n      {\n        \"slot\": \"agent-002\",\n        \"name\": \"Ben\",\n        \"device\": \"phone\",\n        \"color\": \"violet\"\n      }\n    ],\n    \"participants\": [\n      {\n        \"slot\": \"agent-001\",\n        \"kind\": \"creator\"\n      }\n    ]\n  }\n}\nTrace Inspector\nclick a row for payload\nSTATE REDUCED\nParticipant joined the room.\n15:30:46\nSTATE REDUCED\nRoom created.\n15:30:46\n2 events · 0.0s span\nstate reduced · 2\nStart\nHold to talk",
+  "scrollWidth": 390,
+  "scrollHeight": 844,
+  "reducedMotion": false,
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "text": "State",
+      "ariaLabel": null,
+      "title": "Internal State — live reducer snapshot plus trace payloads",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 210.234375,
+        "y": 119.5,
+        "width": 101.453125,
+        "height": 28,
+        "right": 311.6875,
+        "bottom": 147.5
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.233892 -0.00110527 -0.0173289 / 0.617522)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Invite",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 163,
+        "width": 104.484375,
+        "height": 28,
+        "right": 120.484375,
+        "bottom": 191
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.926307)",
+      "focused": true,
+      "focusVisible": true
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Agent",
+      "ariaLabel": null,
+      "title": "Add one more generated agent to this live room",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 419,
+        "width": 110.421875,
+        "height": 28,
+        "right": 126.421875,
+        "bottom": 447
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.6)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "V0\nV0 Failure\nraw transcript\n\ncoord: No room counter\n\nsteer: Steer stays transcript-only",
+      "ariaLabel": null,
+      "title": "V0 Failure: Good for reproducing overlap and stalls",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 455,
+        "width": 175,
+        "height": 261,
+        "right": 191,
+        "bottom": 716
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.194279 -0.000581756 -0.0167309 / 0.55)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "V1\nV1 Room State\nshared reducer\n\ncoord: Floor + count state\n\nsteer: Goal changes are durable",
+      "ariaLabel": null,
+      "title": "V1 Room State: Best default for phone/laptop tests",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 199,
+        "y": 455,
+        "width": 175,
+        "height": 261,
+        "right": 374,
+        "bottom": 716
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.708459 0.113106 0.122984 / 0.12)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "V2\nV2 Work Room\nintent router\n\ncoord: Reducer + typed intent\n\nsteer: LLM interprets interrupts",
+      "ariaLabel": null,
+      "title": "V2 Work Room: Use for retargeting mid-conversation",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 724,
+        "width": 175,
+        "height": 261,
+        "right": 191,
+        "bottom": 985
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.194279 -0.000581756 -0.0167309 / 0.55)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "V3\nV3 Agent OS\ngoal graph\n\ncoord: Goals + workers + artifacts\n\nsteer: Adds workstreams by default",
+      "ariaLabel": null,
+      "title": "V3 Agent OS: Parallel background execution",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 199,
+        "y": 724,
+        "width": 175,
+        "height": 261,
+        "right": 374,
+        "bottom": 985
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.194279 -0.000581756 -0.0167309 / 0.55)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Share invite",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 18.078125,
+        "y": 1456,
+        "width": 109.4375,
+        "height": 28,
+        "right": 127.515625,
+        "bottom": 1484
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.6)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "STATE REDUCED\nParticipant joined the room.\n15:30:46",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 29,
+        "y": 1789.859375,
+        "width": 345,
+        "height": 29.5,
+        "right": 374,
+        "bottom": 1819.359375
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "STATE REDUCED\nRoom created.\n15:30:46",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 29,
+        "y": 1839.859375,
+        "width": 345,
+        "height": 29.5,
+        "right": 374,
+        "bottom": 1869.359375
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Start",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 25,
+        "y": 1928.359375,
+        "width": 118.484375,
+        "height": 36,
+        "right": 143.484375,
+        "bottom": 1964.359375
+      },
+      "fontSize": "28px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": "Message or steer the agents",
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 151.484375,
+        "y": 1926.359375,
+        "width": 77.515625,
+        "height": 40,
+        "right": 229,
+        "bottom": 1966.359375
+      },
+      "fontSize": "28px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Hold to talk",
+      "ariaLabel": "Hold to talk",
+      "title": "Hold to talk",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 237,
+        "y": 1926.359375,
+        "width": 40,
+        "height": 40,
+        "right": 277,
+        "bottom": 1966.359375
+      },
+      "fontSize": "28px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.6)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "",
+      "ariaLabel": null,
+      "title": "Send steer",
+      "placeholder": null,
+      "value": "",
+      "disabled": true,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 285,
+        "y": 1928.359375,
+        "width": 36,
+        "height": 36,
+        "right": 321,
+        "bottom": 1964.359375
+      },
+      "fontSize": "32px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgb(32, 36, 44)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "",
+      "ariaLabel": null,
+      "title": "Play audio for all agents on this device",
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 329,
+        "y": 1928.359375,
+        "width": 36,
+        "height": 36,
+        "right": 365,
+        "bottom": 1964.359375
+      },
+      "fontSize": "24px",
+      "color": "rgb(147, 158, 174)",
+      "background": "oklab(0.227261 -0.000972085 -0.0175648 / 0.6)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": [
+      {
+        "name": "Microsoft David - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Mark - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Zira - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Huihui - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Kangkang - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Yaoyao - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      }
+    ]
+  }
+}

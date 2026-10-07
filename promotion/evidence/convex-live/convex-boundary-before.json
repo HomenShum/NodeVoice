@@ -1,0 +1,109 @@
+{
+  "label": "convex-live-before",
+  "capturedAt": "2026-08-14T01:56:48.253Z",
+  "commit": "30253b4e396d25397d8e1be353a122d7a0fba910",
+  "node": "v22.22.2",
+  "target": {
+    "runtime": "Convex httpAction (hosted)",
+    "baseUrl": "https://<dev-deployment>.convex.site",
+    "note": "Isolated Convex DEV deployment created for this probe; never production. No RSS column: the process is Convex's and this script cannot sample it."
+  },
+  "expectationFailures": [
+    "C1 accepted: expected 0, got 3",
+    "C5 status: expected 400, got 200",
+    "C6 accepted: expected 0, got 3"
+  ],
+  "probes": {
+    "C1_body_cap_25mb": {
+      "probe": "POST /compare/demo with a 25 MB JSON body, x3",
+      "bodyBytes": 26214400,
+      "attempts": [
+        {
+          "status": 200,
+          "head": "{\"bad\":[{\"turn\":1,\"actorId\":\"voice-a\",\"text\":\"I'll count from 1 to 12, and you guys can continue off where I started from. One...\",\"speechAct\":\"instruction\",\"lo",
+          "elapsedMs": 2251
+        },
+        {
+          "status": 200,
+          "head": "{\"bad\":[{\"turn\":1,\"actorId\":\"voice-a\",\"text\":\"I'll count from 1 to 12, and you guys can continue off where I started from. One...\",\"speechAct\":\"instruction\",\"lo",
+          "elapsedMs": 2301
+        },
+        {
+          "status": 200,
+          "head": "{\"bad\":[{\"turn\":1,\"actorId\":\"voice-a\",\"text\":\"I'll count from 1 to 12, and you guys can continue off where I started from. One...\",\"speechAct\":\"instruction\",\"lo",
+          "elapsedMs": 2252
+        }
+      ],
+      "accepted": 3,
+      "read413": 0,
+      "connectionReset": 0
+    },
+    "C2_target_string": {
+      "probe": "POST /compare/demo {\"target\":\"abc\"}",
+      "status": 200,
+      "taskTargetType": "number",
+      "taskTarget": 100,
+      "taskCurrent": 100,
+      "taskCompleted": true,
+      "elapsedMs": 108
+    },
+    "C2b_target_huge": {
+      "probe": "POST /compare/demo {\"target\":1e9,\"turns\":5}",
+      "status": 200,
+      "taskTarget": 300,
+      "elapsedMs": 106
+    },
+    "C3_turns_flood": {
+      "probe": "POST /compare/demo {\"turns\":3000000}",
+      "status": 200,
+      "responseBytes": 230832,
+      "stepsReturned": 420,
+      "elapsedMs": 116
+    },
+    "C4_shipped_default": {
+      "probe": "POST /compare/demo {\"target\":100,\"turns\":100,\"source\":\"deterministic\"}",
+      "status": 200,
+      "goodSteps": 100,
+      "badSteps": 100,
+      "task": {
+        "kind": "count_to_n",
+        "target": 100,
+        "current": 100,
+        "next": 100,
+        "completed": true
+      },
+      "provenanceGood": "production deterministic sim - real reducer & scheduler",
+      "elapsedMs": 104
+    },
+    "C5_unparseable_json": {
+      "probe": "POST /compare/demo with a body that is not JSON",
+      "status": 200,
+      "head": "{\"bad\":[{\"turn\":1,\"actorId\":\"voice-a\",\"text\":\"I'll count from 1 to 100, and you guys can continue off where I started from. One...\",\"speechAct\":\"instruction\",\"loopRisk\":false,\"roomStateSummary\":\"no sh",
+      "elapsedMs": 112
+    },
+    "C6_live_rooms_body_cap": {
+      "probe": "POST /live/rooms with a 25 MB JSON body, x3",
+      "bodyBytes": 26214400,
+      "attempts": [
+        {
+          "status": 200,
+          "head": "{\"ok\":true,\"roomId\":\"jn792g1mp9ajeg32b4ry4326m18cebfv\",\"room\":{\"agents\":{\"agent-001\":{\"color\":\"sky\",\"device\":\"laptop\",\"name\":\"Ada\",\"persona\":\"A decisive planner",
+          "elapsedMs": 2509
+        },
+        {
+          "status": 200,
+          "head": "{\"ok\":true,\"roomId\":\"jn78e6payj4m6gpfwrgaemtwh18ce6hy\",\"room\":{\"agents\":{\"agent-001\":{\"color\":\"sky\",\"device\":\"laptop\",\"name\":\"Ada\",\"persona\":\"A decisive planner",
+          "elapsedMs": 2597
+        },
+        {
+          "status": 200,
+          "head": "{\"ok\":true,\"roomId\":\"jn72fvfzhhqw3h91wmx6rst9ns8cf621\",\"room\":{\"agents\":{\"agent-001\":{\"color\":\"sky\",\"device\":\"laptop\",\"name\":\"Ada\",\"persona\":\"A decisive planner",
+          "elapsedMs": 2261
+        }
+      ],
+      "accepted": 3,
+      "read413": 0,
+      "connectionReset": 0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# UI change boundary
+
+Mechanism: annotation of the exact frozen native capture, not a reconstructed app or another completion.
+Original route/state: 320-demo-settled100; app viewport 320x800; dark theme; clean local deterministic Chromium session.
+Raw before.png SHA256: 295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7. Source is unchanged d225bcaf; exact DOM/font references are in report.json.
+
+## CHANGE B · Comparison controls
+
+Current: see exact preserved native pixels and original DOM rectangles. Expected: the affected native actions/control rail/count-completion fit or are natively reachable after the two-owner layout repair. Boundary region: x0,y0,width320,height57; actual3px outline.
+
+## CHANGE C · Count and completion
+
+Current: see exact preserved native pixels and original DOM rectangles. Expected: the affected native actions/control rail/count-completion fit or are natively reachable after the two-owner layout repair. Boundary region: x0,y229,width320,height37; actual3px outline.
+
+Protected neighbors: page/room identity, source/provider selection, original count/state/errors, comparison panes, room goal/state, footer and all handlers.
+
+The annotation canvas adds a260px right gutter for labels; the original app raster remains at native1:1 scale. Raw and restored viewer rasters are checked against the original. No app/API/provider/clock action occurs in this annotation.

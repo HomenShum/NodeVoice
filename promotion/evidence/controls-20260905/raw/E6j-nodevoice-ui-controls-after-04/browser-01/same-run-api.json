@@ -1,0 +1,5656 @@
+{
+  "status": 200,
+  "request": {
+    "target": 100,
+    "turns": 100,
+    "source": "deterministic",
+    "useOllama": false,
+    "model": "gemma4_e2b"
+  },
+  "body": {
+    "bad": [
+      {
+        "turn": 1,
+        "actorId": "voice-a",
+        "text": "I’ll count from 1 to 100, and you guys can continue off where I started from. One...",
+        "speechAct": "instruction",
+        "current": 1,
+        "next": 2,
+        "loopRisk": false,
+        "roomStateSummary": "raw audio transcript only; no committed task counter",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 0,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "none",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 1,
+            "spokeCount": 0,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "instruction",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 1,
+            "spokeCount": 0,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "instruction",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 2,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 1,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 1,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "instruction",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 2,
+            "spokeCount": 0,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 3,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 2,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 2,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 2,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 4,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 2,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 3,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 3,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 5,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 3,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 3,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 4,
+            "spokeCount": 1,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 6,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 4,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 4,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 4,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 7,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 4,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 5,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 5,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 8,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 5,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 5,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 6,
+            "spokeCount": 2,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 9,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 6,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 6,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 6,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 10,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 6,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 7,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 7,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 11,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 7,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 7,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 8,
+            "spokeCount": 3,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 12,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 8,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 8,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 8,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 13,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 8,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 9,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 9,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 14,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 9,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 9,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 10,
+            "spokeCount": 4,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 15,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 10,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 10,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 10,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 16,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 10,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 11,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 11,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 17,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 11,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 11,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 12,
+            "spokeCount": 5,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 18,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 12,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 12,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 12,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 19,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 12,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 13,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 13,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 20,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 13,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 13,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 14,
+            "spokeCount": 6,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 21,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 14,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 14,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 14,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 22,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 14,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 15,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 15,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 23,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 15,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 15,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 16,
+            "spokeCount": 7,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 24,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 16,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 16,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 16,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 25,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 16,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 17,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 17,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 26,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 17,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 17,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 18,
+            "spokeCount": 8,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 27,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 18,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 18,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 18,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 28,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 18,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 19,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 19,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 29,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 19,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 19,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 20,
+            "spokeCount": 9,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 30,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 20,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 20,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 20,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 31,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 20,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 21,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 21,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 32,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 21,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 21,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 22,
+            "spokeCount": 10,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 33,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 22,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 22,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 22,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 34,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 22,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 23,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 23,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 35,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 23,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 23,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 24,
+            "spokeCount": 11,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 36,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 24,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 24,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 24,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 37,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 24,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 25,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 25,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 38,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 25,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 25,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 26,
+            "spokeCount": 12,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 39,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 26,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 26,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 26,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 40,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 26,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 27,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 27,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 41,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 27,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 27,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 28,
+            "spokeCount": 13,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 42,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 28,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 28,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 28,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 43,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 28,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 29,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 29,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 44,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 29,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 29,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 30,
+            "spokeCount": 14,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 45,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 30,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 30,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 30,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 46,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 30,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 31,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 31,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 47,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 31,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 31,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 32,
+            "spokeCount": 15,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 48,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 32,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 32,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 32,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 49,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 32,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 33,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 33,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 50,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 33,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 33,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 34,
+            "spokeCount": 16,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 51,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 34,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 34,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 34,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 52,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 34,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 35,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 35,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 53,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 35,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 35,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 36,
+            "spokeCount": 17,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 54,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 36,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 36,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 36,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 55,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 36,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 37,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 37,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 56,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 37,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 37,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 38,
+            "spokeCount": 18,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 57,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 38,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 38,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 38,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 58,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 38,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 39,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 39,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 59,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 39,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 39,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 40,
+            "spokeCount": 19,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 60,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 40,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 40,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 40,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 61,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 40,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 41,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 41,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 62,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 41,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 41,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 42,
+            "spokeCount": 20,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 63,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 42,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 42,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 42,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 64,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 42,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 43,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 43,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 65,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 43,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 43,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 44,
+            "spokeCount": 21,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 66,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 44,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 44,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 44,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 67,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 44,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 45,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 45,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 68,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 45,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 45,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 46,
+            "spokeCount": 22,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 69,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 46,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 46,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 46,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 70,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 46,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 47,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 47,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 71,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 47,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 47,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 48,
+            "spokeCount": 23,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 72,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 48,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 48,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 48,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 73,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 48,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 49,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 49,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 74,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 49,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 49,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 50,
+            "spokeCount": 24,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 75,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 50,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 50,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 50,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 76,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 50,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 51,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 51,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 77,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 51,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 51,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 52,
+            "spokeCount": 25,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 78,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 52,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 52,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 52,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 79,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 52,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 53,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 53,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 80,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 53,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 53,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 54,
+            "spokeCount": 26,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 81,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 54,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 54,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 54,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 82,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 54,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 55,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 55,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 83,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 55,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 55,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 56,
+            "spokeCount": 27,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 84,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 56,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 56,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 56,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 85,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 56,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 57,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 57,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 86,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 57,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 57,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 58,
+            "spokeCount": 28,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 87,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 58,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 58,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 58,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 88,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 58,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 59,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 59,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 89,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 59,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 59,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 60,
+            "spokeCount": 29,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 90,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 60,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 60,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 60,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 91,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 60,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 61,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 61,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 92,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 61,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 61,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 62,
+            "spokeCount": 30,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 93,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 62,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 62,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 62,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 94,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 62,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 63,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 63,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 95,
+        "actorId": "voice-b",
+        "text": "Sounds good, I’m aligned, and I’ll start after you finish...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 63,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 63,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 64,
+            "spokeCount": 31,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 96,
+        "actorId": "voice-c",
+        "text": "Exactly, we should count together and continue the sequence...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 64,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 64,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 64,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 97,
+        "actorId": "voice-a",
+        "text": "Yeah exactly, let’s do that. I’ll start off from where you leave off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 64,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 65,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 65,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 98,
+        "actorId": "voice-b",
+        "text": "Yep exactly, let’s do that, we can continue from there...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 65,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 65,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 66,
+            "spokeCount": 32,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      },
+      {
+        "turn": 99,
+        "actorId": "voice-c",
+        "text": "Yeah exactly, I agree with that plan and I’ll continue when it is my turn...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 66,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 66,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 66,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          }
+        ]
+      },
+      {
+        "turn": 100,
+        "actorId": "voice-a",
+        "text": "Yep, exactly, let’s keep going from where the last agent leaves off...",
+        "speechAct": "backchannel",
+        "current": 1,
+        "next": 2,
+        "loopRisk": true,
+        "roomStateSummary": "agreement loop; private beliefs current=1/1/1; nobody ever commits 2",
+        "agentStates": [
+          {
+            "agentId": "voice-a",
+            "heardCount": 66,
+            "spokeCount": 34,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "wait-for-someone"
+          },
+          {
+            "agentId": "voice-b",
+            "heardCount": 67,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          },
+          {
+            "agentId": "voice-c",
+            "heardCount": 67,
+            "spokeCount": 33,
+            "believesCurrent": 1,
+            "lastClassifiedAs": "backchannel",
+            "nextIntent": "acknowledge"
+          }
+        ]
+      }
+    ],
+    "good": [
+      {
+        "turn": 1,
+        "actorId": "voice-a",
+        "text": "One",
+        "speechAct": "task_action",
+        "current": 1,
+        "next": 2,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=1; next=2; scheduled=voice-b"
+      },
+      {
+        "turn": 2,
+        "actorId": "voice-b",
+        "text": "Two",
+        "speechAct": "task_action",
+        "current": 2,
+        "next": 3,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=2; next=3; scheduled=voice-c"
+      },
+      {
+        "turn": 3,
+        "actorId": "voice-c",
+        "text": "Three",
+        "speechAct": "task_action",
+        "current": 3,
+        "next": 4,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=3; next=4; scheduled=voice-a"
+      },
+      {
+        "turn": 4,
+        "actorId": "voice-a",
+        "text": "Four",
+        "speechAct": "task_action",
+        "current": 4,
+        "next": 5,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=4; next=5; scheduled=voice-b"
+      },
+      {
+        "turn": 5,
+        "actorId": "voice-b",
+        "text": "Five",
+        "speechAct": "task_action",
+        "current": 5,
+        "next": 6,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=5; next=6; scheduled=voice-c"
+      },
+      {
+        "turn": 6,
+        "actorId": "voice-c",
+        "text": "Six",
+        "speechAct": "task_action",
+        "current": 6,
+        "next": 7,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=6; next=7; scheduled=voice-a"
+      },
+      {
+        "turn": 7,
+        "actorId": "voice-a",
+        "text": "Seven",
+        "speechAct": "task_action",
+        "current": 7,
+        "next": 8,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=7; next=8; scheduled=voice-b"
+      },
+      {
+        "turn": 8,
+        "actorId": "voice-b",
+        "text": "Eight",
+        "speechAct": "task_action",
+        "current": 8,
+        "next": 9,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=8; next=9; scheduled=voice-c"
+      },
+      {
+        "turn": 9,
+        "actorId": "voice-c",
+        "text": "Nine",
+        "speechAct": "task_action",
+        "current": 9,
+        "next": 10,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=9; next=10; scheduled=voice-a"
+      },
+      {
+        "turn": 10,
+        "actorId": "voice-a",
+        "text": "Ten",
+        "speechAct": "task_action",
+        "current": 10,
+        "next": 11,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=10; next=11; scheduled=voice-b"
+      },
+      {
+        "turn": 11,
+        "actorId": "voice-b",
+        "text": "Eleven",
+        "speechAct": "task_action",
+        "current": 11,
+        "next": 12,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=11; next=12; scheduled=voice-c"
+      },
+      {
+        "turn": 12,
+        "actorId": "voice-c",
+        "text": "Twelve",
+        "speechAct": "task_action",
+        "current": 12,
+        "next": 13,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=12; next=13; scheduled=voice-a"
+      },
+      {
+        "turn": 13,
+        "actorId": "voice-a",
+        "text": "Thirteen",
+        "speechAct": "task_action",
+        "current": 13,
+        "next": 14,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=13; next=14; scheduled=voice-b"
+      },
+      {
+        "turn": 14,
+        "actorId": "voice-b",
+        "text": "Fourteen",
+        "speechAct": "task_action",
+        "current": 14,
+        "next": 15,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=14; next=15; scheduled=voice-c"
+      },
+      {
+        "turn": 15,
+        "actorId": "voice-c",
+        "text": "Fifteen",
+        "speechAct": "task_action",
+        "current": 15,
+        "next": 16,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=15; next=16; scheduled=voice-a"
+      },
+      {
+        "turn": 16,
+        "actorId": "voice-a",
+        "text": "Sixteen",
+        "speechAct": "task_action",
+        "current": 16,
+        "next": 17,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=16; next=17; scheduled=voice-b"
+      },
+      {
+        "turn": 17,
+        "actorId": "voice-b",
+        "text": "Seventeen",
+        "speechAct": "task_action",
+        "current": 17,
+        "next": 18,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=17; next=18; scheduled=voice-c"
+      },
+      {
+        "turn": 18,
+        "actorId": "voice-c",
+        "text": "Eighteen",
+        "speechAct": "task_action",
+        "current": 18,
+        "next": 19,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=18; next=19; scheduled=voice-a"
+      },
+      {
+        "turn": 19,
+        "actorId": "voice-a",
+        "text": "Nineteen",
+        "speechAct": "task_action",
+        "current": 19,
+        "next": 20,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=19; next=20; scheduled=voice-b"
+      },
+      {
+        "turn": 20,
+        "actorId": "voice-b",
+        "text": "Twenty",
+        "speechAct": "task_action",
+        "current": 20,
+        "next": 21,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=20; next=21; scheduled=voice-c"
+      },
+      {
+        "turn": 21,
+        "actorId": "voice-c",
+        "text": "Twenty-one",
+        "speechAct": "task_action",
+        "current": 21,
+        "next": 22,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=21; next=22; scheduled=voice-a"
+      },
+      {
+        "turn": 22,
+        "actorId": "voice-a",
+        "text": "Twenty-two",
+        "speechAct": "task_action",
+        "current": 22,
+        "next": 23,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=22; next=23; scheduled=voice-b"
+      },
+      {
+        "turn": 23,
+        "actorId": "voice-b",
+        "text": "Twenty-three",
+        "speechAct": "task_action",
+        "current": 23,
+        "next": 24,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=23; next=24; scheduled=voice-c"
+      },
+      {
+        "turn": 24,
+        "actorId": "voice-c",
+        "text": "Twenty-four",
+        "speechAct": "task_action",
+        "current": 24,
+        "next": 25,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=24; next=25; scheduled=voice-a"
+      },
+      {
+        "turn": 25,
+        "actorId": "voice-a",
+        "text": "Twenty-five",
+        "speechAct": "task_action",
+        "current": 25,
+        "next": 26,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=25; next=26; scheduled=voice-b"
+      },
+      {
+        "turn": 26,
+        "actorId": "voice-b",
+        "text": "Twenty-six",
+        "speechAct": "task_action",
+        "current": 26,
+        "next": 27,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=26; next=27; scheduled=voice-c"
+      },
+      {
+        "turn": 27,
+        "actorId": "voice-c",
+        "text": "Twenty-seven",
+        "speechAct": "task_action",
+        "current": 27,
+        "next": 28,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=27; next=28; scheduled=voice-a"
+      },
+      {
+        "turn": 28,
+        "actorId": "voice-a",
+        "text": "Twenty-eight",
+        "speechAct": "task_action",
+        "current": 28,
+        "next": 29,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=28; next=29; scheduled=voice-b"
+      },
+      {
+        "turn": 29,
+        "actorId": "voice-b",
+        "text": "Twenty-nine",
+        "speechAct": "task_action",
+        "current": 29,
+        "next": 30,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=29; next=30; scheduled=voice-c"
+      },
+      {
+        "turn": 30,
+        "actorId": "voice-c",
+        "text": "Thirty",
+        "speechAct": "task_action",
+        "current": 30,
+        "next": 31,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=30; next=31; scheduled=voice-a"
+      },
+      {
+        "turn": 31,
+        "actorId": "voice-a",
+        "text": "Thirty-one",
+        "speechAct": "task_action",
+        "current": 31,
+        "next": 32,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=31; next=32; scheduled=voice-b"
+      },
+      {
+        "turn": 32,
+        "actorId": "voice-b",
+        "text": "Thirty-two",
+        "speechAct": "task_action",
+        "current": 32,
+        "next": 33,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=32; next=33; scheduled=voice-c"
+      },
+      {
+        "turn": 33,
+        "actorId": "voice-c",
+        "text": "Thirty-three",
+        "speechAct": "task_action",
+        "current": 33,
+        "next": 34,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=33; next=34; scheduled=voice-a"
+      },
+      {
+        "turn": 34,
+        "actorId": "voice-a",
+        "text": "Thirty-four",
+        "speechAct": "task_action",
+        "current": 34,
+        "next": 35,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=34; next=35; scheduled=voice-b"
+      },
+      {
+        "turn": 35,
+        "actorId": "voice-b",
+        "text": "Thirty-five",
+        "speechAct": "task_action",
+        "current": 35,
+        "next": 36,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=35; next=36; scheduled=voice-c"
+      },
+      {
+        "turn": 36,
+        "actorId": "voice-c",
+        "text": "Thirty-six",
+        "speechAct": "task_action",
+        "current": 36,
+        "next": 37,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=36; next=37; scheduled=voice-a"
+      },
+      {
+        "turn": 37,
+        "actorId": "voice-a",
+        "text": "Thirty-seven",
+        "speechAct": "task_action",
+        "current": 37,
+        "next": 38,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=37; next=38; scheduled=voice-b"
+      },
+      {
+        "turn": 38,
+        "actorId": "voice-b",
+        "text": "Thirty-eight",
+        "speechAct": "task_action",
+        "current": 38,
+        "next": 39,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=38; next=39; scheduled=voice-c"
+      },
+      {
+        "turn": 39,
+        "actorId": "voice-c",
+        "text": "Thirty-nine",
+        "speechAct": "task_action",
+        "current": 39,
+        "next": 40,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=39; next=40; scheduled=voice-a"
+      },
+      {
+        "turn": 40,
+        "actorId": "voice-a",
+        "text": "Forty",
+        "speechAct": "task_action",
+        "current": 40,
+        "next": 41,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=40; next=41; scheduled=voice-b"
+      },
+      {
+        "turn": 41,
+        "actorId": "voice-b",
+        "text": "Forty-one",
+        "speechAct": "task_action",
+        "current": 41,
+        "next": 42,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=41; next=42; scheduled=voice-c"
+      },
+      {
+        "turn": 42,
+        "actorId": "voice-c",
+        "text": "Forty-two",
+        "speechAct": "task_action",
+        "current": 42,
+        "next": 43,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=42; next=43; scheduled=voice-a"
+      },
+      {
+        "turn": 43,
+        "actorId": "voice-a",
+        "text": "Forty-three",
+        "speechAct": "task_action",
+        "current": 43,
+        "next": 44,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=43; next=44; scheduled=voice-b"
+      },
+      {
+        "turn": 44,
+        "actorId": "voice-b",
+        "text": "Forty-four",
+        "speechAct": "task_action",
+        "current": 44,
+        "next": 45,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=44; next=45; scheduled=voice-c"
+      },
+      {
+        "turn": 45,
+        "actorId": "voice-c",
+        "text": "Forty-five",
+        "speechAct": "task_action",
+        "current": 45,
+        "next": 46,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=45; next=46; scheduled=voice-a"
+      },
+      {
+        "turn": 46,
+        "actorId": "voice-a",
+        "text": "Forty-six",
+        "speechAct": "task_action",
+        "current": 46,
+        "next": 47,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=46; next=47; scheduled=voice-b"
+      },
+      {
+        "turn": 47,
+        "actorId": "voice-b",
+        "text": "Forty-seven",
+        "speechAct": "task_action",
+        "current": 47,
+        "next": 48,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=47; next=48; scheduled=voice-c"
+      },
+      {
+        "turn": 48,
+        "actorId": "voice-c",
+        "text": "Forty-eight",
+        "speechAct": "task_action",
+        "current": 48,
+        "next": 49,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=48; next=49; scheduled=voice-a"
+      },
+      {
+        "turn": 49,
+        "actorId": "voice-a",
+        "text": "Forty-nine",
+        "speechAct": "task_action",
+        "current": 49,
+        "next": 50,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=49; next=50; scheduled=voice-b"
+      },
+      {
+        "turn": 50,
+        "actorId": "voice-b",
+        "text": "Fifty",
+        "speechAct": "task_action",
+        "current": 50,
+        "next": 51,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=50; next=51; scheduled=voice-c"
+      },
+      {
+        "turn": 51,
+        "actorId": "voice-c",
+        "text": "Fifty-one",
+        "speechAct": "task_action",
+        "current": 51,
+        "next": 52,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=51; next=52; scheduled=voice-a"
+      },
+      {
+        "turn": 52,
+        "actorId": "voice-a",
+        "text": "Fifty-two",
+        "speechAct": "task_action",
+        "current": 52,
+        "next": 53,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=52; next=53; scheduled=voice-b"
+      },
+      {
+        "turn": 53,
+        "actorId": "voice-b",
+        "text": "Fifty-three",
+        "speechAct": "task_action",
+        "current": 53,
+        "next": 54,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=53; next=54; scheduled=voice-c"
+      },
+      {
+        "turn": 54,
+        "actorId": "voice-c",
+        "text": "Fifty-four",
+        "speechAct": "task_action",
+        "current": 54,
+        "next": 55,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=54; next=55; scheduled=voice-a"
+      },
+      {
+        "turn": 55,
+        "actorId": "voice-a",
+        "text": "Fifty-five",
+        "speechAct": "task_action",
+        "current": 55,
+        "next": 56,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=55; next=56; scheduled=voice-b"
+      },
+      {
+        "turn": 56,
+        "actorId": "voice-b",
+        "text": "Fifty-six",
+        "speechAct": "task_action",
+        "current": 56,
+        "next": 57,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=56; next=57; scheduled=voice-c"
+      },
+      {
+        "turn": 57,
+        "actorId": "voice-c",
+        "text": "Fifty-seven",
+        "speechAct": "task_action",
+        "current": 57,
+        "next": 58,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=57; next=58; scheduled=voice-a"
+      },
+      {
+        "turn": 58,
+        "actorId": "voice-a",
+        "text": "Fifty-eight",
+        "speechAct": "task_action",
+        "current": 58,
+        "next": 59,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=58; next=59; scheduled=voice-b"
+      },
+      {
+        "turn": 59,
+        "actorId": "voice-b",
+        "text": "Fifty-nine",
+        "speechAct": "task_action",
+        "current": 59,
+        "next": 60,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=59; next=60; scheduled=voice-c"
+      },
+      {
+        "turn": 60,
+        "actorId": "voice-c",
+        "text": "Sixty",
+        "speechAct": "task_action",
+        "current": 60,
+        "next": 61,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=60; next=61; scheduled=voice-a"
+      },
+      {
+        "turn": 61,
+        "actorId": "voice-a",
+        "text": "Sixty-one",
+        "speechAct": "task_action",
+        "current": 61,
+        "next": 62,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=61; next=62; scheduled=voice-b"
+      },
+      {
+        "turn": 62,
+        "actorId": "voice-b",
+        "text": "Sixty-two",
+        "speechAct": "task_action",
+        "current": 62,
+        "next": 63,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=62; next=63; scheduled=voice-c"
+      },
+      {
+        "turn": 63,
+        "actorId": "voice-c",
+        "text": "Sixty-three",
+        "speechAct": "task_action",
+        "current": 63,
+        "next": 64,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=63; next=64; scheduled=voice-a"
+      },
+      {
+        "turn": 64,
+        "actorId": "voice-a",
+        "text": "Sixty-four",
+        "speechAct": "task_action",
+        "current": 64,
+        "next": 65,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=64; next=65; scheduled=voice-b"
+      },
+      {
+        "turn": 65,
+        "actorId": "voice-b",
+        "text": "Sixty-five",
+        "speechAct": "task_action",
+        "current": 65,
+        "next": 66,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=65; next=66; scheduled=voice-c"
+      },
+      {
+        "turn": 66,
+        "actorId": "voice-c",
+        "text": "Sixty-six",
+        "speechAct": "task_action",
+        "current": 66,
+        "next": 67,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=66; next=67; scheduled=voice-a"
+      },
+      {
+        "turn": 67,
+        "actorId": "voice-a",
+        "text": "Sixty-seven",
+        "speechAct": "task_action",
+        "current": 67,
+        "next": 68,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=67; next=68; scheduled=voice-b"
+      },
+      {
+        "turn": 68,
+        "actorId": "voice-b",
+        "text": "Sixty-eight",
+        "speechAct": "task_action",
+        "current": 68,
+        "next": 69,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=68; next=69; scheduled=voice-c"
+      },
+      {
+        "turn": 69,
+        "actorId": "voice-c",
+        "text": "Sixty-nine",
+        "speechAct": "task_action",
+        "current": 69,
+        "next": 70,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=69; next=70; scheduled=voice-a"
+      },
+      {
+        "turn": 70,
+        "actorId": "voice-a",
+        "text": "Seventy",
+        "speechAct": "task_action",
+        "current": 70,
+        "next": 71,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=70; next=71; scheduled=voice-b"
+      },
+      {
+        "turn": 71,
+        "actorId": "voice-b",
+        "text": "Seventy-one",
+        "speechAct": "task_action",
+        "current": 71,
+        "next": 72,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=71; next=72; scheduled=voice-c"
+      },
+      {
+        "turn": 72,
+        "actorId": "voice-c",
+        "text": "Seventy-two",
+        "speechAct": "task_action",
+        "current": 72,
+        "next": 73,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=72; next=73; scheduled=voice-a"
+      },
+      {
+        "turn": 73,
+        "actorId": "voice-a",
+        "text": "Seventy-three",
+        "speechAct": "task_action",
+        "current": 73,
+        "next": 74,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=73; next=74; scheduled=voice-b"
+      },
+      {
+        "turn": 74,
+        "actorId": "voice-b",
+        "text": "Seventy-four",
+        "speechAct": "task_action",
+        "current": 74,
+        "next": 75,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=74; next=75; scheduled=voice-c"
+      },
+      {
+        "turn": 75,
+        "actorId": "voice-c",
+        "text": "Seventy-five",
+        "speechAct": "task_action",
+        "current": 75,
+        "next": 76,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=75; next=76; scheduled=voice-a"
+      },
+      {
+        "turn": 76,
+        "actorId": "voice-a",
+        "text": "Seventy-six",
+        "speechAct": "task_action",
+        "current": 76,
+        "next": 77,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=76; next=77; scheduled=voice-b"
+      },
+      {
+        "turn": 77,
+        "actorId": "voice-b",
+        "text": "Seventy-seven",
+        "speechAct": "task_action",
+        "current": 77,
+        "next": 78,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=77; next=78; scheduled=voice-c"
+      },
+      {
+        "turn": 78,
+        "actorId": "voice-c",
+        "text": "Seventy-eight",
+        "speechAct": "task_action",
+        "current": 78,
+        "next": 79,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=78; next=79; scheduled=voice-a"
+      },
+      {
+        "turn": 79,
+        "actorId": "voice-a",
+        "text": "Seventy-nine",
+        "speechAct": "task_action",
+        "current": 79,
+        "next": 80,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=79; next=80; scheduled=voice-b"
+      },
+      {
+        "turn": 80,
+        "actorId": "voice-b",
+        "text": "Eighty",
+        "speechAct": "task_action",
+        "current": 80,
+        "next": 81,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=80; next=81; scheduled=voice-c"
+      },
+      {
+        "turn": 81,
+        "actorId": "voice-c",
+        "text": "Eighty-one",
+        "speechAct": "task_action",
+        "current": 81,
+        "next": 82,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=81; next=82; scheduled=voice-a"
+      },
+      {
+        "turn": 82,
+        "actorId": "voice-a",
+        "text": "Eighty-two",
+        "speechAct": "task_action",
+        "current": 82,
+        "next": 83,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=82; next=83; scheduled=voice-b"
+      },
+      {
+        "turn": 83,
+        "actorId": "voice-b",
+        "text": "Eighty-three",
+        "speechAct": "task_action",
+        "current": 83,
+        "next": 84,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=83; next=84; scheduled=voice-c"
+      },
+      {
+        "turn": 84,
+        "actorId": "voice-c",
+        "text": "Eighty-four",
+        "speechAct": "task_action",
+        "current": 84,
+        "next": 85,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=84; next=85; scheduled=voice-a"
+      },
+      {
+        "turn": 85,
+        "actorId": "voice-a",
+        "text": "Eighty-five",
+        "speechAct": "task_action",
+        "current": 85,
+        "next": 86,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=85; next=86; scheduled=voice-b"
+      },
+      {
+        "turn": 86,
+        "actorId": "voice-b",
+        "text": "Eighty-six",
+        "speechAct": "task_action",
+        "current": 86,
+        "next": 87,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=86; next=87; scheduled=voice-c"
+      },
+      {
+        "turn": 87,
+        "actorId": "voice-c",
+        "text": "Eighty-seven",
+        "speechAct": "task_action",
+        "current": 87,
+        "next": 88,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=87; next=88; scheduled=voice-a"
+      },
+      {
+        "turn": 88,
+        "actorId": "voice-a",
+        "text": "Eighty-eight",
+        "speechAct": "task_action",
+        "current": 88,
+        "next": 89,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=88; next=89; scheduled=voice-b"
+      },
+      {
+        "turn": 89,
+        "actorId": "voice-b",
+        "text": "Eighty-nine",
+        "speechAct": "task_action",
+        "current": 89,
+        "next": 90,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=89; next=90; scheduled=voice-c"
+      },
+      {
+        "turn": 90,
+        "actorId": "voice-c",
+        "text": "Ninety",
+        "speechAct": "task_action",
+        "current": 90,
+        "next": 91,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=90; next=91; scheduled=voice-a"
+      },
+      {
+        "turn": 91,
+        "actorId": "voice-a",
+        "text": "Ninety-one",
+        "speechAct": "task_action",
+        "current": 91,
+        "next": 92,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=91; next=92; scheduled=voice-b"
+      },
+      {
+        "turn": 92,
+        "actorId": "voice-b",
+        "text": "Ninety-two",
+        "speechAct": "task_action",
+        "current": 92,
+        "next": 93,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=92; next=93; scheduled=voice-c"
+      },
+      {
+        "turn": 93,
+        "actorId": "voice-c",
+        "text": "Ninety-three",
+        "speechAct": "task_action",
+        "current": 93,
+        "next": 94,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=93; next=94; scheduled=voice-a"
+      },
+      {
+        "turn": 94,
+        "actorId": "voice-a",
+        "text": "Ninety-four",
+        "speechAct": "task_action",
+        "current": 94,
+        "next": 95,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=94; next=95; scheduled=voice-b"
+      },
+      {
+        "turn": 95,
+        "actorId": "voice-b",
+        "text": "Ninety-five",
+        "speechAct": "task_action",
+        "current": 95,
+        "next": 96,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=95; next=96; scheduled=voice-c"
+      },
+      {
+        "turn": 96,
+        "actorId": "voice-c",
+        "text": "Ninety-six",
+        "speechAct": "task_action",
+        "current": 96,
+        "next": 97,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=96; next=97; scheduled=voice-a"
+      },
+      {
+        "turn": 97,
+        "actorId": "voice-a",
+        "text": "Ninety-seven",
+        "speechAct": "task_action",
+        "current": 97,
+        "next": 98,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=97; next=98; scheduled=voice-b"
+      },
+      {
+        "turn": 98,
+        "actorId": "voice-b",
+        "text": "Ninety-eight",
+        "speechAct": "task_action",
+        "current": 98,
+        "next": 99,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=98; next=99; scheduled=voice-c"
+      },
+      {
+        "turn": 99,
+        "actorId": "voice-c",
+        "text": "Ninety-nine",
+        "speechAct": "task_action",
+        "current": 99,
+        "next": 100,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=99; next=100; scheduled=voice-a"
+      },
+      {
+        "turn": 100,
+        "actorId": "voice-a",
+        "text": "One hundred",
+        "speechAct": "task_action",
+        "current": 100,
+        "next": 100,
+        "loopRisk": false,
+        "roomStateSummary": "committed current=100; next=100; scheduled=none"
+      }
+    ],
+    "goodFinalState": {
+      "roomId": "voice-demo-room",
+      "mode": "review",
+      "floorOwner": null,
+      "nextSpeaker": null,
+      "suppressAcknowledgements": true,
+      "loopRisk": false,
+      "requiredNextAct": null,
+      "turnQueue": [
+        "voice-a",
+        "voice-b",
+        "voice-c"
+      ],
+      "task": {
+        "kind": "count_to_n",
+        "target": 100,
+        "current": 100,
+        "next": 100,
+        "completed": true
+      },
+      "utterances": [
+        {
+          "id": "utt_mtoyihrr_1",
+          "actorId": "voice-a",
+          "text": "One",
+          "ts": 1788647455863,
+          "speechAct": "task_action",
+          "extractedNumber": 1,
+          "reason": "numeric contribution detected: 1",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_2",
+          "actorId": "voice-b",
+          "text": "Two",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 2,
+          "reason": "numeric contribution detected: 2",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_3",
+          "actorId": "voice-c",
+          "text": "Three",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 3,
+          "reason": "numeric contribution detected: 3",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_4",
+          "actorId": "voice-a",
+          "text": "Four",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 4,
+          "reason": "numeric contribution detected: 4",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_5",
+          "actorId": "voice-b",
+          "text": "Five",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 5,
+          "reason": "numeric contribution detected: 5",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_6",
+          "actorId": "voice-c",
+          "text": "Six",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 6,
+          "reason": "numeric contribution detected: 6",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_7",
+          "actorId": "voice-a",
+          "text": "Seven",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 7,
+          "reason": "numeric contribution detected: 7",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_8",
+          "actorId": "voice-b",
+          "text": "Eight",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 8,
+          "reason": "numeric contribution detected: 8",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_9",
+          "actorId": "voice-c",
+          "text": "Nine",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 9,
+          "reason": "numeric contribution detected: 9",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrs_a",
+          "actorId": "voice-a",
+          "text": "Ten",
+          "ts": 1788647455864,
+          "speechAct": "task_action",
+          "extractedNumber": 10,
+          "reason": "numeric contribution detected: 10",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_b",
+          "actorId": "voice-b",
+          "text": "Eleven",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 11,
+          "reason": "numeric contribution detected: 11",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_c",
+          "actorId": "voice-c",
+          "text": "Twelve",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 12,
+          "reason": "numeric contribution detected: 12",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_d",
+          "actorId": "voice-a",
+          "text": "Thirteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 13,
+          "reason": "numeric contribution detected: 13",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_e",
+          "actorId": "voice-b",
+          "text": "Fourteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 14,
+          "reason": "numeric contribution detected: 14",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_f",
+          "actorId": "voice-c",
+          "text": "Fifteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 15,
+          "reason": "numeric contribution detected: 15",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_g",
+          "actorId": "voice-a",
+          "text": "Sixteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 16,
+          "reason": "numeric contribution detected: 16",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_h",
+          "actorId": "voice-b",
+          "text": "Seventeen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 17,
+          "reason": "numeric contribution detected: 17",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_i",
+          "actorId": "voice-c",
+          "text": "Eighteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 18,
+          "reason": "numeric contribution detected: 18",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_j",
+          "actorId": "voice-a",
+          "text": "Nineteen",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 19,
+          "reason": "numeric contribution detected: 19",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrt_k",
+          "actorId": "voice-b",
+          "text": "Twenty",
+          "ts": 1788647455865,
+          "speechAct": "task_action",
+          "extractedNumber": 20,
+          "reason": "numeric contribution detected: 20",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_l",
+          "actorId": "voice-c",
+          "text": "Twenty-one",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 21,
+          "reason": "numeric contribution detected: 21",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_m",
+          "actorId": "voice-a",
+          "text": "Twenty-two",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 22,
+          "reason": "numeric contribution detected: 22",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_n",
+          "actorId": "voice-b",
+          "text": "Twenty-three",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 23,
+          "reason": "numeric contribution detected: 23",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_o",
+          "actorId": "voice-c",
+          "text": "Twenty-four",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 24,
+          "reason": "numeric contribution detected: 24",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_p",
+          "actorId": "voice-a",
+          "text": "Twenty-five",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 25,
+          "reason": "numeric contribution detected: 25",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_q",
+          "actorId": "voice-b",
+          "text": "Twenty-six",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 26,
+          "reason": "numeric contribution detected: 26",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_r",
+          "actorId": "voice-c",
+          "text": "Twenty-seven",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 27,
+          "reason": "numeric contribution detected: 27",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_s",
+          "actorId": "voice-a",
+          "text": "Twenty-eight",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 28,
+          "reason": "numeric contribution detected: 28",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_t",
+          "actorId": "voice-b",
+          "text": "Twenty-nine",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 29,
+          "reason": "numeric contribution detected: 29",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_u",
+          "actorId": "voice-c",
+          "text": "Thirty",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 30,
+          "reason": "numeric contribution detected: 30",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_v",
+          "actorId": "voice-a",
+          "text": "Thirty-one",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 31,
+          "reason": "numeric contribution detected: 31",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_w",
+          "actorId": "voice-b",
+          "text": "Thirty-two",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 32,
+          "reason": "numeric contribution detected: 32",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_x",
+          "actorId": "voice-c",
+          "text": "Thirty-three",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 33,
+          "reason": "numeric contribution detected: 33",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_y",
+          "actorId": "voice-a",
+          "text": "Thirty-four",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 34,
+          "reason": "numeric contribution detected: 34",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_z",
+          "actorId": "voice-b",
+          "text": "Thirty-five",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 35,
+          "reason": "numeric contribution detected: 35",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_10",
+          "actorId": "voice-c",
+          "text": "Thirty-six",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 36,
+          "reason": "numeric contribution detected: 36",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_11",
+          "actorId": "voice-a",
+          "text": "Thirty-seven",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 37,
+          "reason": "numeric contribution detected: 37",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_12",
+          "actorId": "voice-b",
+          "text": "Thirty-eight",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 38,
+          "reason": "numeric contribution detected: 38",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_13",
+          "actorId": "voice-c",
+          "text": "Thirty-nine",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 39,
+          "reason": "numeric contribution detected: 39",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_14",
+          "actorId": "voice-a",
+          "text": "Forty",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 40,
+          "reason": "numeric contribution detected: 40",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_15",
+          "actorId": "voice-b",
+          "text": "Forty-one",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 41,
+          "reason": "numeric contribution detected: 41",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_16",
+          "actorId": "voice-c",
+          "text": "Forty-two",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 42,
+          "reason": "numeric contribution detected: 42",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_17",
+          "actorId": "voice-a",
+          "text": "Forty-three",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 43,
+          "reason": "numeric contribution detected: 43",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_18",
+          "actorId": "voice-b",
+          "text": "Forty-four",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 44,
+          "reason": "numeric contribution detected: 44",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_19",
+          "actorId": "voice-c",
+          "text": "Forty-five",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 45,
+          "reason": "numeric contribution detected: 45",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1a",
+          "actorId": "voice-a",
+          "text": "Forty-six",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 46,
+          "reason": "numeric contribution detected: 46",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1b",
+          "actorId": "voice-b",
+          "text": "Forty-seven",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 47,
+          "reason": "numeric contribution detected: 47",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1c",
+          "actorId": "voice-c",
+          "text": "Forty-eight",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 48,
+          "reason": "numeric contribution detected: 48",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1d",
+          "actorId": "voice-a",
+          "text": "Forty-nine",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 49,
+          "reason": "numeric contribution detected: 49",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1e",
+          "actorId": "voice-b",
+          "text": "Fifty",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 50,
+          "reason": "numeric contribution detected: 50",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihru_1f",
+          "actorId": "voice-c",
+          "text": "Fifty-one",
+          "ts": 1788647455866,
+          "speechAct": "task_action",
+          "extractedNumber": 51,
+          "reason": "numeric contribution detected: 51",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1g",
+          "actorId": "voice-a",
+          "text": "Fifty-two",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 52,
+          "reason": "numeric contribution detected: 52",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1h",
+          "actorId": "voice-b",
+          "text": "Fifty-three",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 53,
+          "reason": "numeric contribution detected: 53",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1i",
+          "actorId": "voice-c",
+          "text": "Fifty-four",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 54,
+          "reason": "numeric contribution detected: 54",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1j",
+          "actorId": "voice-a",
+          "text": "Fifty-five",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 55,
+          "reason": "numeric contribution detected: 55",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1k",
+          "actorId": "voice-b",
+          "text": "Fifty-six",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 56,
+          "reason": "numeric contribution detected: 56",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1l",
+          "actorId": "voice-c",
+          "text": "Fifty-seven",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 57,
+          "reason": "numeric contribution detected: 57",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1m",
+          "actorId": "voice-a",
+          "text": "Fifty-eight",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 58,
+          "reason": "numeric contribution detected: 58",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1n",
+          "actorId": "voice-b",
+          "text": "Fifty-nine",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 59,
+          "reason": "numeric contribution detected: 59",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1o",
+          "actorId": "voice-c",
+          "text": "Sixty",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 60,
+          "reason": "numeric contribution detected: 60",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1p",
+          "actorId": "voice-a",
+          "text": "Sixty-one",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 61,
+          "reason": "numeric contribution detected: 61",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1q",
+          "actorId": "voice-b",
+          "text": "Sixty-two",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 62,
+          "reason": "numeric contribution detected: 62",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1r",
+          "actorId": "voice-c",
+          "text": "Sixty-three",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 63,
+          "reason": "numeric contribution detected: 63",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1s",
+          "actorId": "voice-a",
+          "text": "Sixty-four",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 64,
+          "reason": "numeric contribution detected: 64",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1t",
+          "actorId": "voice-b",
+          "text": "Sixty-five",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 65,
+          "reason": "numeric contribution detected: 65",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1u",
+          "actorId": "voice-c",
+          "text": "Sixty-six",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 66,
+          "reason": "numeric contribution detected: 66",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1v",
+          "actorId": "voice-a",
+          "text": "Sixty-seven",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 67,
+          "reason": "numeric contribution detected: 67",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1w",
+          "actorId": "voice-b",
+          "text": "Sixty-eight",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 68,
+          "reason": "numeric contribution detected: 68",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1x",
+          "actorId": "voice-c",
+          "text": "Sixty-nine",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 69,
+          "reason": "numeric contribution detected: 69",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1y",
+          "actorId": "voice-a",
+          "text": "Seventy",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 70,
+          "reason": "numeric contribution detected: 70",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_1z",
+          "actorId": "voice-b",
+          "text": "Seventy-one",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 71,
+          "reason": "numeric contribution detected: 71",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_20",
+          "actorId": "voice-c",
+          "text": "Seventy-two",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 72,
+          "reason": "numeric contribution detected: 72",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_21",
+          "actorId": "voice-a",
+          "text": "Seventy-three",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 73,
+          "reason": "numeric contribution detected: 73",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrv_22",
+          "actorId": "voice-b",
+          "text": "Seventy-four",
+          "ts": 1788647455867,
+          "speechAct": "task_action",
+          "extractedNumber": 74,
+          "reason": "numeric contribution detected: 74",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_23",
+          "actorId": "voice-c",
+          "text": "Seventy-five",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 75,
+          "reason": "numeric contribution detected: 75",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_24",
+          "actorId": "voice-a",
+          "text": "Seventy-six",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 76,
+          "reason": "numeric contribution detected: 76",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_25",
+          "actorId": "voice-b",
+          "text": "Seventy-seven",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 77,
+          "reason": "numeric contribution detected: 77",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_26",
+          "actorId": "voice-c",
+          "text": "Seventy-eight",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 78,
+          "reason": "numeric contribution detected: 78",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_27",
+          "actorId": "voice-a",
+          "text": "Seventy-nine",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 79,
+          "reason": "numeric contribution detected: 79",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_28",
+          "actorId": "voice-b",
+          "text": "Eighty",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 80,
+          "reason": "numeric contribution detected: 80",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_29",
+          "actorId": "voice-c",
+          "text": "Eighty-one",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 81,
+          "reason": "numeric contribution detected: 81",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2a",
+          "actorId": "voice-a",
+          "text": "Eighty-two",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 82,
+          "reason": "numeric contribution detected: 82",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2b",
+          "actorId": "voice-b",
+          "text": "Eighty-three",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 83,
+          "reason": "numeric contribution detected: 83",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2c",
+          "actorId": "voice-c",
+          "text": "Eighty-four",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 84,
+          "reason": "numeric contribution detected: 84",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2d",
+          "actorId": "voice-a",
+          "text": "Eighty-five",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 85,
+          "reason": "numeric contribution detected: 85",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2e",
+          "actorId": "voice-b",
+          "text": "Eighty-six",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 86,
+          "reason": "numeric contribution detected: 86",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2f",
+          "actorId": "voice-c",
+          "text": "Eighty-seven",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 87,
+          "reason": "numeric contribution detected: 87",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2g",
+          "actorId": "voice-a",
+          "text": "Eighty-eight",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 88,
+          "reason": "numeric contribution detected: 88",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2h",
+          "actorId": "voice-b",
+          "text": "Eighty-nine",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 89,
+          "reason": "numeric contribution detected: 89",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2i",
+          "actorId": "voice-c",
+          "text": "Ninety",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 90,
+          "reason": "numeric contribution detected: 90",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2j",
+          "actorId": "voice-a",
+          "text": "Ninety-one",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 91,
+          "reason": "numeric contribution detected: 91",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2k",
+          "actorId": "voice-b",
+          "text": "Ninety-two",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 92,
+          "reason": "numeric contribution detected: 92",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2l",
+          "actorId": "voice-c",
+          "text": "Ninety-three",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 93,
+          "reason": "numeric contribution detected: 93",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2m",
+          "actorId": "voice-a",
+          "text": "Ninety-four",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 94,
+          "reason": "numeric contribution detected: 94",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2n",
+          "actorId": "voice-b",
+          "text": "Ninety-five",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 95,
+          "reason": "numeric contribution detected: 95",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2o",
+          "actorId": "voice-c",
+          "text": "Ninety-six",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 96,
+          "reason": "numeric contribution detected: 96",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2p",
+          "actorId": "voice-a",
+          "text": "Ninety-seven",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 97,
+          "reason": "numeric contribution detected: 97",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2q",
+          "actorId": "voice-b",
+          "text": "Ninety-eight",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 98,
+          "reason": "numeric contribution detected: 98",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2r",
+          "actorId": "voice-c",
+          "text": "Ninety-nine",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 99,
+          "reason": "numeric contribution detected: 99",
+          "confidence": 0.98
+        },
+        {
+          "id": "utt_mtoyihrw_2s",
+          "actorId": "voice-a",
+          "text": "One hundred",
+          "ts": 1788647455868,
+          "speechAct": "task_action",
+          "extractedNumber": 100,
+          "reason": "numeric contribution detected: 100",
+          "confidence": 0.98
+        }
+      ],
+      "artifacts": [],
+      "version": 100
+    },
+    "selectedModel": "gemma4:e2b",
+    "provenance": {
+      "mode": "deterministic",
+      "modelId": null,
+      "bad": "deterministic sim — scripted utterances · no reducer, no scheduler",
+      "good": "deterministic sim — scripted utterances · real reducer & scheduler",
+      "fallbackTurns": 0
+    },
+    "diagnosis": [
+      "Bad: every agent treats every heard utterance as a fresh invitation to respond socially.",
+      "Bad: each agent has only a private belief (current=1) and an intent that oscillates between acknowledge and wait-for-someone — three private states, no shared truth.",
+      "Bad: acknowledgement and handoff language becomes new conversational fuel, so no concrete task state advances.",
+      "Good: the room reducer commits only task actions, suppresses acknowledgements, and schedules exactly one next speaker.",
+      "Good: each agent receives the authoritative next action, not a raw transcript to politely react to."
+    ]
+  }
+}

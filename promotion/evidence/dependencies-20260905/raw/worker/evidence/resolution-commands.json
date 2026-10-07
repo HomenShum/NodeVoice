@@ -1,0 +1,32 @@
+[
+  {
+    "label": "resolve-temporary-exact",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "install",
+      "--package-lock-only",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "exitCode": 0,
+    "seconds": 1.36,
+    "logSha256": "b125771fda8addd462adfe7f7b03299feb35e28badbb2d16ae8589e371216f8f"
+  },
+  {
+    "label": "restore-native-root-metadata",
+    "argv": [
+      "C:/nvm4w/nodejs/node.exe",
+      "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+      "install",
+      "--package-lock-only",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "exitCode": 0,
+    "seconds": 0.828,
+    "logSha256": "7510a3a0811e840087c812811aac889645fc9cfb526231d511454c6b68246ae6"
+  }
+]

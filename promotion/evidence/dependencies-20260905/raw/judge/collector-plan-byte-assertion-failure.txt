@@ -1,0 +1,1 @@
+Initial independent collector stopped at Accepted plan exact, comparing differently serialized copies. No proposal, source, runtime or dependency mutation. Complete raw delta is retained separately.

@@ -1,0 +1,1531 @@
+{
+  "name": "NODEVOICE-CURRENT-FIRST-USE-01",
+  "startedAt": "2026-09-05T21:36:16.014Z",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "current service; both providers unavailable",
+      "passed": true
+    },
+    {
+      "name": "shipped source deterministic",
+      "passed": true
+    },
+    {
+      "name": "shipped two count fields100",
+      "passed": true
+    },
+    {
+      "name": "same-run API completed100",
+      "passed": true
+    },
+    {
+      "name": "same-run deterministic actual provenance",
+      "passed": true
+    },
+    {
+      "name": "three bad private states remain1",
+      "passed": true
+    },
+    {
+      "name": "native rendered100 within original300s deadline",
+      "passed": true
+    },
+    {
+      "name": "actual playback finished within same300s budget",
+      "passed": true
+    },
+    {
+      "name": "visible stuck-left disclosure",
+      "passed": true
+    },
+    {
+      "name": "native create HTTP200 with room",
+      "passed": true
+    },
+    {
+      "name": "two-distinct-seats poll HTTP200",
+      "passed": true
+    },
+    {
+      "name": "both contexts share room",
+      "passed": true
+    },
+    {
+      "name": "deterministic-correction poll HTTP200",
+      "passed": true
+    },
+    {
+      "name": "deterministic-correction poll HTTP200",
+      "passed": true
+    },
+    {
+      "name": "correction records missing-key fallback",
+      "passed": true
+    },
+    {
+      "name": "no-key-halted poll HTTP200",
+      "passed": true
+    },
+    {
+      "name": "failed turn did not count",
+      "passed": true
+    },
+    {
+      "name": "one explicit Start adds one new missing-key error",
+      "passed": true
+    },
+    {
+      "name": "retained-room-after-navigation HTTP200",
+      "passed": true
+    },
+    {
+      "name": "only exact public CSS/referenced fonts permitted externally",
+      "passed": true
+    },
+    {
+      "name": "no unexpected browser console/request/HTTP errors",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "1440-root-entry",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-before",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-first100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-completed100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 115
+    },
+    {
+      "name": "360-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 9
+    },
+    {
+      "name": "390-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 6
+    },
+    {
+      "name": "768-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-lobby",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-demo-settled100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-lobby-computed-text200",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-lobby-reduced",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": true,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-demo-settled100-computed-text200",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 138
+    },
+    {
+      "name": "390-demo-settled100-reduced",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": true,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 6
+    },
+    {
+      "name": "1440-lobby-computed-text200",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-lobby-reduced",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": true,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-settled100-computed-text200",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-settled100-reduced",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": true,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-created-room",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 2
+    },
+    {
+      "name": "1440-join-gate",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-two-seats",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 2
+    },
+    {
+      "name": "1440-two-seats",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-correction-state",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 2
+    },
+    {
+      "name": "1440-correction",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-no-key-halted",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-no-key-halted",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 2
+    },
+    {
+      "name": "1440-no-key-state",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-lobby-recovery",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    }
+  ],
+  "actions": [
+    {
+      "phase": "root-to-demo",
+      "action": "Native root demo link click"
+    },
+    {
+      "phase": "count100",
+      "action": "One native Run the comparison click at shipped100/100 deterministic defaults"
+    },
+    {
+      "phase": "two-context-room",
+      "action": "Native create of synthetic Count to10 room at390x844"
+    },
+    {
+      "phase": "two-context-room",
+      "action": "Second clean context entered actual room code and clicked Join, then Join & enable sound; no microphone gesture"
+    },
+    {
+      "phase": "two-context-room",
+      "action": "Native keyboard Enter submits deterministic count correction",
+      "text": "Actually, count from 5 to 10"
+    },
+    {
+      "phase": "no-key-start",
+      "action": "One explicit native Start with both provider flags false; wait for error/halt rather than treating HTTP200 as completed work"
+    },
+    {
+      "phase": "no-key-start",
+      "action": "Explicit same-context route navigation to root after failure; not a discovered in-app Back control"
+    }
+  ],
+  "events": [
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "type": "requestfailed",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/events",
+      "error": {
+        "errorText": "net::ERR_ABORTED"
+      },
+      "intentionalTransportClose": true
+    }
+  ],
+  "requests": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/demo"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/api/models"
+    },
+    {
+      "page": "demo",
+      "phase": "count100",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/compare/demo"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/join"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/events"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/join"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/events"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/human"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "POST",
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/run"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    }
+  ],
+  "responses": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/demo",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/api/models",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "count100",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/compare/demo",
+      "method": "POST"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "count100",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "POST"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/join",
+      "method": "POST"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/events",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/join",
+      "method": "POST"
+    },
+    {
+      "page": "joiner",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/events",
+      "method": "GET"
+    },
+    {
+      "page": "lobby",
+      "phase": "two-context-room",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/human",
+      "method": "POST"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms/325e6d/run",
+      "method": "POST"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-DxSXpeDh.css",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-BnwyP8lp.js",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "joiner",
+      "phase": "no-key-start",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    }
+  ],
+  "samples": [
+    {
+      "current": 1,
+      "atMs": 42
+    },
+    {
+      "current": 2,
+      "atMs": 2067
+    },
+    {
+      "current": 3,
+      "atMs": 3077
+    },
+    {
+      "current": 4,
+      "atMs": 4088
+    },
+    {
+      "current": 5,
+      "atMs": 5104
+    },
+    {
+      "current": 6,
+      "atMs": 6109
+    },
+    {
+      "current": 7,
+      "atMs": 7121
+    },
+    {
+      "current": 8,
+      "atMs": 8132
+    },
+    {
+      "current": 9,
+      "atMs": 9147
+    },
+    {
+      "current": 10,
+      "atMs": 10155
+    },
+    {
+      "current": 11,
+      "atMs": 11169
+    },
+    {
+      "current": 12,
+      "atMs": 12177
+    },
+    {
+      "current": 13,
+      "atMs": 13190
+    },
+    {
+      "current": 14,
+      "atMs": 14197
+    },
+    {
+      "current": 15,
+      "atMs": 15213
+    },
+    {
+      "current": 16,
+      "atMs": 17240
+    },
+    {
+      "current": 17,
+      "atMs": 18254
+    },
+    {
+      "current": 18,
+      "atMs": 19268
+    },
+    {
+      "current": 19,
+      "atMs": 20281
+    },
+    {
+      "current": 20,
+      "atMs": 21296
+    },
+    {
+      "current": 21,
+      "atMs": 22308
+    },
+    {
+      "current": 22,
+      "atMs": 24332
+    },
+    {
+      "current": 23,
+      "atMs": 25349
+    },
+    {
+      "current": 24,
+      "atMs": 26363
+    },
+    {
+      "current": 25,
+      "atMs": 27376
+    },
+    {
+      "current": 26,
+      "atMs": 29401
+    },
+    {
+      "current": 27,
+      "atMs": 30410
+    },
+    {
+      "current": 28,
+      "atMs": 31422
+    },
+    {
+      "current": 29,
+      "atMs": 33451
+    },
+    {
+      "current": 30,
+      "atMs": 34469
+    },
+    {
+      "current": 31,
+      "atMs": 35482
+    },
+    {
+      "current": 32,
+      "atMs": 36497
+    },
+    {
+      "current": 33,
+      "atMs": 37507
+    },
+    {
+      "current": 34,
+      "atMs": 39526
+    },
+    {
+      "current": 35,
+      "atMs": 40541
+    },
+    {
+      "current": 36,
+      "atMs": 41551
+    },
+    {
+      "current": 37,
+      "atMs": 43577
+    },
+    {
+      "current": 38,
+      "atMs": 44588
+    },
+    {
+      "current": 39,
+      "atMs": 45603
+    },
+    {
+      "current": 40,
+      "atMs": 46607
+    },
+    {
+      "current": 41,
+      "atMs": 47619
+    },
+    {
+      "current": 42,
+      "atMs": 49647
+    },
+    {
+      "current": 43,
+      "atMs": 50659
+    },
+    {
+      "current": 44,
+      "atMs": 51663
+    },
+    {
+      "current": 45,
+      "atMs": 52675
+    },
+    {
+      "current": 46,
+      "atMs": 54703
+    },
+    {
+      "current": 47,
+      "atMs": 55724
+    },
+    {
+      "current": 48,
+      "atMs": 56737
+    },
+    {
+      "current": 49,
+      "atMs": 58766
+    },
+    {
+      "current": 50,
+      "atMs": 59781
+    },
+    {
+      "current": 51,
+      "atMs": 60797
+    },
+    {
+      "current": 52,
+      "atMs": 61807
+    },
+    {
+      "current": 53,
+      "atMs": 62824
+    },
+    {
+      "current": 54,
+      "atMs": 64842
+    },
+    {
+      "current": 55,
+      "atMs": 65856
+    },
+    {
+      "current": 56,
+      "atMs": 66870
+    },
+    {
+      "current": 57,
+      "atMs": 68890
+    },
+    {
+      "current": 58,
+      "atMs": 69902
+    },
+    {
+      "current": 59,
+      "atMs": 70912
+    },
+    {
+      "current": 60,
+      "atMs": 72937
+    },
+    {
+      "current": 61,
+      "atMs": 73953
+    },
+    {
+      "current": 62,
+      "atMs": 74960
+    },
+    {
+      "current": 63,
+      "atMs": 75973
+    },
+    {
+      "current": 64,
+      "atMs": 77997
+    },
+    {
+      "current": 65,
+      "atMs": 79012
+    },
+    {
+      "current": 66,
+      "atMs": 80025
+    },
+    {
+      "current": 67,
+      "atMs": 82055
+    },
+    {
+      "current": 68,
+      "atMs": 83068
+    },
+    {
+      "current": 69,
+      "atMs": 84078
+    },
+    {
+      "current": 70,
+      "atMs": 86106
+    },
+    {
+      "current": 71,
+      "atMs": 87119
+    },
+    {
+      "current": 72,
+      "atMs": 88132
+    },
+    {
+      "current": 73,
+      "atMs": 89151
+    },
+    {
+      "current": 74,
+      "atMs": 91169
+    },
+    {
+      "current": 75,
+      "atMs": 92181
+    },
+    {
+      "current": 76,
+      "atMs": 94218
+    },
+    {
+      "current": 77,
+      "atMs": 95230
+    },
+    {
+      "current": 78,
+      "atMs": 96242
+    },
+    {
+      "current": 79,
+      "atMs": 98267
+    },
+    {
+      "current": 80,
+      "atMs": 99276
+    },
+    {
+      "current": 81,
+      "atMs": 100289
+    },
+    {
+      "current": 82,
+      "atMs": 101302
+    },
+    {
+      "current": 83,
+      "atMs": 102312
+    },
+    {
+      "current": 84,
+      "atMs": 104339
+    },
+    {
+      "current": 85,
+      "atMs": 105354
+    },
+    {
+      "current": 86,
+      "atMs": 106360
+    },
+    {
+      "current": 87,
+      "atMs": 107372
+    },
+    {
+      "current": 88,
+      "atMs": 108388
+    },
+    {
+      "current": 89,
+      "atMs": 110419
+    },
+    {
+      "current": 90,
+      "atMs": 111431
+    },
+    {
+      "current": 91,
+      "atMs": 112441
+    },
+    {
+      "current": 92,
+      "atMs": 113455
+    },
+    {
+      "current": 93,
+      "atMs": 114466
+    },
+    {
+      "current": 94,
+      "atMs": 116491
+    },
+    {
+      "current": 95,
+      "atMs": 117502
+    },
+    {
+      "current": 96,
+      "atMs": 118511
+    },
+    {
+      "current": 97,
+      "atMs": 120539
+    },
+    {
+      "current": 98,
+      "atMs": 121545
+    },
+    {
+      "current": 99,
+      "atMs": 122559
+    },
+    {
+      "current": 100,
+      "atMs": 123564
+    }
+  ],
+  "blockedEgress": [],
+  "failures": [],
+  "limits": [
+    "Local deterministic emulated Chromium; no physical device, native zoom, microphone, hosted Convex, provider, durable restart or full grade."
+  ],
+  "browserVersion": "149.0.7827.55",
+  "firstHundredMs": 123564,
+  "settledMs": 125203,
+  "correctionAutoResumeErrors": 1,
+  "explicitStartNewErrors": [
+    {
+      "id": "fce065fc-0",
+      "slot": "system",
+      "name": "system",
+      "text": "turn failed: Error: OPENAI_API_KEY is not configured on the server",
+      "speechAct": "error",
+      "ts": 1788644310366
+    }
+  ],
+  "finishedAt": "2026-09-05T21:38:31.583Z",
+  "closedOwnedBrowser": true
+}

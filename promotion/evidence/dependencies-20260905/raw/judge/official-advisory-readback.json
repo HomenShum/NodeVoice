@@ -1,0 +1,90 @@
+[
+  {
+    "id": "GHSA-28wg-ghj8-5hjv",
+    "sha256": "f6585f0f283a4e146731880912dea3c678adffa199d61222ecc4c2a68bb0a5c8",
+    "severity": "high",
+    "summary": "nanoid: non-secure generators can loop indefinitely with negative size",
+    "ranges": [
+      [
+        "nanoid",
+        "< 3.3.16",
+        "3.3.16"
+      ],
+      [
+        "nanoid",
+        ">= 4.0.0, < 5.1.16",
+        "5.1.16"
+      ]
+    ]
+  },
+  {
+    "id": "GHSA-2v37-7h3g-55p8",
+    "sha256": "2e4d40936b1501f8b41f5361eaec2c9301618429341570c4d3dda1fe74b6e631",
+    "severity": "high",
+    "summary": "nanoid: custom generators can loop indefinitely when size is zero",
+    "ranges": [
+      [
+        "nanoid",
+        ">= 4.0.0, < 5.1.6",
+        "5.1.6"
+      ],
+      [
+        "nanoid",
+        "< 3.3.18",
+        "3.3.18"
+      ]
+    ]
+  },
+  {
+    "id": "GHSA-73wf-gq98-2v4g",
+    "sha256": "82784d919b3a8b4fad17b0fc72e05021ba0024d5f6cd7756893124a1a235bae6",
+    "severity": "high",
+    "summary": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+    "ranges": [
+      [
+        "browserslist",
+        "<= 4.28.6",
+        "4.28.7"
+      ]
+    ]
+  },
+  {
+    "id": "GHSA-c83g-rgw3-j3cx",
+    "sha256": "a031cd6d6e3dd3e1639bc9e4edf9a6c06543cf3247f7fd21ef985314b31c88ef",
+    "severity": "high",
+    "summary": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+    "ranges": [
+      [
+        "browserslist",
+        "<= 4.28.6",
+        "4.28.7"
+      ]
+    ]
+  },
+  {
+    "id": "GHSA-fxqj-rqcc-2cmp",
+    "sha256": "616e9ac39682030948b95e68d5cafc80752728181194db0a951f97a05e0b9e6e",
+    "severity": "medium",
+    "summary": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+    "ranges": [
+      [
+        "postcss",
+        "<= 8.5.22",
+        "8.5.23"
+      ]
+    ]
+  },
+  {
+    "id": "GHSA-r28c-9q8g-f849",
+    "sha256": "153b44239442f93df686feb835b9bea3f306360ef6732fbd2b02a3fdab5be9b4",
+    "severity": "high",
+    "summary": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+    "ranges": [
+      [
+        "postcss",
+        "<= 8.5.17",
+        "8.5.18"
+      ]
+    ]
+  }
+]

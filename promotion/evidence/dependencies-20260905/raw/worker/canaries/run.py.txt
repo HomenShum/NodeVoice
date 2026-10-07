@@ -1,0 +1,22 @@
+from pathlib import Path
+import subprocess,json,os,time,sys,hashlib
+root=Path(__file__).resolve().parent.parent;mode=sys.argv[1];assert mode in ['baseline','proposed']
+out=root/'evidence'/('canaries-'+mode);out.mkdir()
+env=os.environ.copy()
+for key in list(env):
+    if key.upper().startswith(('BROWSERSLIST_','NODE_','OPENAI_','OPENROUTER_','ANTHROPIC_','GEMINI_','GOOGLE_','ELEVENLABS_','OLLAMA_','CONVEX_','VITE_')):del env[key]
+env.update(SOURCE='deterministic',USE_OLLAMA='0')
+rows=[]
+for name in ['nanoid-negative','nanoid-zero','nanoid-fixed6','postcss-map','browserslist-stats-cache']:
+    argv=['C:/nvm4w/nodejs/node.exe','--expose-gc',str(root/'canaries/check.cjs'),mode,name]
+    started=time.monotonic();budget=.6 if name in ['nanoid-negative','nanoid-zero'] else 20
+    try:
+        p=subprocess.run(argv,cwd=root/'consumer',env=env,capture_output=True,timeout=budget);stdout=p.stdout;stderr=p.stderr;code=p.returncode;timeout=False
+    except subprocess.TimeoutExpired as e:stdout=e.stdout or b'';stderr=e.stderr or b'';code=None;timeout=True
+    (out/(name+'.stdout.jsonl')).write_bytes(stdout);(out/(name+'.stderr.txt')).write_bytes(stderr)
+    parsed=[json.loads(line) for line in stdout.decode().splitlines() if line.strip()]
+    row={'name':name,'argv':argv,'exitCode':code,'timedOut':timeout,'budgetSeconds':budget,'seconds':round(time.monotonic()-started,3),'observations':parsed}
+    rows.append(row)
+report={'mode':mode,'rows':rows,'scriptSha256':hashlib.sha256((root/'canaries/check.cjs').read_bytes()).hexdigest(),'meaning':'Owned scratch fixtures only; no external or private data. Baseline defects are observations, not successful library behavior.'}
+(out/'report.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(report,indent=2))

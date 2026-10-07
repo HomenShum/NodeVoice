@@ -1,0 +1,191 @@
+{
+  "files": [
+    {
+      "path": "demo-1440/before.png",
+      "bytes": 271848,
+      "sha256": "63fb0bc59f275b016ee156bd2c4d735dca852893b152ddd91b87c024c3de3c75"
+    },
+    {
+      "path": "demo-1440/change-boundary.md",
+      "bytes": 1424,
+      "sha256": "1f325694bb9301fefadf5d319d33b93f56a4e480452b50a50a76c0ad0621fe35"
+    },
+    {
+      "path": "demo-1440/change-boundary.png",
+      "bytes": 288769,
+      "sha256": "422af49ac0184164d45544a86771daa676a14558a9300a129e33f216a4f25504"
+    },
+    {
+      "path": "demo-1440/viewer-before.png",
+      "bytes": 271848,
+      "sha256": "63fb0bc59f275b016ee156bd2c4d735dca852893b152ddd91b87c024c3de3c75"
+    },
+    {
+      "path": "demo-1440/viewer-restored.png",
+      "bytes": 271848,
+      "sha256": "63fb0bc59f275b016ee156bd2c4d735dca852893b152ddd91b87c024c3de3c75"
+    },
+    {
+      "path": "demo-1440-text200/before.png",
+      "bytes": 328448,
+      "sha256": "0601d06c56f10c404b8b0cfad08ae0a6e08bb73849ea8a6e0667f0d3711753fa"
+    },
+    {
+      "path": "demo-1440-text200/change-boundary.md",
+      "bytes": 1439,
+      "sha256": "fc129d81a8ba0ebecf6cc1dfba29336ef09b449b278cbdef8b49179fd0e76a9a"
+    },
+    {
+      "path": "demo-1440-text200/change-boundary.png",
+      "bytes": 348203,
+      "sha256": "528b3dcac08739cf6efd0ffe6a700e449fe66b856ac1810f3a72b30334f647b9"
+    },
+    {
+      "path": "demo-1440-text200/viewer-before.png",
+      "bytes": 328448,
+      "sha256": "0601d06c56f10c404b8b0cfad08ae0a6e08bb73849ea8a6e0667f0d3711753fa"
+    },
+    {
+      "path": "demo-1440-text200/viewer-restored.png",
+      "bytes": 328448,
+      "sha256": "0601d06c56f10c404b8b0cfad08ae0a6e08bb73849ea8a6e0667f0d3711753fa"
+    },
+    {
+      "path": "demo-320/before.png",
+      "bytes": 110700,
+      "sha256": "295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7"
+    },
+    {
+      "path": "demo-320/change-boundary.md",
+      "bytes": 1418,
+      "sha256": "84f6668a5e5492fd7654cb60edc62fb7a580fd312d58abf560935f88bda576c8"
+    },
+    {
+      "path": "demo-320/change-boundary.png",
+      "bytes": 128605,
+      "sha256": "26f6eb0474cf4b7461ee5a49019285bb436e4fa022fbb34e08f491f84eab7e9f"
+    },
+    {
+      "path": "demo-320/viewer-before.png",
+      "bytes": 110700,
+      "sha256": "295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7"
+    },
+    {
+      "path": "demo-320/viewer-restored.png",
+      "bytes": 110700,
+      "sha256": "295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7"
+    },
+    {
+      "path": "demo-390/before.png",
+      "bytes": 128196,
+      "sha256": "117d4e168fe650e1945900c04293c34df0059a3edf5343b2c0eaf11e5620889d"
+    },
+    {
+      "path": "demo-390/change-boundary.md",
+      "bytes": 1418,
+      "sha256": "c50af850417f7f2da24ab38ae0bb28d0d4872c2da132b7167597796d9af9322f"
+    },
+    {
+      "path": "demo-390/change-boundary.png",
+      "bytes": 145692,
+      "sha256": "3dfdef8f333b69d1e285d84ed87c5e9372197313fc2f2d2f3b38c8630b7ac63c"
+    },
+    {
+      "path": "demo-390/viewer-before.png",
+      "bytes": 128196,
+      "sha256": "117d4e168fe650e1945900c04293c34df0059a3edf5343b2c0eaf11e5620889d"
+    },
+    {
+      "path": "demo-390/viewer-restored.png",
+      "bytes": 128196,
+      "sha256": "117d4e168fe650e1945900c04293c34df0059a3edf5343b2c0eaf11e5620889d"
+    },
+    {
+      "path": "demo-390-text200/before.png",
+      "bytes": 151862,
+      "sha256": "8003d581d1ff3998bc2f61ae89b2771c0a6e703862c6b8d6b82fd2520dfeee55"
+    },
+    {
+      "path": "demo-390-text200/change-boundary.md",
+      "bytes": 1435,
+      "sha256": "a88615be771f702cb41c4648aa20ffeb8edec8b99cbef5c17b340337832eaa0f"
+    },
+    {
+      "path": "demo-390-text200/change-boundary.png",
+      "bytes": 171057,
+      "sha256": "a3ddc18f585dd0312aceecb03a8b61d470f199e3eaac89a0843f6c2ff7f9c02b"
+    },
+    {
+      "path": "demo-390-text200/viewer-before.png",
+      "bytes": 151862,
+      "sha256": "8003d581d1ff3998bc2f61ae89b2771c0a6e703862c6b8d6b82fd2520dfeee55"
+    },
+    {
+      "path": "demo-390-text200/viewer-restored.png",
+      "bytes": 151862,
+      "sha256": "8003d581d1ff3998bc2f61ae89b2771c0a6e703862c6b8d6b82fd2520dfeee55"
+    },
+    {
+      "path": "raster-readback.json",
+      "bytes": 2508,
+      "sha256": "8344750aee3f86c4f5a8f54c8dc8a283a0035e233987b21a3cb1b85c67654565"
+    },
+    {
+      "path": "report.json",
+      "bytes": 23523,
+      "sha256": "74b5b7e6292fae0304d480575de33eb447e3d91b7934b5eb91b89bc5e4eec562"
+    },
+    {
+      "path": "room-1440/before.png",
+      "bytes": 119038,
+      "sha256": "d33631ff0c01b3397e3c0a4a29d49d1435d08a4c08632f811dfa7d1d5fd0af72"
+    },
+    {
+      "path": "room-1440/change-boundary.md",
+      "bytes": 1106,
+      "sha256": "43b6d7967ecfda207aaf0deaec532129b25058ad89974901e59e65ae4d822d58"
+    },
+    {
+      "path": "room-1440/change-boundary.png",
+      "bytes": 131392,
+      "sha256": "65d317b65bbaf092e04d1627da5d95746c01e7b04ba51667810799a4ab8d7c39"
+    },
+    {
+      "path": "room-1440/viewer-before.png",
+      "bytes": 119038,
+      "sha256": "d33631ff0c01b3397e3c0a4a29d49d1435d08a4c08632f811dfa7d1d5fd0af72"
+    },
+    {
+      "path": "room-1440/viewer-restored.png",
+      "bytes": 119038,
+      "sha256": "d33631ff0c01b3397e3c0a4a29d49d1435d08a4c08632f811dfa7d1d5fd0af72"
+    },
+    {
+      "path": "room-390/before.png",
+      "bytes": 86135,
+      "sha256": "c5a5d2707a13747fddb3764a71b7ee05024673e44ab25c6d83e724384e9e4482"
+    },
+    {
+      "path": "room-390/change-boundary.md",
+      "bytes": 1102,
+      "sha256": "d7c58043800b1306e3c8bedb4f11928518b91593270bf4981a36beeac247de8f"
+    },
+    {
+      "path": "room-390/change-boundary.png",
+      "bytes": 101991,
+      "sha256": "d53977a96e28fb98f1138e36b994542e4f72ccb4c996ee7ba651fe795c961299"
+    },
+    {
+      "path": "room-390/viewer-before.png",
+      "bytes": 86135,
+      "sha256": "c5a5d2707a13747fddb3764a71b7ee05024673e44ab25c6d83e724384e9e4482"
+    },
+    {
+      "path": "room-390/viewer-restored.png",
+      "bytes": 86135,
+      "sha256": "c5a5d2707a13747fddb3764a71b7ee05024673e44ab25c6d83e724384e9e4482"
+    }
+  ],
+  "count": 37,
+  "bytes": 4939763
+}

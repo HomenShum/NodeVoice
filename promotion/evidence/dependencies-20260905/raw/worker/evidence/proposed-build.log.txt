@@ -1,0 +1,13 @@
+
+> nodevoice@0.1.0 build
+> vite build
+
+vite v8.1.3 building client environment for production...
+[2Ktransforming...✓ 1937 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.86 kB │ gzip:   0.45 kB
+dist/assets/index-DGAuW_yU.css   80.40 kB │ gzip:  12.57 kB
+dist/assets/index-B4ZxCWpG.js   384.36 kB │ gzip: 121.15 kB
+
+✓ built in 11.29s

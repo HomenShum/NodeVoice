@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "mechanism": "Annotation of exact frozen native pixels; no fresh application render/API replay/completion.",
+  "cells": [
+    {
+      "cell": "room-390",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "room-1440",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "demo-320",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "demo-390",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "demo-390-text200",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "demo-1440",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    },
+    {
+      "cell": "demo-1440-text200",
+      "originalCopiedBytesExact": true,
+      "unlabelledRasterExact": true,
+      "restoredRasterExact": true,
+      "viewerDomRestored": true,
+      "annotationDimensionsExact": true,
+      "threePixelTopBordersExact": true
+    }
+  ],
+  "browserClosed": true,
+  "unexpectedEvents": [],
+  "currentSourceOwners": [
+    {
+      "path": "src/client/App.tsx",
+      "bytes": 39825,
+      "sha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21"
+    },
+    {
+      "path": "src/client/live/LiveRoom.tsx",
+      "bytes": 71147,
+      "sha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619"
+    }
+  ]
+}

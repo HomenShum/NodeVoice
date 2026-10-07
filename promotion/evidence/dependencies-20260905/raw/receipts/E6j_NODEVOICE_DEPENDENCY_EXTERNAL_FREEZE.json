@@ -1,0 +1,282 @@
+{
+  "name": "NODEVOICE-DEPENDENCY-EXTERNAL-01",
+  "status": "FROZEN_SCOPED_PASS_PENDING_NONAUTHOR_REVIEW",
+  "createdAt": "2026-09-05T23:11:16.940443+00:00",
+  "scratch": "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905",
+  "proposedConsumer": "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\consumer",
+  "sourceBase": {
+    "head": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+    "sourceCount": 177,
+    "approvedUiOwners": [
+      "src/client/App.tsx",
+      "src/client/live/LiveRoom.tsx"
+    ]
+  },
+  "authoredApplicationDelta": [
+    "package-lock.json"
+  ],
+  "packageJsonByteIdentical": true,
+  "newDirectDependencies": 0,
+  "changedLockRows": [
+    {
+      "path": "node_modules/browserslist",
+      "before": "4.28.4",
+      "after": "4.28.7",
+      "integrity": "sha512-JxV13hNrFxqjOc8alRbq9dK1MM79NEXYpma2B2J4wAtpWS5zIEIKqWPGCl7N4o7Uc7B7itylh7SuDujATRyyTw==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/nanoid",
+      "before": "3.3.15",
+      "after": "3.3.18",
+      "integrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/postcss",
+      "before": "8.5.16",
+      "after": "8.5.23",
+      "integrity": "sha512-g50586zr4bZmwFiTlflMu8E0bDTb5I5gertgwAKmsdUlTQIhZtunzUlD1WSzwcVWPoAVpsrA6vlfCD7oXvRwgg==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/caniuse-lite",
+      "before": "1.0.30001800",
+      "after": "1.0.30001806",
+      "integrity": "sha512-72Cuvd95zbSYPKq6Fhg8eDJRlzgWDf7/mtoZv6Qe/DYNCEBdNxoA3+rZAU2ZhGCpZlns3EssFavaZomckT5Uuw==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/node-releases",
+      "before": "2.0.50",
+      "after": "2.0.51",
+      "integrity": "sha512-wRNIrw4DmVLKQlbgOMdkMx27Wrpzes2hh5Jtbi2bjPd+4wJstWIqP5A+lscnqbm0xxmT5Bpg8Lec5ItEBwx6BQ==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/electron-to-chromium",
+      "before": "1.5.387",
+      "after": "1.5.393",
+      "integrity": "sha512-kiDJdIUawuEIcp9XoICKp1iTYDEbgguIPq526N1Q7jIQDeQ3CqoMx71025PI/7E48Ddtw2HuWsVjY7afEgNxmg==",
+      "dev": true
+    },
+    {
+      "path": "node_modules/baseline-browser-mapping",
+      "before": "2.10.41",
+      "after": "2.10.44",
+      "integrity": "sha512-T3ghW+sl/ZJ8w1v/yQx3qvJ9040DWoLBz8JT/CILbAKcFyG9b2MRe75v6W5uXjv6uH1lumK2Kv46y2zSkcej0Q==",
+      "dev": true
+    }
+  ],
+  "oldLockSha256": "bdbd22a06f566749eaa1aa2c8207f3bb67bf1840336cb2e50ea8c0ad4555fa94",
+  "newLockSha256": "65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b",
+  "sourceBindings": {
+    "path": "evidence/current-source-dist.json",
+    "bytes": 44186,
+    "sha256": "31ba46eb8c55e8e911c42e2941fc0f95113dff75c5202ad5585bac2510951f48",
+    "rawGitBlobSha1": "db2a19d5a309767ed27b18d34e54ccd4208c6a55"
+  },
+  "resolution": {
+    "path": "evidence/resolution-receipt.json",
+    "bytes": 10769,
+    "sha256": "8b4323b888788d14ca76bbee9c8d722084718158af30ab7076abfce962212b97",
+    "rawGitBlobSha1": "3573147099e0ddab6d32b76abafe0c3c7f5551a1"
+  },
+  "canaryVerdict": {
+    "path": "evidence/canary-before-after-verdict.json",
+    "bytes": 7611,
+    "sha256": "0af48117b19d62adacf933f886762e8ff8e051608df7015df420eb0b50f1e201",
+    "rawGitBlobSha1": "cf95db7990a445f8cf079746cb3efb2b237aa74f"
+  },
+  "canaryChecks": 16,
+  "commands": [
+    {
+      "label": "proposed-npm-ci",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "ci"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 7.656,
+      "stdoutSha256": "320310f0bbeed5c8b628f71743bd2bcecbd986cf754f2c1294e05c82c944b03c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-npm-audit",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "audit",
+        "--json"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 1.078,
+      "stdoutSha256": "792beea25a5b59b68cea90d786db8f222cd87fad46fb85434845587f7b46e65f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-npm-audit-omit-dev",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "audit",
+        "--omit=dev",
+        "--json"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 0.938,
+      "stdoutSha256": "792beea25a5b59b68cea90d786db8f222cd87fad46fb85434845587f7b46e65f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-canaries",
+      "argv": [
+        "python",
+        "-X",
+        "utf8",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\run.py",
+        "proposed"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 120,
+      "seconds": 4.297,
+      "stdoutSha256": "e1284e2a5f8f9504ea53de5620ab5305d5fc6b90dc6bc47f2cc38a21028e9efd",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-doctor",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 15.282,
+      "stdoutSha256": "fcc0480e6c6e03d1d4a4d8728b3241e1515f3bfa4e38e4c94e66b2856c8274db",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-proof",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "proof"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 18.031,
+      "stdoutSha256": "9c09992c7963aaa570cb8fa9467326852f8e13c244ab0d07fe61d6e20efe5223",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "proposed-build",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 180,
+      "seconds": 11.828,
+      "stdoutSha256": "76d0ac3e2831e27cb50529f1fda5a412d204e172ed0320ee48a0d89eb091df3a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "auditResults": {
+    "proposed-npm-audit": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 19,
+        "dev": 146,
+        "optional": 97,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 190
+      }
+    },
+    "proposed-npm-audit-omit-dev": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 19,
+        "dev": 146,
+        "optional": 97,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 190
+      }
+    }
+  },
+  "normalProof": {
+    "testsPassed": 55,
+    "testFilesPassed": 9,
+    "citationsChecked": 56,
+    "typecheckProjects": 3,
+    "comparison": "Existing CLI illustrative target 12 with nine turns, not the historical browser count-100 playback."
+  },
+  "distBinding": {
+    "path": "evidence/historical-native-rebind.json",
+    "bytes": 1935,
+    "sha256": "ed0906e4de965c91bb3508855a59b2cb641b134db7920e2816c3e7f9300ed6b3",
+    "rawGitBlobSha1": "36dabde7160cb46ea9cac3d05584197f92f3f47f"
+  },
+  "allThreeCompiledAssetsExact": true,
+  "freshBrowserPlaybackRun": false,
+  "protectedInputs": {
+    "path": "evidence/protected-checkouts-and-handoff.json",
+    "bytes": 3633,
+    "sha256": "0fcd0f9dd74b2459beff203ea51a4fc613cdd07f51fd7d2ccbb86d6f3df1e5f3",
+    "rawGitBlobSha1": "5055b29a329850ae30711bb6d778f60069817a80"
+  },
+  "runtimeClosure": {
+    "path": "evidence/runtime-closure.json",
+    "bytes": 310,
+    "sha256": "b95ca7d05d6b4a3aa463f866fd44779d25604bf3b9fda0b594ce199901c04049",
+    "rawGitBlobSha1": "cb234ea90c91a58e74cf2a79212644619a5ffce5"
+  },
+  "manifest": {
+    "path": "freeze-manifest.json",
+    "bytes": 65648,
+    "sha256": "e5dd75946a8c555c8fb4bae8434f46311318232f426fa19d6906f1f790bd233b",
+    "rawGitBlobSha1": "87bfb236c7cfa6b8c99d2a132d39f4347b3c6777"
+  },
+  "manifestFiles": 268,
+  "installedSevenPackageFiles": 956,
+  "fullGrades": null,
+  "limitations": [
+    "External proposal only: no Rvoice or HANDOFF transfer, staging, commit, push or publication.",
+    "Original audit and canary failure observations remain immutable; the new audit feed is not a full exploitability or security certification.",
+    "Changed packages are dev tooling; no omit-dev-only runtime certification.",
+    "The earlier browser proof is rebound only through exact compiled bytes, not claimed as a new run.",
+    "No provider, audio, shared durable room, deployed/live, full visual or physical-device certification.",
+    "All pre-existing UI main-pane, short-height and selected-option limitations remain open."
+  ]
+}

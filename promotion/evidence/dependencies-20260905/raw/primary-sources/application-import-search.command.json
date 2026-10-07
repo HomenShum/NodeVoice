@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "rg",
+    "-n",
+    "--glob",
+    "*.ts",
+    "--glob",
+    "*.tsx",
+    "--glob",
+    "*.mjs",
+    "postcss|browserslist|nanoid",
+    "src",
+    "convex",
+    "scripts"
+  ],
+  "exitCode": 1,
+  "meaning": "Exit1 means no matches; source purpose and runtime path inspection still required."
+}

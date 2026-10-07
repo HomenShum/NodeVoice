@@ -1,0 +1,22 @@
+# NodeVoice controls: independent shared integration judgment
+
+Builder mode. **READY_FOR_ROOT_NORMAL_MERGE_SCOPED** at `1a1593661f393cfdcd6dea79bf3a28e7d38248cd`. A developer can now integrate the previously reviewed control-layout repair through the ordinary merge path. This judgment verifies its committed evidence and real shared checks; it does not certify every room or voice workflow.
+
+**Re your request:** make each repository usable and ready for handoff, including visual/responsive/interaction standards, through planner-worker-judge execution. This closes the shared integration gate for NodeVoice's named controls repair.
+
+All **374 committed blobs** (three authored owners and 371 packet files) match the approved publication freeze in raw bytes, SHA-256 and Git blob identity. The actual GitHub source tree and synthetic merge `f1b0e5cfe4a8a5594bc7bd3deba9b9823c722988` both equal `a2e1f0405634d985195548f03a7b8b19e45585ae` against current main `d225bcaf64008ee522bc66d40aa72eb0381b95a6`. Package, lockfile and both workflows are exactly unchanged from the base. The reviewed PR body is accurate; its publication-time “shared CI pending” line can now be updated. All seven immutable evidence links resolve in the committed file set.
+
+- [CI run 33997769753](https://github.com/HomenShum/NodeVoice/actions/runs/33997769753), attempt 1, passed on the actual synthetic merge: normal install, server/client typechecks, 56 citations, and **55 tests in nine files** with no test skips. The CLI sets target 10 but records only **nine committed steps, next=10**. It is a short deterministic smoke, not completion or browser proof. This workflow omits Convex typechecking, build and the local responsive matrix.
+- [Conformance run 33997769996](https://github.com/HomenShum/NodeVoice/actions/runs/33997769996), attempt 1, passed the repository metadata/command contract. The reusable workflow is pinned to `ef4ac8a011b230efa3324892a193abe02ff2d673`; its inner Node Platform main checkout actually resolved to `a2d2e8ce36cc3e87a6a8133469dd55d8b7580588`. It does not create a current installed consumer or execute the browser job.
+- GitGuardian check **101391179378** succeeded and explicitly scanned **one commit**, finding no secrets and zero annotations. This is actual scan coverage, not a neutral size-limit result.
+- Vercel status and Preview Comments are successful. No public content was observed in this task; those statuses do not establish a production UI claim.
+
+Observed policy permits normal merge, squash or rebase; main reports no branch protection/effective rules/rulesets. Automatic source-branch deletion is disabled. Root owns the merge and should match the exact reviewed head. No retry, bypass or policy change is needed; old PR4 remains outside this task.
+
+The unchanged NodeVoice install still reports **three high dependency findings**. The separate seven-row dependency proposal has not been applied in PR6. Conformance's producer install separately reports one moderate/two high findings. Node action-runtime and `url.parse` deprecation warnings remain in the raw logs. These are explicit holds, not silently treated as fixed by this layout PR.
+
+The accepted local 337-check/94-capture native proof remains separate evidence. Selected-option truncation, other clipped detail regions, short-height reading, complete accessibility/visual grades, native devices/zoom, audio/microphone, executed providers, hosted Convex, durable restart and production functional acceptance remain held. **All full grades remain null.**
+
+Reviewer is a nonauthor of the implementation and reused earlier source/publication judgments with explicit custody checks. No local tests, install, browser run, provider access or repository mutation occurred. One harmless reader lookup guessed `nodekit-conformance.yml`; immutable enumeration identified `node-platform-conformance.yml`, which was then read. That reader error is retained separately from product outcomes.
+
+Evidence: [E6j-nodevoice-controls-shared-independent/manifest.json](E6j-nodevoice-controls-shared-independent/manifest.json), SHA-256 `868c077582bc6d8a09f133885406a2169b1e1cd6b221021eb695ca92fdb66883`; 82 files include full raw APIs and both completed job logs. The JSON judgment carries exact identities, assertions, policy and limitations. **Immutable review closed; no working-tree guard is held.**

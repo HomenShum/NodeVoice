@@ -1,0 +1,25 @@
+# NodeVoice external dependency freeze
+
+The exact seven-row tooling update is ready for independent review. The retained consumer is `D:/ProjectRecovery/nodevoice-dependency-repair-20260905/consumer`. This worker changed no reviewed NodeVoice checkout or HANDOFF bytes and made no Git or publication change.
+
+| Package | Before | Proposed |
+|---|---|---|
+| browserslist | 4.28.4 | 4.28.7 |
+| nanoid | 3.3.15 | 3.3.18 |
+| postcss | 8.5.16 | 8.5.23 |
+| caniuse-lite | 1.0.30001800 | 1.0.30001806 |
+| node-releases | 2.0.50 | 2.0.51 |
+| electron-to-chromium | 1.5.387 | 1.5.393 |
+| baseline-browser-mapping | 2.10.41 | 2.10.44 |
+
+Native npm generated the proposed rows under temporary exact constraints, then restored the original package.json bytes and native root metadata. The final lock changes exactly these seven rows, with every other row and top-level value unchanged. The new lock SHA-256 is `65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b`.
+
+Normal npm ci passed. Fresh full and omit-dev audits report zero findings. Doctor passed all three typechecks and 56 citations. Proof passed 55 tests in nine files and the existing deterministic CLI comparison. Build passed. The unchanged observer's 16 before/after assertions prove the ID calls finish, disallowed owned map reads stop, valid maps still work, inherited-key stats work, and the 2,050-query cache entry is evicted. Original failures remain in `evidence/canaries-baseline`.
+
+The three rebuilt HTML/CSS/JS files are byte-identical to the independently reviewed UI assets. This binds the earlier actual count-100 proof to the new build without inventing another playback. No browser or provider run was performed for this dependency slice. The previous UI limitations and all full grades remain open.
+
+The new audit results concern this current dependency feed. All changed rows are development tooling, and the documented start uses devDependency tsx, so an omit-dev-only application install is not certified. The bounded canaries are not a remote exploit or complete library security audit.
+
+The external manifest binds 268 source, generated, script and evidence files. `python verify-freeze.py` checks their bytes. The installed seven-package inventory contains 956 files. All owned command processes have exited; no port or persistent runtime remains. Historical source/audit/publication reports are referenced by exact hashes rather than rewritten or duplicated.
+
+See [the JSON receipt](E6j_NODEVOICE_DEPENDENCY_EXTERNAL_FREEZE.json) for exact command exits, source/raw Git blob bindings, protected checkout observations and the manifest hash. Review is the next step; there is no repository transfer authorization in this receipt.

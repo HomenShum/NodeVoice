@@ -1,0 +1,112 @@
+{
+  "status": "APPROVED_BOUNDED_EXTERNAL_DRAFT_PENDING_ACCEPTED_STATUS_AND_TRANSFER_BINDINGS",
+  "at": "2026-09-05T22:55:09.418694+00:00",
+  "mode": "Builder / independent nonauthor external publication judge",
+  "requestTraceability": "Re the request to make every repository usable for developer/user handoff: verify the proposed NodeVoice instructions and selected native evidence preserve honest current scope, portability and privacy.",
+  "independence": "Nonauthor of publication proposal, reused source judge; own source verdict is not yet inside this original draft. No fresh-reader-context claim.",
+  "proposalSha256": "a67e644840f295cb8d2dfed16425c2cf7ae3c6625c10be2da7ffc9adf92c4778",
+  "externalRoot": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6j-nodevoice-publication-proposal-01",
+  "packetManifestSha256": "49495d95fcc0716bfb276e58fb41f621ffaff5aeb6236eaa6efa715bb78de54d",
+  "packetFiles": 367,
+  "manifestPayloads": 366,
+  "packetBytes": 17433178,
+  "exactRawCopies": 360,
+  "originalUniverse": 1075,
+  "originalMapped": 352,
+  "originalOmitted": 723,
+  "extraHistoricalCopies": 8,
+  "custody": "All360 exactcentral/rawcopy bytes and366manifest payload hashes/rawGitIDs verified; every1075original gets exact mapped or explicitlocal-only disposition. Same draft bytes before/after.",
+  "coverage": {
+    "rawReportChecks": 337,
+    "rawReportCaptures": 94,
+    "all94DomFontSets": true,
+    "completePngDomFontSets": 54,
+    "remaining40": "PNG omitted; DOM/fonts retained, originals explicitly local.",
+    "requiredFullSets": 49,
+    "allRequiredFullSetsPresent": true,
+    "scope": "All seven normal control forward/reverse-keyboard, numeric100, room Invite focus and completion;390/1440computed-font200/reduced-motion sets plus first/settled100andcurrentfailedroom images. No claim all94PNGs/fullHTML are portable."
+  },
+  "entrypoint": {
+    "start": "tsx src/server.ts",
+    "serverPortDefault": 8787,
+    "noExplicitListenHost": true,
+    "healthFlags": [
+      "live.openai",
+      "live.elevenlabs"
+    ],
+    "envLocalLoading": "Optional .env.local loaded by actual source; handoff requires fresh clean checkout/shell and flagsfalse before missing-key room test. No private configuration inspected.",
+    "routes": {
+      "/": "room lobby",
+      "/demo": "comparison"
+    },
+    "doctor": "server/client/Convex/citations",
+    "proof": "55tests9files plus CLI target12/nine turns, separate from actual100browser",
+    "vite": {
+      "version": "8.1.3",
+      "engine": "^20.19.0 || >=22.12.0"
+    },
+    "sharedCI": "Existing Node20 server/client types/citations/test/demo; Convex typecheck and fullbrowser not part of this workflow.",
+    "citationCollector": "Exact README.md, docs/START_HERE.md, docs/codebase/*.md, .tours; newHANDOFF/promotion README outside active collector. Their23links verified separately; no checker edits/rerun."
+  },
+  "verifier": {
+    "defaultUnrelatedCwd": "PASS366payloads",
+    "optionalSourceRoot": "PASS177historicalsources",
+    "requiresGit": false,
+    "requiresExternalPythonPackages": false,
+    "boundaries": "Rawbytes/hashverification only, no provenanceauthentication, browserreplay, Gitfilters/index or laterchangedsource. Path/reparse/symlink bounds inspected.",
+    "rawGitHash": "Manual blob-length framing is documented as unfiltered raw Git identity."
+  },
+  "links": {
+    "count": 23,
+    "allResolve": true,
+    "inertHistory": "Historical code/Markdown/controllers use inert suffixes. Only packet README.md/verify.py/local.gitattributes active."
+  },
+  "privacy": {
+    "rawRuntimeInventories": "EXCLUDED_OPERATOR_LOCAL",
+    "derivative": "15explicitwhitelistedoutcome/health/listen/closurefields exactlyequaloriginal; bindsoriginalSHA. Noenvironmentname/prefix/argument/processinventory fields.",
+    "finiteScan": {
+      "fieldsWhitelisted": [
+        "actualListenAddress",
+        "all177SourceBytesUnchanged",
+        "allDistBytesUnchanged",
+        "candidateRefsIndexStatusUnchanged",
+        "finishedAt",
+        "health",
+        "listenerLimit",
+        "name",
+        "outerControllerBudgetSeconds",
+        "portReleased",
+        "primaryRefsIndexStatusUnchanged",
+        "proofExitCode",
+        "renderedDeadlineMs",
+        "startedAt",
+        "status"
+      ],
+      "originalHashBound": true,
+      "rawRuntimeInventoriesOmitted": true,
+      "patterns": 4,
+      "finiteTextFilesScanned": 277,
+      "findings": [],
+      "limitation": "Heuristic finite content check, not a general secret-scanner or credential safety guarantee."
+    },
+    "limitations": "Finite heuristic only. No private envfiles/browserprofiles/authsessionstores/fullHTML found in listedpublication. Synthetic room/selectedmodelmetadata are not realprovider proof."
+  },
+  "findings": [],
+  "requiredNextMetadataDelta": [
+    "Update only approved-current-source and actualtransfer status prose; preserve this externaldraft history.",
+    "Append exact final source judgment/selectedreviewer custody if rootchooses, with updated manifest and explicit omissions.",
+    "Afteractualtransfer, verify authoredlinks, exact allfutureGitfiltered/index/commit byte bindings. This external approval is not a stagedsource or sharedCI verdict."
+  ],
+  "sourceVerdict": {
+    "path": "E6j_NODEVOICE_UI_REPAIR_FINAL_JUDGE.json",
+    "sha256": "3a87b99fc9cc2790024a22d217461f6092655e9fdca9f62a33b85780c238695f"
+  },
+  "fullGrades": null,
+  "holds": "Retained detailedpanes/optionellipsis/shortheight/mobileerrorreadability,physicaldevice/nativezoom/audio/provider/durablerestart/fullreadiness and3highdependencyentries.",
+  "evidence": {
+    "manifest": "E6j-nodevoice-external-publication-independent-01/manifest.json",
+    "manifestSha256": "3936cdf5aa0c2eba685c250802ace528ca1c9ed46abf458ed93f30342cd4ed4a",
+    "files": 13
+  },
+  "guard": "CLOSED externaldraft only. No proposal/repository/source/index/ref edits, no install/build/test/browser/runtime/provider/credential/deploy work. Immutable originalproposal remains unchanged."
+}

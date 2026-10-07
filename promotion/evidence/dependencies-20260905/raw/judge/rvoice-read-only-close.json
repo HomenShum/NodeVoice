@@ -1,0 +1,25 @@
+{
+  "scope": "Read-only reviewer; parent owns remote integration independently. Source 177 and dist 3 are separately exact.",
+  "observed": {
+    "head": {
+      "sha256": "f3a641a46faa7d3add9af3b3486ed98dd1fb610bd7949ca217385aec66c55085",
+      "bytes": 41,
+      "entryRawEqual": true
+    },
+    "refs": {
+      "sha256": "e9969f8d095a387add0f10c8270a71886f003d30a164dfddb2fabe600f28b489",
+      "bytes": 473,
+      "entryRawEqual": true
+    },
+    "index": {
+      "sha256": "cf1d8f90ecf6d5e5b8fc970671fde9d36baea4e4c1ad722b1d5e5ee12bf4948a",
+      "bytes": 75981,
+      "entryRawEqual": true
+    },
+    "status": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "entryRawEqual": true
+    }
+  }
+}

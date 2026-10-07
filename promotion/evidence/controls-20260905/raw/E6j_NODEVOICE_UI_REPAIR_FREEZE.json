@@ -1,0 +1,225 @@
+{
+  "name": "NODEVOICE-ROOM-AND-COMPARISON-CONTROLS-01",
+  "status": "FROZEN_SCOPED_PASS_PENDING_INDEPENDENT_JUDGE",
+  "createdAt": "2026-09-05T22:36:29.262951+00:00",
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+  "head": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+  "owners": [
+    {
+      "path": "src/client/App.tsx",
+      "beforeSha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21",
+      "afterSha256": "63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc",
+      "bytes": 39924
+    },
+    {
+      "path": "src/client/live/LiveRoom.tsx",
+      "beforeSha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619",
+      "afterSha256": "517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174",
+      "bytes": 71178
+    }
+  ],
+  "currentSourceCount": 177,
+  "currentDistCount": 3,
+  "protectedOtherSourceCount": 175,
+  "layoutOnlyGuard": {
+    "path": "E6j-nodevoice-ui-repair-01/layout-only-guard.json",
+    "bytes": 3119,
+    "sha256": "44c889ec30f17f2c2e3c065a19f53101fd25cea878f7dd165ff3016bcc81fee6",
+    "rawGitBlobSha1": "796115901f3d0eaa637c913bd63e7bbbc1291d2b"
+  },
+  "sourceBindings": {
+    "path": "E6j-nodevoice-ui-final-freeze-01/current-source-dist.json",
+    "bytes": 30829,
+    "sha256": "c0563ac735e98a7420752c2ab5385755401925c544fff54b1885803c08e16789",
+    "rawGitBlobSha1": "fa69eae8ac8c2754b327733aa6f0537b0cf27ea6"
+  },
+  "artifactManifest": {
+    "path": "E6j-nodevoice-ui-final-freeze-01/artifact-manifest.json",
+    "bytes": 298723,
+    "sha256": "3df49bd4843466ce3e8d39751b4c9d65c401a5cc47c09b0eb88b3bf0f5e90956",
+    "rawGitBlobSha1": "7091a5dc5cfc59acaf015a8ec220afaae7b6d673"
+  },
+  "artifactCount": 1075,
+  "artifactBytes": 53699862,
+  "ordinaryCommands": [
+    {
+      "script": "doctor",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "seconds": 5.515,
+      "log": "doctor-04.log",
+      "sha256": "fcc0480e6c6e03d1d4a4d8728b3241e1515f3bfa4e38e4c94e66b2856c8274db"
+    },
+    {
+      "script": "proof",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "proof"
+      ],
+      "exitCode": 0,
+      "seconds": 4.485,
+      "log": "proof-04.log",
+      "sha256": "263d795db5f37a31135ed4fc166e8d16901c840777d15e7dcf18e9ea2eb68bc5"
+    },
+    {
+      "script": "build",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 1.047,
+      "log": "build-04.log",
+      "sha256": "1e64e8773b5daed627b35dd9292b1ec308ed228091ea22a34b8837d4264a28ba"
+    }
+  ],
+  "browser": {
+    "report": {
+      "path": "E6j-nodevoice-ui-controls-after-04/browser-01/report.json",
+      "bytes": 158133,
+      "sha256": "6771143d0c2b62271adb8a3ea04fbdd78eab6518ad08e5644b60d86aa0b09d69",
+      "rawGitBlobSha1": "0dcd6a76639221ddc2718cb91d785ffe5ce9d219"
+    },
+    "runtime": {
+      "path": "E6j-nodevoice-ui-controls-after-04/runtime-receipt.json",
+      "bytes": 4083,
+      "sha256": "454237704e8562f13d5b9e4ed6c473a5598ac54932c6dea270c305e78870848d",
+      "rawGitBlobSha1": "afacef7ab5d09732fcd9295a92e35873d0b8ea58"
+    },
+    "checks": 337,
+    "captures": 94,
+    "visible100Ms": 125736,
+    "runEnabledMs": 126829,
+    "sameDeadlineMs": 300000,
+    "unexpectedEvents": 0,
+    "intentionalSseCloseEvents": 1,
+    "fullPairs": [
+      [
+        320,
+        800
+      ],
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1440,
+        960
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "special": "390/1440 computed font200 and reduced motion; actual settled completion reused after one native125.7s count.",
+    "nativeActions": "First/last complete control, forward/reverse Tab, pointer numeric spinner99→100 and ArrowDown/Up; Invite/State pointer/Tab/Enter/Space, double activation and repeated cycles; two-context join, deterministic correction with one no-key error then explicit Start with one additional error."
+  },
+  "historicalCustody": [
+    {
+      "manifest": {
+        "path": "E6j-nodevoice-first-use-01/artifact-manifest.json",
+        "bytes": 35026,
+        "sha256": "2578ee124e44374995f8822262d2c203424bbded87a0b0e6f3381929d7c08e01",
+        "rawGitBlobSha1": "9af00456b434fef3a14efc50c05a48265015f76a"
+      },
+      "verifiedFiles": 147,
+      "unchanged": true
+    },
+    {
+      "manifest": {
+        "path": "E6j-nodevoice-first-use-fonts-02/artifact-manifest.json",
+        "bytes": 42013,
+        "sha256": "5587c361323da1fb2f376f9f1c52cea09b3456eb2e26ec15fbb10471f0d2a837",
+        "rawGitBlobSha1": "6709bb740c461e5840d08cf1a9629cfa8a9c6d1b"
+      },
+      "verifiedFiles": 174,
+      "unchanged": true
+    },
+    {
+      "manifest": {
+        "path": "E6j-nodevoice-native-boundaries-01/manifest.json",
+        "bytes": 6317,
+        "sha256": "d61fac4e53e7a8df6e6bf20c5fabf2f2bd23487dc4c9350b390f1415103ff2e7",
+        "rawGitBlobSha1": "90e4737e74660386d0e949466d37ab2bc8f5850e"
+      },
+      "verifiedFiles": 37,
+      "unchanged": true
+    }
+  ],
+  "preservedFailures": [
+    {
+      "path": "E6j-nodevoice-first-use-01",
+      "status": "FAIL",
+      "meaning": "Public fonts deliberately blocked; functional completion separately retained."
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-01",
+      "status": "raw PASS, scoped rail failure",
+      "meaning": "First oracle measured native interior and missed wider complete control; preserved without relabeling raw result."
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-02",
+      "status": "FAIL",
+      "meaning": "Native forward Tab Source clips at320; no long playback."
+    },
+    {
+      "path": "E6j-nodevoice-ui-controls-after-03",
+      "status": "FAIL",
+      "meaning": "Padding fixed320 but reverse Tab Voice clips360; no long playback."
+    },
+    {
+      "path": "E6j-nodevoice-rail-scroll-diagnostic-02",
+      "status": "FAIL",
+      "meaning": "Margin-only native focus still clips Source320; temporary styles exactly restored."
+    },
+    {
+      "path": "E6j-nodevoice-rail-scroll-diagnostic-01",
+      "status": "diagnostic PASS320 only",
+      "meaning": "Insufficient cross-width oracle; not final product certification."
+    },
+    {
+      "path": "E6j-nodevoice-rail-wrap-diagnostic-01",
+      "status": "diagnostic PASS236/49",
+      "meaning": "Wrapping with padding/margin zero removes focus-scroll dependence; temporary styles exactly restored."
+    }
+  ],
+  "pixels": {
+    "path": "E6j-nodevoice-ui-final-freeze-01/actual-pixel-review.json",
+    "bytes": 2821,
+    "sha256": "a50006fd75290f1a2c2f32783af90ba42cb1bd5b850d311fde501c5cda5181e2",
+    "rawGitBlobSha1": "a311cd04ac34efa5234f5047a3b84d328f776942"
+  },
+  "allOwnedRuntimesClosed": true,
+  "port4993Released": true,
+  "limits": [
+    "Scoped Chromium emulation; no numeric full UI/UX grades, physical device, native zoom or comprehensive accessibility audit.",
+    "Computed-font200 is not native browser zoom. Detailed room/comparison panes, selected-option ellipsis, mobile/short-height reading and audio usability remain held.",
+    "Only local deterministic comparison and synthetic two-context rooms; no microphone, actual provider/model, shared Convex, real room, external agent, tunnel or durable restart proof.",
+    "Invite QR remains governed by existing showQr && waitingForAgent; proof occurs before second participant joins and does not certify the filled-seat Invite behavior.",
+    "Root baseline audit retains3 high package entries (browserslist/nanoid/postcss); no dependency change or fresh audit in this layout slice.",
+    "Server still listens on unspecified host: actual :: and0.0.0.0, not loopback-only.",
+    "No commit, staging, push or deployment. Product HANDOFF/portable packet will be a separately reviewed metadata step."
+  ],
+  "grades": null
+}

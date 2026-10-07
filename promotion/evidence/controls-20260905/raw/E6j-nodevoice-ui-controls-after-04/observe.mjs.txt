@@ -1,0 +1,451 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+import crypto from 'node:crypto';
+
+const O = path.dirname(fileURLToPath(import.meta.url));
+const out = path.join(O, 'browser-01');
+fs.mkdirSync(out); // Never reuse or overwrite a previous run.
+const require = createRequire('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodevideo-current-consumer-20260905/package.json');
+const { chromium } = require('playwright');
+const { expect: baseExpect } = require('playwright/test');
+const expect = baseExpect.configure({ timeout: 15000 });
+const base = 'http://127.0.0.1:4993';
+const pairs = [[320, 800], [360, 800], [390, 844], [768, 1024], [1024, 768], [1440, 960], [1920, 1080]];
+const report = { name: 'NODEVOICE-ROOM-AND-COMPARISON-CONTROLS-01', startedAt: new Date().toISOString(), status: 'RUNNING',
+  checks: [], captures: [], actions: [], events: [], requests: [], responses: [], samples: [],
+  blockedEgress: [], failures: [], limits: ['Local deterministic emulated Chromium; no physical device, native zoom, microphone, hosted Convex, provider, durable restart or full grade.'] };
+const put = (name, value) => fs.writeFileSync(path.join(out, name), JSON.stringify(value, null, 2) + '\n');
+const check = (name, actual) => { report.checks.push({ name, passed: !!actual }); if (!actual) throw Error(name); };
+const contexts = [];
+const cssUrl = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap';
+const allowedFonts = new Set();
+const fontResponses = [];
+fs.mkdirSync(path.join(out, 'fonts'));
+const digest = b => crypto.createHash('sha256').update(b).digest('hex');
+async function publicFont(route) {
+  const request = route.request();
+  const url = request.url();
+  const css = url === cssUrl;
+  const entry = { url, method: request.method(), css, status: null, startedAt: new Date().toISOString() };
+  fontResponses.push(entry);
+  try {
+    if (request.method() !== 'GET') throw Error('Font request must be GET');
+    const userAgent = await request.headerValue('user-agent');
+    const response = await fetch(url, { redirect: 'manual', credentials: 'omit',
+      headers: { 'user-agent': userAgent, accept: css ? 'text/css,*/*;q=0.1' : '*/*' }, signal: AbortSignal.timeout(15000) });
+    entry.status = response.status;
+    entry.headers = Object.fromEntries(['content-type', 'cache-control', 'etag', 'access-control-allow-origin', 'vary', 'cross-origin-resource-policy'].map(k => [k, response.headers.get(k)]).filter(([,v]) => v !== null));
+    if (response.status !== 200) throw Error(`Public font HTTP${response.status}; redirects not followed`);
+    const limit = css ? 256 * 1024 : 2 * 1024 * 1024;
+    const chunks = []; let bytes = 0;
+    for await (const chunk of response.body) { bytes += chunk.byteLength; if (bytes > limit) throw Error('Public font body cap exceeded'); chunks.push(chunk); }
+    const body = Buffer.concat(chunks);
+    entry.bytes = body.byteLength; entry.sha256 = digest(body);
+    const contentType = response.headers.get('content-type') ?? '';
+    if (css && !contentType.startsWith('text/css')) throw Error('Exact CSS URL did not serve CSS');
+    if (!css && !/(?:font|woff|octet-stream)/i.test(contentType)) throw Error('Referenced font URL did not serve font bytes');
+    entry.file = `fonts/${entry.sha256}${css ? '.css.txt' : '.woff2'}`;
+    const destination = path.join(out, entry.file);
+    if (fs.existsSync(destination) && digest(fs.readFileSync(destination)) !== entry.sha256) throw Error('Font payload collision');
+    if (!fs.existsSync(destination)) fs.writeFileSync(destination, body);
+    if (css) {
+      const references = [...body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)['"]?\s*\)/g)].map(m => m[1]);
+      if (!references.length) throw Error('Public CSS has no font references');
+      for (const href of references) { const u = new URL(href); if (u.origin !== 'https://fonts.gstatic.com' || u.username || u.password || !u.pathname.endsWith('.woff2')) throw Error('Unapproved font reference in public CSS'); allowedFonts.add(href); }
+      entry.references = references;
+    }
+    await route.fulfill({ status: response.status, headers: entry.headers, body });
+    entry.fulfilledExactBytes = true;
+  } catch (error) {
+    entry.error = String(error);
+    report.events.push({ page: 'font-recorder', phase, type: 'font-network-error', url, text: String(error) });
+    await route.abort('failed');
+  } finally { entry.finishedAt = new Date().toISOString(); put('font-network.json', { exactCssUrl: cssUrl, allowedReferencedFonts: [...allowedFonts].sort(), responses: fontResponses }); }
+}
+async function usedFonts(page, name) {
+  const fontFaceSet = await page.evaluate(() => ({ status: document.fonts.status,
+    declared: [...document.fonts].map(f => ({ family: f.family, weight: f.weight, style: f.style, status: f.status })),
+    bodyFamily: getComputedStyle(document.body).fontFamily }));
+  const client = await page.context().newCDPSession(page);
+  const actual = [];
+  try {
+    await client.send('DOM.enable'); await client.send('CSS.enable');
+    const { root } = await client.send('DOM.getDocument');
+    for (const selector of ['h1,h2', 'p', '.font-mono', 'pre']) {
+      const { nodeId } = await client.send('DOM.querySelector', { nodeId: root.nodeId, selector });
+      if (nodeId) actual.push({ selector, ...(await client.send('CSS.getPlatformFontsForNode', { nodeId })) });
+    }
+  } finally { await client.detach(); }
+  put(name + '.fonts.json', { fontFaceSet, actual });
+  if (fontFaceSet.status !== 'loaded' || !fontFaceSet.declared.some(f => f.family.replaceAll('"','') === 'Inter' && f.status === 'loaded') || !fontFaceSet.declared.some(f => f.family.replaceAll('"','') === 'JetBrains Mono' && f.status === 'loaded')) throw Error('Both declared public font families must actually be loaded before capture');
+}
+let browser;
+let phase = 'startup';
+let closing = false;
+let navigating = new Set();
+function persist() { put('report.json', report); }
+async function watch(page, name) {
+  page.on('console', m => { if (['error', 'warning'].includes(m.type())) report.events.push({ page: name, phase, type: m.type(), text: m.text() }); });
+  page.on('pageerror', e => report.events.push({ page: name, phase, type: 'pageerror', text: String(e) }));
+  page.on('request', r => report.requests.push({ page: name, phase, method: r.method(), url: r.url() }));
+  page.on('requestfailed', r => report.events.push({ page: name, phase, type: 'requestfailed', url: r.url(), error: r.failure(),
+    intentionalTransportClose: (closing || navigating.has(name)) && r.resourceType() === 'eventsource' }));
+  page.on('response', r => {
+    const event = { page: name, phase, status: r.status(), url: r.url(), method: r.request().method() };
+    report.responses.push(event);
+    if (r.status() >= 400) report.events.push({ ...event, type: 'http-error' });
+  });
+  return page;
+}
+async function context(viewport) {
+  const c = await browser.newContext({ viewport, reducedMotion: 'no-preference', permissions: [], serviceWorkers: 'block' });
+  contexts.push(c);
+  await c.route('**/*', route => {
+    const u = new URL(route.request().url());
+    if (u.origin === base || ['data:', 'blob:'].includes(u.protocol)) return route.continue();
+    if (u.href === cssUrl || allowedFonts.has(u.href)) return publicFont(route);
+    report.blockedEgress.push({ phase, url: u.href, method: route.request().method() });
+    return route.abort('blockedbyclient');
+  });
+  return c;
+}
+async function settle(page) {
+  await page.evaluate(async () => { await document.fonts.ready; await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); });
+}
+async function capture(page, name) {
+  await settle(page);
+  await usedFonts(page, name);
+  const dom = await page.evaluate(() => {
+    const bounds = e => { const r = e.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
+    const visible = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
+    const controls = [...document.querySelectorAll('a,button,input,select,textarea,summary')].filter(visible).map(e => ({
+      tag: e.tagName, text: e.innerText ?? '', ariaLabel: e.getAttribute('aria-label'), title: e.getAttribute('title'),
+      placeholder: e.getAttribute('placeholder'), value: 'value' in e ? e.value : null, disabled: !!e.disabled,
+      labels: [...(e.labels ?? [])].map(l => l.innerText), tabIndex: e.tabIndex, rect: bounds(e),
+      fontSize: getComputedStyle(e).fontSize, color: getComputedStyle(e).color, background: getComputedStyle(e).backgroundColor,
+      focused: document.activeElement === e, focusVisible: e.matches(':focus-visible') }));
+    const overflow = [...document.querySelectorAll('body *')].filter(visible).map(e => ({ tag: e.tagName, text: (e.innerText ?? '').slice(0, 100), rect: bounds(e) }))
+      .filter(e => e.rect.x < -1 || e.rect.right > innerWidth + 1);
+    return { url: location.href, width: innerWidth, height: innerHeight, body: document.body.innerText,
+      scrollWidth: document.documentElement.scrollWidth, scrollHeight: document.documentElement.scrollHeight,
+      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches, controls, overflow,
+      speech: { available: !!window.speechSynthesis, speaking: window.speechSynthesis?.speaking, pending: window.speechSynthesis?.pending,
+        voices: window.speechSynthesis?.getVoices().map(v => ({ name: v.name, lang: v.lang, localService: v.localService })) } };
+  });
+  put(name + '.dom.json', dom);
+  fs.writeFileSync(path.join(out, name + '.html'), await page.content());
+  await page.screenshot({ path: path.join(out, name + '.png'), fullPage: false, caret: 'initial' });
+  report.captures.push({ name, url: dom.url, viewport: [dom.width, dom.height], reducedMotion: dom.reducedMotion,
+    horizontalOverflow: dom.scrollWidth - dom.width, outOfViewportElements: dom.overflow.length });
+  persist();
+  return dom;
+}
+async function doubled(page, name, during) {
+  const originals = await page.evaluate(() => [...document.querySelectorAll('body *')].map(e => [e, e.getAttribute('style'), parseFloat(getComputedStyle(e).fontSize)]).map(([e, style, px], i) => {
+    e.setAttribute('data-proof-font-id', String(i));
+    e.style.setProperty('font-size', `${px * 2}px`, 'important');
+    return { id: i, style, beforePx: px };
+  }));
+  try {
+    put(name + '.font-change.json', originals.map(({ id, beforePx }) => ({ id, beforePx, expectedAfterPx: beforePx * 2 })));
+    await capture(page, name);
+    if (during) await during();
+  } finally {
+    await page.evaluate(rows => { for (const row of rows) { const e = document.querySelector(`[data-proof-font-id="${row.id}"]`); if (!e) continue; if (row.style === null) e.removeAttribute('style'); else e.setAttribute('style', row.style); e.removeAttribute('data-proof-font-id'); } }, originals);
+  }
+}
+async function apiRoom(id, name) {
+  const response = await fetch(`${base}/live/rooms/${id}`, { signal: AbortSignal.timeout(15000) });
+  const data = await response.json();
+  put(name + '.json', { status: response.status, body: data });
+  check(name + ' HTTP200', response.status === 200);
+  return data.room ?? data;
+}
+async function untilRoom(id, predicate, name) {
+  const end = Date.now() + 15000;
+  let room;
+  while (Date.now() < end) {
+    const response = await fetch(`${base}/live/rooms/${id}`, { signal: AbortSignal.timeout(5000) });
+    check(name + ' poll HTTP200', response.status === 200);
+    const data = await response.json(); room = data.room ?? data;
+    if (predicate(room)) { put(name + '.json', room); return room; }
+    await new Promise(r => setTimeout(r, 200));
+  }
+  put(name + '-failed.json', room); throw Error(name + ' not reached in15s');
+}
+
+report.layout = [];
+async function fit(locator, name, clip) {
+  const rect = await locator.boundingBox();
+  const viewport = locator.page().viewportSize();
+  const bounds = clip ?? { x: 0, y: 0, width: viewport.width, height: viewport.height };
+  const point = rect && { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  const hit = point && await locator.evaluate((el, p) => el.contains(document.elementFromPoint(p.x, p.y)), point);
+  report.layout.push({ name, rect, bounds, centerHit: !!hit });
+  check(name + ' complete box and native hit', rect && rect.x >= Math.max(0, bounds.x) - 1 && rect.y >= Math.max(0, bounds.y) - 1
+    && rect.x + rect.width <= Math.min(viewport.width, bounds.x + bounds.width) + 1
+    && rect.y + rect.height <= Math.min(viewport.height, bounds.y + bounds.height) + 1 && hit);
+  return rect;
+}
+async function railProof(page, name) {
+  const rail = page.getByRole('group', { name: 'Comparison controls', exact: true });
+  const controls = rail.locator('select:visible,input:visible');
+  const count = await controls.count();
+  const beforeValues = await controls.evaluateAll(es => es.map(e => e.value));
+  await rail.hover(); await page.mouse.wheel(-10000, 0);
+  await expect.poll(() => rail.evaluate(e => Math.round(e.scrollLeft))).toBe(0);
+  await settle(page);
+  const clip = await rail.boundingBox();
+  await fit(controls.first().locator('..'), name + ' first full control', clip);
+  await controls.first().click(); await page.keyboard.press('Escape');
+  await expect(controls.first()).toBeFocused();
+  await capture(page, name + '-first-pointer');
+  const maxScroll = await rail.evaluate(e => e.scrollWidth - e.clientWidth);
+  await rail.hover(); await page.mouse.wheel(10000, 0);
+  await expect.poll(() => rail.evaluate(e => Math.round(e.scrollLeft))).toBe(Math.round(maxScroll));
+  await settle(page);
+  await fit(controls.last().locator('..'), name + ' last full control', clip);
+  await controls.last().click(); await page.keyboard.press('Escape');
+  await expect(controls.last()).toBeFocused();
+  await capture(page, name + '-last-pointer');
+  await rail.hover(); await page.mouse.wheel(-10000, 0);
+  await expect.poll(() => rail.evaluate(e => Math.round(e.scrollLeft))).toBe(0);
+  await controls.first().click(); await page.keyboard.press('Escape');
+  for (let i = 1; i < count; i++) {
+    await page.keyboard.press('Tab'); await expect(controls.nth(i)).toBeFocused();
+    await settle(page); await fit(controls.nth(i), name + ` Tab${i}`, clip);
+    await fit(controls.nth(i).locator('..'), name + ` Tab${i} full wrapper`, clip);
+    check(name + ` Tab${i} focus-visible`, await controls.nth(i).evaluate(e => e.matches(':focus-visible')));
+  }
+  await capture(page, name + '-last-keyboard');
+  for (let i = count - 2; i >= 0; i--) {
+    await page.keyboard.press('Shift+Tab'); await expect(controls.nth(i)).toBeFocused();
+    await settle(page); await fit(controls.nth(i), name + ` ShiftTab${i}`, clip);
+    await fit(controls.nth(i).locator('..'), name + ` ShiftTab${i} full wrapper`, clip);
+    check(name + ` ShiftTab${i} focus-visible`, await controls.nth(i).evaluate(e => e.matches(':focus-visible')));
+  }
+  await capture(page, name + '-first-keyboard');
+  const numbers = rail.locator('input[type=number]');
+  for (let i = 0; i < await numbers.count(); i++) {
+    const field = numbers.nth(i);
+    await field.fill('99'); await field.hover();
+    const rect = await fit(field, name + ` number${i} including spinner`, clip);
+    const point = { x: rect.x + rect.width - 5, y: rect.y + rect.height * 0.25 };
+    await page.mouse.click(point.x, point.y);
+    await expect(field).toHaveValue('100');
+    report.actions.push({ phase, action: 'Native number spinner99 to100', name, field: i, point });
+    await field.press('ArrowDown'); await expect(field).toHaveValue('99');
+    await field.press('ArrowUp'); await expect(field).toHaveValue('100');
+  }
+  check(name + ' selections and100 restored', JSON.stringify(beforeValues) === JSON.stringify(await controls.evaluateAll(es => es.map(e => e.value))));
+  await capture(page, name + '-number100');
+}
+async function roomProof(page, id, name, sustained = false) {
+  const before = await apiRoom(id, name + '-state-before');
+  const invite = page.getByRole('button', { name: 'Invite', exact: true });
+  const state = page.getByRole('button', { name: 'State', exact: true });
+  const qr = page.getByText('Scan from your phone to join another agent', { exact: true });
+  const inspector = page.getByText('Internal State', { exact: true });
+  await fit(invite, name + ' Invite'); await fit(state, name + ' State');
+  await expect(qr).toBeVisible();
+  await invite.click(); await expect(qr).toHaveCount(0);
+  await invite.click(); await expect(qr).toBeVisible();
+  await capture(page, name + '-invite-pointer');
+  await state.click(); await expect(inspector).toBeVisible();
+  await state.press('Tab'); await expect(invite).toBeFocused();
+  check(name + ' Invite keyboard focus-visible', await invite.evaluate(e => e.matches(':focus-visible')));
+  await fit(invite, name + ' focused Invite');
+  await capture(page, name + '-invite-keyboard');
+  await invite.press('Enter'); await expect(qr).toHaveCount(0);
+  await invite.press('Enter'); await expect(qr).toBeVisible();
+  await invite.press('Shift+Tab'); await expect(state).toBeFocused();
+  await state.press('Space'); await expect(inspector).toHaveCount(0);
+  await invite.dblclick({ delay: 0 }); await expect(qr).toBeVisible();
+  const cycles = sustained ? 10 : 1;
+  for (let i = 0; i < cycles; i++) {
+    await invite.click(); await expect(qr).toHaveCount(0);
+    await invite.click(); await expect(qr).toBeVisible();
+    await state.click(); await expect(inspector).toBeVisible();
+    await state.click(); await expect(inspector).toHaveCount(0);
+  }
+  const after = await apiRoom(id, name + '-state-after');
+  check(name + ' toggle cycles preserve authoritative state', JSON.stringify(before.state) === JSON.stringify(after.state));
+  report.actions.push({ phase, name, action: 'Native Invite/State pointer, Tab/Enter/Space, double activation and repeated toggles while waiting for second participant', cycles, providerCall: false });
+}
+async function progressProof(page, name) {
+  const label = page.getByText('Shared-room progress', { exact: true });
+  const row = label.locator('..');
+  const count = row.getByText('100/100', { exact: true });
+  const complete = row.getByText('complete', { exact: true });
+  await fit(count, name + ' actual100 count'); await fit(complete, name + ' actual complete badge');
+}
+
+try {
+  const healthResponse = await fetch(base + '/health', { signal: AbortSignal.timeout(15000) });
+  const health = await healthResponse.json(); put('health.json', { status: healthResponse.status, body: health });
+  check('current service; both providers unavailable', healthResponse.status === 200 && health.ok && health.service === 'nodevoice' && health.live.openai === false && health.live.elevenlabs === false);
+  browser = await chromium.launch();
+  report.browserVersion = browser.version();
+  const c = await context({ width: 1440, height: 960 });
+  const demo = await watch(await c.newPage(), 'demo');
+  phase = 'root-to-demo';
+  await demo.goto(base + '/', { waitUntil: 'networkidle' });
+  await capture(demo, '1440-root-entry');
+  const link = demo.getByRole('link', { name: /watch the bad-vs-good demo/i });
+  await expect(link).toBeVisible();
+  await link.click();
+  report.actions.push({ phase, action: 'Native root demo link click' });
+  await demo.waitForURL('**/demo');
+  await expect(demo.getByRole('button', { name: /Run the comparison/i })).toBeVisible();
+  await capture(demo, '1440-demo-before');
+  const defaults = await demo.locator('input[type=number],select').evaluateAll(es => es.map(e => ({ title: e.title, value: e.value, type: e.type })));
+  put('demo-defaults.json', defaults);
+  check('shipped source deterministic', defaults.some(d => d.value === 'deterministic'));
+  check('shipped two count fields100', defaults.filter(d => d.type === 'number' && d.value === '100').length === 2);
+
+  phase = 'control-rail-interactions';
+  for (const [width, height] of pairs) {
+    await demo.setViewportSize({ width, height });
+    await railProof(demo, `${width}-rail`);
+  }
+  for (const [width, height] of [[390, 844], [1440, 960]]) {
+    await demo.setViewportSize({ width, height });
+    await doubled(demo, `${width}-rail-computed-text200`, () => railProof(demo, `${width}-rail-text200`));
+  }
+  const lobby = await watch(await c.newPage(), 'lobby');
+  await lobby.goto(base + '/', { waitUntil: 'networkidle' });
+  phase = 'two-context-room';
+  await lobby.setViewportSize({ width: 390, height: 844 });
+  await lobby.getByPlaceholder('What should the agents work on together?').fill('Count to 10');
+  const createdPromise = lobby.waitForResponse(r => r.url() === base + '/live/rooms' && r.request().method() === 'POST');
+  await lobby.getByRole('button', { name: 'Create room', exact: true }).click();
+  report.actions.push({ phase, action: 'Native create of synthetic Count to10 room at390x844' });
+  const createdResponse = await createdPromise; const created = await createdResponse.json();
+  put('created-room.json', { status: createdResponse.status(), body: created });
+  check('native create HTTP200 with room', createdResponse.status() === 200 && typeof created.roomId === 'string');
+  const id = created.roomId;
+  await expect(lobby.getByRole('button', { name: 'State', exact: true })).toBeVisible();
+  await capture(lobby, '390-created-room');
+  phase = 'room-layout-interactions';
+  for (const [width, height] of pairs) {
+    await lobby.setViewportSize({ width, height });
+    await roomProof(lobby, id, `${width}-waiting-room`, width === 390);
+  }
+  for (const [width, height] of [[390, 844], [1440, 960]]) {
+    await lobby.setViewportSize({ width, height });
+    await doubled(lobby, `${width}-waiting-room-computed-text200`, () => roomProof(lobby, id, `${width}-waiting-room-text200`));
+    await lobby.emulateMedia({ reducedMotion: 'reduce' });
+    await capture(lobby, `${width}-waiting-room-reduced`);
+    await lobby.emulateMedia({ reducedMotion: 'no-preference' });
+  }
+  await lobby.setViewportSize({ width: 390, height: 844 });
+  phase = 'two-context-room';
+  const c2 = await context({ width: 1440, height: 960 });
+  const joiner = await watch(await c2.newPage(), 'joiner');
+  await joiner.goto(base + '/', { waitUntil: 'networkidle' });
+  await joiner.getByPlaceholder('e.g. x7k2mp').fill(id);
+  await joiner.getByRole('button', { name: 'Join', exact: true }).click();
+  await expect(joiner.getByRole('heading', { name: 'Join the room' })).toBeVisible();
+  await capture(joiner, '1440-join-gate');
+  await joiner.getByRole('button', { name: 'Join & enable sound', exact: true }).click();
+  report.actions.push({ phase, action: 'Second clean context entered actual room code and clicked Join, then Join & enable sound; no microphone gesture' });
+  await expect(joiner.getByRole('button', { name: 'State', exact: true })).toBeVisible();
+  const joined = await untilRoom(id, r => new Set(r.participants?.map(p => p.slot)).size === 2, 'two-distinct-seats');
+  check('both contexts share room', joined.id === id);
+  await capture(lobby, '390-two-seats'); await capture(joiner, '1440-two-seats');
+  const correction = 'Actually, count from 5 to 10';
+  await lobby.getByPlaceholder('Message or steer the agents').fill(correction);
+  await lobby.getByPlaceholder('Message or steer the agents').press('Enter');
+  report.actions.push({ phase, action: 'Native keyboard Enter submits deterministic count correction', text: correction });
+  const corrected = await untilRoom(id, r => r.state?.task?.next === 5 && r.state?.task?.target === 10 && r.state.running === false && r.utterances.filter(u => u.speechAct === 'error' && u.text.includes('OPENAI_API_KEY is not configured')).length === 1, 'deterministic-correction');
+  check('correction records missing-key fallback', corrected.traces?.some(t => JSON.stringify(t).includes('deterministic fallback')));
+  await lobby.getByRole('button', { name: 'State', exact: true }).click();
+  await expect(lobby.getByText('Internal State', { exact: true })).toBeVisible();
+  await capture(lobby, '390-correction-state'); await capture(joiner, '1440-correction');
+  phase = 'no-key-start';
+  const priorErrors = new Set(corrected.utterances.filter(u => u.speechAct === 'error').map(u => u.id));
+  report.correctionAutoResumeErrors = priorErrors.size;
+  await joiner.getByRole('button', { name: 'Start', exact: true }).click();
+  report.actions.push({ phase, action: 'One explicit native Start with both provider flags false; wait for error/halt rather than treating HTTP200 as completed work' });
+  const failed = await untilRoom(id, r => r.state?.running === false && r.utterances?.some(u => u.speechAct === 'error' && !priorErrors.has(u.id) && u.text.includes('OPENAI_API_KEY is not configured')), 'no-key-halted');
+  check('failed turn did not count', failed.state.turn === 0 && failed.state.task.next === 5);
+  report.explicitStartNewErrors = failed.utterances.filter(u => u.speechAct === 'error' && !priorErrors.has(u.id));
+  check('one explicit Start adds one new missing-key error', report.explicitStartNewErrors.length === 1);
+  await expect(joiner.getByText(/turn failed:.*OPENAI_API_KEY is not configured/).first()).toBeVisible();
+  await capture(joiner, '1440-no-key-halted'); await capture(lobby, '390-no-key-halted');
+  await joiner.getByRole('button', { name: 'State', exact: true }).click();
+  await capture(joiner, '1440-no-key-state');
+  navigating.add('joiner');
+  await joiner.goto(base + '/', { waitUntil: 'networkidle' });
+  report.actions.push({ phase, action: 'Explicit same-context route navigation to root after failure; not a discovered in-app Back control' });
+  navigating.delete('joiner');
+  await expect(joiner.getByRole('button', { name: 'Create room', exact: true })).toBeVisible();
+  await capture(joiner, '1440-lobby-recovery');
+  await apiRoom(id, 'retained-room-after-navigation');
+  await demo.setViewportSize({ width: 1440, height: 960 });
+  await demo.bringToFront();
+  phase = 'count100';
+  const responsePromise = demo.waitForResponse(r => r.url() === base + '/compare/demo' && r.request().method() === 'POST', { timeout: 300000 });
+  await demo.getByRole('button', { name: /Run the comparison/i }).click();
+  report.actions.push({ phase, action: 'One native Run the comparison click at shipped100/100 deterministic defaults' });
+  const started = Date.now();
+  const apiResponse = await responsePromise;
+  const api = await apiResponse.json();
+  put('same-run-api.json', { status: apiResponse.status(), request: apiResponse.request().postDataJSON(), body: api });
+  check('same-run API completed100', apiResponse.status() === 200 && api.goodFinalState?.task?.current === 100 && api.goodFinalState?.task?.completed === true);
+  check('same-run deterministic actual provenance', api.provenance?.mode === 'deterministic' && api.provenance?.modelId === null && api.provenance?.fallbackTurns === 0);
+  check('three bad private states remain1', api.bad?.at(-1)?.agentStates?.length === 3 && api.bad.at(-1).agentStates.every(s => s.believesCurrent === 1));
+  const progressRe = /\b(\d{1,3})\s*\/\s*100\b/;
+  let progress = null;
+  while (Date.now() - started < 300000) {
+    const body = await demo.evaluate(() => document.body.innerText);
+    const match = body.match(progressRe);
+    const current = match ? Number(match[1]) : null;
+    if (current !== progress) { progress = current; report.samples.push({ current, atMs: Date.now() - started }); persist(); }
+    if (current === 100) { report.firstHundredMs = Date.now() - started; break; }
+    await demo.waitForTimeout(1000);
+  }
+  check('native rendered100 within original300s deadline', progress === 100);
+  await expect(demo.getByText('complete', { exact: true }).first()).toBeVisible();
+  await capture(demo, '1440-demo-first100');
+  await expect(demo.getByRole('button', { name: 'Run', exact: true })).toBeEnabled({ timeout: Math.max(1, 300000 - (Date.now() - started)) });
+  report.settledMs = Date.now() - started;
+  check('actual playback finished within same300s budget', report.settledMs <= 300000);
+  const settled = await capture(demo, '1440-demo-completed100');
+  check('visible stuck-left disclosure', settled.body.includes('3 private states') && settled.body.includes('stuck'));
+
+  phase = 'current-completed-matrix';
+  for (const [width, height] of pairs) {
+    await demo.setViewportSize({ width, height });
+    await capture(demo, `${width}-demo-settled100`);
+    await progressProof(demo, `${width}-demo-settled100`);
+  }
+  for (const [width, height] of [[390, 844], [1440, 960]]) {
+    await demo.setViewportSize({ width, height });
+    await doubled(demo, `${width}-demo-settled100-computed-text200`, () => progressProof(demo, `${width}-demo-text200`));
+    await demo.emulateMedia({ reducedMotion: 'reduce' });
+    await capture(demo, `${width}-demo-settled100-reduced`);
+    await progressProof(demo, `${width}-demo-reduced`);
+    await demo.emulateMedia({ reducedMotion: 'no-preference' });
+  }
+  phase = 'final';
+  check('only exact public CSS/referenced fonts permitted externally', report.blockedEgress.length === 0 && fontResponses.length > 0 && fontResponses.every(r => r.status === 200 && r.fulfilledExactBytes));
+  check('no unexpected browser console/request/HTTP errors', report.events.filter(e => !e.intentionalTransportClose).length === 0);
+  report.status = 'PASS';
+} catch (error) {
+  report.status = 'FAIL'; report.failures.push({ phase, error: String(error), stack: error.stack });
+  for (const c of contexts) for (const page of c.pages()) {
+    try { await capture(page, `failure-${contexts.indexOf(c)}-${c.pages().indexOf(page)}`); } catch (captureError) { report.failures.push({ phase: 'failure-capture', error: String(captureError) }); }
+  }
+} finally {
+  closing = true;
+  for (const c of contexts) { try { await c.close(); } catch (e) { report.failures.push({ phase: 'context-close', error: String(e) }); } }
+  if (browser) { try { await browser.close(); } catch (e) { report.failures.push({ phase: 'browser-close', error: String(e) }); } }
+  const unexpected = report.events.filter(e => !e.intentionalTransportClose);
+  if (unexpected.length || report.blockedEgress.length) report.status = 'FAIL';
+  report.finishedAt = new Date().toISOString(); report.closedOwnedBrowser = true; persist();
+  console.log(JSON.stringify({ status: report.status, checks: report.checks.length, captures: report.captures.length, firstHundredMs: report.firstHundredMs, failures: report.failures, browserEvents: report.events.length }));
+  if (report.status !== 'PASS' || report.failures.length) process.exitCode = 1;
+}

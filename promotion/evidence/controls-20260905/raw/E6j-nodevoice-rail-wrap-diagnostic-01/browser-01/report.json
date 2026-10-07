@@ -1,0 +1,4444 @@
+{
+  "name": "NODEVOICE-ROOM-AND-COMPARISON-CONTROLS-01",
+  "startedAt": "2026-09-05T22:28:42.799Z",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "current service; both providers unavailable",
+      "passed": true
+    },
+    {
+      "name": "shipped source deterministic",
+      "passed": true
+    },
+    {
+      "name": "shipped two count fields100",
+      "passed": true
+    },
+    {
+      "name": "320-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "360-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "360-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "360-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "390-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "768-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "768-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "768-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "1024-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab4 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab4 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail Tab4 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1024-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1024-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "1440-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab4 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab4 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail Tab4 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "1920-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab4 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab4 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail Tab4 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1920-rail number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1920-rail selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "390-rail-text200 selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab4 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab4 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 Tab4 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab3 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab3 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab3 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab0 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab0 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab0 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 number0 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 number1 including spinner complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "1440-rail-text200 selections and100 restored",
+      "passed": true
+    },
+    {
+      "name": "only exact public CSS/referenced fonts permitted externally",
+      "passed": true
+    },
+    {
+      "name": "no unexpected browser console/request/HTTP errors",
+      "passed": true
+    }
+  ],
+  "captures": [
+    {
+      "name": "1440-root-entry",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-before",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "360-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        360,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "768-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        768,
+        1024
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1024-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1024,
+        768
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-rail-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-rail-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1920-rail-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "390-rail-computed-text200",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "390-rail-text200-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "390-rail-text200-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "390-rail-text200-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "390-rail-text200-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "390-rail-text200-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        390,
+        844
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 14
+    },
+    {
+      "name": "1440-rail-computed-text200",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-text200-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-text200-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-text200-last-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-text200-first-keyboard",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-rail-text200-number100",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    }
+  ],
+  "actions": [
+    {
+      "phase": "root-to-demo",
+      "action": "Native root demo link click"
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "320-rail",
+      "field": 0,
+      "point": {
+        "x": 288.09375,
+        "y": 67.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "320-rail",
+      "field": 1,
+      "point": {
+        "x": 119.09375,
+        "y": 111.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "360-rail",
+      "field": 0,
+      "point": {
+        "x": 288.09375,
+        "y": 67.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "360-rail",
+      "field": 1,
+      "point": {
+        "x": 119.09375,
+        "y": 111.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "390-rail",
+      "field": 0,
+      "point": {
+        "x": 288.09375,
+        "y": 67.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "390-rail",
+      "field": 1,
+      "point": {
+        "x": 119.09375,
+        "y": 111.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "768-rail",
+      "field": 0,
+      "point": {
+        "x": 471.796875,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "768-rail",
+      "field": 1,
+      "point": {
+        "x": 592.890625,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1024-rail",
+      "field": 0,
+      "point": {
+        "x": 669.796875,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1024-rail",
+      "field": 1,
+      "point": {
+        "x": 790.890625,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1440-rail",
+      "field": 0,
+      "point": {
+        "x": 669.796875,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1440-rail",
+      "field": 1,
+      "point": {
+        "x": 790.890625,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1920-rail",
+      "field": 0,
+      "point": {
+        "x": 669.796875,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1920-rail",
+      "field": 1,
+      "point": {
+        "x": 790.890625,
+        "y": 23.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "390-rail-text200",
+      "field": 0,
+      "point": {
+        "x": 350.1875,
+        "y": 76
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "390-rail-text200",
+      "field": 1,
+      "point": {
+        "x": 210.171875,
+        "y": 130
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1440-rail-text200",
+      "field": 0,
+      "point": {
+        "x": 861.59375,
+        "y": 31.5
+      }
+    },
+    {
+      "phase": "control-rail-interactions",
+      "action": "Native number spinner99 to100",
+      "name": "1440-rail-text200",
+      "field": 1,
+      "point": {
+        "x": 1073.765625,
+        "y": 31.5
+      }
+    }
+  ],
+  "events": [],
+  "requests": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/demo"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/api/models"
+    }
+  ],
+  "responses": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/demo",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/api/models",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    }
+  ],
+  "samples": [],
+  "blockedEgress": [],
+  "failures": [],
+  "limits": [
+    "Local deterministic emulated Chromium; no physical device, native zoom, microphone, hosted Convex, provider, durable restart or full grade."
+  ],
+  "layout": [
+    {
+      "name": "320-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail last full control",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab3",
+      "rect": {
+        "x": 200.59375,
+        "y": 99,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab3 full wrapper",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab0",
+      "rect": {
+        "x": 68.28125,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail number0 including spinner",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail number1 including spinner",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail last full control",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab3",
+      "rect": {
+        "x": 200.59375,
+        "y": 99,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail Tab3 full wrapper",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab0",
+      "rect": {
+        "x": 68.28125,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail number0 including spinner",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "360-rail number1 including spinner",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 328,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail last full control",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab3",
+      "rect": {
+        "x": 200.59375,
+        "y": 99,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail Tab3 full wrapper",
+      "rect": {
+        "x": 137.09375,
+        "y": 98,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab2",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 98,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab1",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab0",
+      "rect": {
+        "x": 68.28125,
+        "y": 55,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail number0 including spinner",
+      "rect": {
+        "x": 239.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail number1 including spinner",
+      "rect": {
+        "x": 70.09375,
+        "y": 107,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 358,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail first full control",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail last full control",
+      "rect": {
+        "x": 199.703125,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab1",
+      "rect": {
+        "x": 422.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab2",
+      "rect": {
+        "x": 543.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab2 full wrapper",
+      "rect": {
+        "x": 489.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab3",
+      "rect": {
+        "x": 263.203125,
+        "y": 55,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail Tab3 full wrapper",
+      "rect": {
+        "x": 199.703125,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab2",
+      "rect": {
+        "x": 543.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 489.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab1",
+      "rect": {
+        "x": 422.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab0",
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail number0 including spinner",
+      "rect": {
+        "x": 422.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "768-rail number1 including spinner",
+      "rect": {
+        "x": 543.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 552.296875,
+        "height": 84
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail first full control",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail last full control",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab4",
+      "rect": {
+        "x": 872.390625,
+        "y": 11,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail Tab4 full wrapper",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab0",
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail number0 including spinner",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1024-rail number1 including spinner",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 808.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail first full control",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail last full control",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab4",
+      "rect": {
+        "x": 872.390625,
+        "y": 11,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail Tab4 full wrapper",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab0",
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail number0 including spinner",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail number1 including spinner",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1224.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail first full control",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail last full control",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab4",
+      "rect": {
+        "x": 872.390625,
+        "y": 11,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail Tab4 full wrapper",
+      "rect": {
+        "x": 808.890625,
+        "y": 10,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab3",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab3 full wrapper",
+      "rect": {
+        "x": 687.796875,
+        "y": 10,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab2",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab2 full wrapper",
+      "rect": {
+        "x": 595.703125,
+        "y": 10,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab1",
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab1 full wrapper",
+      "rect": {
+        "x": 397.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab0",
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail ShiftTab0 full wrapper",
+      "rect": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail number0 including spinner",
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1920-rail number1 including spinner",
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 199.703125,
+        "y": 10,
+        "width": 1704.296875,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 first full control",
+      "rect": {
+        "x": 16,
+        "y": 67,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 last full control",
+      "rect": {
+        "x": 16,
+        "y": 170,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab1",
+      "rect": {
+        "x": 247.1875,
+        "y": 67,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 62,
+        "width": 146.1875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab2",
+      "rect": {
+        "x": 107.171875,
+        "y": 121,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 116,
+        "width": 204.171875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab3",
+      "rect": {
+        "x": 124,
+        "y": 171,
+        "width": 9,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 Tab3 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 170,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab2",
+      "rect": {
+        "x": 107.171875,
+        "y": 121,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab2 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 116,
+        "width": 204.171875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab1",
+      "rect": {
+        "x": 247.1875,
+        "y": 67,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab1 full wrapper",
+      "rect": {
+        "x": 214,
+        "y": 62,
+        "width": 146.1875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab0",
+      "rect": {
+        "x": 101.546875,
+        "y": 68,
+        "width": 71.453125,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 ShiftTab0 full wrapper",
+      "rect": {
+        "x": 16,
+        "y": 67,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 number0 including spinner",
+      "rect": {
+        "x": 247.1875,
+        "y": 67,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "390-rail-text200 number1 including spinner",
+      "rect": {
+        "x": 107.171875,
+        "y": 121,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 62,
+        "width": 358,
+        "height": 148
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 first full control",
+      "rect": {
+        "x": 329.40625,
+        "y": 22.5,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 last full control",
+      "rect": {
+        "x": 1091.765625,
+        "y": 22.5,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab1",
+      "rect": {
+        "x": 607.515625,
+        "y": 23.5,
+        "width": 76.890625,
+        "height": 34
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab1 full wrapper",
+      "rect": {
+        "x": 527.40625,
+        "y": 22.5,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab2",
+      "rect": {
+        "x": 758.59375,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab2 full wrapper",
+      "rect": {
+        "x": 725.40625,
+        "y": 17.5,
+        "width": 146.1875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab3",
+      "rect": {
+        "x": 970.765625,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab3 full wrapper",
+      "rect": {
+        "x": 879.59375,
+        "y": 17.5,
+        "width": 204.171875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab4",
+      "rect": {
+        "x": 1199.765625,
+        "y": 23.5,
+        "width": 9,
+        "height": 34
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 Tab4 full wrapper",
+      "rect": {
+        "x": 1091.765625,
+        "y": 22.5,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab3",
+      "rect": {
+        "x": 970.765625,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab3 full wrapper",
+      "rect": {
+        "x": 879.59375,
+        "y": 17.5,
+        "width": 204.171875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab2",
+      "rect": {
+        "x": 758.59375,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab2 full wrapper",
+      "rect": {
+        "x": 725.40625,
+        "y": 17.5,
+        "width": 146.1875,
+        "height": 46
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab1",
+      "rect": {
+        "x": 607.515625,
+        "y": 23.5,
+        "width": 76.890625,
+        "height": 34
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab1 full wrapper",
+      "rect": {
+        "x": 527.40625,
+        "y": 22.5,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab0",
+      "rect": {
+        "x": 414.953125,
+        "y": 23.5,
+        "width": 71.453125,
+        "height": 34
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 ShiftTab0 full wrapper",
+      "rect": {
+        "x": 329.40625,
+        "y": 22.5,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 number0 including spinner",
+      "rect": {
+        "x": 758.59375,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    },
+    {
+      "name": "1440-rail-text200 number1 including spinner",
+      "rect": {
+        "x": 970.765625,
+        "y": 22.5,
+        "width": 108,
+        "height": 36
+      },
+      "bounds": {
+        "x": 329.40625,
+        "y": 17.5,
+        "width": 1094.59375,
+        "height": 50
+      },
+      "centerHit": true
+    }
+  ],
+  "browserVersion": "149.0.7827.55",
+  "diagnosticOnly": true,
+  "diagnosticCss": {
+    "railScrollPaddingInline": "0px",
+    "railFlexWrap": "wrap",
+    "railOverflow": "visible",
+    "fieldScrollMarginInline": "0px"
+  },
+  "diagnosticStyleRestored": true,
+  "finishedAt": "2026-09-05T22:28:56.853Z",
+  "closedOwnedBrowser": true
+}

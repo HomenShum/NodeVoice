@@ -1,0 +1,36 @@
+{
+  "status": "APPROVED_WITH_EXPLICIT_BEFORE_EVIDENCE_AMENDMENT",
+  "mode": "Builder / independent read-only planner judge",
+  "requestTraceability": "Make each repository usable and ready for handoff, including visual, responsive and interaction standards; approve one bounded next layout slice with honest proof lineage.",
+  "plan": {
+    "path": "E6j_NODEVOICE_UI_FOLLOWON_PLAN.json",
+    "sha256": "4a3b670b67189f67fa15c9cf402f079501bbc3883f533f425cd1f5c637d6a3ab"
+  },
+  "base": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+  "owners": ["src/client/App.tsx", "src/client/live/LiveRoom.tsx"],
+  "causalSourceReviewed": ["App header/control rail", "NumberField fixed height/width", "CompareView progress row", "RoomView header/action group"],
+  "originalProofGuard": "CLOSED in E6j_NODEVOICE_CURRENT_FIRST_USE_JUDGE.json",
+  "approvedBeforeAmendment": {
+    "supersedes": "Retained API-response replay for new boundary capture",
+    "method": "Inert viewer annotates exact frozen native-run PNG bytes with labelled native DOM 3px boundaries; unlabelled raster must match source pixels, followed by exact overlay removal and DOM/raster restoration.",
+    "requiredLabel": "Annotation of frozen native capture; not a fresh application render or completion",
+    "roomBefore": ["390 normal", "1440 normal"],
+    "demoBefore": ["320 normal", "390 normal", "1440 normal", "390 computed text200", "1440 computed text200"],
+    "notExistingBefore": ["320 room", "room computed text200"],
+    "noAdditionalLongBeforeRunRequired": true
+  },
+  "afterRequired": {
+    "ordinaryCommands": ["npm run doctor", "npm run proof", "npm run build"],
+    "oneFreshNativeCompletion": {"target": 100, "turns": 100, "deadlineMs": 300000, "requiresRunEnabled": true, "recordedApiSubstitutionAllowedAsCompletion": false},
+    "viewports": [[320,800],[360,800],[390,844],[768,1024],[1024,768],[1440,960],[1920,1080]],
+    "separateConditions": ["390/1440 computed text200", "390/1440 reduced motion"],
+    "nativeActions": ["Rail pointer horizontal scrolling", "Tab and Shift+Tab reach all rendered controls", "Numeric100 and spinner readable", "Invite and State pointer/keyboard open/close", "Repeated and burst toggles preserve task state", "Two-context join/correction/explicit Start retains distinct1+1 errors and turn0/next5"],
+    "perCellEvidence": ["PNG", "DOM", "console/request errors", "actual source fonts/glyph evidence"]
+  },
+  "protected": ["handlers and playback", "source/model visibility policy", "server/reducer/provider behavior", "shared Select/Badge/Button", "existing300s deadline", "old source/first-failure evidence"],
+  "stopConditions": ["Additional owner or handler changes needed", "Unexpected egress/browser error", "Wrapped header occludes affected controls", "Source/evidence guard drift"],
+  "holds": ["Full comparison pane/detail reflow", "Selected-option label ellipsis", "Provenance copy", "Dependency findings", "Unspecified listener host", "Product handoff/publication", "Provider/device/full-product/full-grade acceptance"],
+  "sourceEditsByJudge": 0,
+  "runtimeOrBrowserRunsByJudge": 0,
+  "fullGrades": null
+}

@@ -1,5 +1,9 @@
-const SMALL: Record<string, number> = {
-  zero: 0,
+/**
+ * The English number lexicon, in one place. `src/core/steering.ts` reads the
+ * same two tables, so a room that can SAY a number can also HEAR it — the two
+ * used to be separate copies and drifted (see docs/codebase/CONCERNS.md).
+ */
+export const ONES: Record<string, number> = {
   one: 1,
   two: 2,
   three: 3,
@@ -21,7 +25,7 @@ const SMALL: Record<string, number> = {
   nineteen: 19,
 };
 
-const TENS: Record<string, number> = {
+export const TENS: Record<string, number> = {
   twenty: 20,
   thirty: 30,
   forty: 40,
@@ -32,6 +36,11 @@ const TENS: Record<string, number> = {
   ninety: 90,
 };
 
+// Hearing a spoken turn accepts "zero"; issuing a count command (steering.ts)
+// accepts "a" ("count to a hundred") instead. Same lexicon, two extra words.
+const SMALL: Record<string, number> = { ...ONES, zero: 0 };
+
+/** What number did this speaker just say? Returns undefined if they said none. */
 export function extractNumber(text: string): number | undefined {
   const normalized = text.toLowerCase().replace(/[,.!?]/g, " ").replace(/-/g, " ").trim();
   const digit = normalized.match(/\b(\d{1,3})\b/);
@@ -39,19 +48,43 @@ export function extractNumber(text: string): number | undefined {
 
   const tokens = normalized.split(/\s+/).filter(Boolean);
   for (let i = 0; i < tokens.length; i += 1) {
-    const token = tokens[i];
-    if (!token) continue;
-    if (SMALL[token] !== undefined) return SMALL[token];
-    if (TENS[token] !== undefined) {
-      const next = tokens[i + 1];
-      if (next && SMALL[next] !== undefined && SMALL[next] > 0 && SMALL[next] < 10) {
-        return TENS[token] + SMALL[next];
-      }
-      return TENS[token];
-    }
-    if (token === "hundred") return 100;
+    const parsed = parseNumberPhrase(tokens, i);
+    if (parsed !== undefined) return parsed;
   }
   return undefined;
+}
+
+// "One hundred" is TWO tokens. Returning on the first number word read it as 1,
+// so a room counting to 100 asked for 100, heard 1, demanded a correction, and
+// stalled at 99 forever. "hundred" is a multiplier over the phrase to its left,
+// so the whole phrase has to be consumed before a value is returned.
+function parseNumberPhrase(tokens: string[], start: number): number | undefined {
+  const head = tokens[start];
+  if (head === undefined) return undefined;
+
+  let i = start + 1;
+  let value: number;
+  if (SMALL[head] !== undefined) {
+    value = SMALL[head];
+  } else if (TENS[head] !== undefined) {
+    value = TENS[head];
+    const ones = tokens[i];
+    if (ones !== undefined && SMALL[ones] !== undefined && SMALL[ones] > 0 && SMALL[ones] < 10) {
+      value += SMALL[ones];
+      i += 1;
+    }
+  } else if (head === "hundred") {
+    return 100;
+  } else {
+    return undefined;
+  }
+
+  if (tokens[i] !== "hundred") return value;
+  value *= 100;
+  i += 1;
+  if (tokens[i] === "and") i += 1;
+  const remainder = parseNumberPhrase(tokens, i);
+  return remainder !== undefined && remainder < 100 ? value + remainder : value;
 }
 
 export function numberToWords(n: number): string {

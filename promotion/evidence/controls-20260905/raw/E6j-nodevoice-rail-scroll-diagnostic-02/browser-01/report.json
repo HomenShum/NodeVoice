@@ -1,0 +1,440 @@
+{
+  "name": "NODEVOICE-ROOM-AND-COMPARISON-CONTROLS-01",
+  "startedAt": "2026-09-05T22:28:01.299Z",
+  "status": "FAIL",
+  "checks": [
+    {
+      "name": "current service; both providers unavailable",
+      "passed": true
+    },
+    {
+      "name": "shipped source deterministic",
+      "passed": true
+    },
+    {
+      "name": "shipped two count fields100",
+      "passed": true
+    },
+    {
+      "name": "320-rail first full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail last full control complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab1 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper complete box and native hit",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab2 focus-visible",
+      "passed": true
+    },
+    {
+      "name": "320-rail Tab3 complete box and native hit",
+      "passed": false
+    }
+  ],
+  "captures": [
+    {
+      "name": "1440-root-entry",
+      "url": "http://127.0.0.1:4993/",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "1440-demo-before",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        1440,
+        960
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 0
+    },
+    {
+      "name": "320-rail-first-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "320-rail-last-pointer",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 8
+    },
+    {
+      "name": "failure-0-0",
+      "url": "http://127.0.0.1:4993/demo",
+      "viewport": [
+        320,
+        800
+      ],
+      "reducedMotion": false,
+      "horizontalOverflow": 0,
+      "outOfViewportElements": 9
+    }
+  ],
+  "actions": [
+    {
+      "phase": "root-to-demo",
+      "action": "Native root demo link click"
+    }
+  ],
+  "events": [],
+  "requests": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/live/rooms"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/demo"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "method": "GET",
+      "url": "http://127.0.0.1:4993/api/models"
+    }
+  ],
+  "responses": [
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/live/rooms",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/demo",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-dSydRYPe.css",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/assets/index-Cs_4hD5p.js",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "http://127.0.0.1:4993/api/models",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "method": "GET"
+    },
+    {
+      "page": "demo",
+      "phase": "root-to-demo",
+      "status": 200,
+      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2",
+      "method": "GET"
+    }
+  ],
+  "samples": [],
+  "blockedEgress": [],
+  "failures": [
+    {
+      "phase": "control-rail-interactions",
+      "error": "Error: 320-rail Tab3 complete box and native hit",
+      "stack": "Error: 320-rail Tab3 complete box and native hit\n    at check (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-rail-scroll-diagnostic-02/observe.mjs:20:102)\n    at fit (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-rail-scroll-diagnostic-02/observe.mjs:187:3)\n    at async railProof (file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-rail-scroll-diagnostic-02/observe.mjs:218:25)\n    at async file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6j-nodevoice-rail-scroll-diagnostic-02/observe.mjs:321:5"
+    }
+  ],
+  "limits": [
+    "Local deterministic emulated Chromium; no physical device, native zoom, microphone, hosted Convex, provider, durable restart or full grade."
+  ],
+  "layout": [
+    {
+      "name": "320-rail first full control",
+      "rect": {
+        "x": 16,
+        "y": 54,
+        "width": 190,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail last full control",
+      "rect": {
+        "x": 154.1875,
+        "y": 54,
+        "width": 150,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1",
+      "rect": {
+        "x": 154.09375,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab1 full wrapper",
+      "rect": {
+        "x": 129,
+        "y": 54,
+        "width": 84.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2",
+      "rect": {
+        "x": 154.1875,
+        "y": 63,
+        "width": 54,
+        "height": 18
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab2 full wrapper",
+      "rect": {
+        "x": 100.09375,
+        "y": 54,
+        "width": 113.09375,
+        "height": 36
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": true
+    },
+    {
+      "name": "320-rail Tab3",
+      "rect": {
+        "x": 284.6875,
+        "y": 55,
+        "width": 53.5,
+        "height": 34
+      },
+      "bounds": {
+        "x": 16,
+        "y": 54,
+        "width": 288,
+        "height": 40
+      },
+      "centerHit": false
+    }
+  ],
+  "browserVersion": "149.0.7827.55",
+  "diagnosticOnly": true,
+  "diagnosticCss": {
+    "railScrollPaddingInline": "0px",
+    "fieldScrollMarginInline": "6rem"
+  },
+  "diagnosticStyleRestored": true,
+  "finishedAt": "2026-09-05T22:28:04.008Z",
+  "closedOwnedBrowser": true
+}

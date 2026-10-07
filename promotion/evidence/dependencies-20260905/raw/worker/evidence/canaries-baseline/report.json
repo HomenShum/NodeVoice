@@ -1,0 +1,177 @@
+{
+  "mode": "baseline",
+  "rows": [
+    {
+      "name": "nanoid-negative",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "baseline",
+        "nanoid-negative"
+      ],
+      "exitCode": null,
+      "timedOut": true,
+      "budgetSeconds": 0.6,
+      "seconds": 0.641,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-negative",
+          "version": "3.3.15"
+        }
+      ]
+    },
+    {
+      "name": "nanoid-zero",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "baseline",
+        "nanoid-zero"
+      ],
+      "exitCode": null,
+      "timedOut": true,
+      "budgetSeconds": 0.6,
+      "seconds": 0.703,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-zero",
+          "version": "3.3.15"
+        }
+      ]
+    },
+    {
+      "name": "nanoid-fixed6",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "baseline",
+        "nanoid-fixed6"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 0.062,
+      "observations": [
+        {
+          "phase": "operation-started",
+          "name": "nanoid-fixed6",
+          "version": "3.3.15"
+        },
+        {
+          "phase": "completed",
+          "count": 128,
+          "allSix": true,
+          "distinct": 128
+        }
+      ]
+    },
+    {
+      "name": "postcss-map",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "baseline",
+        "postcss-map"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 1.563,
+      "observations": [
+        {
+          "name": "allowed-relative",
+          "version": "8.5.16",
+          "reads": [
+            "inside-owned-map"
+          ],
+          "markerDisclosed": true,
+          "cssRetainsRule": true
+        },
+        {
+          "name": "outside-relative",
+          "version": "8.5.16",
+          "reads": [
+            "outside-owned-map"
+          ],
+          "markerDisclosed": true,
+          "cssRetainsRule": true
+        },
+        {
+          "name": "outside-absolute-no-from",
+          "version": "8.5.16",
+          "reads": [
+            "outside-owned-map"
+          ],
+          "markerDisclosed": true,
+          "cssRetainsRule": true
+        }
+      ]
+    },
+    {
+      "name": "browserslist-stats-cache",
+      "argv": [
+        "C:/nvm4w/nodejs/node.exe",
+        "--expose-gc",
+        "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905\\canaries\\check.cjs",
+        "baseline",
+        "browserslist-stats-cache"
+      ],
+      "exitCode": 0,
+      "timedOut": false,
+      "budgetSeconds": 20,
+      "seconds": 2.719,
+      "observations": [
+        {
+          "name": "stats-toString",
+          "completed": false,
+          "error": "TypeError: Cannot read properties of undefined (reading 'length')"
+        },
+        {
+          "name": "stats-constructor",
+          "completed": false,
+          "error": "TypeError: Cannot read properties of undefined (reading 'length')"
+        },
+        {
+          "name": "stats-__proto__",
+          "completed": false,
+          "error": "TypeError: Cannot read properties of undefined (reading 'length')"
+        },
+        {
+          "name": "sustained-cache",
+          "version": "4.28.4",
+          "distinctQueries": 2050,
+          "immediateSameReference": true,
+          "afterSameReference": true,
+          "sameValues": true,
+          "checkpoints": [
+            {
+              "queries": 512,
+              "heapUsed": 20316944
+            },
+            {
+              "queries": 1024,
+              "heapUsed": 34282440
+            },
+            {
+              "queries": 1536,
+              "heapUsed": 48314328
+            },
+            {
+              "queries": 2048,
+              "heapUsed": 62232992
+            }
+          ],
+          "limit": "Bounded2050-query cache-retention scenario; heap figures are observations, not a throughput benchmark or OOM attempt."
+        }
+      ]
+    }
+  ],
+  "scriptSha256": "4b3e4ef3d295edb5afaa80274afbd7e92bc19ddd029d52083578ba22c4d84e11",
+  "meaning": "Owned scratch fixtures only; no external or private data. Baseline defects are observations, not successful library behavior."
+}

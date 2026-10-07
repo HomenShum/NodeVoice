@@ -1,0 +1,32 @@
+[
+  {
+    "manifest": {
+      "path": "E6j-nodevoice-first-use-01/artifact-manifest.json",
+      "bytes": 35026,
+      "sha256": "2578ee124e44374995f8822262d2c203424bbded87a0b0e6f3381929d7c08e01",
+      "rawGitBlobSha1": "9af00456b434fef3a14efc50c05a48265015f76a"
+    },
+    "verifiedFiles": 147,
+    "unchanged": true
+  },
+  {
+    "manifest": {
+      "path": "E6j-nodevoice-first-use-fonts-02/artifact-manifest.json",
+      "bytes": 42013,
+      "sha256": "5587c361323da1fb2f376f9f1c52cea09b3456eb2e26ec15fbb10471f0d2a837",
+      "rawGitBlobSha1": "6709bb740c461e5840d08cf1a9629cfa8a9c6d1b"
+    },
+    "verifiedFiles": 174,
+    "unchanged": true
+  },
+  {
+    "manifest": {
+      "path": "E6j-nodevoice-native-boundaries-01/manifest.json",
+      "bytes": 6317,
+      "sha256": "d61fac4e53e7a8df6e6bf20c5fabf2f2bd23487dc4c9350b390f1415103ff2e7",
+      "rawGitBlobSha1": "90e4737e74660386d0e949466d37ab2bc8f5850e"
+    },
+    "verifiedFiles": 37,
+    "unchanged": true
+  }
+]

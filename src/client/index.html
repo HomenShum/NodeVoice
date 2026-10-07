@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#080b11" />
-    <title>NodeVoice — shared-state voice agent console</title>
+    <title>NodeVoice — shared rooms for voice agents</title>
+    <meta name="description" content="Coordinate voice agents in one shared room. Set a goal, invite phones or tabs, and steer the conversation with your own voice. Provider keys stay server-side." />
+    <link rel="canonical" href="https://nodevoice.vercel.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="NodeVoice — shared rooms for voice agents" />
+    <meta property="og:description" content="Set a shared goal, invite phones or tabs, and steer a room of voice agents." />
+    <meta property="og:url" content="https://nodevoice.vercel.app/" />
+    <link rel="stylesheet" href="./index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,7 +21,8 @@
     />
   </head>
   <body>
-    <div id="root"></div>
+    <noscript><p class="px-6 py-4 text-center text-sm text-muted-foreground">Enable JavaScript to create or join a voice room. <a class="underline" href="https://github.com/HomenShum/NodeVoice#readme">Read the setup guide</a> for local and hosted requirements.</p></noscript>
+    <div id="root"><!--public-lobby--></div>
     <script type="module" src="./main.tsx"></script>
   </body>
 </html>

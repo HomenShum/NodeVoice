@@ -1,15 +1,17 @@
-import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { createServer, type ServerResponse } from "node:http";
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createVoiceRoom } from "./core/roomReducer.js";
+import { validTurns } from "./core/agents.js";
+import { validCountTarget } from "./core/steering.js";
 import { VOICE_AGENT_IDS } from "./core/types.js";
 import { runVoiceStep } from "./voice/voiceAgent.js";
 import { runLocalNodeAgentLoop } from "./nodeagents/nodeAgentLocalMvp.js";
 import { CLOUD_ONLY_REFERENCE_MODELS, DEFAULT_NODEAGENT_MODEL_ID, DEFAULT_VOICE_MODEL_ID, LOCAL_MODEL_OPTIONS, MODEL_CATALOG_REFRESHED_AT, getModelsFor, getOllamaModelName } from "./providers/localModels.js";
 import { runSideBySideComparison, type ComparisonSource } from "./compare/badGoodDemo.js";
-import { handleLive } from "./live/roomServer.js";
+import { handleLive, readJson } from "./live/roomServer.js";
 
 // Load server-side API keys (OpenAI / ElevenLabs) from a gitignored .env.local.
 const envPath = resolve(fileURLToPath(new URL("../.env.local", import.meta.url)));
@@ -21,9 +23,10 @@ try {
 }
 
 const port = Number(process.env.PORT ?? "8787");
-const distDir = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
-const publicDir = resolve(fileURLToPath(new URL("../public", import.meta.url)));
-const staticDir = existsSync(distDir) ? distDir : publicDir;
+// The browser UI is the Vite build in dist/. There is exactly one client; if it
+// has not been built the API still answers and the page says so, rather than a
+// second, older UI being served silently from somewhere else.
+const staticDir = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
 
 const server = createServer(async (req, res) => {
   try {
@@ -99,8 +102,8 @@ const server = createServer(async (req, res) => {
     if (req.method === "POST" && path === "/voice/demo") {
       const body = await readJson<{ target?: number; turns?: number; useOllama?: boolean; model?: string }>(req);
       const model = getOllamaModelName(body.model, DEFAULT_VOICE_MODEL_ID);
-      let state = createVoiceRoom(body.target ?? 20);
-      const maxTurns = body.turns ?? 20;
+      let state = createVoiceRoom(validCountTarget(body.target, 20));
+      const maxTurns = validTurns(body.turns, 20);
       for (let i = 0; i < maxTurns && state.task.kind === "count_to_n" && !state.task.completed; i += 1) {
         const actorId = state.nextSpeaker ?? VOICE_AGENT_IDS[0]!;
         state = await runVoiceStep(state, {
@@ -130,12 +133,21 @@ const server = createServer(async (req, res) => {
 
     return json(res, 404, { ok: false, error: "not_found" });
   } catch (error) {
-    return json(res, 500, { ok: false, error: error instanceof Error ? error.message : String(error) });
+    const message = error instanceof Error ? error.message : String(error);
+    if (message === "body too large") {
+      // The caller's fault, so say 413 rather than resetting the connection —
+      // and close it, because the rest of their upload is still arriving and
+      // the socket cannot be reused for the next request.
+      res.writeHead(413, corsHeaders({ "content-type": "application/json; charset=utf-8", connection: "close" }));
+      return res.end(JSON.stringify({ ok: false, error: message }, null, 2));
+    }
+    return json(res, 500, { ok: false, error: message });
   }
 });
 
 server.listen(port, () => {
   console.log(`nodevoice server running on http://localhost:${port}`);
+  if (!existsSync(staticDir)) console.log("NOTE: dist/ is missing — run `npm run build` (or `npm run ui`) to get the browser UI. API routes below work regardless.");
   console.log("GET  /               tiny browser UI");
   console.log("GET  /api/models     local model dropdown data");
   console.log("POST /compare/demo   { target, turns, source, model, openaiModel }");
@@ -155,25 +167,16 @@ async function serveStatic(path: string, res: ServerResponse): Promise<void> {
     res.writeHead(200, { "content-type": contentType(filePath) });
     res.end(file);
   } catch {
-    if (staticDir === distDir) {
-      try {
-        const fallback = resolve(join(distDir, "index.html"));
-        const file = await readFile(fallback);
-        res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-        res.end(file);
-        return;
-      } catch { /* fall through to 404 */ }
+    // Single-page app: unknown GET paths fall back to index.html so deep links
+    // like /demo work on reload.
+    try {
+      const file = await readFile(resolve(join(staticDir, "index.html")));
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end(file);
+    } catch {
+      json(res, 404, { ok: false, error: "client_not_built", hint: "run `npm run build` (or `npm run ui`)" });
     }
-    json(res, 404, { ok: false, error: "not_found" });
   }
-}
-
-async function readJson<T>(req: IncomingMessage): Promise<T> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) chunks.push(Buffer.from(chunk));
-  const raw = Buffer.concat(chunks).toString("utf8").trim();
-  if (!raw) return {} as T;
-  return JSON.parse(raw) as T;
 }
 
 function json(res: ServerResponse, statusCode: number, payload: unknown): void {
@@ -206,6 +209,10 @@ function contentType(filePath: string): string {
       return "text/javascript; charset=utf-8";
     case ".json":
       return "application/json; charset=utf-8";
+    case ".txt":
+      return "text/plain; charset=utf-8";
+    case ".xml":
+      return "application/xml; charset=utf-8";
     case ".svg":
       return "image/svg+xml";
     case ".ico":

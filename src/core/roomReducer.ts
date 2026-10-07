@@ -1,8 +1,11 @@
 import { classifyUtterance } from "./speechActClassifier.js";
+import { validCountTarget } from "./steering.js";
 import type { ActorId, Artifact, ClassifiedUtterance, RoomState, RoomTask, Utterance } from "./types.js";
 import { NODE_AGENT_IDS, VOICE_AGENT_IDS } from "./types.js";
 
-export function createVoiceRoom(target = 100): RoomState {
+/** Every caller that builds a counting room routes through here, so this is
+ *  where `task.target` stops being whatever the caller had. */
+export function createVoiceRoom(target: number = 100): RoomState {
   return {
     roomId: "voice-demo-room",
     mode: "execution",
@@ -12,7 +15,7 @@ export function createVoiceRoom(target = 100): RoomState {
     loopRisk: false,
     requiredNextAct: "task_action",
     turnQueue: [...VOICE_AGENT_IDS],
-    task: { kind: "count_to_n", target, current: 0, next: 1, completed: false },
+    task: { kind: "count_to_n", target: validCountTarget(target), current: 0, next: 1, completed: false },
     utterances: [],
     artifacts: [],
     version: 0,

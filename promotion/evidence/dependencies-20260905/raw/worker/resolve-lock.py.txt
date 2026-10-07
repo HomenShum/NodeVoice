@@ -1,0 +1,52 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,time
+S=Path(__file__).resolve().parent;C=S/'consumer';E=S/'evidence'
+plan=json.loads((E/'accepted-plan.json').read_text(encoding='utf-8'));originalPackage=(E/'original-package.json.txt').read_bytes();originalLock=(E/'original-package-lock.json.txt').read_bytes()
+assert (C/'package.json').read_bytes()==originalPackage and (C/'package-lock.json').read_bytes()==originalLock
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def write(p,j):p.write_text(json.dumps(j,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
+baseline=json.loads(originalLock);allowed={r['path'] for r in plan['rows']}
+installed=[]
+for row in plan['rows']:
+    for f in sorted((C/row['path']).rglob('*')):
+        if f.is_file():
+            assert not f.is_symlink() and not f.lstat().st_file_attributes&1024
+            b=f.read_bytes();installed.append({'path':f.relative_to(C).as_posix(),'bytes':len(b),'sha256':sha(b)})
+write(E/'installed-baseline-seven-packages.json',installed)
+for name in ['browserslist/index.js','browserslist/node.js','browserslist/package.json','nanoid/index.cjs','nanoid/non-secure/index.cjs','nanoid/package.json','postcss/lib/previous-map.js','postcss/lib/input.js','postcss/package.json']:
+    f=C/'node_modules'/name;(E/('baseline-'+name.replace('/','__')+'.txt')).write_bytes(f.read_bytes())
+env=os.environ.copy()
+for key in list(env):
+    if key.upper().startswith(('NODE_','OPENAI_','OPENROUTER_','ANTHROPIC_','GEMINI_','GOOGLE_','ELEVENLABS_','OLLAMA_','CONVEX_','VITE_','BROWSERSLIST_')):del env[key]
+env.update(SOURCE='deterministic',USE_OLLAMA='0')
+commands=[]
+def npm(label):
+    argv=['C:/nvm4w/nodejs/node.exe','C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js','install','--package-lock-only','--ignore-scripts','--no-audit','--no-fund']
+    start=time.monotonic()
+    with (E/(label+'.log')).open('wb') as out:r=subprocess.run(argv,cwd=C,env=env,stdout=out,stderr=subprocess.STDOUT,timeout=120)
+    commands.append({'label':label,'argv':argv,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'logSha256':sha((E/(label+'.log')).read_bytes())})
+    write(E/'resolution-commands.json',commands);assert r.returncode==0,label
+temporary=json.loads(originalPackage)
+for row in plan['rows']:temporary['devDependencies'][row['path'].removeprefix('node_modules/')]=row['targetVersion']
+(C/'package.json').write_text(json.dumps(temporary,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
+(E/'temporary-exact-package.json.txt').write_bytes((C/'package.json').read_bytes())
+try:
+    npm('resolve-temporary-exact')
+    proposed=json.loads((C/'package-lock.json').read_text(encoding='utf-8'))
+    (E/'temporary-resolved-lock.json.txt').write_bytes((C/'package-lock.json').read_bytes())
+    delta=[k for k in set(baseline['packages'])|set(proposed['packages']) if baseline['packages'].get(k)!=proposed['packages'].get(k)]
+    write(E/'temporary-row-delta.json',delta)
+    assert set(delta)<=allowed|{''},'Unrelated native lock-row churn; preserve and stop'
+finally:
+    (C/'package.json').write_bytes(originalPackage)
+npm('restore-native-root-metadata')
+final=json.loads((C/'package-lock.json').read_text(encoding='utf-8'))
+delta=[k for k in set(baseline['packages'])|set(final['packages']) if baseline['packages'].get(k)!=final['packages'].get(k)]
+assert set(delta)==allowed,delta
+assert {k:v for k,v in baseline.items() if k!='packages'}=={k:v for k,v in final.items() if k!='packages'}
+for row in plan['rows']:
+    actual=final['packages'][row['path']];assert actual['version']==row['targetVersion'] and actual['integrity']==row['targetIntegrity']
+assert (C/'package.json').read_bytes()==originalPackage
+receipt={'status':'PASS_EXACT_SEVEN_ROWS','packageRestoredByteExact':True,'changedRows':[{'path':p,'before':baseline['packages'][p],'after':final['packages'][p]} for p in sorted(delta)],'oldLockSha256':sha(originalLock),'newLockSha256':sha((C/'package-lock.json').read_bytes()),'nativeCommands':commands,'allOtherRowsAndTopMetadataExact':True,'resolver':'Native npm generated all version/resolved/integrity/row flags; temporary exact roots were removed before final install.'}
+write(E/'resolution-receipt.json',receipt);(E/'proposed-package-lock.json.txt').write_bytes((C/'package-lock.json').read_bytes())
+print(json.dumps({'status':receipt['status'],'changedRows':delta,'newLockSha256':receipt['newLockSha256'],'commands':commands}))

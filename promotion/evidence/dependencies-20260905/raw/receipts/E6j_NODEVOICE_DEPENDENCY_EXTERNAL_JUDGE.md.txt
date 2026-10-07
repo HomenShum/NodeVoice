@@ -1,0 +1,47 @@
+# NodeVoice dependency proposal: independent judgment
+
+**Builder — APPROVED for the scoped external lockfile transfer.**
+
+**Re your request:** execute planner, worker and judge recovery so each repository is usable and ready for handoff — this review accepts the seven dependency updates while keeping the earlier UI limitations visible. A developer receives a build that clears the recorded dependency findings; neither a clean audit nor identical browser assets establishes full product readiness.
+
+The proposal remains external at `D:/ProjectRecovery/nodevoice-dependency-repair-20260905/consumer`. Its **268 frozen files / 47,030,242 bytes** and **956 installed files** across the seven packages match their raw hashes. Among the 177 accepted source files, only `package-lock.json` changes; all 176 other files and the original `package.json` bytes remain exact. The reviewed NodeVoice checkout's original 177 source files and three built assets also remain unchanged.
+
+| Locked package | Before | Accepted proposal |
+| --- | --- | --- |
+| browserslist | 4.28.4 | 4.28.7 |
+| nanoid | 3.3.15 | 3.3.18 |
+| postcss | 8.5.16 | 8.5.23 |
+| caniuse-lite | 1.0.30001800 | 1.0.30001806 |
+| node-releases | 2.0.50 | 2.0.51 |
+| electron-to-chromium | 1.5.387 | 1.5.393 |
+| baseline-browser-mapping | 2.10.41 | 2.10.44 |
+
+Native npm generated these rows under the seven temporary exact constraints. The preserved temporary lock already contains the exact seven final rows. The original package was restored, and a second normal native resolution restored the root metadata. No unrelated row, new direct dependency, override or peer bypass remains. Registry version, tarball and integrity fields match the seven preserved official metadata responses. The four browser-data versions are the newly required Browserslist lower bounds; a three-row-only change would not satisfy this cohort.
+
+Fresh independent GitHub advisory reads match all six preserved advisory records. The selected versions clear the recorded [Browserslist inherited-key](https://github.com/advisories/GHSA-73wf-gq98-2v4g) and [cache](https://github.com/advisories/GHSA-c83g-rgw3-j3cx) ranges, nanoid [negative-size](https://github.com/advisories/GHSA-28wg-ghj8-5hjv) and [zero-size](https://github.com/advisories/GHSA-2v37-7h3g-55p8) ranges, and PostCSS [source-map traversal](https://github.com/advisories/GHSA-r28c-9q8g-f849) and [unset-from residual](https://github.com/advisories/GHSA-fxqj-rqcc-2cmp) ranges. The cache advisory's maintainer narrative says Medium while the database/feed classifies it high; both are retained. The older nanoid integer-overflow issue was already fixed below 3.3.15 and is not counted as a current additional defect.
+
+The unchanged observer calls the actual installed libraries, with generated files kept inside the owned scratch fixture. Raw JSONL agrees with both reports:
+
+- Both old identifier operations reached their start marker and exceeded the same 0.6-second child deadline; the updated negative/zero calls complete with empty IDs. The 128 fixed-six calls remain valid in both versions.
+- The permitted adjacent map is actually read before and after. The relative escape and absolute path without `from` read the owned outside marker before; afterward neither reads nor discloses it, while retaining the CSS rule.
+- Three inherited stats keys stop throwing. Immediate cache reuse remains; the initial result reference is evicted after 2,050 distinct queries in the update. Heap figures describe that bounded observation, not a throughput, total-memory or OOM guarantee.
+
+Normal `npm ci` passed. Actual full and `--omit=dev` audit commands separately returned zero findings. Doctor ran all three TypeScript projects and checked 56 citations without a broken reference. Proof reports **55 tests / nine files**, followed by the existing deterministic target-12/nine-turn CLI illustration. Build passed. These raw exits and logs were checked without repeating installation, canaries or application execution. Original three-high audit results and bounded canary failures remain intact.
+
+The actual rebuilt files are exactly the three assets in the accepted native UI proof:
+
+| File | Bytes | SHA-256 |
+| --- | ---: | --- |
+| `dist/assets/index-B4ZxCWpG.js` | 384,362 | `015fa6d9922b18d40d7d977f189c2b8f29dd7e6babb535f677225d5855ddb958` |
+| `dist/assets/index-DGAuW_yU.css` | 80,400 | `edf553215308bcafefc16d59d886e4314295100428c308410d60434436f22e10` |
+| `dist/index.html` | 862 | `2347ffd4bda2a550cb6d219c0937bd06b36694ba8f22bab5028bf5a4d6961572` |
+
+This permits a **historical evidence rebind**: the already judged local native count-100 observation used identical compiled bytes and unchanged application/server source. That earlier run displayed 100 at 125,736 ms and re-enabled Run at 126,829 ms under its unchanged 300-second deadline. **No new playback occurred.** The comparison does not renew external font delivery, network conditions, provider, audio, hosted backend or durable-room evidence. Additional upstream query/regex fixes within the Browserslist version are not blanket-certified; identical emitted CSS directly bounds this app's observed build result.
+
+All seven rows are development tooling. The documented start still uses the devDependency `tsx`, so a production-only install is not certified by an omit-dev audit. Zero audit findings describe the current feed, not absence of all vulnerabilities or a proven remote exploit boundary. Existing main-pane clipping, short-height and selected-option limitations, unspecified-host listener binding, physical-device/native-zoom/accessibility, audio and production acceptance remain open. Full dimension and overall grades remain **null**; target 4.5 is unchanged.
+
+The reused reviewer did not author this dependency repair, its canaries or the accepted NodeVoice UI implementation. One initial collector assertion expected byte-identical copies of the plan; the external copy escapes arrows in two JSON text lines. Parsed values and constraints are identical. Both raw hashes, the failed assertion and exact textual delta are retained; no candidate correction was needed.
+
+**60/60 checks passed; guard CLOSED.** This approves the exact lock SHA-256 `65661fb1fd16fc07dfd12310e738357c767984205cb70848ed387318f85de12b` for the next controlled transfer. Handoff/publication, actual Git-filtered/index/commit bindings and normal shared CI require their separate review. It does not authorize publishing all 268 scratch files. No source, index, ref, installation, provider or browser change was made by this reviewer.
+
+Evidence: [structured verdict](E6j_NODEVOICE_DEPENDENCY_EXTERNAL_JUDGE.json), [raw review manifest](E6j-nodevoice-dependency-external-judge-01/artifact-manifest.json), [actual lock delta](E6j-nodevoice-dependency-external-judge-01/actual-lock.diff), [independent compiled-asset rebind](E6j-nodevoice-dependency-external-judge-01/independent-build-rebind.json), [frozen proposal](E6j_NODEVOICE_DEPENDENCY_EXTERNAL_FREEZE.json).

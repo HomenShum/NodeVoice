@@ -1,0 +1,94 @@
+{
+  "status": "CLARIFIED_NO_ADDITIONAL_APP_RUN",
+  "originalPlanSha256": "4a3b670b67189f67fa15c9cf402f079501bbc3883f533f425cd1f5c637d6a3ab",
+  "annotationAddendumSha256": "ab627bccd067d19e5ae634fde1c12f3a0007a903e05a51cae066c19044d79f4e",
+  "effectiveBeforeCells": [
+    {
+      "cell": "room-390",
+      "originalCapture": "390-created-room",
+      "originalViewport": [
+        390,
+        844
+      ],
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "cell": "room-1440",
+      "originalCapture": "1440-no-key-halted",
+      "originalViewport": [
+        1440,
+        960
+      ],
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "cell": "demo-320",
+      "originalCapture": "320-demo-settled100",
+      "originalViewport": [
+        320,
+        800
+      ],
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "cell": "demo-390",
+      "originalCapture": "390-demo-settled100",
+      "originalViewport": [
+        390,
+        844
+      ],
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "cell": "demo-390-text200",
+      "originalCapture": "390-demo-settled100-computed-text200",
+      "originalViewport": [
+        390,
+        844
+      ],
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "cell": "demo-1440",
+      "originalCapture": "1440-demo-completed100",
+      "originalViewport": [
+        1440,
+        960
+      ],
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "cell": "demo-1440-text200",
+      "originalCapture": "1440-demo-settled100-computed-text200",
+      "originalViewport": [
+        1440,
+        960
+      ],
+      "regions": [
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "absentBeforeCells": "There is no retained320px room or doubled-text room before. Neither was recreated or asserted. All-seven room coverage and affected doubled-text room checks belong to the fresh after proof.",
+  "mechanism": "Only exact original PNG annotation in inert viewer. No API replay, application render, state or clock intervention, or fresh completion.",
+  "inspected": "Worker visually viewed all7 finished labelled PNGs; labels are readable in260px external gutters. Original app pixels keep native scale.",
+  "sourceOwnersUnchanged": true,
+  "originalPlanRetained": true
+}

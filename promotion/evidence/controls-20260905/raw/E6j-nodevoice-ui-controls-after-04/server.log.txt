@@ -1,0 +1,7 @@
+nodevoice server running on http://localhost:4993
+GET  /               tiny browser UI
+GET  /api/models     local model dropdown data
+POST /compare/demo   { target, turns, source, model, openaiModel }
+POST /voice/demo     { target, turns, useOllama, model }
+POST /nodeagents/run { goal, useOllama, model }
+LIVE /live/*         voice room (openai:false elevenlabs:false)

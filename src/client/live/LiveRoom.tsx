@@ -30,15 +30,12 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Qr } from "./Qr";
+import { MAX_AGENT_COUNT, activeSlots, agentIndexFromSlot, isAgentSlot, DEFAULT_GOAL } from "../../core/agents.js";
 import {
   useRoom,
   useActiveRooms,
   LIVE_BASE,
   CONVEX_MODE,
-  MAX_AGENT_COUNT,
-  activeSlots,
-  agentIndexFromSlot,
-  isAgentSlot,
   type CapabilityProfileId,
   type Slot,
   type MySlot,
@@ -48,8 +45,6 @@ import {
   type AgentOsPolicy,
 } from "./roomClient";
 
-const DEFAULT_GOAL =
-  "Plan a great Saturday for two friends in San Francisco and agree on a final 3-stop itinerary with rough timing.";
 const VISIBLE_UTTERANCE_LIMIT = 160;
 const WEB_RESEARCH_MODEL_ID = "gpt-4.1-mini";
 
@@ -203,7 +198,7 @@ function fallbackAgentName(slot: string): string {
 
 export default function LiveRoom() {
   const rm = useRoom();
-  const params = React.useMemo(() => new URLSearchParams(window.location.search), []);
+  const params = React.useMemo(() => new URLSearchParams(typeof window === "undefined" ? "" : window.location.search), []);
   // joinable via QR deep-link (?room=…) OR an in-app pick (active list / code)
   const [pendingJoin, setPendingJoin] = React.useState<string | null>(null);
   const joinId = params.get("room") ?? pendingJoin;
@@ -243,6 +238,8 @@ function Brand({ tag }: { tag: string }) {
 
 /* ── lobby (create) ────────────────────────────────────────────────── */
 function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom: (id: string) => void }) {
+  const [interactive, setInteractive] = React.useState(false);
+  React.useEffect(() => setInteractive(true), []);
   const [goal, setGoal] = React.useState(DEFAULT_GOAL);
   const [busy, setBusy] = React.useState(false);
   const [isPrivate, setIsPrivate] = React.useState(false);
@@ -273,7 +270,8 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
 
   return (
     <Shell>
-      <div className="flex flex-1 items-center justify-center px-6 py-12">
+      <fieldset disabled={!interactive} className="contents">
+      <main className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-xl">
           <div className="mb-6 flex justify-center">
             <Brand tag={`${agentCount} agents · one shared room · live voice`} />
@@ -289,8 +287,9 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             This device becomes <span className="font-semibold text-sky-300">Ada</span>. Add phones or tabs for more agent voices in the same shared room, then jump in by voice anytime.
           </p>
 
-          <label className="mt-6 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Shared goal</label>
+          <label htmlFor="shared-goal" className="mt-6 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Shared goal</label>
           <textarea
+            id="shared-goal"
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
             rows={3}
@@ -399,6 +398,7 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             <div className="mt-2.5 flex items-center gap-2">
               <input
                 value={joinCode}
+                aria-label="Room code"
                 onChange={(e) => setJoinCode(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") void joinByCode();
@@ -451,7 +451,8 @@ function Lobby({ rm, onJoinRoom }: { rm: ReturnType<typeof useRoom>; onJoinRoom:
             )}
           </div>
         </div>
-      </div>
+      </main>
+      </fieldset>
     </Shell>
   );
 }
@@ -539,9 +540,9 @@ function InRoom({ rm }: { rm: ReturnType<typeof useRoom> }) {
   return (
     <Shell locked>
       {/* top bar */}
-      <header className="z-20 flex shrink-0 items-center gap-3 border-b border-border bg-card/85 px-4 py-2.5 backdrop-blur">
+      <header className="z-20 flex shrink-0 flex-wrap items-center gap-3 border-b border-border bg-card/85 px-4 py-2.5 backdrop-blur">
         <Brand tag={`room ${room.code ?? room.id} · ${connectedLabel}`} />
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex max-w-full flex-wrap items-center gap-2">
           <span
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium",

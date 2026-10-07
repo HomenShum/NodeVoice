@@ -1,0 +1,114 @@
+[
+  {
+    "file": "browserslist-4.28.7.json",
+    "url": "https://registry.npmjs.org/browserslist/4.28.7",
+    "status": 200,
+    "bytes": 2309,
+    "sha256": "2d1264c2976acf7c9e781ebb20723cd0709c0f5dbb3c496b1062555ff7dcf366",
+    "at": "2026-09-05T22:48:20.481228+00:00"
+  },
+  {
+    "file": "nanoid-3.3.18.json",
+    "url": "https://registry.npmjs.org/nanoid/3.3.18",
+    "status": 200,
+    "bytes": 3107,
+    "sha256": "e068b45312ea854dd1b79c57aff7b7bc19966a7a36e3ccf2f5799c02a65710e4",
+    "at": "2026-09-05T22:48:20.481228+00:00"
+  },
+  {
+    "file": "postcss-8.5.23.json",
+    "url": "https://registry.npmjs.org/postcss/8.5.23",
+    "status": 200,
+    "bytes": 3292,
+    "sha256": "b33e1ab1884aa470afb3811f1fc80aebd60732caefd845e37437139453fa91ab",
+    "at": "2026-09-05T22:48:20.512181+00:00"
+  },
+  {
+    "file": "GHSA-c83g-rgw3-j3cx.json",
+    "url": "https://api.github.com/advisories/GHSA-c83g-rgw3-j3cx",
+    "status": 200,
+    "bytes": 7586,
+    "sha256": "a031cd6d6e3dd3e1639bc9e4edf9a6c06543cf3247f7fd21ef985314b31c88ef",
+    "at": "2026-09-05T22:48:20.637862+00:00"
+  },
+  {
+    "file": "GHSA-73wf-gq98-2v4g.json",
+    "url": "https://api.github.com/advisories/GHSA-73wf-gq98-2v4g",
+    "status": 200,
+    "bytes": 9208,
+    "sha256": "82784d919b3a8b4fad17b0fc72e05021ba0024d5f6cd7756893124a1a235bae6",
+    "at": "2026-09-05T22:48:20.795066+00:00"
+  },
+  {
+    "file": "GHSA-28wg-ghj8-5hjv.json",
+    "url": "https://api.github.com/advisories/GHSA-28wg-ghj8-5hjv",
+    "status": 200,
+    "bytes": 2460,
+    "sha256": "f6585f0f283a4e146731880912dea3c678adffa199d61222ecc4c2a68bb0a5c8",
+    "at": "2026-09-05T22:48:20.832521+00:00"
+  },
+  {
+    "file": "GHSA-2v37-7h3g-55p8.json",
+    "url": "https://api.github.com/advisories/GHSA-2v37-7h3g-55p8",
+    "status": 200,
+    "bytes": 4362,
+    "sha256": "2e4d40936b1501f8b41f5361eaec2c9301618429341570c4d3dda1fe74b6e631",
+    "at": "2026-09-05T22:48:20.862251+00:00"
+  },
+  {
+    "file": "GHSA-fxqj-rqcc-2cmp.json",
+    "url": "https://api.github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+    "status": 200,
+    "bytes": 7154,
+    "sha256": "616e9ac39682030948b95e68d5cafc80752728181194db0a951f97a05e0b9e6e",
+    "at": "2026-09-05T22:48:20.986899+00:00"
+  },
+  {
+    "file": "GHSA-r28c-9q8g-f849.json",
+    "url": "https://api.github.com/advisories/GHSA-r28c-9q8g-f849",
+    "status": 200,
+    "bytes": 7940,
+    "sha256": "153b44239442f93df686feb835b9bea3f306360ef6732fbd2b02a3fdab5be9b4",
+    "at": "2026-09-05T22:48:21.121734+00:00"
+  },
+  {
+    "file": "GHSA-xwg4-73v4-xw9w.json",
+    "url": "https://api.github.com/advisories/GHSA-xwg4-73v4-xw9w",
+    "status": 200,
+    "bytes": 6188,
+    "sha256": "7c44785ca0e0cf7ded77e50b26d454885a19b4579c0e035780c8c6726b99058e",
+    "at": "2026-09-05T22:48:21.158200+00:00"
+  },
+  {
+    "file": "browserslist-release.json",
+    "url": "https://api.github.com/repos/browserslist/browserslist/releases/tags/4.28.7",
+    "status": 200,
+    "bytes": 2302,
+    "sha256": "b93996fd9d9d8e997e66ec2d872c0a77e16ba29a1a194efc4814a18f86568b46",
+    "at": "2026-09-05T22:48:21.073943+00:00"
+  },
+  {
+    "file": "nanoid-release.json",
+    "url": "https://api.github.com/repos/ai/nanoid/releases/tags/3.3.18",
+    "status": 200,
+    "bytes": 1942,
+    "sha256": "0b35a29dadc530fb00a3aad2b35aa0b53394b89c06176cea57d0e271602da25a",
+    "at": "2026-09-05T22:48:21.193119+00:00"
+  },
+  {
+    "file": "postcss-release.json",
+    "url": "https://api.github.com/repos/postcss/postcss/releases/tags/8.5.23",
+    "status": 200,
+    "bytes": 2141,
+    "sha256": "552efb88c164e9f2b315391945f9383acd239d47c71c081818d31250c12ccd56",
+    "at": "2026-09-05T22:48:21.292749+00:00"
+  },
+  {
+    "file": "three-package-advisories-current.json",
+    "url": "https://registry.npmjs.org/-/npm/v1/security/advisories/bulk",
+    "status": 200,
+    "bytes": 2045,
+    "sha256": "675cda9355bc7df1e209969b37e8530a2dbee582e8badb46da7eb7a85bba568c",
+    "at": "2026-09-05T22:48:21.270687+00:00"
+  }
+]

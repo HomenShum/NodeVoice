@@ -19,7 +19,7 @@
  */
 
 /** Minimal shape needed here — a structural subset of BadAgentPrivateState. */
-export type BadFooterAgentState = { believesCurrent: number };
+type BadFooterAgentState = { believesCurrent: number };
 
 /** Minimal shape needed here — a structural subset of the compare step. */
 export type BadFooterStep = { agentStates?: BadFooterAgentState[] };

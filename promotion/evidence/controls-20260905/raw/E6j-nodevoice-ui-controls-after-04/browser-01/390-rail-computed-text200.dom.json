@@ -1,0 +1,438 @@
+{
+  "url": "http://127.0.0.1:4993/demo",
+  "width": 390,
+  "height": 844,
+  "body": "NodeVoice\nVOICE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nN\nTURNS\nSOURCE\nSim (scripted)\nOllama (local)\nOpenAI (live)\nIdle · listening\nlocal-first · no API keys\nWhy multi-agent voice loops get stuck — and how a shared room fixes it\n\nThree voice agents try to count together. With transcripts alone they loop on “yeah, exactly…” forever. Give them one server-authoritative room state and they count all the way up.\n\nvoice-a\nvoice-b\nvoice-c\nShared Room\nauthoritative state\nroomState\nscheduler\nclassifier\nRun the comparison\n\nRuns the bad vs. good demo side-by-side and narrates the good run aloud.\n\nCompare\nNodeAgent\nRun",
+  "scrollWidth": 390,
+  "scrollHeight": 844,
+  "reducedMotion": false,
+  "controls": [
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback",
+      "ariaLabel": null,
+      "title": "Voice model",
+      "placeholder": null,
+      "value": "gemma4_e2b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 101.546875,
+        "y": 68,
+        "width": 71.453125,
+        "height": 34,
+        "right": 173,
+        "bottom": 102
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "N"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 247.1875,
+        "y": 67,
+        "width": 108,
+        "height": 36,
+        "right": 355.1875,
+        "bottom": 103
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "TURNS"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 107.171875,
+        "y": 121,
+        "width": 108,
+        "height": 36,
+        "right": 215.171875,
+        "bottom": 157
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": true,
+      "focusVisible": true
+    },
+    {
+      "tag": "SELECT",
+      "text": "Sim (scripted)\nOllama (local)\nOpenAI (live)",
+      "ariaLabel": null,
+      "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+      "placeholder": null,
+      "value": "deterministic",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 124,
+        "y": 171,
+        "width": 9,
+        "height": 34,
+        "right": 133,
+        "bottom": 205
+      },
+      "fontSize": "24px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run the comparison",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 86.84375,
+        "y": 992.25,
+        "width": 216.296875,
+        "height": 44,
+        "right": 303.140625,
+        "bottom": 1036.25
+      },
+      "fontSize": "14.4572px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Compare",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 19,
+        "y": 746.484375,
+        "width": 98.234375,
+        "height": 28.515625,
+        "right": 117.234375,
+        "bottom": 775
+      },
+      "fontSize": "12.3919px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgb(24, 28, 37)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "NodeAgent",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 119.234375,
+        "y": 746.484375,
+        "width": 110.703125,
+        "height": 28.515625,
+        "right": 229.9375,
+        "bottom": 775
+      },
+      "fontSize": "12.3919px",
+      "color": "rgb(147, 158, 174)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": "Press Run to start the side-by-side comparison demo…",
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 16,
+        "y": 790,
+        "width": 251.25,
+        "height": 40,
+        "right": 267.25,
+        "bottom": 830
+      },
+      "fontSize": "28px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.261176 -0.00153025 -0.0153386 / 0.7)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 277.25,
+        "y": 788,
+        "width": 96.75,
+        "height": 44,
+        "right": 374,
+        "bottom": 832
+      },
+      "fontSize": "14.4572px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "text": "voice-a\nvoice-b\nvoice-c",
+      "rect": {
+        "x": -37.984375,
+        "y": 721.25,
+        "width": 108,
+        "height": 222,
+        "right": 70.015625,
+        "bottom": 943.25
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "voice-a",
+      "rect": {
+        "x": -37.984375,
+        "y": 721.25,
+        "width": 108,
+        "height": 70,
+        "right": 70.015625,
+        "bottom": 791.25
+      }
+    },
+    {
+      "tag": "svg",
+      "text": "",
+      "rect": {
+        "x": -28.984375,
+        "y": 750.25,
+        "width": 10.5,
+        "height": 12,
+        "right": -18.484375,
+        "bottom": 762.25
+      }
+    },
+    {
+      "tag": "rect",
+      "text": "",
+      "rect": {
+        "x": -26.796875,
+        "y": 751.875,
+        "width": 6.125,
+        "height": 8.75,
+        "right": -20.671875,
+        "bottom": 760.625
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "voice-b",
+      "rect": {
+        "x": -37.984375,
+        "y": 797.25,
+        "width": 108,
+        "height": 70,
+        "right": 70.015625,
+        "bottom": 867.25
+      }
+    },
+    {
+      "tag": "svg",
+      "text": "",
+      "rect": {
+        "x": -28.984375,
+        "y": 826.25,
+        "width": 10.5,
+        "height": 12,
+        "right": -18.484375,
+        "bottom": 838.25
+      }
+    },
+    {
+      "tag": "rect",
+      "text": "",
+      "rect": {
+        "x": -26.796875,
+        "y": 827.875,
+        "width": 6.125,
+        "height": 8.75,
+        "right": -20.671875,
+        "bottom": 836.625
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "voice-c",
+      "rect": {
+        "x": -37.984375,
+        "y": 873.25,
+        "width": 108,
+        "height": 70,
+        "right": 70.015625,
+        "bottom": 943.25
+      }
+    },
+    {
+      "tag": "svg",
+      "text": "",
+      "rect": {
+        "x": -28.984375,
+        "y": 902.25,
+        "width": 10.5,
+        "height": 12,
+        "right": -18.484375,
+        "bottom": 914.25
+      }
+    },
+    {
+      "tag": "rect",
+      "text": "",
+      "rect": {
+        "x": -26.796875,
+        "y": 903.875,
+        "width": 6.125,
+        "height": 8.75,
+        "right": -20.671875,
+        "bottom": 912.625
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "roomState\nscheduler\nclassifier",
+      "rect": {
+        "x": 290,
+        "y": 766.25,
+        "width": 138,
+        "height": 132,
+        "right": 428,
+        "bottom": 898.25
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "roomState",
+      "rect": {
+        "x": 290,
+        "y": 766.25,
+        "width": 138,
+        "height": 40,
+        "right": 428,
+        "bottom": 806.25
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "scheduler",
+      "rect": {
+        "x": 290,
+        "y": 812.25,
+        "width": 138,
+        "height": 40,
+        "right": 428,
+        "bottom": 852.25
+      }
+    },
+    {
+      "tag": "DIV",
+      "text": "classifier",
+      "rect": {
+        "x": 290,
+        "y": 858.25,
+        "width": 138,
+        "height": 40,
+        "right": 428,
+        "bottom": 898.25
+      }
+    }
+  ],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": [
+      {
+        "name": "Microsoft David - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Mark - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Zira - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Huihui - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Kangkang - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Yaoyao - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      }
+    ]
+  }
+}

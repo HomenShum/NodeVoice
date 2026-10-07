@@ -1,0 +1,4 @@
+{"name":"stats-toString","completed":true,"resultCount":31}
+{"name":"stats-constructor","completed":true,"resultCount":31}
+{"name":"stats-__proto__","completed":true,"resultCount":31}
+{"name":"sustained-cache","version":"4.28.7","distinctQueries":2050,"immediateSameReference":true,"afterSameReference":false,"sameValues":true,"checkpoints":[{"queries":512,"heapUsed":20195256},{"queries":1024,"heapUsed":20193424},{"queries":1536,"heapUsed":20197592},{"queries":2048,"heapUsed":20197160}],"limit":"Bounded2050-query cache-retention scenario; heap figures are observations, not a throughput benchmark or OOM attempt."}

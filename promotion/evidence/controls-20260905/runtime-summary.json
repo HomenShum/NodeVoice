@@ -1,0 +1,50 @@
+{
+  "kind": "privacy-safe runtime derivative",
+  "original": {
+    "path": "E6j-nodevoice-ui-controls-after-04/runtime-receipt.json",
+    "bytes": 4083,
+    "sha256": "454237704e8562f13d5b9e4ed6c473a5598ac54932c6dea270c305e78870848d",
+    "rawGitBlobSha1": "afacef7ab5d09732fcd9295a92e35873d0b8ea58"
+  },
+  "omission": "All environment names, inventories, prefixes, command arguments and process lists remain operator-local. This derivative is not the raw receipt.",
+  "fields": {
+    "name": "NODEVOICE-CURRENT-FIRST-USE-01",
+    "status": "PASS",
+    "startedAt": "2026-09-05T22:30:29.738393+00:00",
+    "finishedAt": "2026-09-05T22:33:05.687480+00:00",
+    "proofExitCode": 0,
+    "renderedDeadlineMs": 300000,
+    "outerControllerBudgetSeconds": 720,
+    "health": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "service": "nodevoice",
+        "live": {
+          "openai": false,
+          "elevenlabs": false
+        }
+      }
+    },
+    "actualListenAddress": [
+      {
+        "pid": 13248,
+        "ip": "::",
+        "port": 4993,
+        "family": "23"
+      },
+      {
+        "pid": 13248,
+        "ip": "0.0.0.0",
+        "port": 4993,
+        "family": "2"
+      }
+    ],
+    "listenerLimit": "Current server.listen(port) has no explicit host; using127.0.0.1 does not imply loopback-only listening.",
+    "portReleased": true,
+    "all177SourceBytesUnchanged": true,
+    "allDistBytesUnchanged": true,
+    "candidateRefsIndexStatusUnchanged": true,
+    "primaryRefsIndexStatusUnchanged": true
+  }
+}

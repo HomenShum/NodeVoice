@@ -1,0 +1,24 @@
+{
+  "owners": [
+    {
+      "path": "src/client/App.tsx",
+      "beforeSha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21",
+      "afterSha256": "63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc",
+      "bytes": 39924
+    },
+    {
+      "path": "src/client/live/LiveRoom.tsx",
+      "beforeSha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619",
+      "afterSha256": "517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174",
+      "bytes": 71178
+    }
+  ],
+  "allTouchedLF": true,
+  "reason": "Native padding and margin approaches each failed another width/direction. Wrapping complete existing groups removes focus-scroll dependence; actual236-check/49-capture diagnostic passed seven pairs plus doubled text. No handlers or shared primitive changes.",
+  "previousReceipt": "source-third-patch.json",
+  "diagnostic": "E6j-nodevoice-rail-wrap-diagnostic-01/browser-01/report.json",
+  "preservedFailures": [
+    "E6j-nodevoice-ui-controls-after-03/browser-01/report.json",
+    "E6j-nodevoice-rail-scroll-diagnostic-02/browser-01/report.json"
+  ]
+}

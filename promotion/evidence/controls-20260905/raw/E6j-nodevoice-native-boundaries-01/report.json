@@ -1,0 +1,892 @@
+{
+  "status": "PASS_PENDING_RASTER_READBACK",
+  "mechanism": "Annotation of frozen native capture. No app render, API replay, clock intervention or new completion.",
+  "cells": [
+    {
+      "name": "room-390",
+      "input": "390-created-room",
+      "w": 390,
+      "h": 844,
+      "boxes": [
+        {
+          "id": "A",
+          "name": "Room actions",
+          "y": 0,
+          "h": 99
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-created-room.png",
+          "sha256": "c5a5d2707a13747fddb3764a71b7ee05024673e44ab25c6d83e724384e9e4482"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-created-room.dom.json",
+          "sha256": "1d75d4e13ebcb6acdb2fde5dcc51f08b0372d8fd71d4f53238362610469796a0"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-created-room.fonts.json",
+          "sha256": "f4399fadf142d4e106538f8d86c2ac077dcb25fd4351d4ae9ddaeacedef64d6a"
+        }
+      ],
+      "originalPngSha256": "c5a5d2707a13747fddb3764a71b7ee05024673e44ab25c6d83e724384e9e4482",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        650,
+        844
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 99,
+            "top": 0,
+            "right": 390,
+            "bottom": 99,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 390,
+            "y": 49.5,
+            "width": 18,
+            "height": 2,
+            "top": 49.5,
+            "right": 408,
+            "bottom": 51.5,
+            "left": 390
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE A · Room actions",
+          "rect": {
+            "x": 408,
+            "y": 25.5,
+            "width": 228,
+            "height": 32,
+            "top": 25.5,
+            "right": 636,
+            "bottom": 57.5,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 390 × 844.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 408,
+            "y": 676,
+            "width": 222,
+            "height": 144,
+            "top": 676,
+            "right": 630,
+            "bottom": 820,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "room-1440",
+      "input": "1440-no-key-halted",
+      "w": 1440,
+      "h": 960,
+      "boxes": [
+        {
+          "id": "A",
+          "name": "Room actions",
+          "y": 0,
+          "h": 54
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-no-key-halted.png",
+          "sha256": "d33631ff0c01b3397e3c0a4a29d49d1435d08a4c08632f811dfa7d1d5fd0af72"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-no-key-halted.dom.json",
+          "sha256": "8eddc85712016af2c6367707dde31a54425e7ec07f6ca6d684744c46f6235e8b"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-no-key-halted.fonts.json",
+          "sha256": "4fb6a5d299a5f0b32b90ddd060c5120319907a6db0553e93c38c042e3a530443"
+        }
+      ],
+      "originalPngSha256": "d33631ff0c01b3397e3c0a4a29d49d1435d08a4c08632f811dfa7d1d5fd0af72",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        1700,
+        960
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 54,
+            "top": 0,
+            "right": 1440,
+            "bottom": 54,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 1440,
+            "y": 27,
+            "width": 18,
+            "height": 2,
+            "top": 27,
+            "right": 1458,
+            "bottom": 29,
+            "left": 1440
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE A · Room actions",
+          "rect": {
+            "x": 1458,
+            "y": 3,
+            "width": 228,
+            "height": 32,
+            "top": 3,
+            "right": 1686,
+            "bottom": 35,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 1440 × 960.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 1458,
+            "y": 792,
+            "width": 222,
+            "height": 144,
+            "top": 792,
+            "right": 1680,
+            "bottom": 936,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "demo-320",
+      "input": "320-demo-settled100",
+      "w": 320,
+      "h": 800,
+      "boxes": [
+        {
+          "id": "B",
+          "name": "Comparison controls",
+          "y": 0,
+          "h": 57
+        },
+        {
+          "id": "C",
+          "name": "Count and completion",
+          "y": 229,
+          "h": 37
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/320-demo-settled100.png",
+          "sha256": "295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/320-demo-settled100.dom.json",
+          "sha256": "95e6c33442ff6b6916fbe6d7267c7e5542ff3e3adc09762d0ecd3733e0367923"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/320-demo-settled100.fonts.json",
+          "sha256": "1ec24b11ea184b79f878f32248f46b5fdb84117a0413de1c08e8630ddaec3cf1"
+        }
+      ],
+      "originalPngSha256": "295c63edc94ab57b94be5cfe6e97e784da8c67819bb6f10fa75f9341078db1b7",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        580,
+        800
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 57,
+            "top": 0,
+            "right": 320,
+            "bottom": 57,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 320,
+            "y": 28.5,
+            "width": 18,
+            "height": 2,
+            "top": 28.5,
+            "right": 338,
+            "bottom": 30.5,
+            "left": 320
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE B · Comparison controls",
+          "rect": {
+            "x": 338,
+            "y": 4.5,
+            "width": 228,
+            "height": 50,
+            "top": 4.5,
+            "right": 566,
+            "bottom": 54.5,
+            "left": 338
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 229,
+            "width": 320,
+            "height": 37,
+            "top": 229,
+            "right": 320,
+            "bottom": 266,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 320,
+            "y": 247.5,
+            "width": 18,
+            "height": 2,
+            "top": 247.5,
+            "right": 338,
+            "bottom": 249.5,
+            "left": 320
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE C · Count and completion",
+          "rect": {
+            "x": 338,
+            "y": 223.5,
+            "width": 228,
+            "height": 50,
+            "top": 223.5,
+            "right": 566,
+            "bottom": 273.5,
+            "left": 338
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 320 × 800.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 338,
+            "y": 632,
+            "width": 222,
+            "height": 144,
+            "top": 632,
+            "right": 560,
+            "bottom": 776,
+            "left": 338
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "demo-390",
+      "input": "390-demo-settled100",
+      "w": 390,
+      "h": 844,
+      "boxes": [
+        {
+          "id": "B",
+          "name": "Comparison controls",
+          "y": 0,
+          "h": 57
+        },
+        {
+          "id": "C",
+          "name": "Count and completion",
+          "y": 193,
+          "h": 37
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100.png",
+          "sha256": "117d4e168fe650e1945900c04293c34df0059a3edf5343b2c0eaf11e5620889d"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100.dom.json",
+          "sha256": "aa2f51e53992b41f69b76cd6e3d8f950aab149e6bdab58eb9d26b1487f3ed35a"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100.fonts.json",
+          "sha256": "1ec24b11ea184b79f878f32248f46b5fdb84117a0413de1c08e8630ddaec3cf1"
+        }
+      ],
+      "originalPngSha256": "117d4e168fe650e1945900c04293c34df0059a3edf5343b2c0eaf11e5620889d",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        650,
+        844
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 57,
+            "top": 0,
+            "right": 390,
+            "bottom": 57,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 390,
+            "y": 28.5,
+            "width": 18,
+            "height": 2,
+            "top": 28.5,
+            "right": 408,
+            "bottom": 30.5,
+            "left": 390
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE B · Comparison controls",
+          "rect": {
+            "x": 408,
+            "y": 4.5,
+            "width": 228,
+            "height": 50,
+            "top": 4.5,
+            "right": 636,
+            "bottom": 54.5,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 193,
+            "width": 390,
+            "height": 37,
+            "top": 193,
+            "right": 390,
+            "bottom": 230,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 390,
+            "y": 211.5,
+            "width": 18,
+            "height": 2,
+            "top": 211.5,
+            "right": 408,
+            "bottom": 213.5,
+            "left": 390
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE C · Count and completion",
+          "rect": {
+            "x": 408,
+            "y": 187.5,
+            "width": 228,
+            "height": 50,
+            "top": 187.5,
+            "right": 636,
+            "bottom": 237.5,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 390 × 844.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 408,
+            "y": 676,
+            "width": 222,
+            "height": 144,
+            "top": 676,
+            "right": 630,
+            "bottom": 820,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "demo-390-text200",
+      "input": "390-demo-settled100-computed-text200",
+      "w": 390,
+      "h": 844,
+      "boxes": [
+        {
+          "id": "B",
+          "name": "Comparison controls",
+          "y": 0,
+          "h": 61
+        },
+        {
+          "id": "C",
+          "name": "Count and completion",
+          "y": 432,
+          "h": 57
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100-computed-text200.png",
+          "sha256": "8003d581d1ff3998bc2f61ae89b2771c0a6e703862c6b8d6b82fd2520dfeee55"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100-computed-text200.dom.json",
+          "sha256": "b83921d9892f7b6962fdb6b46bfbbe28b0168c70712a2d33b3afcfaf0aa2fe2b"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/390-demo-settled100-computed-text200.fonts.json",
+          "sha256": "1ec24b11ea184b79f878f32248f46b5fdb84117a0413de1c08e8630ddaec3cf1"
+        }
+      ],
+      "originalPngSha256": "8003d581d1ff3998bc2f61ae89b2771c0a6e703862c6b8d6b82fd2520dfeee55",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        650,
+        844
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 61,
+            "top": 0,
+            "right": 390,
+            "bottom": 61,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 390,
+            "y": 30.5,
+            "width": 18,
+            "height": 2,
+            "top": 30.5,
+            "right": 408,
+            "bottom": 32.5,
+            "left": 390
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE B · Comparison controls",
+          "rect": {
+            "x": 408,
+            "y": 6.5,
+            "width": 228,
+            "height": 50,
+            "top": 6.5,
+            "right": 636,
+            "bottom": 56.5,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 432,
+            "width": 390,
+            "height": 57,
+            "top": 432,
+            "right": 390,
+            "bottom": 489,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 390,
+            "y": 460.5,
+            "width": 18,
+            "height": 2,
+            "top": 460.5,
+            "right": 408,
+            "bottom": 462.5,
+            "left": 390
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE C · Count and completion",
+          "rect": {
+            "x": 408,
+            "y": 436.5,
+            "width": 228,
+            "height": 50,
+            "top": 436.5,
+            "right": 636,
+            "bottom": 486.5,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 390 × 844.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 408,
+            "y": 676,
+            "width": 222,
+            "height": 144,
+            "top": 676,
+            "right": 630,
+            "bottom": 820,
+            "left": 408
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "demo-1440",
+      "input": "1440-demo-completed100",
+      "w": 1440,
+      "h": 960,
+      "boxes": [
+        {
+          "id": "B",
+          "name": "Comparison controls",
+          "y": 0,
+          "h": 57
+        },
+        {
+          "id": "C",
+          "name": "Count and completion",
+          "y": 162,
+          "h": 37
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-completed100.png",
+          "sha256": "63fb0bc59f275b016ee156bd2c4d735dca852893b152ddd91b87c024c3de3c75"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-completed100.dom.json",
+          "sha256": "4005a21078091c64e01ce05b95f2b918b48016ccba0573cf76518eb8f981fcf1"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-completed100.fonts.json",
+          "sha256": "3d538de54241c4266507c8696e21a095599188be58cb79db86570d52c6493b2a"
+        }
+      ],
+      "originalPngSha256": "63fb0bc59f275b016ee156bd2c4d735dca852893b152ddd91b87c024c3de3c75",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        1700,
+        960
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 57,
+            "top": 0,
+            "right": 1440,
+            "bottom": 57,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 1440,
+            "y": 28.5,
+            "width": 18,
+            "height": 2,
+            "top": 28.5,
+            "right": 1458,
+            "bottom": 30.5,
+            "left": 1440
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE B · Comparison controls",
+          "rect": {
+            "x": 1458,
+            "y": 4.5,
+            "width": 228,
+            "height": 50,
+            "top": 4.5,
+            "right": 1686,
+            "bottom": 54.5,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 162,
+            "width": 1440,
+            "height": 37,
+            "top": 162,
+            "right": 1440,
+            "bottom": 199,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 1440,
+            "y": 180.5,
+            "width": 18,
+            "height": 2,
+            "top": 180.5,
+            "right": 1458,
+            "bottom": 182.5,
+            "left": 1440
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE C · Count and completion",
+          "rect": {
+            "x": 1458,
+            "y": 156.5,
+            "width": 228,
+            "height": 50,
+            "top": 156.5,
+            "right": 1686,
+            "bottom": 206.5,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 1440 × 960.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 1458,
+            "y": 792,
+            "width": 222,
+            "height": 144,
+            "top": 792,
+            "right": 1680,
+            "bottom": 936,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    },
+    {
+      "name": "demo-1440-text200",
+      "input": "1440-demo-settled100-computed-text200",
+      "w": 1440,
+      "h": 960,
+      "boxes": [
+        {
+          "id": "B",
+          "name": "Comparison controls",
+          "y": 0,
+          "h": 86
+        },
+        {
+          "id": "C",
+          "name": "Count and completion",
+          "y": 238,
+          "h": 57
+        }
+      ],
+      "inputs": [
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-settled100-computed-text200.png",
+          "sha256": "0601d06c56f10c404b8b0cfad08ae0a6e08bb73849ea8a6e0667f0d3711753fa"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-settled100-computed-text200.dom.json",
+          "sha256": "f1012fa23fc24f6d7fa26f418b1eb8c236a9c3eb7380812e9fb235aa0ecabe80"
+        },
+        {
+          "path": "E6j-nodevoice-first-use-fonts-02/browser-01/1440-demo-settled100-computed-text200.fonts.json",
+          "sha256": "3d538de54241c4266507c8696e21a095599188be58cb79db86570d52c6493b2a"
+        }
+      ],
+      "originalPngSha256": "0601d06c56f10c404b8b0cfad08ae0a6e08bb73849ea8a6e0667f0d3711753fa",
+      "viewerDomRestored": true,
+      "annotationCanvas": [
+        1700,
+        960
+      ],
+      "annotation": [
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 86,
+            "top": 0,
+            "right": 1440,
+            "bottom": 86,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 1440,
+            "y": 43,
+            "width": 18,
+            "height": 2,
+            "top": 43,
+            "right": 1458,
+            "bottom": 45,
+            "left": 1440
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE B · Comparison controls",
+          "rect": {
+            "x": 1458,
+            "y": 19,
+            "width": 228,
+            "height": 50,
+            "top": 19,
+            "right": 1686,
+            "bottom": 69,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 238,
+            "width": 1440,
+            "height": 57,
+            "top": 238,
+            "right": 1440,
+            "bottom": 295,
+            "left": 0
+          },
+          "borderWidth": "3px"
+        },
+        {
+          "text": "",
+          "rect": {
+            "x": 1440,
+            "y": 266.5,
+            "width": 18,
+            "height": 2,
+            "top": 266.5,
+            "right": 1458,
+            "bottom": 268.5,
+            "left": 1440
+          },
+          "borderWidth": "2px"
+        },
+        {
+          "text": "CHANGE C · Count and completion",
+          "rect": {
+            "x": 1458,
+            "y": 242.5,
+            "width": 228,
+            "height": 50,
+            "top": 242.5,
+            "right": 1686,
+            "bottom": 292.5,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        },
+        {
+          "text": "ANNOTATED NATIVE CAPTURE\n\nOriginal app viewport 1440 × 960.\n\nLabels occupy an external gutter. Original pixels were captured during the completed first-use run. No app replay or new completion.",
+          "rect": {
+            "x": 1458,
+            "y": 792,
+            "width": 222,
+            "height": 144,
+            "top": 792,
+            "right": 1680,
+            "bottom": 936,
+            "left": 1458
+          },
+          "borderWidth": "0px"
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "browserClosed": true
+}

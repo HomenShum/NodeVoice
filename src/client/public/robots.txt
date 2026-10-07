@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /demo
+Disallow: /api/
+Disallow: /live/
+Disallow: /*?*room=
+
+Sitemap: https://nodevoice.vercel.app/sitemap.xml

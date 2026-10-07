@@ -1,0 +1,236 @@
+{
+  "status": "APPROVED_SCOPED_TWO_OWNER_LAYOUT_SOURCE_PENDING_PUBLICATION_SHARED_CI",
+  "at": "2026-09-05T22:50:05.526713+00:00",
+  "mode": "Builder / independent nonauthor source and raw native-proof judge",
+  "requestTraceability": "Re the request to execute planner-worker-judge recovery and improve each repository for developer/user handoff including visual, responsiveness and interaction standards: independently approve the bounded NodeVoice controls/status layout repair while retaining full-readiness gaps.",
+  "independence": "Reused nonauthor of the two-owner implementation and native after runs. Previously authored baseline/first-use and plan/boundary judgments; no fresh reviewer-context claim. No new browser/125s run was performed because source-bound current native proofs cover the scoped claim.",
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+  "base": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+  "freezeSha256": "8bc83985cdab617ecaf03e1ee80ae0264ab995dfbc0beae9aabc1c5e47a01eff",
+  "owners": [
+    {
+      "path": "src/client/App.tsx",
+      "beforeSha256": "47a128cbf27e11af668f115bc16aab52c5039b6c2dfd240ed204e5ca8b8b0c21",
+      "afterSha256": "63335fe19adfd1a3922578d8443612a2959b00f71b7fb2f68c17317563ad5ebc",
+      "bytes": 39924
+    },
+    {
+      "path": "src/client/live/LiveRoom.tsx",
+      "beforeSha256": "db053002338ac753860c317ca1752eed8e115a531e0a186e510d5309f0469619",
+      "afterSha256": "517fe329c062326effc8987d567725ef3792912907642eb3b77671104d862174",
+      "bytes": 71178
+    }
+  ],
+  "sourceReview": {
+    "owners": 2,
+    "protectedOtherSource": 175,
+    "sourceFiles": 177,
+    "distFiles": 3,
+    "operatorArtifactFiles": 1075,
+    "operatorArtifactBytes": 53699862,
+    "wholeFileLayoutOnlyReconstruction": true,
+    "layoutGuardSha256": "44c889ec30f17f2c2e3c065a19f53101fd25cea878f7dd165ff3016bcc81fee6",
+    "sourceSemantics": "Only existing header/group/progress/numeric class attributes plus named Comparison controls group are changed. Source handlers, state, conditional visibility, provider paths, playback, reducer and shared primitives are byte-identical. Numeric max100 fits tested100. Flex wrapping eliminates observed first/last native focus clipping from prior horizontal-rail attempts.",
+    "backendEightPointChangeReview": "No backend/infra/tool endpoint change; all backend source bytes unchanged. Existing backend shortcomings are not certified or repaired by this layout slice."
+  },
+  "ordinaryCommands": [
+    {
+      "script": "doctor",
+      "sha256": "fcc0480e6c6e03d1d4a4d8728b3241e1515f3bfa4e38e4c94e66b2856c8274db",
+      "seconds": 5.515,
+      "scopeLines": [
+        "> nodevoice@0.1.0 doctor",
+        "> npm run check && npm run check:client && npm run check:convex && npm run check:citations",
+        "> nodevoice@0.1.0 check",
+        "> tsc --noEmit",
+        "> nodevoice@0.1.0 check:client",
+        "> tsc --noEmit -p tsconfig.client.json",
+        "> nodevoice@0.1.0 check:convex",
+        "> tsc --noEmit -p convex/tsconfig.json",
+        "> nodevoice@0.1.0 check:citations",
+        "> node scripts/check-citations.mjs",
+        "56 citations checked, 0 broken"
+      ]
+    },
+    {
+      "script": "proof",
+      "sha256": "263d795db5f37a31135ed4fc166e8d16901c840777d15e7dcf18e9ea2eb68bc5",
+      "seconds": 4.485,
+      "scopeLines": [
+        "> nodevoice@0.1.0 proof",
+        "> npm run test && npm run demo:compare",
+        "> nodevoice@0.1.0 test",
+        "> vitest run --root .",
+        " Test Files  9 passed (9)",
+        "      Tests  55 passed (55)",
+        "> nodevoice@0.1.0 demo:compare",
+        "> tsx src/compare/runComparisonMvp.ts"
+      ]
+    },
+    {
+      "script": "build",
+      "sha256": "1e64e8773b5daed627b35dd9292b1ec308ed228091ea22a34b8837d4264a28ba",
+      "seconds": 1.047,
+      "scopeLines": [
+        "> nodevoice@0.1.0 build",
+        "> vite build",
+        "\u2713 built in 541ms"
+      ]
+    }
+  ],
+  "nativeProof": {
+    "rawChecks": 337,
+    "rawCaptures": 94,
+    "recordedNativeActions": 34,
+    "recordedFullBoxChecks": 209,
+    "authoritativeStateTogglePairs": 9,
+    "independentRawAssertions": 879,
+    "assertionMeaning": "Custody/raw semantic checks, not879 fresh browser scenarios.",
+    "viewedPngs": 10,
+    "sameRequest": {
+      "target": 100,
+      "turns": 100,
+      "source": "deterministic",
+      "useOllama": false,
+      "model": "gemma4_e2b"
+    },
+    "visible100Ms": 125736,
+    "RunEnabledMs": 126829,
+    "unchangedDeadlineMs": 300000,
+    "samples100Sequential": true,
+    "actualProviderModel": null,
+    "provenance": "deterministic; actual reducer/scheduler; modelId null; no fallback turns. Selected model metadata is not actual provider execution.",
+    "fullPairs": [
+      [
+        320,
+        800
+      ],
+      [
+        360,
+        800
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1024,
+        768
+      ],
+      [
+        1440,
+        960
+      ],
+      [
+        1920,
+        1080
+      ]
+    ],
+    "special": "390/1440 computed font200 and reduced-motion observations; one real native completion is reused in responsive captures, not100 newly completed for every viewport.",
+    "focus": "Pointer and native Tab/ShiftTab verify complete wrapper/native input bounds and focus-visible; native spinner99\u2192100 and ArrowDown/ArrowUp restore both inputs.",
+    "room": "Two contexts occupy two seats. Deterministic correction autostarts once and produces1 missing-key error; explicit native Start adds1 distinct error; turn remains0/next5, both errors retained across explicit root navigation. Invite/State toggles preserve authoritative state, including double activation and10cycles in named sustained cell.",
+    "events": "0 unexpected events;1 intentional EventSource abort on explicit navigation. Exact public CSS/font payloads allowed; no provider/API replay.",
+    "fontScope": "94 FontFaceSet/actual glyph records checked;10 actual PNGs viewed. Existing-element computed font doubling is not native browser zoom, and does not certify every dynamically added descendant font."
+  },
+  "causalEvidence": {
+    "before": "Frozen actual native before PNGs plus previously judged external3px annotation, not a replayed fresh before render. Original control/status clipping is visible.",
+    "after": "Final after04 wraps the existing group and header;209 recorded complete-box/hit checks include full wrappers, eliminating the interior-only earlier oracle gap.",
+    "preservedFailures": [
+      {
+        "path": "E6j-nodevoice-first-use-01",
+        "status": "FAIL",
+        "meaning": "Public fonts deliberately blocked; functional completion separately retained."
+      },
+      {
+        "path": "E6j-nodevoice-ui-controls-after-01",
+        "status": "raw PASS, scoped rail failure",
+        "meaning": "First oracle measured native interior and missed wider complete control; preserved without relabeling raw result."
+      },
+      {
+        "path": "E6j-nodevoice-ui-controls-after-02",
+        "status": "FAIL",
+        "meaning": "Native forward Tab Source clips at320; no long playback."
+      },
+      {
+        "path": "E6j-nodevoice-ui-controls-after-03",
+        "status": "FAIL",
+        "meaning": "Padding fixed320 but reverse Tab Voice clips360; no long playback."
+      },
+      {
+        "path": "E6j-nodevoice-rail-scroll-diagnostic-02",
+        "status": "FAIL",
+        "meaning": "Margin-only native focus still clips Source320; temporary styles exactly restored."
+      },
+      {
+        "path": "E6j-nodevoice-rail-scroll-diagnostic-01",
+        "status": "diagnostic PASS320 only",
+        "meaning": "Insufficient cross-width oracle; not final product certification."
+      },
+      {
+        "path": "E6j-nodevoice-rail-wrap-diagnostic-01",
+        "status": "diagnostic PASS236/49",
+        "meaning": "Wrapping with padding/margin zero removes focus-scroll dependence; temporary styles exactly restored."
+      }
+    ],
+    "fullCheckNoWeakening": true
+  },
+  "findings": [],
+  "holds": [
+    "Full comparison/room panes remain clipped on phones and at enlarged text; measured overflow list retains11 captures with off-viewport descendants despite page scrollWidth equaling viewport. Do not call whole page overflow-free.",
+    "Selected option ellipsis is unchanged; full model/source selection content readability remains held.",
+    "At390 computed-font200 the taller header/hero leaves little or no detailed-pane viewport. Run/count remain reachable in the named proof, not a full short-height/mobile reading solution.",
+    "Room QR presence toggles are semantically tested while waiting; filled-seat Invite and QR/inspector/error full viewport readability at every cell remain outside this header slice.",
+    "No physical-device, native zoom, comprehensive accessibility, audio usability, real provider/model/microphone, hosted Convex, durable restart or production acceptance.",
+    "Original package audit3high remains; no dependency change or fresh audit in this slice.",
+    "Server still listens on unspecified host :: and0.0.0.0. Using127.0.0.1 does not mean loopback-only binding.",
+    "Runtime receipts contain a credential-shaped environment variable name. Originals stay operator-local; forthcoming publication must omit name inventories through explicit whitelisted derivatives/exclusions with exact original hash custody.",
+    "HANDOFF/evidence publication, exact committed Git-filtered bytes and shared CI are separate next steps; no commit/push/deployed claim from this approval."
+  ],
+  "historicalCustody": [
+    {
+      "manifest": "E6j-nodevoice-first-use-01/artifact-manifest.json",
+      "count": 147,
+      "exact": true
+    },
+    {
+      "manifest": "E6j-nodevoice-first-use-fonts-02/artifact-manifest.json",
+      "count": 174,
+      "exact": true
+    },
+    {
+      "manifest": "E6j-nodevoice-native-boundaries-01/manifest.json",
+      "count": 37,
+      "exact": true
+    }
+  ],
+  "fullDimensions": {
+    "Visual": null,
+    "Responsive": null,
+    "Interaction": null,
+    "Accessibility": null,
+    "Reliability": null,
+    "Performance": null,
+    "DeveloperExperience": null,
+    "AgentReadiness": null
+  },
+  "gradesAssigned": false,
+  "evidence": {
+    "operatorManifest": {
+      "path": "E6j-nodevoice-ui-final-freeze-01/artifact-manifest.json",
+      "bytes": 298723,
+      "sha256": "3df49bd4843466ce3e8d39751b4c9d65c401a5cc47c09b0eb88b3bf0f5e90956",
+      "rawGitBlobSha1": "7091a5dc5cfc59acaf015a8ec220afaae7b6d673"
+    },
+    "independentManifest": "E6j-nodevoice-ui-independent-02/manifest.json",
+    "independentManifestSha256": "bd606865e441db8c9dd35aea77bf874c9a19a8ef2777359cb79ab49b2d79c417",
+    "independentFiles": 37,
+    "sourceClose": "E6j-nodevoice-ui-independent-02/source-custody-closed.json",
+    "rawSemantics": "E6j-nodevoice-ui-independent-02/raw-semantics.json",
+    "viewedPixels": "E6j-nodevoice-ui-independent-02/independently-viewed-pixels.json"
+  },
+  "guard": "CLOSED: current177source/3dist/1075operator artifacts exact; candidate/original primary HEAD/refs/index/status match frozen formulas and entry bytes;4993 not listening. No source/index/ref or runtime mutation, install/test/provider/browser rerun, commit/push/deploy by judge."
+}

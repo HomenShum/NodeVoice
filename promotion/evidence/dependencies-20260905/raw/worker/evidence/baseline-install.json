@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "scratch": "D:\\ProjectRecovery\\nodevoice-dependency-repair-20260905",
+  "copiedSourceCount": 177,
+  "allCopiedExact": true,
+  "argv": [
+    "C:/nvm4w/nodejs/node.exe",
+    "C:/nvm4w/nodejs/node_modules/npm/bin/npm-cli.js",
+    "ci"
+  ],
+  "exitCode": 0,
+  "seconds": 9.343,
+  "logSha256": "4aba909bb1acbbe17530bd3c23dfbddd4fcb055bcce946f3e281ba474cc4da9c",
+  "environment": "Names-only scrub used internally; neither values nor inherited names persisted. SOURCE deterministic/USE_OLLAMA0; no private env file copied."
+}

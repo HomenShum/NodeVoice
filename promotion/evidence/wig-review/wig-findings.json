@@ -1,0 +1,1418 @@
+{
+  "review": "Vercel Web Interface Guidelines",
+  "guidelinesSource": "https://vercel.com/design/guidelines",
+  "guidelinesFetched": "2026-08-13",
+  "method": "Rendered app driven in headless Chromium (Playwright). Every finding carries the DOM measurement that produced it. This is NOT a Lighthouse score — condition 8 holds those, and the two measure different things.",
+  "capturedAt": "2026-08-14T01:51:41.360Z",
+  "baseUrl": "http://127.0.0.1:4901",
+  "surfaces": [
+    "lobby-desktop",
+    "lobby-mobile",
+    "demo-desktop",
+    "demo-mobile"
+  ],
+  "majorCount": 12,
+  "minorCount": 21,
+  "findings": [
+    {
+      "section": "Forms",
+      "guideline": "Labels everywhere — every control has a <label> or an associated label",
+      "severity": "major",
+      "page": "lobby-desktop",
+      "detail": "2 visible control(s) reach the accessibility tree with no name. A screen-reader user hears an unnamed field.",
+      "evidence": [
+        {
+          "tag": "textarea",
+          "selector": "textarea[placeholder=\"What should the agents work on together?\"]",
+          "title": null,
+          "placeholder": "What should the agents work on together?",
+          "nameSource": null
+        },
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"e.g. x7k2mp\"]",
+          "title": null,
+          "placeholder": "e.g. x7k2mp",
+          "nameSource": null
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Match visual & hit targets — expand targets <24px to >=24px",
+      "severity": "major",
+      "page": "lobby-desktop",
+      "detail": "1 interactive element(s) measure under 24px on their short side.",
+      "evidence": [
+        {
+          "text": "or watch the bad-vs-good demo →",
+          "tag": "a",
+          "inline": false,
+          "w": 198,
+          "h": 16
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Icon-only buttons are named — provide a descriptive aria-label",
+      "severity": "minor",
+      "page": "lobby-desktop",
+      "detail": "2 icon-only button(s) are named ONLY by title. The name does reach the accessibility tree — axe's button-name rule passes — but a title never appears for a touch user, who sees an unlabelled icon.",
+      "evidence": [
+        {
+          "title": "One fewer starting agent",
+          "nameSource": "title"
+        },
+        {
+          "title": "One more starting agent",
+          "nameSource": "title"
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Semantics before ARIA — prefer native elements; headings & landmarks",
+      "severity": "minor",
+      "page": "lobby-desktop",
+      "detail": "No <main> landmark, so every region of the page is orphaned and a landmark-navigating screen-reader user has nothing to jump to.",
+      "evidence": {
+        "mainLandmarks": 0
+      }
+    },
+    {
+      "section": "Content",
+      "guideline": "Headings & skip link — hierarchical h1-h6 and a 'Skip to content' link",
+      "severity": "minor",
+      "page": "lobby-desktop",
+      "detail": "No skip link. A keyboard user re-tabs the header on every page.",
+      "evidence": {
+        "headings": [
+          1,
+          2,
+          3
+        ],
+        "skipLink": false
+      }
+    },
+    {
+      "section": "Animations",
+      "guideline": "Honor prefers-reduced-motion — provide a reduced-motion variant",
+      "severity": "major",
+      "page": "lobby-desktop",
+      "detail": "6 CSS rule(s) declare a transition or animation and no rule anywhere responds to prefers-reduced-motion.",
+      "evidence": {
+        "animatedRules": 6,
+        "reducedMotionRules": 0
+      }
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Prevent double-tap zoom on controls — touch-action: manipulation",
+      "severity": "minor",
+      "page": "lobby-desktop",
+      "detail": "9 button(s) leave touch-action at auto, so a double tap zooms instead of acting.",
+      "evidence": {
+        "buttons": 9
+      }
+    },
+    {
+      "section": "Forms",
+      "guideline": "Don't pre-disable submit — surface validation instead",
+      "severity": "minor",
+      "page": "lobby-desktop",
+      "detail": "1 button(s) are disabled before the user has done anything.",
+      "evidence": [
+        "Join"
+      ]
+    },
+    {
+      "section": "Forms",
+      "guideline": "Labels everywhere — every control has a <label> or an associated label",
+      "severity": "major",
+      "page": "lobby-mobile",
+      "detail": "2 visible control(s) reach the accessibility tree with no name. A screen-reader user hears an unnamed field.",
+      "evidence": [
+        {
+          "tag": "textarea",
+          "selector": "textarea[placeholder=\"What should the agents work on together?\"]",
+          "title": null,
+          "placeholder": "What should the agents work on together?",
+          "nameSource": null
+        },
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"e.g. x7k2mp\"]",
+          "title": null,
+          "placeholder": "e.g. x7k2mp",
+          "nameSource": null
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Match visual & hit targets — 44px minimum on mobile",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "6 interactive element(s) are under 44px on their short side at 390px.",
+      "evidence": [
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 64,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "or watch the bad-vs-good demo →",
+          "tag": "a",
+          "inline": false,
+          "w": 169,
+          "h": 32
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 144,
+          "h": 40
+        },
+        {
+          "text": "Join",
+          "tag": "button",
+          "inline": false,
+          "w": 84,
+          "h": 36
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Mobile input size — <input> font >=16px to prevent iOS Safari auto-zoom",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "3 control(s) render below 16px, so iOS Safari zooms the page on focus.",
+      "evidence": [
+        {
+          "tag": "textarea",
+          "fontSize": 14,
+          "selector": "textarea"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Icon-only buttons are named — provide a descriptive aria-label",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "2 icon-only button(s) are named ONLY by title. The name does reach the accessibility tree — axe's button-name rule passes — but a title never appears for a touch user, who sees an unlabelled icon.",
+      "evidence": [
+        {
+          "title": "One fewer starting agent",
+          "nameSource": "title"
+        },
+        {
+          "title": "One more starting agent",
+          "nameSource": "title"
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Semantics before ARIA — prefer native elements; headings & landmarks",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "No <main> landmark, so every region of the page is orphaned and a landmark-navigating screen-reader user has nothing to jump to.",
+      "evidence": {
+        "mainLandmarks": 0
+      }
+    },
+    {
+      "section": "Content",
+      "guideline": "Headings & skip link — hierarchical h1-h6 and a 'Skip to content' link",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "No skip link. A keyboard user re-tabs the header on every page.",
+      "evidence": {
+        "headings": [
+          1,
+          2,
+          3
+        ],
+        "skipLink": false
+      }
+    },
+    {
+      "section": "Animations",
+      "guideline": "Honor prefers-reduced-motion — provide a reduced-motion variant",
+      "severity": "major",
+      "page": "lobby-mobile",
+      "detail": "6 CSS rule(s) declare a transition or animation and no rule anywhere responds to prefers-reduced-motion.",
+      "evidence": {
+        "animatedRules": 6,
+        "reducedMotionRules": 0
+      }
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Prevent double-tap zoom on controls — touch-action: manipulation",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "9 button(s) leave touch-action at auto, so a double tap zooms instead of acting.",
+      "evidence": {
+        "buttons": 9
+      }
+    },
+    {
+      "section": "Forms",
+      "guideline": "Don't pre-disable submit — surface validation instead",
+      "severity": "minor",
+      "page": "lobby-mobile",
+      "detail": "1 button(s) are disabled before the user has done anything.",
+      "evidence": [
+        "Join"
+      ]
+    },
+    {
+      "section": "Forms",
+      "guideline": "Labels everywhere — every control has a <label> or an associated label",
+      "severity": "major",
+      "page": "demo-desktop",
+      "detail": "1 visible control(s) reach the accessibility tree with no name. A screen-reader user hears an unnamed field.",
+      "evidence": [
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"Press Run to start the side-by-side comparison demo…\"]",
+          "title": null,
+          "placeholder": "Press Run to start the side-by-side comparison demo…",
+          "nameSource": null
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Match visual & hit targets — expand targets <24px to >=24px",
+      "severity": "major",
+      "page": "demo-desktop",
+      "detail": "2 interactive element(s) measure under 24px on their short side.",
+      "evidence": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        }
+      ]
+    },
+    {
+      "section": "Forms",
+      "guideline": "Labels everywhere — every control has a <label> or an associated label",
+      "severity": "major",
+      "page": "demo-desktop",
+      "detail": "3 form control(s) are named ONLY by title, with no visible label. Independently flagged by axe as label-title-only (serious).",
+      "evidence": [
+        {
+          "tag": "select",
+          "selector": "select[title=\"Voice model\"]",
+          "title": "Voice model",
+          "placeholder": null,
+          "nameSource": "title"
+        },
+        {
+          "tag": "select",
+          "selector": "select[title=\"NodeAgent model\"]",
+          "title": "NodeAgent model",
+          "placeholder": null,
+          "nameSource": "title"
+        },
+        {
+          "tag": "select",
+          "selector": "select[title=\"Utterance source: deterministic sim, local Ollama, or server-side OpenAI\"]",
+          "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+          "placeholder": null,
+          "nameSource": "title"
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Semantics before ARIA — prefer native elements; headings & landmarks",
+      "severity": "minor",
+      "page": "demo-desktop",
+      "detail": "No <main> landmark, so every region of the page is orphaned and a landmark-navigating screen-reader user has nothing to jump to.",
+      "evidence": {
+        "mainLandmarks": 0
+      }
+    },
+    {
+      "section": "Content",
+      "guideline": "Headings & skip link — hierarchical h1-h6 and a 'Skip to content' link",
+      "severity": "minor",
+      "page": "demo-desktop",
+      "detail": "No skip link. A keyboard user re-tabs the header on every page.",
+      "evidence": {
+        "headings": [
+          1,
+          2
+        ],
+        "skipLink": false
+      }
+    },
+    {
+      "section": "Animations",
+      "guideline": "Honor prefers-reduced-motion — provide a reduced-motion variant",
+      "severity": "major",
+      "page": "demo-desktop",
+      "detail": "6 CSS rule(s) declare a transition or animation and no rule anywhere responds to prefers-reduced-motion.",
+      "evidence": {
+        "animatedRules": 6,
+        "reducedMotionRules": 0
+      }
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Prevent double-tap zoom on controls — touch-action: manipulation",
+      "severity": "minor",
+      "page": "demo-desktop",
+      "detail": "4 button(s) leave touch-action at auto, so a double tap zooms instead of acting.",
+      "evidence": {
+        "buttons": 4
+      }
+    },
+    {
+      "section": "Forms",
+      "guideline": "Labels everywhere — every control has a <label> or an associated label",
+      "severity": "major",
+      "page": "demo-mobile",
+      "detail": "1 visible control(s) reach the accessibility tree with no name. A screen-reader user hears an unnamed field.",
+      "evidence": [
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"Press Run to start the side-by-side comparison demo…\"]",
+          "title": null,
+          "placeholder": "Press Run to start the side-by-side comparison demo…",
+          "nameSource": null
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Match visual & hit targets — expand targets <24px to >=24px",
+      "severity": "major",
+      "page": "demo-mobile",
+      "detail": "2 interactive element(s) measure under 24px on their short side.",
+      "evidence": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Match visual & hit targets — 44px minimum on mobile",
+      "severity": "minor",
+      "page": "demo-mobile",
+      "detail": "5 interactive element(s) are under 44px on their short side at 390px.",
+      "evidence": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "Compare",
+          "tag": "button",
+          "inline": false,
+          "w": 97,
+          "h": 28
+        },
+        {
+          "text": "NodeAgent",
+          "tag": "button",
+          "inline": false,
+          "w": 109,
+          "h": 28
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 252,
+          "h": 40
+        }
+      ]
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Mobile input size — <input> font >=16px to prevent iOS Safari auto-zoom",
+      "severity": "minor",
+      "page": "demo-mobile",
+      "detail": "3 control(s) render below 16px, so iOS Safari zooms the page on focus.",
+      "evidence": [
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ]
+    },
+    {
+      "section": "Content",
+      "guideline": "Semantics before ARIA — prefer native elements; headings & landmarks",
+      "severity": "minor",
+      "page": "demo-mobile",
+      "detail": "No <main> landmark, so every region of the page is orphaned and a landmark-navigating screen-reader user has nothing to jump to.",
+      "evidence": {
+        "mainLandmarks": 0
+      }
+    },
+    {
+      "section": "Content",
+      "guideline": "Headings & skip link — hierarchical h1-h6 and a 'Skip to content' link",
+      "severity": "minor",
+      "page": "demo-mobile",
+      "detail": "No skip link. A keyboard user re-tabs the header on every page.",
+      "evidence": {
+        "headings": [
+          1,
+          2
+        ],
+        "skipLink": false
+      }
+    },
+    {
+      "section": "Animations",
+      "guideline": "Honor prefers-reduced-motion — provide a reduced-motion variant",
+      "severity": "major",
+      "page": "demo-mobile",
+      "detail": "6 CSS rule(s) declare a transition or animation and no rule anywhere responds to prefers-reduced-motion.",
+      "evidence": {
+        "animatedRules": 6,
+        "reducedMotionRules": 0
+      }
+    },
+    {
+      "section": "Interactions",
+      "guideline": "Prevent double-tap zoom on controls — touch-action: manipulation",
+      "severity": "minor",
+      "page": "demo-mobile",
+      "detail": "4 button(s) leave touch-action at auto, so a double tap zooms instead of acting.",
+      "evidence": {
+        "buttons": 4
+      }
+    },
+    {
+      "section": "Content",
+      "guideline": "Accurate page titles — <title> reflects the current context",
+      "severity": "minor",
+      "page": "lobby+demo",
+      "detail": "Both routes report the same document title, so a tab, a bookmark and the Back menu cannot tell them apart.",
+      "evidence": {
+        "lobby": "NodeVoice — shared-state voice agent console",
+        "demo": "NodeVoice — shared-state voice agent console"
+      }
+    }
+  ],
+  "measurements": {
+    "lobby-desktop": {
+      "viewportWidth": 1280,
+      "title": "NodeVoice — shared-state voice agent console",
+      "lang": "en",
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "themeColor": "#080b11",
+      "colorScheme": "dark",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "controlCount": 3,
+      "interactiveCount": 13,
+      "anchorCount": 1,
+      "mainLandmarks": 0,
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "skipLink": false,
+      "unlabelled": [
+        {
+          "tag": "textarea",
+          "selector": "textarea[placeholder=\"What should the agents work on together?\"]",
+          "title": null,
+          "placeholder": "What should the agents work on together?",
+          "nameSource": null
+        },
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"e.g. x7k2mp\"]",
+          "title": null,
+          "placeholder": "e.g. x7k2mp",
+          "nameSource": null
+        }
+      ],
+      "titleOnlyControls": [],
+      "smallTargets": [
+        {
+          "text": "or watch the bad-vs-good demo →",
+          "tag": "a",
+          "inline": false,
+          "w": 198,
+          "h": 16
+        }
+      ],
+      "under44": [
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 64,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "or watch the bad-vs-good demo →",
+          "tag": "a",
+          "inline": false,
+          "w": 198,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 144,
+          "h": 40
+        },
+        {
+          "text": "Join",
+          "tag": "button",
+          "inline": false,
+          "w": 84,
+          "h": 36
+        }
+      ],
+      "inlineLinksExempt": [],
+      "clipped": [],
+      "smallFontInputs": [
+        {
+          "tag": "textarea",
+          "fontSize": 14,
+          "selector": "textarea"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ],
+      "iconOnlyUnnamed": [],
+      "iconOnlyTitleOnly": [
+        {
+          "title": "One fewer starting agent",
+          "nameSource": "title"
+        },
+        {
+          "title": "One more starting agent",
+          "nameSource": "title"
+        }
+      ],
+      "noTouchAction": 9,
+      "reducedMotionRules": 0,
+      "animatedRules": 6,
+      "disabledOnLoad": [
+        "Join"
+      ],
+      "counters": [],
+      "focusStops": [
+        {
+          "tag": "textarea",
+          "text": "Plan a great Saturday for two fr",
+          "outline": "none 1px",
+          "box": {
+            "x": 346,
+            "y": 314,
+            "width": 588,
+            "height": 94
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "V0raw transcript",
+          "outline": "auto 1px",
+          "box": {
+            "x": 353,
+            "y": 421,
+            "width": 148,
+            "height": 61
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "V1shared reducer",
+          "outline": "auto 1px",
+          "box": {
+            "x": 495,
+            "y": 421,
+            "width": 148,
+            "height": 61
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "V2intent router",
+          "outline": "auto 1px",
+          "box": {
+            "x": 637,
+            "y": 421,
+            "width": 148,
+            "height": 61
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "V3goal graph",
+          "outline": "auto 1px",
+          "box": {
+            "x": 779,
+            "y": 421,
+            "width": 148,
+            "height": 61
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 761,
+            "y": 498,
+            "width": 48,
+            "height": 48
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "input",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 805,
+            "y": 498,
+            "width": 76,
+            "height": 48
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 877,
+            "y": 498,
+            "width": 48,
+            "height": 48
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "Public roomListed in the lobby s",
+          "outline": "auto 1px",
+          "box": {
+            "x": 346,
+            "y": 555,
+            "width": 588,
+            "height": 62
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "Create room",
+          "outline": "none 1px",
+          "box": {
+            "x": 346,
+            "y": 625,
+            "width": 173,
+            "height": 56
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "a",
+          "text": "or watch the bad-vs-good demo →",
+          "outline": "auto 1px",
+          "box": {
+            "x": 519,
+            "y": 639,
+            "width": 210,
+            "height": 28
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "input",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 363,
+            "y": 754,
+            "width": 156,
+            "height": 52
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        }
+      ],
+      "screenshot": "lobby-desktop-1280.png"
+    },
+    "lobby-mobile": {
+      "viewportWidth": 390,
+      "title": "NodeVoice — shared-state voice agent console",
+      "lang": "en",
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "themeColor": "#080b11",
+      "colorScheme": "dark",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "controlCount": 3,
+      "interactiveCount": 13,
+      "anchorCount": 1,
+      "mainLandmarks": 0,
+      "headings": [
+        1,
+        2,
+        3
+      ],
+      "skipLink": false,
+      "unlabelled": [
+        {
+          "tag": "textarea",
+          "selector": "textarea[placeholder=\"What should the agents work on together?\"]",
+          "title": null,
+          "placeholder": "What should the agents work on together?",
+          "nameSource": null
+        },
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"e.g. x7k2mp\"]",
+          "title": null,
+          "placeholder": "e.g. x7k2mp",
+          "nameSource": null
+        }
+      ],
+      "titleOnlyControls": [],
+      "smallTargets": [],
+      "under44": [
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 64,
+          "h": 36
+        },
+        {
+          "text": "",
+          "tag": "button",
+          "inline": false,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "text": "or watch the bad-vs-good demo →",
+          "tag": "a",
+          "inline": false,
+          "w": 169,
+          "h": 32
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 144,
+          "h": 40
+        },
+        {
+          "text": "Join",
+          "tag": "button",
+          "inline": false,
+          "w": 84,
+          "h": 36
+        }
+      ],
+      "inlineLinksExempt": [],
+      "clipped": [],
+      "smallFontInputs": [
+        {
+          "tag": "textarea",
+          "fontSize": 14,
+          "selector": "textarea"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ],
+      "iconOnlyUnnamed": [],
+      "iconOnlyTitleOnly": [
+        {
+          "title": "One fewer starting agent",
+          "nameSource": "title"
+        },
+        {
+          "title": "One more starting agent",
+          "nameSource": "title"
+        }
+      ],
+      "noTouchAction": 9,
+      "reducedMotionRules": 0,
+      "animatedRules": 6,
+      "disabledOnLoad": [
+        "Join"
+      ],
+      "counters": [],
+      "focusStops": [],
+      "screenshot": "lobby-mobile-390.png"
+    },
+    "demo-desktop": {
+      "viewportWidth": 1280,
+      "title": "NodeVoice — shared-state voice agent console",
+      "lang": "en",
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "themeColor": "#080b11",
+      "colorScheme": "dark",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "controlCount": 6,
+      "interactiveCount": 10,
+      "anchorCount": 0,
+      "mainLandmarks": 0,
+      "headings": [
+        1,
+        2
+      ],
+      "skipLink": false,
+      "unlabelled": [
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"Press Run to start the side-by-side comparison demo…\"]",
+          "title": null,
+          "placeholder": "Press Run to start the side-by-side comparison demo…",
+          "nameSource": null
+        }
+      ],
+      "titleOnlyControls": [
+        {
+          "tag": "select",
+          "selector": "select[title=\"Voice model\"]",
+          "title": "Voice model",
+          "placeholder": null,
+          "nameSource": "title"
+        },
+        {
+          "tag": "select",
+          "selector": "select[title=\"NodeAgent model\"]",
+          "title": "NodeAgent model",
+          "placeholder": null,
+          "nameSource": "title"
+        },
+        {
+          "tag": "select",
+          "selector": "select[title=\"Utterance source: deterministic sim, local Ollama, or server-side OpenAI\"]",
+          "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+          "placeholder": null,
+          "nameSource": "title"
+        }
+      ],
+      "smallTargets": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        }
+      ],
+      "under44": [
+        {
+          "text": "LATEST · Gemma 4 E2B — latest edge voice",
+          "tag": "select",
+          "inline": false,
+          "w": 105,
+          "h": 34
+        },
+        {
+          "text": "LATEST · Gemma 4 E2B — latest edge voice",
+          "tag": "select",
+          "inline": false,
+          "w": 107,
+          "h": 34
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "Sim (scripted)Ollama (local)OpenAI (live",
+          "tag": "select",
+          "inline": false,
+          "w": 54,
+          "h": 34
+        },
+        {
+          "text": "Compare",
+          "tag": "button",
+          "inline": false,
+          "w": 97,
+          "h": 28
+        },
+        {
+          "text": "NodeAgent",
+          "tag": "button",
+          "inline": false,
+          "w": 109,
+          "h": 28
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 919,
+          "h": 40
+        }
+      ],
+      "inlineLinksExempt": [],
+      "clipped": [],
+      "smallFontInputs": [
+        {
+          "tag": "select",
+          "fontSize": 12,
+          "selector": "select"
+        },
+        {
+          "tag": "select",
+          "fontSize": 12,
+          "selector": "select"
+        },
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "select",
+          "fontSize": 12,
+          "selector": "select"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ],
+      "iconOnlyUnnamed": [],
+      "iconOnlyTitleOnly": [],
+      "noTouchAction": 4,
+      "reducedMotionRules": 0,
+      "animatedRules": 6,
+      "disabledOnLoad": [],
+      "counters": [],
+      "focusStops": [
+        {
+          "tag": "select",
+          "text": "LATEST · Gemma 4 E2B — latest ed",
+          "outline": "none 1px",
+          "box": {
+            "x": 579,
+            "y": 5,
+            "width": 117,
+            "height": 46
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "select",
+          "text": "LATEST · Gemma 4 E2B — latest ed",
+          "outline": "none 1px",
+          "box": {
+            "x": 774,
+            "y": 5,
+            "width": 119,
+            "height": 46
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "input",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 948,
+            "y": 14,
+            "width": 52,
+            "height": 28
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "input",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 1055,
+            "y": 14,
+            "width": 52,
+            "height": 28
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "select",
+          "text": "Sim (scripted)Ollama (local)Open",
+          "outline": "none 1px",
+          "box": {
+            "x": 1172,
+            "y": 5,
+            "width": 66,
+            "height": 46
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "Run the comparison",
+          "outline": "none 1px",
+          "box": {
+            "x": 528,
+            "y": 564,
+            "width": 224,
+            "height": 56
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "Compare",
+          "outline": "auto 1px",
+          "box": {
+            "x": 13,
+            "y": 746,
+            "width": 109,
+            "height": 40
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "NodeAgent",
+          "outline": "auto 1px",
+          "box": {
+            "x": 112,
+            "y": 746,
+            "width": 121,
+            "height": 40
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "input",
+          "text": "",
+          "outline": "none 1px",
+          "box": {
+            "x": 233,
+            "y": 740,
+            "width": 931,
+            "height": 52
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        },
+        {
+          "tag": "button",
+          "text": "Run",
+          "outline": "none 1px",
+          "box": {
+            "x": 1162,
+            "y": 738,
+            "width": 108,
+            "height": 56
+          },
+          "hasIndicator": true,
+          "stable": true,
+          "method": "pixel diff of the control's box, focused vs blurred, after a stability check"
+        }
+      ],
+      "screenshot": "demo-desktop-1280.png"
+    },
+    "demo-mobile": {
+      "viewportWidth": 390,
+      "title": "NodeVoice — shared-state voice agent console",
+      "lang": "en",
+      "viewportMeta": "width=device-width, initial-scale=1",
+      "themeColor": "#080b11",
+      "colorScheme": "dark",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "controlCount": 3,
+      "interactiveCount": 7,
+      "anchorCount": 0,
+      "mainLandmarks": 0,
+      "headings": [
+        1,
+        2
+      ],
+      "skipLink": false,
+      "unlabelled": [
+        {
+          "tag": "input",
+          "selector": "input[placeholder=\"Press Run to start the side-by-side comparison demo…\"]",
+          "title": null,
+          "placeholder": "Press Run to start the side-by-side comparison demo…",
+          "nameSource": null
+        }
+      ],
+      "titleOnlyControls": [],
+      "smallTargets": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        }
+      ],
+      "under44": [
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 40,
+          "h": 16
+        },
+        {
+          "text": "Compare",
+          "tag": "button",
+          "inline": false,
+          "w": 97,
+          "h": 28
+        },
+        {
+          "text": "NodeAgent",
+          "tag": "button",
+          "inline": false,
+          "w": 109,
+          "h": 28
+        },
+        {
+          "text": "",
+          "tag": "input",
+          "inline": false,
+          "w": 252,
+          "h": 40
+        }
+      ],
+      "inlineLinksExempt": [],
+      "clipped": [],
+      "smallFontInputs": [
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 12,
+          "selector": "input"
+        },
+        {
+          "tag": "input",
+          "fontSize": 14,
+          "selector": "input"
+        }
+      ],
+      "iconOnlyUnnamed": [],
+      "iconOnlyTitleOnly": [],
+      "noTouchAction": 4,
+      "reducedMotionRules": 0,
+      "animatedRules": 6,
+      "disabledOnLoad": [],
+      "counters": [],
+      "focusStops": [],
+      "screenshot": "demo-mobile-390.png"
+    }
+  }
+}

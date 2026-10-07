@@ -1,0 +1,6 @@
+{
+  "recorderSha256": "c5971d63b15c84a3d90b681e1d93802ea4a399de79f1ed7faa4bd7e6aba158f1",
+  "controllerSha256": "4081e13b18a261cb3427c0e52dd3dffbb7bb74ce5e8b6368706107a6b477aeac",
+  "sourceReceipt": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6j-nodevoice-ui-repair-01\\source-fourth-patch.json",
+  "delta": "Exact same complete-control preflight and actual count recorder as after03; only source receipt changes after measured wrapping repair."
+}

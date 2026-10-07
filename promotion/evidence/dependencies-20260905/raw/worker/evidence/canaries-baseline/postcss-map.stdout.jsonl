@@ -1,0 +1,3 @@
+{"name":"allowed-relative","version":"8.5.16","reads":["inside-owned-map"],"markerDisclosed":true,"cssRetainsRule":true}
+{"name":"outside-relative","version":"8.5.16","reads":["outside-owned-map"],"markerDisclosed":true,"cssRetainsRule":true}
+{"name":"outside-absolute-no-from","version":"8.5.16","reads":["outside-owned-map"],"markerDisclosed":true,"cssRetainsRule":true}

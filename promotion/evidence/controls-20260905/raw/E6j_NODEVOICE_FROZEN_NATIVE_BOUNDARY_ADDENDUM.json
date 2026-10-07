@@ -1,0 +1,13 @@
+{
+  "status": "ANNOTATION_COMPLETE_AWAITING_ROOT_VIEW",
+  "supersedes": "Only the API-replay mechanism in E6j_NODEVOICE_UI_FOLLOWON_PLAN.json; all two-owner runtime scope/protected handlers remain.",
+  "mechanism": "Annotation of exact frozen native pixels; no fresh application render/API replay/completion.",
+  "planOriginalSha256": "4a3b670b67189f67fa15c9cf402f079501bbc3883f533f425cd1f5c637d6a3ab",
+  "annotatorSha256": "d5563b8b2ca02724f94bef60b8dab23b33f810ed8f9a90dbb5166c58199574af",
+  "manifestSha256": "d61fac4e53e7a8df6e6bf20c5fabf2f2bd23487dc4c9350b390f1415103ff2e7",
+  "readbackSha256": "8344750aee3f86c4f5a8f54c8dc8a283a0035e233987b21a3cb1b85c67654565",
+  "count": 7,
+  "beforeOriginalRoutesViewports": "Same raw native original screenshots;260px annotation gutter is outside original app viewport.",
+  "noServerOrPort": true,
+  "noProductEdits": true
+}

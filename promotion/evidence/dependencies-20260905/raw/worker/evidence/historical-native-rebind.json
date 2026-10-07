@@ -1,0 +1,44 @@
+{
+  "status": "EXACT_COMPILED_ARTIFACT_REBIND",
+  "historicalSource": {
+    "path": "E6j-nodevoice-ui-controls-after-04/after.json",
+    "bytes": 30829,
+    "sha256": "c0563ac735e98a7420752c2ab5385755401925c544fff54b1885803c08e16789",
+    "rawGitBlobSha1": "fa69eae8ac8c2754b327733aa6f0537b0cf27ea6"
+  },
+  "historicalFreeze": {
+    "path": "E6j_NODEVOICE_UI_REPAIR_FREEZE.json",
+    "bytes": 8257,
+    "sha256": "8bc83985cdab617ecaf03e1ee80ae0264ab995dfbc0beae9aabc1c5e47a01eff",
+    "rawGitBlobSha1": "df0f6819b075fc4b22b176e8349f4b03120a7265"
+  },
+  "independentJudge": {
+    "path": "E6j_NODEVOICE_UI_REPAIR_FINAL_JUDGE.json",
+    "bytes": 11625,
+    "sha256": "3a87b99fc9cc2790024a22d217461f6092655e9fdca9f62a33b85780c238695f",
+    "rawGitBlobSha1": "42ccb4bb5fa11827f4c208126e1173c06969ae18"
+  },
+  "currentDist": [
+    {
+      "path": "dist/assets/index-B4ZxCWpG.js",
+      "bytes": 384362,
+      "sha256": "015fa6d9922b18d40d7d977f189c2b8f29dd7e6babb535f677225d5855ddb958",
+      "rawGitBlobSha1": "96e1f059f590dba800d5a0859cbda921917293a3"
+    },
+    {
+      "path": "dist/assets/index-DGAuW_yU.css",
+      "bytes": 80400,
+      "sha256": "edf553215308bcafefc16d59d886e4314295100428c308410d60434436f22e10",
+      "rawGitBlobSha1": "7ce232e8591d84f674ada18c586f3d405861ab73"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 862,
+      "sha256": "2347ffd4bda2a550cb6d219c0937bd06b36694ba8f22bab5028bf5a4d6961572",
+      "rawGitBlobSha1": "95f52bfbd2466b3204880ad9c5f65a245a7cab52"
+    }
+  ],
+  "allThreeDistFilesByteExact": true,
+  "historicalObserved": "337 checks / 94 captures, actual visible 100 at 125736 ms; final Run enabled at 126829 ms under the original 300-second deadline.",
+  "meaning": "The new dependency build emitted exactly the already-reviewed browser assets. No new playback, room runtime, provider call or browser matrix was executed by this dependency slice. Existing UI limitations remain."
+}

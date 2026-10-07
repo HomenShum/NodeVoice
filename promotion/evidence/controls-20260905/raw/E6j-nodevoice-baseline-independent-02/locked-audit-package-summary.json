@@ -1,0 +1,74 @@
+[
+  {
+    "name": "browserslist",
+    "lockedVersion": "4.28.4",
+    "dev": true,
+    "isDirect": false,
+    "severity": "high",
+    "fixAvailableReported": true,
+    "advisories": [
+      {
+        "id": "GHSA-c83g-rgw3-j3cx",
+        "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+        "severity": "high",
+        "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+        "range": "<=4.28.6"
+      },
+      {
+        "id": "GHSA-73wf-gq98-2v4g",
+        "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+        "severity": "high",
+        "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+        "range": "<=4.28.6"
+      }
+    ]
+  },
+  {
+    "name": "nanoid",
+    "lockedVersion": "3.3.15",
+    "dev": true,
+    "isDirect": false,
+    "severity": "high",
+    "fixAvailableReported": true,
+    "advisories": [
+      {
+        "id": "GHSA-28wg-ghj8-5hjv",
+        "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+        "severity": "high",
+        "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+        "range": "<3.3.16"
+      },
+      {
+        "id": "GHSA-2v37-7h3g-55p8",
+        "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+        "severity": "high",
+        "title": "nanoid: custom generators can loop indefinitely when size is zero",
+        "range": "<3.3.18"
+      }
+    ]
+  },
+  {
+    "name": "postcss",
+    "lockedVersion": "8.5.16",
+    "dev": true,
+    "isDirect": true,
+    "severity": "high",
+    "fixAvailableReported": true,
+    "advisories": [
+      {
+        "id": "GHSA-fxqj-rqcc-2cmp",
+        "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+        "severity": "moderate",
+        "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q \u2014 attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+        "range": "<=8.5.22"
+      },
+      {
+        "id": "GHSA-r28c-9q8g-f849",
+        "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+        "severity": "high",
+        "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+        "range": "<=8.5.17"
+      }
+    ]
+  }
+]

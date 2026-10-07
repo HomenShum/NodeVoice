@@ -1,6 +1,6 @@
 export type ActorId = "user" | "voice-a" | "voice-b" | "voice-c" | "context-agent" | "synthesis-agent" | "model-agent" | "memo-agent";
 
-export type RoomMode = "discussion" | "execution" | "handoff" | "review";
+type RoomMode = "discussion" | "execution" | "handoff" | "review";
 
 export type SpeechAct =
   | "backchannel"

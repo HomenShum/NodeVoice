@@ -1,0 +1,155 @@
+{
+  "status": 200,
+  "body": {
+    "ok": true,
+    "roomId": "5a752a",
+    "room": {
+      "id": "5a752a",
+      "code": "5a752a",
+      "private": false,
+      "agents": {
+        "agent-001": {
+          "slot": "agent-001",
+          "name": "Ada",
+          "device": "laptop",
+          "color": "sky",
+          "persona": "A decisive planner. Proposes concrete, specific options with names and rough timing, and pushes to lock decisions."
+        },
+        "agent-002": {
+          "slot": "agent-002",
+          "name": "Ben",
+          "device": "phone",
+          "color": "violet",
+          "persona": "A thoughtful challenger. Asks one sharp question, checks constraints and budget, then refines the plan."
+        }
+      },
+      "state": {
+        "goal": "Count to 10",
+        "model": "gpt-5.4-mini",
+        "agentCount": 2,
+        "profile": "v1_room_state",
+        "floorOwner": "agent-001",
+        "nextSpeaker": "agent-001",
+        "turn": 0,
+        "running": false,
+        "done": false,
+        "loopRisk": false,
+        "nextRequiredAct": "task_action",
+        "suppressAcknowledgements": true,
+        "task": {
+          "kind": "count_to_n",
+          "target": 10,
+          "next": 1,
+          "completed": false
+        }
+      },
+      "models": [
+        {
+          "id": "gpt-5.4-mini",
+          "label": "GPT-5.4 mini",
+          "tier": "smart + fast",
+          "note": "default · smartest mini that stays ~1.3s",
+          "expectedLatencyMs": 1300,
+          "expectedCostUsd": 0.0007164375,
+          "qualityScore": 4.75
+        },
+        {
+          "id": "gpt-4.1-nano",
+          "label": "GPT-4.1 nano",
+          "tier": "cheapest",
+          "note": "fastest (~0.7s) + cheapest",
+          "expectedLatencyMs": 700,
+          "expectedCostUsd": 0.000033425,
+          "qualityScore": 4.15
+        },
+        {
+          "id": "gpt-4.1-mini",
+          "label": "GPT-4.1 mini",
+          "tier": "balanced",
+          "note": "fast, mid capability",
+          "expectedLatencyMs": 700,
+          "expectedCostUsd": 0.0001409,
+          "qualityScore": 4.1
+        },
+        {
+          "id": "gpt-4o-mini",
+          "label": "GPT-4o mini",
+          "tier": "legacy",
+          "note": "older baseline",
+          "expectedLatencyMs": 1000,
+          "expectedCostUsd": 0.0000505875,
+          "qualityScore": 4.5
+        },
+        {
+          "id": "gpt-5-nano",
+          "label": "GPT-5 nano",
+          "tier": "cheap + smart",
+          "note": "smart but ~3s (reasoning)",
+          "expectedLatencyMs": 3200,
+          "expectedCostUsd": 0.0001320625,
+          "qualityScore": 4.6
+        },
+        {
+          "id": "gpt-5-mini",
+          "label": "GPT-5 mini",
+          "tier": "max quality",
+          "note": "top quality, ~3s+ (reasoning)",
+          "expectedLatencyMs": 3000,
+          "expectedCostUsd": 0.0007873125,
+          "qualityScore": 5
+        }
+      ],
+      "profiles": [
+        {
+          "id": "v0_no_room_state",
+          "label": "V0 Failure",
+          "shortLabel": "V0",
+          "note": "raw transcript agents; no durable room-state steering"
+        },
+        {
+          "id": "v1_room_state",
+          "label": "V1 Room State",
+          "shortLabel": "V1",
+          "note": "shared goal, floor owner, reducer, traces, durable steering"
+        },
+        {
+          "id": "v2_work_room",
+          "label": "V2 Work Room",
+          "shortLabel": "V2",
+          "note": "room-state plus typed intent routing for work/artifacts"
+        },
+        {
+          "id": "v3_agent_ecosystem",
+          "label": "V3 Ecosystem",
+          "shortLabel": "V3",
+          "note": "goal graph, world model, workers, artifacts, and subagents"
+        }
+      ],
+      "participants": [],
+      "utterances": [
+        {
+          "id": "b1806d2d-f",
+          "slot": "system",
+          "name": "system",
+          "text": "Room created. Share code 5a752a or scan the QR to add another device.",
+          "speechAct": "system",
+          "ts": 1788647446177
+        }
+      ],
+      "traces": [
+        {
+          "id": "0311abcfe0",
+          "kind": "state_reduced",
+          "summary": "Room created.",
+          "payload": {
+            "goal": "Count to 10",
+            "model": "gpt-5.4-mini",
+            "profile": "v1_room_state",
+            "agentCount": 2
+          },
+          "ts": 1788647446177
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "observedAt": "2026-09-05T23:23:37.787221+00:00",
+  "expectedMerge": "6544eb482787099280825eb932f1c5bb7a99f01f",
+  "title": "NodeVoice \u2014 shared-state voice agent console",
+  "rootStatus": 200,
+  "demoStatus": 200,
+  "sameRootAndDemoBytes": true,
+  "emptyReactRoot": true,
+  "modulePath": "/assets/index-CGenaCDE.js",
+  "moduleStatus": 200,
+  "cssPath": "/assets/index-Do6FFEs9.css",
+  "cssStatus": 200,
+  "moduleSignals": {
+    "comparisonAccessibleGroup": false,
+    "wrappedGroupLayout": false,
+    "runComparison": false,
+    "numericWidth": false
+  },
+  "exactDeploymentUrlStatus": 200,
+  "exactDeploymentRootStatusIsApp": false,
+  "exactDeploymentModulePath": null,
+  "publicModuleByteEqualExactDeploymentModule": false,
+  "explicitCommitStampInHtml": false,
+  "observedHydratedProductionUi": false,
+  "scope": "Anonymous public root/demo HTML and referenced JS/CSS bytes; exact deployment host read if accessible. No browser hydration, controls action, voice/mic/provider access or 100-step run."
+}

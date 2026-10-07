@@ -1,0 +1,105 @@
+{
+  "label": "convex-live-after",
+  "capturedAt": "2026-08-14T01:57:14.788Z",
+  "commit": "30253b4e396d25397d8e1be353a122d7a0fba910",
+  "node": "v22.22.2",
+  "target": {
+    "runtime": "Convex httpAction (hosted)",
+    "baseUrl": "https://<dev-deployment>.convex.site",
+    "note": "Isolated Convex DEV deployment created for this probe; never production. No RSS column: the process is Convex's and this script cannot sample it."
+  },
+  "expectationFailures": [],
+  "probes": {
+    "C1_body_cap_25mb": {
+      "probe": "POST /compare/demo with a 25 MB JSON body, x3",
+      "bodyBytes": 26214400,
+      "attempts": [
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 514
+        },
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 761
+        },
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 629
+        }
+      ],
+      "accepted": 0,
+      "read413": 3,
+      "connectionReset": 0
+    },
+    "C2_target_string": {
+      "probe": "POST /compare/demo {\"target\":\"abc\"}",
+      "status": 200,
+      "taskTargetType": "number",
+      "taskTarget": 100,
+      "taskCurrent": 100,
+      "taskCompleted": true,
+      "elapsedMs": 304
+    },
+    "C2b_target_huge": {
+      "probe": "POST /compare/demo {\"target\":1e9,\"turns\":5}",
+      "status": 200,
+      "taskTarget": 300,
+      "elapsedMs": 148
+    },
+    "C3_turns_flood": {
+      "probe": "POST /compare/demo {\"turns\":3000000}",
+      "status": 200,
+      "responseBytes": 230832,
+      "stepsReturned": 420,
+      "elapsedMs": 126
+    },
+    "C4_shipped_default": {
+      "probe": "POST /compare/demo {\"target\":100,\"turns\":100,\"source\":\"deterministic\"}",
+      "status": 200,
+      "goodSteps": 100,
+      "badSteps": 100,
+      "task": {
+        "kind": "count_to_n",
+        "target": 100,
+        "current": 100,
+        "next": 100,
+        "completed": true
+      },
+      "provenanceGood": "production deterministic sim - real reducer & scheduler",
+      "elapsedMs": 119
+    },
+    "C5_unparseable_json": {
+      "probe": "POST /compare/demo with a body that is not JSON",
+      "status": 400,
+      "head": "{\"ok\":false,\"error\":\"Expected property name or '}' in JSON at position 1 (line 1 column 2)\"}",
+      "elapsedMs": 110
+    },
+    "C6_live_rooms_body_cap": {
+      "probe": "POST /live/rooms with a 25 MB JSON body, x3",
+      "bodyBytes": 26214400,
+      "attempts": [
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 390
+        },
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 442
+        },
+        {
+          "status": 413,
+          "head": "{\"ok\":false,\"error\":\"body too large\"}",
+          "elapsedMs": 595
+        }
+      ],
+      "accepted": 0,
+      "read413": 3,
+      "connectionReset": 0
+    }
+  }
+}

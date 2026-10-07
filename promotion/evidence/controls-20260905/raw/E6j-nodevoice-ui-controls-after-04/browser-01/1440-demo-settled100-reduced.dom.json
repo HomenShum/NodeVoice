@@ -1,0 +1,293 @@
+{
+  "url": "http://127.0.0.1:4993/demo",
+  "width": 1440,
+  "height": 960,
+  "body": "NodeVoice\n\nshared-state agent console\n\nVOICE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nNODE\nLATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nLATEST · Gemma 4 12B — latest laptop/workstation NodeAgent default\nLATEST · Gemma 4 26B-A4B — MoE local reasoning/agent model\nLATEST · Gemma 4 31B — dense local/lab reasoning model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nLATEST · Ministral 3 14B — stronger edge NodeAgent/vision model\nLATEST · Qwen3.6 27B — latest Qwen agentic coding/thinking model\nLATEST · Qwen3.6 35B-A3B — MoE coding/reasoning variant\nLATEST · Nemotron-Cascade-2 30B-A3B — open MoE reasoning/agent model\nLATEST · Mistral Medium 3.5 128B — latest local/lab flagship\nLATEST · GLM-4.7-Flash 30B-A3B — latest lightweight Z.ai agent model\nLATEST · GLM-5 — huge open-weight agentic engineering model\nLATEST · GLM-5.1 — flagship agentic engineering model\nLATEST · Mistral Small 3.2 24B — repetition/function-calling fix\nLATEST · Magistral 24B — Mistral reasoning reviewer/planner\nLATEST · gpt-oss 20B — open-weight local reasoning/agent model\nLATEST · gpt-oss 120B — larger open-weight local/lab reasoning model\nLATEST · Qwen3-Coder-Next — latest efficient coding-agent model\nLATEST · Qwen3-Coder 30B — practical agentic code model\nLATEST · Qwen3-Coder 480B — most agentic Qwen code model, lab only\nLATEST · Devstral Small 2 24B — current software-engineering agent\nLATEST · Devstral 2 123B — larger codebase agent, lab only\nLATEST · DeepSeek-R1 0528 8B — practical distilled reasoner\nPhi-4 Mini Reasoning — tiny logic-intensive model\nPhi-4 Reasoning Vision 15B — compact multimodal UI/doc reasoner\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nOLMo 3.1 32B Instruct — open science model\nLlama 4 Scout — large multimodal MoE, not newest but current Meta line\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nSTABLE · Qwen3 30B-A3B — stable MoE agent fallback\nSTABLE · Qwen2.5-Coder 7B — stable practical code model\nSTABLE · Qwen2.5-Coder 32B — stable stronger code model\nN\nTURNS\nSOURCE\nSim (scripted)\nOllama (local)\nOpenAI (live)\nIdle · listening\ngemma4:e2b · 2.3B effective / 5.1B loaded · laptop · local\n\nThree friends walk down a street, each with an iPhone voice agent. “Count to 100 together.”\n\nThey didn’t fail for lack of intelligence. They failed for lack of shared state. The fix isn’t better agents — it’s a shared room.\n\nSHARED-ROOM PROGRESS\n100/100\ncomplete\nReal-world architecture\n— how three iPhones share one authoritative room\nNo shared state\n\n3 iPhones · transcripts only\n\nloop\n\nEach iPhone only hears the audio transcript. No floor control, no counter, no scheduler.\n\nINSTRUCTION\nvoice-a\nvoice-a: I’ll count from 1 to 100, and you guys can continue off where I started from. One...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\nBACKCHANNEL\nvoice-b\nvoice-b: Sounds good, I’m aligned, and I’ll start after you finish...\nBACKCHANNEL\nvoice-c\nvoice-c: Exactly, we should count together and continue the sequence...\nBACKCHANNEL\nvoice-a\nvoice-a: Yeah exactly, let’s do that. I’ll start off from where you leave off...\nBACKCHANNEL\nvoice-b\nvoice-b: Yep exactly, let’s do that, we can continue from there...\nBACKCHANNEL\nvoice-c\nvoice-c: Yeah exactly, I agree with that plan and I’ll continue when it is my turn...\nBACKCHANNEL\nvoice-a\nvoice-a: Yep, exactly, let’s keep going from where the last agent leaves off...\n3 private states — no shared truth\nLIVE\ndivergent · no authority\nvoice-a\nPRIVATE\nbelievesCurrent: 1STUCK\nnextIntent: wait-for-someone\nlastClassifiedAs: backchannel\nheard 66 · spoke 34\nvoice-b\nPRIVATE\nbelievesCurrent: 1STUCK\nnextIntent: acknowledge\nlastClassifiedAs: backchannel\nheard 67 · spoke 33\nvoice-c\nPRIVATE\nbelievesCurrent: 1STUCK\nnextIntent: acknowledge\nlastClassifiedAs: backchannel\nheard 67 · spoke 33\n\nEach agent privately believes current≤1 and flips between acknowledge ⇄ wait-for-someone. Nobody ever commits 2.\n\ntext source: deterministic sim — scripted utterances · no reducer, no scheduler\n3 iPhones + 3 transcripts + no state = stuck at 1\nOne shared room\n\n3 iPhones + authoritative room state\n\ntask advances\n\nOne room state: floor owner, counter, next speaker, required act. The scheduler suppresses acknowledgements.\n\nTASK_ACTION\nvoice-a\nvoice-a: One\nTASK_ACTION\nvoice-b\nvoice-b: Two\nTASK_ACTION\nvoice-c\nvoice-c: Three\nTASK_ACTION\nvoice-a\nvoice-a: Four\nTASK_ACTION\nvoice-b\nvoice-b: Five\nTASK_ACTION\nvoice-c\nvoice-c: Six\nTASK_ACTION\nvoice-a\nvoice-a: Seven\nTASK_ACTION\nvoice-b\nvoice-b: Eight\nTASK_ACTION\nvoice-c\nvoice-c: Nine\nTASK_ACTION\nvoice-a\nvoice-a: Ten\nTASK_ACTION\nvoice-b\nvoice-b: Eleven\nTASK_ACTION\nvoice-c\nvoice-c: Twelve\nTASK_ACTION\nvoice-a\nvoice-a: Thirteen\nTASK_ACTION\nvoice-b\nvoice-b: Fourteen\nTASK_ACTION\nvoice-c\nvoice-c: Fifteen\nTASK_ACTION\nvoice-a\nvoice-a: Sixteen\nTASK_ACTION\nvoice-b\nvoice-b: Seventeen\nTASK_ACTION\nvoice-c\nvoice-c: Eighteen\nTASK_ACTION\nvoice-a\nvoice-a: Nineteen\nTASK_ACTION\nvoice-b\nvoice-b: Twenty\nTASK_ACTION\nvoice-c\nvoice-c: Twenty-one\nTASK_ACTION\nvoice-a\nvoice-a: Twenty-two\nTASK_ACTION\nvoice-b\nvoice-b: Twenty-three\nTASK_ACTION\nvoice-c\nvoice-c: Twenty-four\nTASK_ACTION\nvoice-a\nvoice-a: Twenty-five\nTASK_ACTION\nvoice-b\nvoice-b: Twenty-six\nTASK_ACTION\nvoice-c\nvoice-c: Twenty-seven\nTASK_ACTION\nvoice-a\nvoice-a: Twenty-eight\nTASK_ACTION\nvoice-b\nvoice-b: Twenty-nine\nTASK_ACTION\nvoice-c\nvoice-c: Thirty\nTASK_ACTION\nvoice-a\nvoice-a: Thirty-one\nTASK_ACTION\nvoice-b\nvoice-b: Thirty-two\nTASK_ACTION\nvoice-c\nvoice-c: Thirty-three\nTASK_ACTION\nvoice-a\nvoice-a: Thirty-four\nTASK_ACTION\nvoice-b\nvoice-b: Thirty-five\nTASK_ACTION\nvoice-c\nvoice-c: Thirty-six\nTASK_ACTION\nvoice-a\nvoice-a: Thirty-seven\nTASK_ACTION\nvoice-b\nvoice-b: Thirty-eight\nTASK_ACTION\nvoice-c\nvoice-c: Thirty-nine\nTASK_ACTION\nvoice-a\nvoice-a: Forty\nTASK_ACTION\nvoice-b\nvoice-b: Forty-one\nTASK_ACTION\nvoice-c\nvoice-c: Forty-two\nTASK_ACTION\nvoice-a\nvoice-a: Forty-three\nTASK_ACTION\nvoice-b\nvoice-b: Forty-four\nTASK_ACTION\nvoice-c\nvoice-c: Forty-five\nTASK_ACTION\nvoice-a\nvoice-a: Forty-six\nTASK_ACTION\nvoice-b\nvoice-b: Forty-seven\nTASK_ACTION\nvoice-c\nvoice-c: Forty-eight\nTASK_ACTION\nvoice-a\nvoice-a: Forty-nine\nTASK_ACTION\nvoice-b\nvoice-b: Fifty\nTASK_ACTION\nvoice-c\nvoice-c: Fifty-one\nTASK_ACTION\nvoice-a\nvoice-a: Fifty-two\nTASK_ACTION\nvoice-b\nvoice-b: Fifty-three\nTASK_ACTION\nvoice-c\nvoice-c: Fifty-four\nTASK_ACTION\nvoice-a\nvoice-a: Fifty-five\nTASK_ACTION\nvoice-b\nvoice-b: Fifty-six\nTASK_ACTION\nvoice-c\nvoice-c: Fifty-seven\nTASK_ACTION\nvoice-a\nvoice-a: Fifty-eight\nTASK_ACTION\nvoice-b\nvoice-b: Fifty-nine\nTASK_ACTION\nvoice-c\nvoice-c: Sixty\nTASK_ACTION\nvoice-a\nvoice-a: Sixty-one\nTASK_ACTION\nvoice-b\nvoice-b: Sixty-two\nTASK_ACTION\nvoice-c\nvoice-c: Sixty-three\nTASK_ACTION\nvoice-a\nvoice-a: Sixty-four\nTASK_ACTION\nvoice-b\nvoice-b: Sixty-five\nTASK_ACTION\nvoice-c\nvoice-c: Sixty-six\nTASK_ACTION\nvoice-a\nvoice-a: Sixty-seven\nTASK_ACTION\nvoice-b\nvoice-b: Sixty-eight\nTASK_ACTION\nvoice-c\nvoice-c: Sixty-nine\nTASK_ACTION\nvoice-a\nvoice-a: Seventy\nTASK_ACTION\nvoice-b\nvoice-b: Seventy-one\nTASK_ACTION\nvoice-c\nvoice-c: Seventy-two\nTASK_ACTION\nvoice-a\nvoice-a: Seventy-three\nTASK_ACTION\nvoice-b\nvoice-b: Seventy-four\nTASK_ACTION\nvoice-c\nvoice-c: Seventy-five\nTASK_ACTION\nvoice-a\nvoice-a: Seventy-six\nTASK_ACTION\nvoice-b\nvoice-b: Seventy-seven\nTASK_ACTION\nvoice-c\nvoice-c: Seventy-eight\nTASK_ACTION\nvoice-a\nvoice-a: Seventy-nine\nTASK_ACTION\nvoice-b\nvoice-b: Eighty\nTASK_ACTION\nvoice-c\nvoice-c: Eighty-one\nTASK_ACTION\nvoice-a\nvoice-a: Eighty-two\nTASK_ACTION\nvoice-b\nvoice-b: Eighty-three\nTASK_ACTION\nvoice-c\nvoice-c: Eighty-four\nTASK_ACTION\nvoice-a\nvoice-a: Eighty-five\nTASK_ACTION\nvoice-b\nvoice-b: Eighty-six\nTASK_ACTION\nvoice-c\nvoice-c: Eighty-seven\nTASK_ACTION\nvoice-a\nvoice-a: Eighty-eight\nTASK_ACTION\nvoice-b\nvoice-b: Eighty-nine\nTASK_ACTION\nvoice-c\nvoice-c: Ninety\nTASK_ACTION\nvoice-a\nvoice-a: Ninety-one\nTASK_ACTION\nvoice-b\nvoice-b: Ninety-two\nTASK_ACTION\nvoice-c\nvoice-c: Ninety-three\nTASK_ACTION\nvoice-a\nvoice-a: Ninety-four\nTASK_ACTION\nvoice-b\nvoice-b: Ninety-five\nTASK_ACTION\nvoice-c\nvoice-c: Ninety-six\nTASK_ACTION\nvoice-a\nvoice-a: Ninety-seven\nTASK_ACTION\nvoice-b\nvoice-b: Ninety-eight\nTASK_ACTION\nvoice-c\nvoice-c: Ninety-nine\nTASK_ACTION\nvoice-a\nvoice-a: One hundred\nroomState\nLIVE\nCOMPLETED\nauthoritative\n{\n  task: {\n    kind: count_to_n,\n    target: 100,\n    current: 100,\n    next: 100,\n    completed: true\n  },\n  floorOwner: none,\n  nextSpeaker: none,\n  nextRequiredAct: task_action,\n  suppressAcknowledgements: true,\n  loopRisk: false\n}\ntext source: deterministic sim — scripted utterances · real reducer & scheduler\n3 iPhones + 1 shared room + scheduler = count to 100\nCompare\nNodeAgent\nRun",
+  "scrollWidth": 1440,
+  "scrollHeight": 960,
+  "reducedMotion": true,
+  "controls": [
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nPhi-4 Mini Reasoning — tiny logic-intensive model\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nSTABLE · Llama 3.2 1B — stable tiny fallback\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback",
+      "ariaLabel": null,
+      "title": "Voice model",
+      "placeholder": null,
+      "value": "gemma4_e2b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 251.984375,
+        "y": 11,
+        "width": 104.71875,
+        "height": 34,
+        "right": 356.703125,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SELECT",
+      "text": "LATEST · Gemma 4 E2B — latest edge voice/room-state default\nLATEST · Gemma 4 E4B — stronger edge voice/NodeAgent model\nLATEST · Gemma 4 12B — latest laptop/workstation NodeAgent default\nLATEST · Gemma 4 26B-A4B — MoE local reasoning/agent model\nLATEST · Gemma 4 31B — dense local/lab reasoning model\nSTABLE · Gemma 3n E2B — older tiny everyday-device fallback\nSTABLE · Gemma 3n E4B — older everyday-device fallback\nLATEST · Ministral 3 3B — latest edge agent model\nLATEST · Ministral 3 8B — best latest laptop NodeAgent default\nLATEST · Ministral 3 14B — stronger edge NodeAgent/vision model\nLATEST · Qwen3.6 27B — latest Qwen agentic coding/thinking model\nLATEST · Qwen3.6 35B-A3B — MoE coding/reasoning variant\nLATEST · Nemotron-Cascade-2 30B-A3B — open MoE reasoning/agent model\nLATEST · Mistral Medium 3.5 128B — latest local/lab flagship\nLATEST · GLM-4.7-Flash 30B-A3B — latest lightweight Z.ai agent model\nLATEST · GLM-5 — huge open-weight agentic engineering model\nLATEST · GLM-5.1 — flagship agentic engineering model\nLATEST · Mistral Small 3.2 24B — repetition/function-calling fix\nLATEST · Magistral 24B — Mistral reasoning reviewer/planner\nLATEST · gpt-oss 20B — open-weight local reasoning/agent model\nLATEST · gpt-oss 120B — larger open-weight local/lab reasoning model\nLATEST · Qwen3-Coder-Next — latest efficient coding-agent model\nLATEST · Qwen3-Coder 30B — practical agentic code model\nLATEST · Qwen3-Coder 480B — most agentic Qwen code model, lab only\nLATEST · Devstral Small 2 24B — current software-engineering agent\nLATEST · Devstral 2 123B — larger codebase agent, lab only\nLATEST · DeepSeek-R1 0528 8B — practical distilled reasoner\nPhi-4 Mini Reasoning — tiny logic-intensive model\nPhi-4 Reasoning Vision 15B — compact multimodal UI/doc reasoner\nLFM2.5 Thinking 1.2B — ultra-fast local classifier/reasoner\nOLMo 3.1 32B Instruct — open science model\nLlama 4 Scout — large multimodal MoE, not newest but current Meta line\nSTABLE · Llama 3.2 3B — stable low-latency voice fallback\nSTABLE · Gemma 3 4B QAT — stable compact vision baseline\nSTABLE · Qwen3 4B — stable small NodeAgent fallback\nSTABLE · Qwen3 30B-A3B — stable MoE agent fallback\nSTABLE · Qwen2.5-Coder 7B — stable practical code model\nSTABLE · Qwen2.5-Coder 32B — stable stronger code model",
+      "ariaLabel": null,
+      "title": "NodeAgent model",
+      "placeholder": null,
+      "value": "gemma4_12b",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 447.265625,
+        "y": 11,
+        "width": 107.4375,
+        "height": 34,
+        "right": 554.703125,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "N"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 620.796875,
+        "y": 19,
+        "width": 54,
+        "height": 18,
+        "right": 674.796875,
+        "bottom": 37
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "100",
+      "disabled": false,
+      "labels": [
+        "TURNS"
+      ],
+      "tabIndex": 0,
+      "rect": {
+        "x": 741.890625,
+        "y": 19,
+        "width": 54,
+        "height": 18,
+        "right": 795.890625,
+        "bottom": 37
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SELECT",
+      "text": "Sim (scripted)\nOllama (local)\nOpenAI (live)",
+      "ariaLabel": null,
+      "title": "Utterance source: deterministic sim, local Ollama, or server-side OpenAI",
+      "placeholder": null,
+      "value": "deterministic",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 872.390625,
+        "y": 11,
+        "width": 53.5,
+        "height": 34,
+        "right": 925.890625,
+        "bottom": 45
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "SUMMARY",
+      "text": "Real-world architecture\n— how three iPhones share one authoritative room",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": null,
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 0,
+        "y": 202.5,
+        "width": 1440,
+        "height": 28.5,
+        "right": 1440,
+        "bottom": 231
+      },
+      "fontSize": "11px",
+      "color": "oklab(0.708459 0.113106 0.122984 / 0.9)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Compare",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 23,
+        "y": 912,
+        "width": 96.515625,
+        "height": 28,
+        "right": 119.515625,
+        "bottom": 940
+      },
+      "fontSize": "12px",
+      "color": "rgb(233, 237, 241)",
+      "background": "rgb(24, 28, 37)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "NodeAgent",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 121.515625,
+        "y": 912,
+        "width": 108.59375,
+        "height": 28,
+        "right": 230.109375,
+        "bottom": 940
+      },
+      "fontSize": "12px",
+      "color": "rgb(147, 158, 174)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": "Press Run to start the side-by-side comparison demo…",
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 243.109375,
+        "y": 906,
+        "width": 1070.96875,
+        "height": 40,
+        "right": 1314.078125,
+        "bottom": 946
+      },
+      "fontSize": "14px",
+      "color": "rgb(233, 237, 241)",
+      "background": "oklab(0.261176 -0.00153025 -0.0153386 / 0.7)",
+      "focused": false,
+      "focusVisible": false
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Run",
+      "ariaLabel": null,
+      "title": null,
+      "placeholder": null,
+      "value": "",
+      "disabled": false,
+      "labels": [],
+      "tabIndex": 0,
+      "rect": {
+        "x": 1324.078125,
+        "y": 904,
+        "width": 95.921875,
+        "height": 44,
+        "right": 1420,
+        "bottom": 948
+      },
+      "fontSize": "14px",
+      "color": "rgb(30, 17, 11)",
+      "background": "rgba(0, 0, 0, 0)",
+      "focused": false,
+      "focusVisible": false
+    }
+  ],
+  "overflow": [],
+  "speech": {
+    "available": true,
+    "speaking": false,
+    "pending": false,
+    "voices": [
+      {
+        "name": "Microsoft David - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Mark - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Zira - English (United States)",
+        "lang": "en-US",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Huihui - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Kangkang - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      },
+      {
+        "name": "Microsoft Yaoyao - Chinese (Simplified, PRC)",
+        "lang": "zh-CN",
+        "localService": true
+      }
+    ]
+  }
+}

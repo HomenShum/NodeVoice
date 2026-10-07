@@ -1,0 +1,294 @@
+{
+  "name": "NODEVOICE-LOCKED-BUILD-DEPENDENCIES-01",
+  "status": "READ_ONLY_PROPOSAL_NOT_AUTHORIZED_IMPLEMENTATION",
+  "at": "2026-09-05T22:52:35.593167+00:00",
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+  "head": "d225bcaf64008ee522bc66d40aa72eb0381b95a6",
+  "recommendation": "Lock-only repair at the seven exact minimum rows. Keep package.json ranges and every unrelated row byte-identical after native resolution; no new final dependency, override, force or peer bypass.",
+  "packageSha256": "bdee976d75f0c6d84dd4b6be1a7e2aca4bbb8df91288822bfc050df1e0988272",
+  "lockSha256": "bdbd22a06f566749eaa1aa2c8207f3bb67bf1840336cb2e50ea8c0ad4555fa94",
+  "rows": [
+    {
+      "path": "node_modules/browserslist",
+      "beforeVersion": "4.28.4",
+      "targetVersion": "4.28.7",
+      "dev": true,
+      "beforeRowSha256": "59fde994620dbcf86579063fcb0fddcca3c2109b2c44360fac51f807aa096380",
+      "targetMetadata": {
+        "path": "browserslist-4.28.7.json",
+        "sha256": "2d1264c2976acf7c9e781ebb20723cd0709c0f5dbb3c496b1062555ff7dcf366"
+      },
+      "targetIntegrity": "sha512-JxV13hNrFxqjOc8alRbq9dK1MM79NEXYpma2B2J4wAtpWS5zIEIKqWPGCl7N4o7Uc7B7itylh7SuDujATRyyTw==",
+      "targetDependencies": {
+        "caniuse-lite": "^1.0.30001806",
+        "node-releases": "^2.0.51",
+        "electron-to-chromium": "^1.5.393",
+        "update-browserslist-db": "^1.2.3",
+        "baseline-browser-mapping": "^2.10.44"
+      }
+    },
+    {
+      "path": "node_modules/nanoid",
+      "beforeVersion": "3.3.15",
+      "targetVersion": "3.3.18",
+      "dev": true,
+      "beforeRowSha256": "4ea59a18fb4d8b930e25e3ede77f29225633d97dac0f8396bbf77e2e84ca9038",
+      "targetMetadata": {
+        "path": "nanoid-3.3.18.json",
+        "sha256": "e068b45312ea854dd1b79c57aff7b7bc19966a7a36e3ccf2f5799c02a65710e4"
+      },
+      "targetIntegrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+      "targetDependencies": {}
+    },
+    {
+      "path": "node_modules/postcss",
+      "beforeVersion": "8.5.16",
+      "targetVersion": "8.5.23",
+      "dev": true,
+      "beforeRowSha256": "b7db49b294e89d50e28b8c35e23c5298470a18c5a1b12d4e5464dfcd50f2c339",
+      "targetMetadata": {
+        "path": "postcss-8.5.23.json",
+        "sha256": "b33e1ab1884aa470afb3811f1fc80aebd60732caefd845e37437139453fa91ab"
+      },
+      "targetIntegrity": "sha512-g50586zr4bZmwFiTlflMu8E0bDTb5I5gertgwAKmsdUlTQIhZtunzUlD1WSzwcVWPoAVpsrA6vlfCD7oXvRwgg==",
+      "targetDependencies": {
+        "nanoid": "^3.3.16",
+        "picocolors": "^1.1.1",
+        "source-map-js": "^1.2.1"
+      }
+    },
+    {
+      "path": "node_modules/caniuse-lite",
+      "beforeVersion": "1.0.30001800",
+      "targetVersion": "1.0.30001806",
+      "dev": true,
+      "beforeRowSha256": "b3e1e5cb537edb7eea9545fe144e28e14c21232c72a4fc0e8a56cb1e33ac377b",
+      "targetMetadata": {
+        "path": "caniuse-lite-1.0.30001806-full.json",
+        "sha256": "2edf60da76a9fb824d59e12d3ea79052f7040e074f90122dabd9222ea5b0396d"
+      },
+      "targetIntegrity": "sha512-72Cuvd95zbSYPKq6Fhg8eDJRlzgWDf7/mtoZv6Qe/DYNCEBdNxoA3+rZAU2ZhGCpZlns3EssFavaZomckT5Uuw==",
+      "targetDependencies": {}
+    },
+    {
+      "path": "node_modules/node-releases",
+      "beforeVersion": "2.0.50",
+      "targetVersion": "2.0.51",
+      "dev": true,
+      "beforeRowSha256": "1ca4ff12f1c18d7cbfd1e1448273e36c8a657d1bf45446dea84081ebb8904fac",
+      "targetMetadata": {
+        "path": "node-releases-2.0.51-full.json",
+        "sha256": "e63e3f135dfb118c47a7f8941183d2c1a978ee00a174ba35c06fd75a944239c5"
+      },
+      "targetIntegrity": "sha512-wRNIrw4DmVLKQlbgOMdkMx27Wrpzes2hh5Jtbi2bjPd+4wJstWIqP5A+lscnqbm0xxmT5Bpg8Lec5ItEBwx6BQ==",
+      "targetDependencies": {}
+    },
+    {
+      "path": "node_modules/electron-to-chromium",
+      "beforeVersion": "1.5.387",
+      "targetVersion": "1.5.393",
+      "dev": true,
+      "beforeRowSha256": "4816288753d413fa6122ab4060e553d16605238339ac90ee19cac0beccbf6970",
+      "targetMetadata": {
+        "path": "electron-to-chromium-1.5.393-full.json",
+        "sha256": "de5394b0125169345b126c77295d94c4089a5d3baf7c06c585186336003da004"
+      },
+      "targetIntegrity": "sha512-kiDJdIUawuEIcp9XoICKp1iTYDEbgguIPq526N1Q7jIQDeQ3CqoMx71025PI/7E48Ddtw2HuWsVjY7afEgNxmg==",
+      "targetDependencies": {}
+    },
+    {
+      "path": "node_modules/baseline-browser-mapping",
+      "beforeVersion": "2.10.41",
+      "targetVersion": "2.10.44",
+      "dev": true,
+      "beforeRowSha256": "95fb32ff50a937e9700db7d3acb9e1e871e07519a2d7d9315d30b84c1ee541e1",
+      "targetMetadata": {
+        "path": "baseline-browser-mapping-2.10.44-full.json",
+        "sha256": "f4f8ced3862e8ec269a4be476c09da9c9c18537e4e5111cfb263687e5bc60101"
+      },
+      "targetIntegrity": "sha512-T3ghW+sl/ZJ8w1v/yQx3qvJ9040DWoLBz8JT/CILbAKcFyG9b2MRe75v6W5uXjv6uH1lumK2Kv46y2zSkcej0Q==",
+      "targetDependencies": {}
+    }
+  ],
+  "finalOwners": [
+    "package-lock.json",
+    "later separately reviewed handoff/evidence receipt metadata"
+  ],
+  "transientOwnerIfRootApproves": "package.json may need temporary exact native resolver constraints for the seven existing packages; preserve and restore original bytes before final lock refresh. No install/build while temporary roots exist. This is a proposed mechanism, not one already executed.",
+  "nativeResolutionBoundary": "Use native npm to generate version/resolved/integrity and row flags. Do not hand-author lock rows or transplant a context-dependent fixture. Default npm update would now choose browserslist4.28.9/postcss8.5.28 and exceed the exact minimum cohort. Stop and show the complete lock diff if native resolution adds unrelated rows or cannot return to the original root manifest.",
+  "runtimeApplicability": {
+    "allAffectedDevOnly": true,
+    "paths": [
+      "dev autoprefixer10.5.2 \u2192 browserslist4.28.4",
+      "dev root postcss^8.5.16 / @tailwindcss/postcss4.3.2 / vite8.1.3 \u2192 postcss8.5.16 \u2192 nanoid3.3.15"
+    ],
+    "sourceInspection": "No postcss/browserslist/nanoid match in application src, Convex or scripts; configured PostCSS build plugins are Tailwind and Autoprefixer. Installed postcss/lib/input.js calls nanoid/non-secure with fixed6.",
+    "productionAudit": "NOT_RUN in this recon; lock marks all three dev:true. No claim of zero production vulnerability audit."
+  },
+  "primarySources": [
+    {
+      "id": "GHSA-28wg-ghj8-5hjv",
+      "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": "< 3.3.16",
+          "first_patched_version": "3.3.16",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": ">= 4.0.0, < 5.1.16",
+          "first_patched_version": "5.1.16",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "f6585f0f283a4e146731880912dea3c678adffa199d61222ecc4c2a68bb0a5c8"
+    },
+    {
+      "id": "GHSA-2v37-7h3g-55p8",
+      "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": ">= 4.0.0, < 5.1.6",
+          "first_patched_version": "5.1.6",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": "< 3.3.18",
+          "first_patched_version": "3.3.18",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "2e4d40936b1501f8b41f5361eaec2c9301618429341570c4d3dda1fe74b6e631"
+    },
+    {
+      "id": "GHSA-73wf-gq98-2v4g",
+      "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "browserslist"
+          },
+          "vulnerable_version_range": "<= 4.28.6",
+          "first_patched_version": "4.28.7",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "82784d919b3a8b4fad17b0fc72e05021ba0024d5f6cd7756893124a1a235bae6"
+    },
+    {
+      "id": "GHSA-c83g-rgw3-j3cx",
+      "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "browserslist"
+          },
+          "vulnerable_version_range": "<= 4.28.6",
+          "first_patched_version": "4.28.7",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "a031cd6d6e3dd3e1639bc9e4edf9a6c06543cf3247f7fd21ef985314b31c88ef"
+    },
+    {
+      "id": "GHSA-fxqj-rqcc-2cmp",
+      "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+      "severity": "medium",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "postcss"
+          },
+          "vulnerable_version_range": "<= 8.5.22",
+          "first_patched_version": "8.5.23",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "616e9ac39682030948b95e68d5cafc80752728181194db0a951f97a05e0b9e6e"
+    },
+    {
+      "id": "GHSA-r28c-9q8g-f849",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "postcss"
+          },
+          "vulnerable_version_range": "<= 8.5.17",
+          "first_patched_version": "8.5.18",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "153b44239442f93df686feb835b9bea3f306360ef6732fbd2b02a3fdab5be9b4"
+    },
+    {
+      "id": "GHSA-xwg4-73v4-xw9w",
+      "url": "https://github.com/advisories/GHSA-xwg4-73v4-xw9w",
+      "severity": "high",
+      "vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": "< 3.3.12",
+          "first_patched_version": "3.3.12",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "npm",
+            "name": "nanoid"
+          },
+          "vulnerable_version_range": ">= 4.0.0, < 5.1.11",
+          "first_patched_version": "5.1.11",
+          "vulnerable_functions": []
+        }
+      ],
+      "sha256": "7c44785ca0e0cf7ded77e50b26d454885a19b4579c0e035780c8c6726b99058e"
+    }
+  ],
+  "regressionPlan": [
+    "Preserve reviewed2UIowners, original package/lock,177source,3dist,refs/index and installed baseline before any mutation; wait for source/publication review closure.",
+    "Resolve the exact seven-node minimum cohort natively in the existing candidate only after approval, restore original package.json bytes, inspect all lock rows and verify registry integrity/constraints. Keep update-browserslist-db1.2.3,picocolors1.1.1,source-map-js1.2.1 unchanged.",
+    "Run one normal npm ci from final lock, then full npm audit and npm audit --omit=dev; retain raw outcomes and distinguish metadata/feed state from applicability.",
+    "Run bounded old/new canaries in owned scratch processes: negative/zero nanoid generator with a short child deadline; harmless local PostCSS source-map marker with from set/unset and literal read observer; Browserslist inherited-key stats and varied-query sustained scenario without forcing an OOM. Old failure must be observed and safe generated fixtures retained.",
+    "Run ordinary npm run doctor, npm run proof (55 tests/9 files plus CLI), npm run build with deterministic/no-key environment and full source guards.",
+    "Compare rebuilt served JS/CSS/HTML and a small native current320/390/1440 controls/room check. If CSS or output differs, bind affected before/after geometry/pixels. Do not claim new final100 playback from an older build: unchanged relevant output may be explicitly rebound; changed runtime output requires the named current-tree100 proof or an honest historical hold.",
+    "Freeze exact source/lock/installed/build/canary/audit evidence for nonauthor review; no push, deployment, timeout or provider change."
+  ],
+  "limits": [
+    "Reconnaissance only: no npm install/update/audit fix, lock/source edit, package execution, provider call or environment-value retrieval.",
+    "The seven target versions are the smallest verified metadata combination clearing the six recorded advisory ranges; they are not an executed npm resolution or a current whole-graph audit result.",
+    "No externally supplied CSS/stats/query/size path was found in src/convex/scripts. This is bounded source inspection, not a complete exploitability proof. Build/PR tooling remains relevant even for dev dependencies.",
+    "npm start uses tsx, itself a devDependency; an npm ci --omit=dev deployment is not certified. The three affected libraries are outside the inspected application request path, not necessarily absent from an installed production host.",
+    "The npm feed labels the Browserslist cache issue high; its maintainer advisory says moderate. Preserve both source classifications without changing the baseline three-high package count.",
+    "GHSA-xwg4-73v4-xw9w is already fixed in nanoid3.3.12; current3.3.15 is outside that range. Do not add it as a current fourth finding.",
+    "One supporting registry request batch using the abbreviated metadata Accept header failed406; the corrected application/json reads all passed. No candidate state changed."
+  ]
+}

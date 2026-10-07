@@ -1,0 +1,118 @@
+{
+  "candidate": {
+    "head": {
+      "sha256": "f3a641a46faa7d3add9af3b3486ed98dd1fb610bd7949ca217385aec66c55085",
+      "equalsHistorical": false,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+        "rev-parse",
+        "HEAD"
+      ]
+    },
+    "refs": {
+      "sha256": "e9969f8d095a387add0f10c8270a71886f003d30a164dfddb2fabe600f28b489",
+      "equalsHistorical": false,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+        "for-each-ref",
+        "--format=%(refname) %(objectname)"
+      ]
+    },
+    "index": {
+      "sha256": "cf1d8f90ecf6d5e5b8fc970671fde9d36baea4e4c1ad722b1d5e5ee12bf4948a",
+      "equalsHistorical": false,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+        "ls-files",
+        "--stage",
+        "-z"
+      ]
+    },
+    "status": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equalsHistorical": false,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodevoice-current-consumer-20260905",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ]
+    }
+  },
+  "primary": {
+    "head": {
+      "sha256": "2badecca7d24a955c50f53cdc2d760d769a66f6befb6362643d6a0b7e4de8290",
+      "equalsHistorical": true,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeVoice",
+        "rev-parse",
+        "HEAD"
+      ]
+    },
+    "refs": {
+      "sha256": "e9969f8d095a387add0f10c8270a71886f003d30a164dfddb2fabe600f28b489",
+      "equalsHistorical": false,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeVoice",
+        "for-each-ref",
+        "--format=%(refname) %(objectname)"
+      ]
+    },
+    "index": {
+      "sha256": "96a334967d315cea44da6b2694c4bd289825b1014a6cfe68cc75cdabe6f113c1",
+      "equalsHistorical": true,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeVoice",
+        "ls-files",
+        "--stage",
+        "-z"
+      ]
+    },
+    "status": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "equalsHistorical": true,
+      "exitCode": 0,
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeVoice",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ]
+    }
+  },
+  "source177Preserved": true,
+  "dist3Preserved": true,
+  "externalHandoffSha256": "1d944f483ebd7fe1103cda7bcbf8b2afdaf80660ee79f084d5f2f7ccbce7b972",
+  "meaning": "This worker wrote only the new external scratch and operator packet. Parent-owned publication may change refs or add metadata independently; each observed equality is reported explicitly."
+}
