@@ -42,3 +42,13 @@ CSS and font delivery are unchanged; external font availability is not certified
 and current compiler regeneration/check NOT_RUN under retained execution holds.
 Historical July checks are not current acceptance. No matched architecture
 comparison, visual/SEO grade or production change is claimed.
+
+## 2026-10-08 — Refresh one transitive source-map dependency
+
+A developer using the retained NodeVoice toolchain now gets a lock that selects source-map-js 1.2.2 instead of 1.2.1. The pinned main `08eddca3825328541d09e3bd3c06b60b968c3bba` lock audit reported one high [indexed source-map denial-of-service advisory](https://github.com/advisories/GHSA-68fv-2mgg-jv7q). Its existing PostCSS and Tailwind parent ranges both permit the patched release.
+
+**Change:** normal `npm update source-map-js --package-lock-only` changed only that leaf's version, registry URL and integrity. All 191 lock entry paths remain; the other 190 dependency records (including the root), parent ranges and `package.json` are unchanged.
+
+**Local proof:** `NODEVOICE-ONE-TRANSITIVE-AUDIT-FIX-01` passed the complete lock comparison and a normal `npm audit --package-lock-only --json` with zero findings. The resolved target matches official registry metadata. This is a lock-only result, not an installed-tree audit or a full security certificate.
+
+**Not run in this slice:** dependency install, tests, typechecks, build, browser, providers and deployment. The earlier [CI job for `08eddca`](https://github.com/HomenShum/NodeVoice/actions/runs/37660764318/job/112927394999) describes that earlier source, not this patched lock. At this local capture, new exact-head CI and runtime compatibility are NOT_RUN and remain required before merge. No product, pixel or production readiness is certified.
