@@ -11,6 +11,8 @@
 <p align="center"><a href="#quickstart-30-seconds">Quickstart</a> · <a href="docs/START_HERE.md">Code&nbsp;walkthrough</a> · <a href="HANDOFF.md">Handoff</a> · <a href="https://nodevoice.vercel.app">Live&nbsp;demo</a> · <a href="https://homenshum.github.io/">All&nbsp;projects</a></p>
 <!-- brand:end -->
 
+# NodeVoice — shared-state voice rooms
+
 > **Three friends walk down a street, each with an iPhone voice agent.** *“Count to 100 together.”*
 >
 > They didn’t fail for lack of intelligence. They failed for lack of **shared state**. The fix isn’t better agents — it’s a shared room.
