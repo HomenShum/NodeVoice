@@ -419,13 +419,20 @@ export const getV3WorkerRaw = internalQuery({
 });
 
 /**
- * Rewrite rooms whose stored `model` is no longer in ROUTER_MODELS (a retired id such as
- * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, from, to, at}.
+ * Rewrite stored model ids that are no longer in ROUTER_MODELS (a retired id such as
+ * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, [workerId], from, to, at}.
  * `validModel` only runs on writes, so without this a stale value reaches OpenAI as-is.
+ *
+ * Two tables hold such a value: `rooms.model`, and `workers.model` on `execution_plan` rows
+ * (spawnAgentOsGoal stores the room's model there and retryV3Worker copies it forward, so a
+ * retry of a pre-change planning worker would otherwise resend the retired id). `web_research`
+ * workers are left alone: their model is the OPENAI_WEB_MODEL caller argument, not a router row.
+ *
  * Paged: run `npx convex run rooms:migrateRetiredRoomModels` once AFTER the deploy that
- * removes the row (before it the function does not exist, or gpt-4.1-nano is still in the
- * table so it is a no-op); re-run with {"cursor": <continueCursor>} while isDone is false.
- * Until it finishes, the coordinator read-side guard (validModel) covers unmigrated rooms.
+ * removes the row, for each table: `'{"table":"rooms"}'` then `'{"table":"workers"}'`, and
+ * re-run with `"cursor": <continueCursor>` while isDone is false (before the deploy the row is
+ * still in the table, so it is a no-op). Until the rooms pass finishes, the coordinator
+ * read-side guard (validModel) covers unmigrated rooms.
  */
 export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) {
   const page = await ctx.db.query("rooms").paginate({ numItems: 200, cursor });
@@ -440,9 +447,22 @@ export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) 
   return { migrated, isDone: page.isDone, continueCursor: page.continueCursor };
 }
 
+export async function retireWorkerModels(ctx: MutationCtx, cursor: string | null) {
+  const page = await ctx.db.query("workers").paginate({ numItems: 200, cursor });
+  let migrated = 0;
+  for (const worker of page.page) {
+    const from = worker.model;
+    if (worker.kind !== "execution_plan" || !from || ROUTER_MODELS.some((m) => m.id === from)) continue;
+    await ctx.db.patch(worker._id, { model: DEFAULT_MODEL });
+    await ctx.db.insert("roomModelMigrations", { roomId: worker.roomId, workerId: worker._id, from, to: DEFAULT_MODEL, at: Date.now() });
+    migrated += 1;
+  }
+  return { migrated, isDone: page.isDone, continueCursor: page.continueCursor };
+}
+
 export const migrateRetiredRoomModels = internalMutation({
-  args: { cursor: v.optional(v.union(v.string(), v.null())) },
-  handler: (ctx, args) => retireRoomModels(ctx, args.cursor ?? null),
+  args: { table: v.optional(v.union(v.literal("rooms"), v.literal("workers"))), cursor: v.optional(v.union(v.string(), v.null())) },
+  handler: (ctx, args) => (args.table === "workers" ? retireWorkerModels : retireRoomModels)(ctx, args.cursor ?? null),
 });
 
 export const insertTraceInternal = internalMutation({

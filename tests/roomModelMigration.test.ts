@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_MODEL, ROUTER_MODELS, validModel } from "../src/core/routerModels.js";
+import { DEFAULT_MODEL, ROUTER_MODELS, ROUTER_PRICING_AS_OF, validModel } from "../src/core/routerModels.js";
 
 // convex/*.ts are type-checked by `npm run check:convex` (Convex module settings); the root
 // `tsc` cannot compile them, so they are loaded by a non-literal specifier, as the app
@@ -25,23 +25,24 @@ afterEach(() => {
 
 type Row = Record<string, any>;
 /** In-memory stand-in for a Convex MutationCtx: just the db calls the migration makes. */
-function fakeMutationCtx(roomRows: Row[]) {
+function fakeMutationCtx(roomRows: Row[], workerRows: Row[] = []) {
   const patches: { id: string; fields: Row }[] = [];
   const inserted: { table: string; doc: Row }[] = [];
   const ctx = {
     db: {
       query: (table: string) => ({
         paginate: async ({ numItems, cursor }: { numItems: number; cursor: string | null }) => {
-          expect(table).toBe("rooms");
+          const rows = table === "rooms" ? roomRows : table === "workers" ? workerRows : null;
+          expect(rows, `unexpected table ${table}`).not.toBeNull();
           const start = cursor ? Number(cursor) : 0;
-          const page = roomRows.slice(start, start + numItems);
+          const page = rows!.slice(start, start + numItems);
           const end = start + page.length;
-          return { page, isDone: end >= roomRows.length, continueCursor: String(end) };
+          return { page, isDone: end >= rows!.length, continueCursor: String(end) };
         },
       }),
       patch: async (id: string, fields: Row) => {
         patches.push({ id, fields });
-        Object.assign(roomRows.find((r) => r._id === id)!, fields);
+        Object.assign([...roomRows, ...workerRows].find((r) => r._id === id)!, fields);
       },
       insert: async (table: string, doc: Row) => void inserted.push({ table, doc }),
     },
@@ -148,16 +149,34 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(bodies[0]!.model).toBe("gpt-5.4");
   });
 
-  it("the eval script's per-M price table is the router table's ids, stamped with the date its prices were typed (SPEC A.0.6)", async () => {
+  it("router prices agree with the eval script's per-M table and the recorded run, and carry one as-of date (SPEC A.0.6)", async () => {
     // scripts/model-eval.mjs needs a key and spends money on import, so read it as text.
     const { readFile } = await import("node:fs/promises");
     const src = await readFile(new URL("../scripts/model-eval.mjs", import.meta.url), "utf8");
-    const ids = [...src.matchAll(/\{ id: "([^"]+)", nextgen: (?:true|false), price: \[[\d.]+, [\d.]+\] \}/g)].map((m) => m[1]);
-    expect(ids.sort()).toEqual(ROUTER_MODELS.map((m) => m.id).sort()); // the eval never prices a retired id or omits a live one
-    expect(src).toMatch(/const PRICING_AS_OF = "\d{4}-\d{2}-\d{2}";/);
+    const table = new Map(
+      [...src.matchAll(/\{ id: "([^"]+)", nextgen: (?:true|false), price: \[([\d.]+), ([\d.]+)\] \}/g)].map((m) => [m[1]!, [Number(m[2]), Number(m[3])] as const]),
+    );
+    expect([...table.keys()].sort()).toEqual(ROUTER_MODELS.map((m) => m.id).sort()); // the eval never prices a retired id or omits a live one
+    const asOf = src.match(/const PRICING_AS_OF = "(\d{4}-\d{2}-\d{2})";/)![1];
+
+    const results = JSON.parse(await readFile(new URL("../docs/model-eval-results.json", import.meta.url), "utf8"));
+    const close = (a: number, b: number, what: string) => expect(Math.abs(a - b), what).toBeLessThanOrEqual(1e-9 * Math.max(Math.abs(a), Math.abs(b)));
+    for (const { id } of ROUTER_MODELS) {
+      const [inPerM, outPerM] = table.get(id)!;
+      const rows = results.detail.filter((r: Row) => r.model === id);
+      expect(rows.length, `recorded calls for ${id}`).toBeGreaterThan(0);
+      for (const r of rows) close((r.promptTokens * inPerM + r.completionTokens * outPerM) / 1e6, r.costPerTurn, `${id} ${r.scenario} cost recomputed from the price table`);
+      const avg = rows.reduce((t: number, r: Row) => t + r.costPerTurn, 0) / rows.length;
+      const recorded = results.byModel.find((m: Row) => m.model === id).costPerTurn;
+      close(avg, recorded, `${id} byModel.costPerTurn`);
+      close(ROUTER_MODELS.find((m) => m.id === id)!.expectedCostUsd, recorded, `${id} ROUTER_MODELS.expectedCostUsd`);
+    }
+    // the routerModels numbers, the eval table and the recorded run were all priced on the same day
+    expect(ROUTER_PRICING_AS_OF).toBe(asOf);
+    expect(results.ranAt.slice(0, 10)).toBe(asOf);
   });
 
-  /** A fake OpenAI chat transport for the two coordinator roles below; returns every request body it saw. */
+  /** A fake OpenAI chat transport for the coordinator roles below; returns every request body it saw. */
   function fakeChatTransport(content: string) {
     vi.stubEnv("OPENAI_API_KEY", "test-key");
     const bodies: Record<string, unknown>[] = [];
@@ -172,6 +191,97 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(body).not.toHaveProperty("temperature");
     expect(body).not.toHaveProperty("max_tokens");
   };
+
+  it("migrateRetiredRoomModels pages planning workers: execution_plan rows with a retired id are rewritten and audited; web_research rows are not", async () => {
+    const workerRows: Row[] = [
+      { _id: "w1", roomId: "r1", kind: "execution_plan", model: "gpt-4.1-nano" },
+      { _id: "w2", roomId: "r1", kind: "execution_plan", model: "gpt-5.4-mini" },
+      { _id: "w3", roomId: "r1", kind: "web_research", model: "gpt-5.4" }, // OPENAI_WEB_MODEL caller argument
+      { _id: "w4", roomId: "r1", kind: "web_research", model: "gpt-4.1-nano" }, // never written, but never touched either
+      { _id: "w5", roomId: "r2", kind: "execution_plan" }, // no stored model: runV3Worker falls back to the (guarded) room model
+      { _id: "w6", roomId: "r2", kind: "deterministic_count" },
+    ];
+    const { ctx, patches, inserted } = fakeMutationCtx([], workerRows);
+    expect(await rooms.retireWorkerModels(ctx, null)).toMatchObject({ migrated: 1, isDone: true });
+    expect(patches).toEqual([{ id: "w1", fields: { model: DEFAULT_MODEL } }]);
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0]!.table).toBe("roomModelMigrations");
+    expect(inserted[0]!.doc).toMatchObject({ roomId: "r1", workerId: "w1", from: "gpt-4.1-nano", to: DEFAULT_MODEL });
+    expect(workerRows.map((w) => w.model)).toEqual([DEFAULT_MODEL, "gpt-5.4-mini", "gpt-5.4", "gpt-4.1-nano", undefined, undefined]);
+    expect((await rooms.retireWorkerModels(ctx, null)).migrated).toBe(0); // idempotent
+    // the internalMutation dispatches on `table`, defaulting to rooms
+    const viaMutation = fakeMutationCtx([{ _id: "r9", model: "gpt-4.1-nano" }], [{ _id: "w9", roomId: "r9", kind: "execution_plan", model: "gpt-4.1-nano" }]);
+    await rooms.migrateRetiredRoomModels._handler(viaMutation.ctx, { table: "workers" });
+    expect(viaMutation.patches.map((p) => p.id)).toEqual(["w9"]);
+    await rooms.migrateRetiredRoomModels._handler(viaMutation.ctx, {});
+    expect(viaMutation.patches.map((p) => p.id)).toEqual(["w9", "r9"]);
+  });
+
+  /** Fake Convex db for retryV3Worker: get/insert/patch plus the traces scan insertTrace does. */
+  function fakeRetryCtx(room: Row, worker: Row) {
+    const rows = new Map<string, Row>([["room1", room], [worker._id, worker]]);
+    const inserts: { table: string; doc: Row }[] = [];
+    const ctx = {
+      db: {
+        get: async (id: string) => rows.get(id) ?? null,
+        insert: async (table: string, doc: Row) => {
+          const id = `${table}:${inserts.length}`;
+          inserts.push({ table, doc });
+          rows.set(id, { _id: id, ...doc });
+          return id;
+        },
+        patch: async (id: string, fields: Row) => void Object.assign(rows.get(id)!, fields),
+        delete: async (id: string) => void rows.delete(id),
+        query: () => ({ withIndex: () => ({ collect: async () => [] }) }),
+      },
+      scheduler: { runAfter: vi.fn(async () => undefined) },
+    };
+    return { ctx: ctx as any, rows, inserts };
+  }
+
+  /** retryV3Worker on `stored`, then run the worker row it queued through runV3Worker; return the OpenAI request body. */
+  async function retryThenRun(stored: Row, room: Row) {
+    const { ctx, rows, inserts } = fakeRetryCtx(room, stored);
+    const out = await rooms.retryV3Worker._handler(ctx, { roomId: "room1", workerId: stored._id });
+    expect(out).toMatchObject({ reused: false });
+    const retried = inserts.find((i) => i.table === "workers")!.doc;
+    expect(retried.retryOf).toBe(stored._id);
+    const bodies = fakeChatTransport("# Plan");
+    const runQuery = vi.fn(async () => ({ worker: rows.get(out.workerId)!, goal: { title: "G" }, task: null, room }));
+    const runMutation = vi.fn(async (_ref: unknown, a: Record<string, unknown>) => ("workerId" in a && !("error" in a) && !("content" in a) ? { started: true } : undefined));
+    await coordinator.runV3Worker._handler({ runQuery, runMutation } as any, { workerId: out.workerId });
+    expect(bodies).toHaveLength(1);
+    return { body: bodies[0]!, retried };
+  }
+  const retryRoom = { ...baseRoom, model: "gpt-5.4-mini", budgetMaxWorkers: 9, budgetWorkersUsed: 1, permissionWebResearch: true };
+
+  it("a pre-change planning worker retried after the migration requests gpt-5.4-mini; unmigrated, retry resends the stored retired id", async () => {
+    const preChange = (): Row => ({ _id: "w1", roomId: "room1", goalId: "g1", kind: "execution_plan", status: "failed", title: "Draft execution plan", model: "gpt-4.1-nano", attempt: 1 });
+
+    // without the migration the retired id is copied by retryV3Worker and sent by runV3Worker (this is the defect)
+    const unmigrated = await retryThenRun(preChange(), retryRoom);
+    expect(unmigrated.retried.model).toBe("gpt-4.1-nano");
+    expect(unmigrated.body.model).toBe("gpt-4.1-nano");
+
+    // with it, the retry carries the default and the request has the gpt-5 shape
+    const stored = preChange();
+    const { ctx } = fakeMutationCtx([], [stored]);
+    await rooms.retireWorkerModels(ctx, null);
+    const { body, retried } = await retryThenRun(stored, retryRoom);
+    expect(retried.model).toBe(DEFAULT_MODEL);
+    expectGpt5Shape(body);
+    expect(body.max_completion_tokens).toBe(1800);
+  });
+
+  it("a web_research worker retried after the migration keeps its stored model (OPENAI_WEB_MODEL caller argument)", async () => {
+    const stored: Row = { _id: "w2", roomId: "room1", goalId: "g1", kind: "web_research", status: "completed", title: "Research", model: "gpt-5.4", attempt: 1 };
+    const { ctx, patches } = fakeMutationCtx([], [stored]);
+    await rooms.retireWorkerModels(ctx, null);
+    expect(patches).toEqual([]);
+    const { body, retried } = await retryThenRun(stored, retryRoom);
+    expect(retried.model).toBe("gpt-5.4");
+    expect(body.model).toBe("gpt-5.4");
+  });
 
   it("the human-steer interpreter for a stale room requests gpt-5.4-mini in the gpt-5 request shape", async () => {
     const bodies = fakeChatTransport(JSON.stringify({ kind: "none", confidence: 1, reason: "backchannel" }));

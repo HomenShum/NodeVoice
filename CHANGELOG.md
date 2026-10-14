@@ -16,12 +16,20 @@ copies now import `DEFAULT_MODEL`. `scripts/model-eval.mjs` carries
 `PRICING_AS_OF` (the date its per-M prices were typed, not re-verified). Spec:
 model-defaults SPEC Part A section A.2 (NodeVoice).
 
-**Known residual:** a worker row created BEFORE this change that already stores
-`gpt-4.1-nano` keeps it (worker model is a caller argument, kept as stored), so
-retrying it after 2026-10-23 sends that id. Rooms and all newly spawned workers
-are covered.
+**Planning workers.** Worker rows created BEFORE this change store `gpt-4.1-nano`
+too, and `retryV3Worker` copies the stored model forward, so after 2026-10-23 a
+retry would send the retired id. `rooms:migrateRetiredRoomModels` therefore also
+pages `workers` (`{"table":"workers"}`): `execution_plan` rows whose model is not
+in `ROUTER_MODELS` become `gpt-5.4-mini` and get an audit row (`workerId` set).
+`web_research` rows are never touched, so the `OPENAI_WEB_MODEL` caller argument
+is preserved. Run it once per table after the deploy.
 
-**Validation:** `tests/roomModelMigration.test.ts` (10 tests) fails on the
+**Pricing agreement (SPEC A.0.6).** `ROUTER_PRICING_AS_OF` (2026-07-04) dates the
+`expectedCostUsd` figures; a test recomputes every recorded call's cost from the
+eval script's per-M table and checks it against `docs/model-eval-results.json` and
+`ROUTER_MODELS`.
+
+**Validation:** `tests/roomModelMigration.test.ts` (13 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,
 planning worker spawned through the real steer path); `npm run check`,

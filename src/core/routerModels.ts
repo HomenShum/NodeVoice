@@ -20,6 +20,9 @@ export const ROUTER_MODELS = [
   { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning) · retires 2026-12-11", expectedLatencyMs: 3000, expectedCostUsd: 0.0007873125, qualityScore: 5 },
 ] as const;
 
+/** Day `expectedCostUsd` was measured: the run behind docs/model-eval-results.json (scripts/model-eval.mjs). */
+export const ROUTER_PRICING_AS_OF = "2026-07-04";
+
 export const DEFAULT_MODEL = "gpt-5.4-mini";
 
 /** Never let a caller-supplied model id through unchecked. */

@@ -143,10 +143,12 @@ export default defineSchema({
     .index("by_room", ["roomId", "createdAt"])
     .index("by_goal", ["goalId", "createdAt"]),
 
-  // Audit rows written by rooms:migrateRetiredRoomModels when a stored room.model
-  // is no longer in ROUTER_MODELS (e.g. gpt-4.1-nano, retired by OpenAI 2026-10-23).
+  // Audit rows written by rooms:migrateRetiredRoomModels when a stored room.model, or an
+  // execution_plan worker.model (workerId set), is no longer in ROUTER_MODELS
+  // (e.g. gpt-4.1-nano, retired by OpenAI 2026-10-23).
   roomModelMigrations: defineTable({
     roomId: v.id("rooms"),
+    workerId: v.optional(v.id("workers")),
     from: v.string(),
     to: v.string(),
     at: v.number(),
