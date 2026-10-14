@@ -273,6 +273,32 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(body.max_completion_tokens).toBe(1800);
   });
 
+  it("a planning worker still running when the migration runs does not restore the retired id on completion; the retry sends the default", async () => {
+    const stored: Row = { _id: "w1", roomId: "room1", goalId: "g1", kind: "execution_plan", status: "running", title: "Draft execution plan", model: "gpt-4.1-nano", attempt: 1 };
+    // 1. the worker was started on the retired id; the migration runs while its OpenAI call is in flight
+    expect(await rooms.retireWorkerModels(fakeMutationCtx([], [stored]).ctx, null)).toMatchObject({ migrated: 1 });
+    expect(stored.model).toBe(DEFAULT_MODEL);
+    // 2. the call finishes and runPlanningWorker echoes the id it was given
+    const { ctx, rows } = fakeRetryCtx(retryRoom, stored);
+    rows.set("g1", { _id: "g1" });
+    await rooms.completeV3Worker._handler(ctx, { workerId: "w1", title: "Plan", content: "# Plan", summary: "s", model: "gpt-4.1-nano" });
+    expect(stored).toMatchObject({ status: "completed", model: DEFAULT_MODEL });
+    // 3. a later retry sends the default in the gpt-5 request shape
+    const { body, retried } = await retryThenRun(stored, retryRoom);
+    expect(retried.model).toBe(DEFAULT_MODEL);
+    expectGpt5Shape(body);
+  });
+
+  it("completion still records the model a worker ran on: valid ids for planning, any id for web_research", async () => {
+    for (const [kind, model, expected] of [["execution_plan", "gpt-5.4-mini", "gpt-5.4-mini"], ["web_research", "gpt-5.4", "gpt-5.4"], ["web_research", "gpt-4.1-nano", "gpt-4.1-nano"]] as const) {
+      const stored: Row = { _id: "w1", roomId: "room1", goalId: "g1", kind, status: "running", title: "t", attempt: 1 };
+      const { ctx, rows } = fakeRetryCtx(retryRoom, stored);
+      rows.set("g1", { _id: "g1" });
+      await rooms.completeV3Worker._handler(ctx, { workerId: "w1", title: "t", content: "c", summary: "s", model });
+      expect(stored.model).toBe(expected);
+    }
+  });
+
   it("a web_research worker retried after the migration keeps its stored model (OPENAI_WEB_MODEL caller argument)", async () => {
     const stored: Row = { _id: "w2", roomId: "room1", goalId: "g1", kind: "web_research", status: "completed", title: "Research", model: "gpt-5.4", attempt: 1 };
     const { ctx, patches } = fakeMutationCtx([], [stored]);

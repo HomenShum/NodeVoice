@@ -527,7 +527,9 @@ export const completeV3Worker = internalMutation({
     await ctx.db.patch(args.workerId, {
       status: "completed",
       summary: args.summary.slice(0, 500),
-      ...(args.model ? { model: args.model } : {}),
+      // An in-flight planning call echoes the id it was started with. If the worker migration ran meanwhile,
+      // writing a retired id back would undo it and retryV3Worker would copy it. web_research rows keep the echo.
+      ...(args.model && (worker.kind !== "execution_plan" || ROUTER_MODELS.some((m) => m.id === args.model)) ? { model: args.model } : {}),
       completedAt: now,
       updatedAt: now,
     });
