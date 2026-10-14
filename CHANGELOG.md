@@ -27,12 +27,17 @@ is preserved. Run it once per table after the deploy.
 **Pricing agreement (SPEC A.0.6).** `ROUTER_PRICING_AS_OF` (2026-07-04) dates the
 `expectedCostUsd` figures; a test recomputes every recorded call's cost from the
 eval script's per-M table and checks it against `docs/model-eval-results.json` and
-`ROUTER_MODELS`.
+`ROUTER_MODELS`. A second test reads the README `$/turn` table and the
+`scripts/generate-chart.mjs` DATA rows (both frozen, read-only) and checks each
+against `byModel.costPerTurn` at the 2 significant figures they print.
 
-**Validation:** `tests/roomModelMigration.test.ts` (13 tests) fails on the
+**Validation:** `tests/roomModelMigration.test.ts` (16 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,
-planning worker spawned through the real steer path); `npm run check`,
+planning worker spawned through the real steer path). `completeV3Worker` no
+longer writes a model outside `ROUTER_MODELS` onto an `execution_plan` row, so an
+in-flight planning call cannot undo the workers migration by echoing the retired
+id back. `npm run check`,
 `check:client`, `check:convex`, `check:citations` and `npm test` pass. No
 provider calls made.
 

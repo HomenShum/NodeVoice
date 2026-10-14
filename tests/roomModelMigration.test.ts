@@ -176,6 +176,24 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(results.ranAt.slice(0, 10)).toBe(asOf);
   });
 
+  it("the README $/turn table and the chart's DATA rows show the recorded per-turn cost at display precision (SPEC A.0.6)", async () => {
+    // Both files are frozen docs-loop surfaces: read-only here. Every displayed figure must equal
+    // byModel.costPerTurn at the 2 significant figures the docs print.
+    const { readFile } = await import("node:fs/promises");
+    const results = JSON.parse(await readFile(new URL("../docs/model-eval-results.json", import.meta.url), "utf8"));
+    const recorded = new Map<string, number>(results.byModel.map((m: Row) => [m.model, m.costPerTurn]));
+    const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+    const table = readme.slice(readme.indexOf("| Model | Proofloop quality")).split("\n\n")[0]!;
+    const readmeRows = table.split("\n").map((l) => l.split("|").map((c) => c.replace(/\*/g, "").trim())).filter((c) => c[1]?.startsWith("gpt-"));
+    const readmeCosts = new Map<string, number>(readmeRows.map((c) => [c[1]!.split(" ")[0]!, Number(c[4]!.replace("$", ""))]));
+    const chart = await readFile(new URL("../scripts/generate-chart.mjs", import.meta.url), "utf8");
+    const chartCosts = new Map<string, number>([...chart.matchAll(/\["(gpt-[^"]+)", [\d.]+, [\d.]+, ([\d.]+),/g)].map((m) => [m[1]!, Number(m[2])]));
+    for (const [where, shown] of [["README.md", readmeCosts], ["scripts/generate-chart.mjs", chartCosts]] as const) {
+      expect([...shown.keys()].sort(), `${where} model ids`).toEqual([...recorded.keys()].sort());
+      for (const [id, cost] of shown) expect(cost, `${where} ${id} $/turn`).toBe(Number(recorded.get(id)!.toPrecision(2)));
+    }
+  });
+
   /** A fake OpenAI chat transport for the coordinator roles below; returns every request body it saw. */
   function fakeChatTransport(content: string) {
     vi.stubEnv("OPENAI_API_KEY", "test-key");
