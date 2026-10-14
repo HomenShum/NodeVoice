@@ -7,13 +7,17 @@
  * One table, read by the local Node server and the hosted Convex backend alike.
  */
 
+// gpt-4.1-nano was removed here: OpenAI retires it 2026-10-23 (platform.openai.com
+// deprecations page). Rooms that stored it are rewritten by rooms:migrateRetiredRoomModels
+// and `validModel` falls back to DEFAULT_MODEL for any stale id. gpt-5-nano / gpt-5-mini
+// (gpt-5-*-2025-08-07) retire 2026-12-11: marked in `note`, removed in a follow-up PR
+// through the same migration.
 export const ROUTER_MODELS = [
   { id: "gpt-5.4-mini", label: "GPT-5.4 mini", tier: "smart + fast", note: "default · smartest mini that stays ~1.3s", expectedLatencyMs: 1300, expectedCostUsd: 0.0007164375, qualityScore: 4.75 },
-  { id: "gpt-4.1-nano", label: "GPT-4.1 nano", tier: "cheapest", note: "fastest (~0.7s) + cheapest", expectedLatencyMs: 700, expectedCostUsd: 0.000033425, qualityScore: 4.15 },
   { id: "gpt-4.1-mini", label: "GPT-4.1 mini", tier: "balanced", note: "fast, mid capability", expectedLatencyMs: 700, expectedCostUsd: 0.0001409, qualityScore: 4.1 },
   { id: "gpt-4o-mini", label: "GPT-4o mini", tier: "legacy", note: "older baseline", expectedLatencyMs: 1000, expectedCostUsd: 0.0000505875, qualityScore: 4.5 },
-  { id: "gpt-5-nano", label: "GPT-5 nano", tier: "cheap + smart", note: "smart but ~3s (reasoning)", expectedLatencyMs: 3200, expectedCostUsd: 0.0001320625, qualityScore: 4.6 },
-  { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning)", expectedLatencyMs: 3000, expectedCostUsd: 0.0007873125, qualityScore: 5 },
+  { id: "gpt-5-nano", label: "GPT-5 nano", tier: "cheap + smart", note: "smart but ~3s (reasoning) · retires 2026-12-11", expectedLatencyMs: 3200, expectedCostUsd: 0.0001320625, qualityScore: 4.6 },
+  { id: "gpt-5-mini", label: "GPT-5 mini", tier: "max quality", note: "top quality, ~3s+ (reasoning) · retires 2026-12-11", expectedLatencyMs: 3000, expectedCostUsd: 0.0007873125, qualityScore: 5 },
 ] as const;
 
 export const DEFAULT_MODEL = "gpt-5.4-mini";

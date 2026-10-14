@@ -6,16 +6,16 @@
  */
 
 import { coerceCountTurn, normalizeHumanSteeringIntent, type CapabilityProfile, type HumanSteeringIntent, type CountTask } from "../core/steering.js";
+import { DEFAULT_MODEL } from "../core/routerModels.js";
 
 const OPENAI = "https://api.openai.com/v1";
 const ELEVEN = "https://api.elevenlabs.io/v1";
 
 const STT_MODEL = process.env.STT_MODEL ?? "whisper-1";
-// gpt-5.4-mini: latest, smartest mini, and — measured — as fast as gpt-4.1-nano
-// (~1.4s/turn, 0 reasoning tokens on short conversational turns). Output price is
-// higher but at ~70 tokens/turn it is dwarfed by STT/TTS cost. For the cheapest
-// option instead, set OPENAI_MODEL=gpt-4.1-nano.
-const LLM_MODEL = process.env.OPENAI_MODEL ?? "gpt-5.4-mini";
+// DEFAULT_MODEL (gpt-5.4-mini, src/core/routerModels.ts): measured ~1.4s/turn, 0 reasoning tokens on
+// short turns (docs/model-eval-results.json); output price is dwarfed by STT/TTS cost at ~70 tokens/turn.
+// gpt-4.1-nano retires 2026-10-23 (OpenAI deprecations page) — do not point OPENAI_MODEL at it.
+const LLM_MODEL = process.env.OPENAI_MODEL ?? DEFAULT_MODEL;
 // gpt-5.x / o-series reasoning models use a different param shape and take a
 // reasoning_effort. Keep it low so the voice loop stays snappy.
 const REASONING_EFFORT = process.env.REASONING_EFFORT ?? "low";

@@ -20,10 +20,11 @@ const env = fs.readFileSync(resolve(root, ".env.local"), "utf8");
 const KEY = env.match(/OPENAI_API_KEY=(.+)/)?.[1]?.trim();
 if (!KEY) throw new Error("OPENAI_API_KEY missing from .env.local");
 
+// gpt-4.1-nano dropped: retires 2026-10-23. gpt-5-nano/gpt-5-mini retire 2026-12-11 (drop in the follow-up PR).
+// No new row without a measured run (paid, manual).
 // candidate coordinator models — [inputPrice, outputPrice] per 1M tokens
 const MODELS = [
   { id: "gpt-4o-mini", nextgen: false, price: [0.15, 0.6] },
-  { id: "gpt-4.1-nano", nextgen: false, price: [0.1, 0.4] },
   { id: "gpt-4.1-mini", nextgen: false, price: [0.4, 1.6] },
   { id: "gpt-5-nano", nextgen: true, price: [0.05, 0.4] },
   { id: "gpt-5-mini", nextgen: true, price: [0.25, 2.0] },

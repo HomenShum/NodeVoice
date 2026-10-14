@@ -7,6 +7,7 @@ import {
   activeSlots,
   CAPABILITY_PROFILES,
   ROUTER_MODELS,
+  DEFAULT_MODEL,
   DEFAULT_GOAL,
   agentIndexFromSlot,
   isAgentSlot,
@@ -415,6 +416,31 @@ export const getV3WorkerRaw = internalQuery({
     const room = await ctx.db.get(worker.roomId);
     return { worker, goal, task, room };
   },
+});
+
+/**
+ * Rewrite rooms whose stored `model` is no longer in ROUTER_MODELS (a retired id such as
+ * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, from, to, at}.
+ * `validModel` only runs on writes, so without this a stale value reaches OpenAI as-is.
+ * Paged: run `npx convex run rooms:migrateRetiredRoomModels` before AND after the deploy
+ * that removes the row; re-run with {"cursor": <continueCursor>} while isDone is false.
+ */
+export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) {
+  const page = await ctx.db.query("rooms").paginate({ numItems: 200, cursor });
+  let migrated = 0;
+  for (const room of page.page) {
+    if (ROUTER_MODELS.some((m) => m.id === room.model)) continue;
+    const from = room.model;
+    await ctx.db.patch(room._id, { model: DEFAULT_MODEL });
+    await ctx.db.insert("roomModelMigrations", { roomId: room._id, from, to: DEFAULT_MODEL, at: Date.now() });
+    migrated += 1;
+  }
+  return { migrated, isDone: page.isDone, continueCursor: page.continueCursor };
+}
+
+export const migrateRetiredRoomModels = internalMutation({
+  args: { cursor: v.optional(v.union(v.string(), v.null())) },
+  handler: (ctx, args) => retireRoomModels(ctx, args.cursor ?? null),
 });
 
 export const insertTraceInternal = internalMutation({

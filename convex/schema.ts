@@ -142,4 +142,13 @@ export default defineSchema({
   })
     .index("by_room", ["roomId", "createdAt"])
     .index("by_goal", ["goalId", "createdAt"]),
+
+  // Audit rows written by rooms:migrateRetiredRoomModels when a stored room.model
+  // is no longer in ROUTER_MODELS (e.g. gpt-4.1-nano, retired by OpenAI 2026-10-23).
+  roomModelMigrations: defineTable({
+    roomId: v.id("rooms"),
+    from: v.string(),
+    to: v.string(),
+    at: v.number(),
+  }).index("by_room", ["roomId", "at"]),
 });

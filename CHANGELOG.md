@@ -1,5 +1,20 @@
 # NodeVoice changelog
 
+## 2026-10-14 — Remove the retired gpt-4.1-nano router row
+
+OpenAI retires `gpt-4.1-nano` on 2026-10-23. The room model picker no longer
+offers it, rooms that already stored it are rewritten to `gpt-5.4-mini` by
+`rooms:migrateRetiredRoomModels` (audit rows in `roomModelMigrations`), and the
+coordinator resolves `validModel(room.model)` so a stale stored id can no longer
+reach OpenAI. `gpt-5-nano` / `gpt-5-mini` rows are marked "retires 2026-12-11"
+and are removed in a follow-up PR through the same migration. The three literal
+`gpt-5.4-mini` copies now import `DEFAULT_MODEL`. Spec: model-defaults SPEC
+Part A section A.2 (NodeVoice).
+
+**Validation:** `tests/roomModelMigration.test.ts` fails on the previous code
+(request carried `gpt-4.1-nano`) and passes now; `npm run check`, `check:client`,
+`check:convex`, `check:citations` and `npm test` pass. No provider calls made.
+
 ## 2026-10-07 — Make setup and proof limits reachable
 
 Developers and coding agents can reach the existing `HANDOFF.md` from the README
