@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SpanPrimitive, SpanResource, type SpanData } from "@assistant-ui/react-o11y";
-import { useAui, AuiProvider, useAuiState } from "@assistant-ui/store";
+import { AuiConfig, AuiProvider, useAuiState } from "@assistant-ui/store";
 import { cn } from "@/lib/utils";
 
 export interface TraceTreeViewProps {
@@ -80,23 +80,25 @@ function SpanRow({ accentColor, isActive }: { accentColor: "bad" | "good"; isAct
   );
 }
 
-/**
- * react-o11y renders `components.Span` with NO props — the per-row index lives
- * in context, not props. So we identify the active row by its span *id* (read
- * from the row's own aui state) rather than a prop `index` (which is always
- * undefined). This is what makes the highlight + auto-scroll actually work.
- */
+/** The SDK supplies each row's span through context; identify the active row by ID. */
 function SpanRowByActive({
   accentColor,
   activeId,
-  activeRowRef,
 }: {
   accentColor: "bad" | "good";
   activeId: string | null;
-  activeRowRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const id = useAuiState((s) => s.span.id) as string | undefined;
   const isActive = activeId != null && id === activeId;
+  const activeRowRef = React.useRef<HTMLDivElement | null>(null);
+
+  // The SDK can mount this row after the parent's effect has already run.
+  React.useEffect(() => {
+    if (isActive) {
+      activeRowRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+  }, [isActive]);
+
   return (
     <div
       ref={isActive ? activeRowRef : undefined}
@@ -108,21 +110,14 @@ function SpanRowByActive({
 }
 
 export function TraceTreeView({ spans, className, accentColor = "good", activeIndex = -1 }: TraceTreeViewProps) {
-  const aui = useAui({ span: SpanResource({ spans }) });
+  const config = AuiConfig({ span: SpanResource({ spans }) });
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  const activeRowRef = React.useRef<HTMLDivElement | null>(null);
 
   const activeId =
     activeIndex >= 0 && activeIndex < spans.length ? (spans[activeIndex]!.id as string) : null;
 
-  React.useEffect(() => {
-    if (activeId && activeRowRef.current) {
-      activeRowRef.current.scrollIntoView({ block: "center", behavior: "smooth" });
-    }
-  }, [activeId]);
-
   return (
-    <AuiProvider value={aui}>
+    <AuiProvider config={config}>
       <div ref={scrollRef} className={cn("flex-1 space-y-0.5 overflow-y-auto px-2.5 py-2.5 font-mono text-xs", className)}>
         {spans.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground/70">
@@ -130,13 +125,9 @@ export function TraceTreeView({ spans, className, accentColor = "good", activeIn
             <span className="text-[11px]">Waiting for trace data…</span>
           </div>
         ) : (
-          <SpanPrimitive.Children
-            components={{
-              Span: () => (
-                <SpanRowByActive accentColor={accentColor} activeId={activeId} activeRowRef={activeRowRef} />
-              ),
-            }}
-          />
+          <SpanPrimitive.Children>
+            {() => <SpanRowByActive accentColor={accentColor} activeId={activeId} />}
+          </SpanPrimitive.Children>
         )}
       </div>
     </AuiProvider>
@@ -153,12 +144,12 @@ export function compareStepsToSpans(
   // Flat, sequential timeline — every turn is a sibling. (Chaining each turn as
   // a child of the previous produced runaway indentation: 100 turns => 100
   // levels deep => horizontal-scroll soup.)
-  return steps.map((step, i) => ({
+  return steps.map<SpanData>((step, i) => ({
     id: `${tag}-${step.turn}`,
     parentSpanId: null,
     name: `${step.actorId}: ${step.text}`,
     type: step.speechAct,
-    status: "completed" as const,
+    status: step.speechAct === "error" ? "failed" : "completed",
     startedAt: now + i * stepDuration,
     endedAt: now + (i + 1) * stepDuration,
     latencyMs: stepDuration,
