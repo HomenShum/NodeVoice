@@ -177,7 +177,7 @@ async function spawnAgentOsGoal(
       ? [{ kind: "deterministic_count", title: "Prepare exact count sequence", model: undefined as string | undefined }]
       : [
           { kind: "web_research", title: "Research current external context", model: "gpt-4.1-mini" },
-          { kind: "execution_plan", title: "Draft execution plan", model: room.model },
+          { kind: "execution_plan", title: "Draft execution plan", model: validModel(room.model) },
         ];
   for (const spec of workerSpecs) {
     const budgetBlocked = workersUsed >= policy.budgetMaxWorkers;

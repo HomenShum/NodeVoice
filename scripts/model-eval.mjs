@@ -22,7 +22,11 @@ if (!KEY) throw new Error("OPENAI_API_KEY missing from .env.local");
 
 // gpt-4.1-nano dropped: retires 2026-10-23. gpt-5-nano/gpt-5-mini retire 2026-12-11 (drop in the follow-up PR).
 // No new row without a measured run (paid, manual).
-// candidate coordinator models — [inputPrice, outputPrice] per 1M tokens
+// candidate coordinator models — [inputPrice, outputPrice] per 1M tokens.
+// PRICING_AS_OF = the day these prices were typed for the measured run behind docs/model-eval-results.json
+// (commit 40cd6b6, 2026-07-04). They have NOT been re-read from the vendor since: SPEC A.2 requires a re-read
+// on the day of the next paid run, then this date moves. It is not a "verified today" stamp.
+const PRICING_AS_OF = "2026-07-04";
 const MODELS = [
   { id: "gpt-4o-mini", nextgen: false, price: [0.15, 0.6] },
   { id: "gpt-4.1-mini", nextgen: false, price: [0.4, 1.6] },
@@ -162,7 +166,7 @@ async function main() {
     };
   }).sort((a, b) => b.quality - a.quality);
 
-  const out = { ranAt: new Date().toISOString?.() ?? Date.now(), judge: JUDGE, byModel, detail: judged };
+  const out = { ranAt: new Date().toISOString?.() ?? Date.now(), pricingAsOf: PRICING_AS_OF, judge: JUDGE, byModel, detail: judged };
   fs.writeFileSync(resolve(root, "docs/model-eval-results.json"), JSON.stringify(out, null, 2));
 
   console.log("model            quality  p50 latency  $/turn      reasoning  fails");

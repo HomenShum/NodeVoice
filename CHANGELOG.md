@@ -4,16 +4,29 @@
 
 OpenAI retires `gpt-4.1-nano` on 2026-10-23. The room model picker no longer
 offers it, rooms that already stored it are rewritten to `gpt-5.4-mini` by
-`rooms:migrateRetiredRoomModels` (audit rows in `roomModelMigrations`), and the
-coordinator resolves `validModel(room.model)` so a stale stored id can no longer
-reach OpenAI. `gpt-5-nano` / `gpt-5-mini` rows are marked "retires 2026-12-11"
-and are removed in a follow-up PR through the same migration. The three literal
-`gpt-5.4-mini` copies now import `DEFAULT_MODEL`. Spec: model-defaults SPEC
-Part A section A.2 (NodeVoice).
+`rooms:migrateRetiredRoomModels` (audit rows in `roomModelMigrations`), and every
+request the coordinator builds from `room.model` (the turn, the human-steer
+interpreter, the planning-worker fallback) resolves it through `validModel`.
+New planning workers also store `validModel(room.model)` at spawn, so a host
+steer in a room that has not been migrated yet does not create a worker that
+sends the retired id. `gpt-5-nano` / `gpt-5-mini` rows are marked "retires
+2026-12-11" (in the dropdown options, not only the hover title) and are removed
+in a follow-up PR through the same migration. The three literal `gpt-5.4-mini`
+copies now import `DEFAULT_MODEL`. `scripts/model-eval.mjs` carries
+`PRICING_AS_OF` (the date its per-M prices were typed, not re-verified). Spec:
+model-defaults SPEC Part A section A.2 (NodeVoice).
 
-**Validation:** `tests/roomModelMigration.test.ts` fails on the previous code
-(request carried `gpt-4.1-nano`) and passes now; `npm run check`, `check:client`,
-`check:convex`, `check:citations` and `npm test` pass. No provider calls made.
+**Known residual:** a worker row created BEFORE this change that already stores
+`gpt-4.1-nano` keeps it (worker model is a caller argument, kept as stored), so
+retrying it after 2026-10-23 sends that id. Rooms and all newly spawned workers
+are covered.
+
+**Validation:** `tests/roomModelMigration.test.ts` (10 tests) fails on the
+previous code (request carried `gpt-4.1-nano`) and passes now, with one
+request-shape test per changed coordinator role (turn, steer interpreter,
+planning worker spawned through the real steer path); `npm run check`,
+`check:client`, `check:convex`, `check:citations` and `npm test` pass. No
+provider calls made.
 
 ## 2026-10-07 — Make setup and proof limits reachable
 

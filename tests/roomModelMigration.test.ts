@@ -1,3 +1,5 @@
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_MODEL, ROUTER_MODELS, validModel } from "../src/core/routerModels.js";
 
@@ -7,6 +9,7 @@ import { DEFAULT_MODEL, ROUTER_MODELS, validModel } from "../src/core/routerMode
 const load = (path: string) => import(/* @vite-ignore */ path);
 const rooms = await load("../convex/rooms.ts");
 const coordinator = await load("../convex/coordinator.ts");
+const liveRoom = await load("../src/client/live/LiveRoom.tsx");
 
 // OpenAI retires gpt-4.1-nano on 2026-10-23 (platform.openai.com deprecations page).
 // A host who created a room before the row was removed still has it stored on `rooms.model`;
@@ -54,10 +57,14 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(ROUTER_MODELS).toHaveLength(5);
   });
 
-  it("marks the gpt-5 rows as retiring 2026-12-11 in the picker", () => {
-    for (const id of ["gpt-5-nano", "gpt-5-mini"]) {
-      expect(ROUTER_MODELS.find((m) => m.id === id)?.note, id).toContain("retires 2026-12-11");
-    }
+  it("the picker options a host chooses from carry the retirement date for the gpt-5 rows only", () => {
+    // render the real <ModelSelect>; its <option> text is what the host sees in the dropdown
+    const rm = { room: { models: ROUTER_MODELS, state: { model: DEFAULT_MODEL } }, setModel: () => {} };
+    const html = renderToStaticMarkup(createElement(liveRoom.ModelSelect, { rm }));
+    const options = new Map([...html.matchAll(/<option value="([^"]+)"[^>]*>([^<]*)<\/option>/g)].map((m) => [m[1]!, m[2]!]));
+    expect([...options.keys()]).toEqual(ROUTER_MODELS.map((m) => m.id));
+    for (const id of ["gpt-5-nano", "gpt-5-mini"]) expect(options.get(id), id).toContain("retires 2026-12-11");
+    for (const id of ["gpt-5.4-mini", "gpt-4.1-mini", "gpt-4o-mini"]) expect(options.get(id), id).not.toContain("retires");
   });
 
   it("migrateRetiredRoomModels rewrites stale rooms to DEFAULT_MODEL, records them, and leaves valid rooms alone", async () => {
@@ -139,5 +146,98 @@ describe("retired router model: gpt-4.1-nano", () => {
     const runMutation = vi.fn(async (_ref: unknown, a: Record<string, unknown>) => ("workerId" in a && !("error" in a) && !("content" in a) ? { started: true } : undefined));
     await coordinator.runV3Worker._handler({ runQuery, runMutation } as any, { workerId: "w1" });
     expect(bodies[0]!.model).toBe("gpt-5.4");
+  });
+
+  it("the eval script's per-M price table is the router table's ids, stamped with the date its prices were typed (SPEC A.0.6)", async () => {
+    // scripts/model-eval.mjs needs a key and spends money on import, so read it as text.
+    const { readFile } = await import("node:fs/promises");
+    const src = await readFile(new URL("../scripts/model-eval.mjs", import.meta.url), "utf8");
+    const ids = [...src.matchAll(/\{ id: "([^"]+)", nextgen: (?:true|false), price: \[[\d.]+, [\d.]+\] \}/g)].map((m) => m[1]);
+    expect(ids.sort()).toEqual(ROUTER_MODELS.map((m) => m.id).sort()); // the eval never prices a retired id or omits a live one
+    expect(src).toMatch(/const PRICING_AS_OF = "\d{4}-\d{2}-\d{2}";/);
+  });
+
+  /** A fake OpenAI chat transport for the two coordinator roles below; returns every request body it saw. */
+  function fakeChatTransport(content: string) {
+    vi.stubEnv("OPENAI_API_KEY", "test-key");
+    const bodies: Record<string, unknown>[] = [];
+    vi.stubGlobal("fetch", async (_u: string | URL, init?: RequestInit) => {
+      bodies.push(JSON.parse(String(init?.body)));
+      return new Response(JSON.stringify({ choices: [{ message: { content } }] }), { status: 200 });
+    });
+    return bodies;
+  }
+  const expectGpt5Shape = (body: Record<string, unknown>) => {
+    expect(body.model).toBe("gpt-5.4-mini");
+    expect(body).not.toHaveProperty("temperature");
+    expect(body).not.toHaveProperty("max_tokens");
+  };
+
+  it("the human-steer interpreter for a stale room requests gpt-5.4-mini in the gpt-5 request shape", async () => {
+    const bodies = fakeChatTransport(JSON.stringify({ kind: "none", confidence: 1, reason: "backchannel" }));
+    const room = { goal: "Plan a launch", model: "gpt-4.1-nano", profile: "v1_room_state", pendingHuman: "sounds good", pendingHumanSeq: 1 };
+    const runQuery = vi.fn().mockResolvedValueOnce(room).mockResolvedValueOnce({ utterances: [] }); // getRoomRaw, then watchRoom
+    const runMutation = vi.fn(async () => ({ applied: true }));
+    await coordinator.interpretHumanSteer._handler({ runQuery, runMutation } as any, { roomId: "room1", text: "sounds good", seq: 1 });
+    expect(bodies).toHaveLength(1);
+    expectGpt5Shape(bodies[0]!);
+    expect(bodies[0]!.max_completion_tokens).toBe(1000);
+  });
+
+  /** In-memory Convex db for the steer -> spawn path: get/insert/patch/delete plus the traces index scan. */
+  function fakeSteerCtx(room: Row) {
+    const rows = new Map<string, Row>([["room1", room]]);
+    const inserts: { table: string; doc: Row }[] = [];
+    const ctx = {
+      db: {
+        get: async (id: string) => rows.get(id) ?? null,
+        insert: async (table: string, doc: Row) => {
+          const id = `${table}:${inserts.length}`;
+          inserts.push({ table, doc });
+          rows.set(id, { _id: id, ...doc });
+          return id;
+        },
+        patch: async (id: string, fields: Row) => void Object.assign(rows.get(id)!, fields),
+        delete: async (id: string) => void rows.delete(id),
+        query: () => ({ withIndex: () => ({ collect: async () => [] }) }),
+      },
+      scheduler: { runAfter: vi.fn(async () => undefined) },
+    };
+    return { ctx: ctx as any, rows, inserts };
+  }
+
+  it("a planning worker spawned by a human steer in a stale room requests gpt-5.4-mini in the gpt-5 request shape", async () => {
+    // The room was NOT migrated (deploy-to-migration window): rooms.model is still the retired id.
+    const room: Row = {
+      _id: "room1", ...baseRoom, model: "gpt-4.1-nano", profile: "v3_agent_ecosystem", running: true, runToken: 1, turn: 0,
+      pendingHuman: "also draft a launch plan", pendingHumanSeq: 1,
+    };
+    const { ctx, rows, inserts } = fakeSteerCtx(room);
+    const intent = { kind: "add_goal", goal: "Draft a launch plan", confidence: 1, reason: "parallel workstream" };
+    await rooms.applyHumanIntent._handler(ctx, { roomId: "room1", text: "also draft a launch plan", seq: 1, intent, source: "llm" });
+
+    const workers = inserts.filter((i) => i.table === "workers").map((i) => i.doc);
+    expect(workers.map((w) => w.kind)).toEqual(["web_research", "execution_plan"]);
+    expect(workers[1]!.model).toBe("gpt-5.4-mini"); // spawn-time guard: the retired id is never stored on a new worker
+    expect(workers[0]!.model).toBe("gpt-4.1-mini"); // the web model is not a router row and stays as written
+    const planning = [...rows.values()].find((r) => r.kind === "execution_plan")!;
+
+    const bodies = fakeChatTransport("# Plan\n- objective: launch");
+    const runQuery = vi.fn(async () => ({ worker: planning, goal: { title: "Draft a launch plan" }, task: null, room }));
+    const runMutation = vi.fn(async (_ref: unknown, a: Record<string, unknown>) => ("workerId" in a && !("error" in a) && !("content" in a) ? { started: true } : undefined));
+    await coordinator.runV3Worker._handler({ runQuery, runMutation } as any, { workerId: planning._id });
+    expect(runMutation.mock.calls.some(([, a]) => "error" in (a as object))).toBe(false); // completed, not failed
+    expect(bodies).toHaveLength(1);
+    expectGpt5Shape(bodies[0]!);
+    expect(bodies[0]!.max_completion_tokens).toBe(1800);
+  });
+
+  it("a planning worker row with no stored model still gets a valid id for a stale room (runV3Worker fallback)", async () => {
+    const bodies = fakeChatTransport("# Plan");
+    const worker = { kind: "execution_plan", title: "Draft execution plan" };
+    const runQuery = vi.fn(async () => ({ worker, goal: { title: "G" }, task: null, room: { goal: "Plan", model: "gpt-4.1-nano" } }));
+    const runMutation = vi.fn(async (_ref: unknown, a: Record<string, unknown>) => ("workerId" in a && !("error" in a) && !("content" in a) ? { started: true } : undefined));
+    await coordinator.runV3Worker._handler({ runQuery, runMutation } as any, { workerId: "w1" });
+    expectGpt5Shape(bodies[0]!);
   });
 });
