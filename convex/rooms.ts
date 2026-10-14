@@ -422,8 +422,10 @@ export const getV3WorkerRaw = internalQuery({
  * Rewrite rooms whose stored `model` is no longer in ROUTER_MODELS (a retired id such as
  * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, from, to, at}.
  * `validModel` only runs on writes, so without this a stale value reaches OpenAI as-is.
- * Paged: run `npx convex run rooms:migrateRetiredRoomModels` before AND after the deploy
- * that removes the row; re-run with {"cursor": <continueCursor>} while isDone is false.
+ * Paged: run `npx convex run rooms:migrateRetiredRoomModels` once AFTER the deploy that
+ * removes the row (before it the function does not exist, or gpt-4.1-nano is still in the
+ * table so it is a no-op); re-run with {"cursor": <continueCursor>} while isDone is false.
+ * Until it finishes, the coordinator read-side guard (validModel) covers unmigrated rooms.
  */
 export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) {
   const page = await ctx.db.query("rooms").paginate({ numItems: 200, cursor });

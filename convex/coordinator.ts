@@ -190,8 +190,8 @@ export const runV3Worker = internalAction({
       const taskTitle = raw.task?.title ?? worker.title;
       const output =
         worker.kind === "web_research"
-          ? await runWebResearchWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model ? validModel(worker.model) : undefined })
-          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: validModel(worker.model ?? room.model) });
+          ? await runWebResearchWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model })
+          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model ?? validModel(room.model) });
 
       await ctx.runMutation(internal.rooms.completeV3Worker, {
         workerId: args.workerId,

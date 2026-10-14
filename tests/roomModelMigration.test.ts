@@ -77,12 +77,13 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(inserted.map((i) => i.table)).toEqual(["roomModelMigrations", "roomModelMigrations"]);
     expect(inserted[0]!.doc).toMatchObject({ roomId: "r1", from: "gpt-4.1-nano", to: DEFAULT_MODEL });
     expect(typeof inserted[0]!.doc.at).toBe("number");
-    // idempotent: the second run (before + after the deploy) finds nothing to do
+    // idempotent: a repeated run finds nothing to do
     const again = await rooms.retireRoomModels(ctx, null);
     expect(again.migrated).toBe(0);
   });
 
-  it("the coordinator's next turn for a stale room requests gpt-5.4-mini in the gpt-5 request shape", async () => {
+  /** Run the coordinator's real turn for `room` against a fake OpenAI transport; return the bodies it sent. */
+  async function turnRequestBodies(room: Row) {
     vi.stubEnv("OPENAI_API_KEY", "test-key");
     const bodies: { url: string; body: Record<string, unknown> }[] = [];
     vi.stubGlobal("fetch", async (url: string | URL, init?: RequestInit) => {
@@ -93,13 +94,15 @@ describe("retired router model: gpt-4.1-nano", () => {
       }
       return new Response("no tts in test", { status: 500 }); // speech is best-effort
     });
-    const runMutation = vi.fn(async () => ({ committed: true }));
-    const ctx = { runQuery: vi.fn(async () => ({ utterances: [] })), runMutation } as any;
-    const staleRoom = { goal: "Plan a launch", model: "gpt-4.1-nano", floorOwner: "agent-001", agentCount: 2, goalVersion: 0, recentActs: [] };
-
-    const out = await coordinator.produceTurn(ctx, "room1" as any, staleRoom, 1);
-
+    const ctx = { runQuery: vi.fn(async () => ({ utterances: [] })), runMutation: vi.fn(async () => ({ committed: true })) } as any;
+    const out = await coordinator.produceTurn(ctx, "room1" as any, room, 1);
     expect(out.committed).toBe(true);
+    return bodies;
+  }
+  const baseRoom = { goal: "Plan a launch", floorOwner: "agent-001", agentCount: 2, goalVersion: 0, recentActs: [] };
+
+  it("the coordinator's next turn for a stale room requests gpt-5.4-mini in the gpt-5 request shape", async () => {
+    const bodies = await turnRequestBodies({ ...baseRoom, model: "gpt-4.1-nano" });
     const chat = bodies.find((b) => b.url.endsWith("/chat/completions"))!;
     expect(chat.body.model).toBe("gpt-5.4-mini");
     // gpt-5.x shape: the 4.x-only keys must be absent
@@ -108,5 +111,33 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(chat.body.max_completion_tokens).toBe(1500);
     expect(chat.body.reasoning_effort).toBe("low");
     expect(bodies.some((b) => b.body.model === "gpt-4.1-nano")).toBe(false);
+  });
+
+  it("one room, end to end: created with the pre-change validator, migrated, audited, then its next turn requests gpt-5.4-mini", async () => {
+    // created through the PRE-CHANGE validator: nano was a valid pick for the host
+    const room: Row = { _id: "r1", ...baseRoom, model: preChangeValidModel("gpt-4.1-nano") };
+    expect(room.model).toBe("gpt-4.1-nano");
+    const { ctx, inserted } = fakeMutationCtx([room]);
+    await rooms.retireRoomModels(ctx, null);
+    expect(room.model).toBe(DEFAULT_MODEL);
+    expect(inserted).toHaveLength(1);
+    expect(inserted[0]!.doc).toMatchObject({ roomId: "r1", from: "gpt-4.1-nano", to: DEFAULT_MODEL });
+    const bodies = await turnRequestBodies(room);
+    expect(bodies.find((b) => b.url.endsWith("/chat/completions"))!.body.model).toBe("gpt-5.4-mini");
+  });
+
+  it("a web-research worker keeps its stored model, even one outside the picker (caller argument preserved)", async () => {
+    // completeV3Worker stores the resolved model (e.g. an OPENAI_WEB_MODEL override); retryV3Worker copies it.
+    vi.stubEnv("OPENAI_API_KEY", "test-key");
+    const bodies: Record<string, unknown>[] = [];
+    vi.stubGlobal("fetch", async (_u: string | URL, init?: RequestInit) => {
+      bodies.push(JSON.parse(String(init?.body)));
+      return new Response("stop", { status: 500 }); // only the request model matters here
+    });
+    const worker = { kind: "web_research", title: "Research", model: "gpt-5.4" };
+    const runQuery = vi.fn(async () => ({ worker, goal: { title: "Goal" }, room: { goal: "Plan", model: "gpt-4.1-nano" } }));
+    const runMutation = vi.fn(async (_ref: unknown, a: Record<string, unknown>) => ("workerId" in a && !("error" in a) && !("content" in a) ? { started: true } : undefined));
+    await coordinator.runV3Worker._handler({ runQuery, runMutation } as any, { workerId: "w1" });
+    expect(bodies[0]!.model).toBe("gpt-5.4");
   });
 });
