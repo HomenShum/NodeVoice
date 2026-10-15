@@ -1,3 +1,6 @@
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -156,6 +159,28 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect((await script.migrateTable(run, "rooms")).migrated).toBe(0);
     // convex run prints function logs before the strict-JSON result
     expect(script.parseRunOutput(["some log line", "{ not json } mid-log", "{", '  "migrated": 2,', '  "isDone": true,', '  "continueCursor": "c"', "}", ""].join("\n"))).toEqual({ migrated: 2, isDone: true, continueCursor: "c" });
+  });
+
+  it("crosses the real process boundary: the CLI receives the selector and the JSON argument with its quotes intact (no shell), and the default CLI path exists", async () => {
+    const script = await load("../scripts/migrate-retired-models.mjs");
+    const dir = mkdtempSync(join(tmpdir(), "nv-convex-stub-"));
+    const stub = join(dir, "stub-cli.mjs");
+    // stand-in for the Convex CLI: echoes its argv and strict-parses the last argument (convex run uses JSON5, a superset that still rejects bare strings)
+    writeFileSync(stub, [
+      "const a = process.argv.slice(2);",
+      'console.log("a log line first");',
+      'console.log(JSON.stringify({ migrated: 0, isDone: true, continueCursor: "", argv: a, parsed: JSON.parse(a.at(-1)) }, null, 2));',
+    ].join("\n"));
+    try {
+      const out = script.convexRun(["--prod"], stub)({ table: "rooms", cursor: null });
+      expect(out.argv.slice(0, 3)).toEqual(["run", "--prod", "rooms:migrateRetiredRoomModels"]);
+      expect(out.argv[3]).toBe('{"table":"rooms","cursor":null}');
+      expect(out.parsed).toEqual({ table: "rooms", cursor: null });
+      expect(() => script.convexRun(["--prod"], join(dir, "missing.mjs"))({ table: "rooms", cursor: null })).toThrow(/convex run failed/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+    expect(existsSync(script.convexBin())).toBe(true);
   });
 
   /** Run the coordinator's real turn for `room` against a fake OpenAI transport; return the bodies it sent. */
@@ -341,13 +366,17 @@ describe("retired router model: gpt-4.1-nano", () => {
   }
   const retryRoom = { ...baseRoom, model: "gpt-5.4-mini", budgetMaxWorkers: 9, budgetWorkersUsed: 1, permissionWebResearch: true };
 
-  it("a pre-change planning worker retried after the migration requests gpt-5.4-mini; unmigrated, retry resends the stored retired id", async () => {
+  it("a pre-change planning worker retried requests gpt-5.4-mini with the gpt-5 shape, with or without the stored-row migration", async () => {
     const preChange = (): Row => ({ _id: "w1", roomId: "room1", goalId: "g1", kind: "execution_plan", status: "failed", title: "Draft execution plan", model: "gpt-4.1-nano", attempt: 1 });
 
-    // without the migration the retired id is copied by retryV3Worker and sent by runV3Worker (this is the defect)
+    // without the migration the retired id is still copied by retryV3Worker, but runV3Worker resolves it on read
+    // (validModel(worker.model ?? room.model)): execution_plan models never come from a caller (spawn uses
+    // validModel(room.model), retry copies, completeV3Worker refuses non-router ids), so the stale id falls back
+    // to DEFAULT_MODEL and the request has the gpt-5 shape. Before this read-side guard it sent gpt-4.1-nano.
     const unmigrated = await retryThenRun(preChange(), retryRoom);
     expect(unmigrated.retried.model).toBe("gpt-4.1-nano");
-    expect(unmigrated.body.model).toBe("gpt-4.1-nano");
+    expect(unmigrated.body.model).toBe(DEFAULT_MODEL);
+    expectGpt5Shape(unmigrated.body);
 
     // with it, the retry carries the default and the request has the gpt-5 shape
     const stored = preChange();

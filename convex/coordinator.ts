@@ -191,7 +191,7 @@ export const runV3Worker = internalAction({
       const output =
         worker.kind === "web_research"
           ? await runWebResearchWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model })
-          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model ?? validModel(room.model) });
+          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: validModel(worker.model ?? room.model) }); // execution_plan models only ever come from validModel(room.model) (rooms.ts spawn/retry), so a stale stored id falls back to DEFAULT_MODEL here too; web_research above is untouched
 
       await ctx.runMutation(internal.rooms.completeV3Worker, {
         workerId: args.workerId,

@@ -3,8 +3,20 @@
 // otherwise, so pass the selector yourself, e.g.  node scripts/migrate-retired-models.mjs --prod
 // Run it after the deploy, then run it again: the second run must report migrated: 0 for both
 // tables (that is the exhaustive stale-row check; `convex data` only lists the newest 100 rows).
+import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
+
+// The Convex CLI is run as `node <bin> ...`, never through a shell: on Windows cmd.exe strips the quotes
+// from the JSON argument and `convex run` (JSON5) then rejects `{table:rooms,cursor:null}`.
+// The package's `exports` hides bin/main.js, so locate it from package.json and its `bin` field.
+export function convexBin() {
+  const pkgPath = createRequire(import.meta.url).resolve("convex/package.json");
+  const bin = JSON.parse(readFileSync(pkgPath, "utf8")).bin.convex;
+  return join(dirname(pkgPath), bin);
+}
 
 /** Pages through one table until isDone, summing `migrated`. `run(args)` returns the parsed result. */
 export async function migrateTable(run, table) {
@@ -26,9 +38,10 @@ export function parseRunOutput(stdout) {
   return JSON.parse(stdout.slice(start));
 }
 
-function convexRun(selector) {
+export function convexRun(selector, cli = convexBin()) {
   return (args) => {
-    const r = spawnSync("npx", ["convex", "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8", shell: process.platform === "win32" });
+    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8" });
+    if (r.error) throw r.error;
     if (r.status !== 0) throw new Error(`convex run failed (exit ${r.status}): ${r.stderr}`);
     return parseRunOutput(r.stdout);
   };
