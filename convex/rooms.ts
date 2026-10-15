@@ -419,6 +419,16 @@ export const getV3WorkerRaw = internalQuery({
 });
 
 /**
+ * Page size. Convex caps a mutation at 16 MiB read and 8 MiB written, and a document at 1 MiB;
+ * `goal` has no length cap, so a room can be ~1 MiB. Each stale document is read twice (the page,
+ * then `patch`) and written once: 6 x 1 MiB x 2 = 12 MiB read, 6 MiB written, with room left for
+ * the audit inserts. Do not raise this without re-deriving that bound. (maximumBytesRead is not
+ * used: a byte-limited page can come back incomplete with pageStatus SplitRequired, and this
+ * migration must never skip rows.)
+ */
+export const MIGRATION_PAGE_SIZE = 6;
+
+/**
  * Rewrite stored model ids that are no longer in ROUTER_MODELS (a retired id such as
  * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, [workerId], from, to, at}.
  * `validModel` only runs on writes, so without this a stale value reaches OpenAI as-is.
@@ -428,14 +438,14 @@ export const getV3WorkerRaw = internalQuery({
  * retry of a pre-change planning worker would otherwise resend the retired id). `web_research`
  * workers are left alone: their model is the OPENAI_WEB_MODEL caller argument, not a router row.
  *
- * Paged: run `npx convex run rooms:migrateRetiredRoomModels` once AFTER the deploy that
- * removes the row, for each table: `'{"table":"rooms"}'` then `'{"table":"workers"}'`, and
- * re-run with `"cursor": <continueCursor>` while isDone is false (before the deploy the row is
- * still in the table, so it is a no-op). Until the rooms pass finishes, the coordinator
- * read-side guard (validModel) covers unmigrated rooms.
+ * Paged, and run against the PRODUCTION deployment once AFTER the deploy that removes the row:
+ * `node scripts/migrate-retired-models.mjs --prod` walks every page of both tables (a bare
+ * `npx convex run` targets the dev deployment). Run it a second time: it must report
+ * `migrated: 0` for both tables. Until the rooms pass finishes, the coordinator read-side
+ * guard (validModel) covers unmigrated rooms.
  */
 export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) {
-  const page = await ctx.db.query("rooms").paginate({ numItems: 200, cursor });
+  const page = await ctx.db.query("rooms").paginate({ numItems: MIGRATION_PAGE_SIZE, cursor });
   let migrated = 0;
   for (const room of page.page) {
     if (ROUTER_MODELS.some((m) => m.id === room.model)) continue;
@@ -448,7 +458,7 @@ export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) 
 }
 
 export async function retireWorkerModels(ctx: MutationCtx, cursor: string | null) {
-  const page = await ctx.db.query("workers").paginate({ numItems: 200, cursor });
+  const page = await ctx.db.query("workers").paginate({ numItems: MIGRATION_PAGE_SIZE, cursor });
   let migrated = 0;
   for (const worker of page.page) {
     const from = worker.model;

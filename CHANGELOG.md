@@ -22,7 +22,12 @@ retry would send the retired id. `rooms:migrateRetiredRoomModels` therefore also
 pages `workers` (`{"table":"workers"}`): `execution_plan` rows whose model is not
 in `ROUTER_MODELS` become `gpt-5.4-mini` and get an audit row (`workerId` set).
 `web_research` rows are never touched, so the `OPENAI_WEB_MODEL` caller argument
-is preserved. Run it once per table after the deploy.
+is preserved. Pages are 6 rows (`MIGRATION_PAGE_SIZE`): a room's `goal` has no length
+cap, so a page of 1 MiB documents read twice (page, then `patch`) must stay under
+Convex's 16 MiB per-mutation read limit and 8 MiB write limit. After the deploy run
+`node scripts/migrate-retired-models.mjs --prod`, which walks every page of both tables
+(a bare `npx convex run` targets the DEV deployment, so the script refuses to run with no
+selector); run it again and expect `migrated: 0` for both tables.
 
 **Pricing agreement (SPEC A.0.6).** `ROUTER_PRICING_AS_OF` (2026-07-04) dates the
 `expectedCostUsd` figures; a test recomputes every recorded call's cost from the
@@ -31,7 +36,7 @@ eval script's per-M table and checks it against `docs/model-eval-results.json` a
 `scripts/generate-chart.mjs` DATA rows (both frozen, read-only) and checks each
 against `byModel.costPerTurn` at the 2 significant figures they print.
 
-**Validation:** `tests/roomModelMigration.test.ts` (16 tests) fails on the
+**Validation:** `tests/roomModelMigration.test.ts` (19 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,
 planning worker spawned through the real steer path). `completeV3Worker` no

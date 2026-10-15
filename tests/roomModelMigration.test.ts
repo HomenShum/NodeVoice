@@ -24,11 +24,20 @@ afterEach(() => {
 });
 
 type Row = Record<string, any>;
+const MIB = 1024 * 1024;
 /** In-memory stand-in for a Convex MutationCtx: just the db calls the migration makes. */
 function fakeMutationCtx(roomRows: Row[], workerRows: Row[] = []) {
   const patches: { id: string; fields: Row }[] = [];
   const inserted: { table: string; doc: Row }[] = [];
+  // Convex's per-mutation limits (docs.convex.dev/production/state/limits): 16 MiB read, 8 MiB written.
+  // A row's `bytes` is its document size; paginate reads it, patch re-reads and rewrites it.
+  const txn = { read: 0, written: 0 };
+  const spend = (kind: "read" | "written", n: number, max: number) => {
+    txn[kind] += n;
+    if (txn[kind] > max) throw new Error(`Transaction exceeded ${kind} limit: ${txn[kind]} > ${max}`);
+  };
   const ctx = {
+    txn,
     db: {
       query: (table: string) => ({
         paginate: async ({ numItems, cursor }: { numItems: number; cursor: string | null }) => {
@@ -36,18 +45,22 @@ function fakeMutationCtx(roomRows: Row[], workerRows: Row[] = []) {
           expect(rows, `unexpected table ${table}`).not.toBeNull();
           const start = cursor ? Number(cursor) : 0;
           const page = rows!.slice(start, start + numItems);
+          for (const r of page) spend("read", r.bytes ?? 0, 16 * MIB);
           const end = start + page.length;
           return { page, isDone: end >= rows!.length, continueCursor: String(end) };
         },
       }),
       patch: async (id: string, fields: Row) => {
+        const row = [...roomRows, ...workerRows].find((r) => r._id === id)!;
+        spend("read", row.bytes ?? 0, 16 * MIB);
+        spend("written", row.bytes ?? 0, 8 * MIB);
         patches.push({ id, fields });
-        Object.assign([...roomRows, ...workerRows].find((r) => r._id === id)!, fields);
+        Object.assign(row, fields);
       },
       insert: async (table: string, doc: Row) => void inserted.push({ table, doc }),
     },
   };
-  return { ctx: ctx as any, patches, inserted };
+  return { ctx: ctx as any, patches, inserted, txn };
 }
 
 describe("retired router model: gpt-4.1-nano", () => {
@@ -88,6 +101,61 @@ describe("retired router model: gpt-4.1-nano", () => {
     // idempotent: a repeated run finds nothing to do
     const again = await rooms.retireRoomModels(ctx, null);
     expect(again.migrated).toBe(0);
+  });
+
+  it("every migration page stays inside Convex's per-mutation byte limits even when every goal is ~1 MiB (the page stops and the cursor continues)", async () => {
+    // `createRoom` stores `goal` with no length cap, so a stale room can be a full 1 MiB document.
+    const mk = (n: number, make: (i: number) => Row) => Array.from({ length: n }, (_, i) => make(i));
+    const roomRows = mk(40, (i) => ({ _id: `r${i}`, model: "gpt-4.1-nano", bytes: MIB }));
+    const workerRows = mk(40, (i) => ({ _id: `w${i}`, roomId: "r0", kind: "execution_plan", model: "gpt-4.1-nano", bytes: MIB }));
+    const { ctx, txn } = fakeMutationCtx(roomRows, workerRows);
+
+    // the failure this bound prevents: a 200-row page of 1 MiB documents blows the read limit, and re-running the same cursor would fail again
+    await expect(ctx.db.query("rooms").paginate({ numItems: 200, cursor: null })).rejects.toThrow(/read limit/);
+
+    for (const [table, retire] of [["rooms", rooms.retireRoomModels], ["workers", rooms.retireWorkerModels]] as const) {
+      let cursor: string | null = null;
+      let migrated = 0;
+      let pages = 0;
+      for (;;) {
+        txn.read = txn.written = 0; // a fresh transaction per call
+        const out: { migrated: number; isDone: boolean; continueCursor: string } = await retire(ctx, cursor); // throws if the page exceeded 16 MiB read / 8 MiB written
+        expect(out.migrated, `${table} page ${pages}`).toBeLessThanOrEqual(rooms.MIGRATION_PAGE_SIZE);
+        migrated += out.migrated;
+        pages += 1;
+        if (out.isDone) break;
+        cursor = out.continueCursor; // the page stopped; the next call continues from here
+      }
+      expect(migrated, table).toBe(40);
+      expect(pages, table).toBeGreaterThan(1);
+    }
+    expect(roomRows.every((r) => r.model === DEFAULT_MODEL)).toBe(true);
+    expect(workerRows.every((r) => r.model === DEFAULT_MODEL)).toBe(true);
+  });
+
+  it("the page-size bound is derived from the Convex limits: pageSize x 1 MiB x 2 reads < 16 MiB and pageSize x 1 MiB writes < 8 MiB", () => {
+    expect(rooms.MIGRATION_PAGE_SIZE * MIB * 2).toBeLessThan(16 * MIB);
+    expect(rooms.MIGRATION_PAGE_SIZE * MIB).toBeLessThan(8 * MIB);
+  });
+
+  it("scripts/migrate-retired-models.mjs walks every page of a table, follows the cursor and sums the rewrites (a second run reports 0)", async () => {
+    const script = await load("../scripts/migrate-retired-models.mjs");
+    const roomRows: Row[] = Array.from({ length: 14 }, (_, i) => ({ _id: `r${i}`, model: i % 2 ? "gpt-4.1-nano" : "gpt-5.4-mini" }));
+    const { ctx } = fakeMutationCtx(roomRows);
+    const calls: unknown[] = [];
+    // stand-in for `npx convex run --prod`: same arguments, same result shape, JSON round trip
+    const run = async (args: { table: string; cursor: string | null }) => {
+      calls.push(args);
+      return JSON.parse(JSON.stringify(await rooms.migrateRetiredRoomModels._handler(ctx, args)));
+    };
+    const first = await script.migrateTable(run, "rooms");
+    expect(first).toEqual({ table: "rooms", migrated: 7, pages: Math.ceil(14 / rooms.MIGRATION_PAGE_SIZE) });
+    expect(calls).toHaveLength(first.pages);
+    expect(calls[0]).toEqual({ table: "rooms", cursor: null });
+    expect(calls[1]).toMatchObject({ table: "rooms", cursor: expect.any(String) });
+    expect((await script.migrateTable(run, "rooms")).migrated).toBe(0);
+    // convex run prints function logs before the strict-JSON result
+    expect(script.parseRunOutput(["some log line", "{ not json } mid-log", "{", '  "migrated": 2,', '  "isDone": true,', '  "continueCursor": "c"', "}", ""].join("\n"))).toEqual({ migrated: 2, isDone: true, continueCursor: "c" });
   });
 
   /** Run the coordinator's real turn for `room` against a fake OpenAI transport; return the bodies it sent. */
