@@ -1,6 +1,7 @@
 // Runs rooms:migrateRetiredRoomModels over EVERY page of `rooms` and `workers` and prints the
 // totals. The deployment is never defaulted: `convex run` targets the DEV deployment unless told
-// otherwise, so pass the selector yourself, e.g.  node scripts/migrate-retired-models.mjs --prod
+// otherwise, so pass an explicit selector (--prod, --deployment-name, --preview-name, or --url with
+// --admin-key); any other argument list is refused before spawning, e.g.  node scripts/migrate-retired-models.mjs --prod
 // Run it after the deploy, then run it again: the second run must report migrated: 0 for both
 // tables (that is the exhaustive stale-row check; `convex data` only lists the newest 100 rows).
 import { readFileSync } from "node:fs";
@@ -38,7 +39,17 @@ export function parseRunOutput(stdout) {
   return JSON.parse(stdout.slice(start));
 }
 
+/** `convex run` defaults to the DEV deployment, so refuse any argument list that does not name one explicitly. */
+export function assertDeploymentSelector(args) {
+  const has = (flag) => args.some((a) => a === flag || a.startsWith(`${flag}=`));
+  const named = has("--prod") || has("--deployment-name") || has("--preview-name") || (has("--url") && has("--admin-key"));
+  if (!named) {
+    throw new Error("Pass an explicit deployment selector to convex run: --prod, --deployment-name <name>, --preview-name <name>, or --url <url> with --admin-key <key>. Without one it would migrate your DEV deployment.");
+  }
+}
+
 export function convexRun(selector, cli = convexBin()) {
+  assertDeploymentSelector(selector);
   return (args) => {
     const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8" });
     if (r.error) throw r.error;
@@ -49,10 +60,12 @@ export function convexRun(selector, cli = convexBin()) {
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const selector = process.argv.slice(2);
-  if (!selector.length) {
-    console.error("Pass the deployment selector to convex run (e.g. --prod). Without one it would migrate your DEV deployment.");
+  let run;
+  try {
+    run = convexRun(selector);
+  } catch (e) {
+    console.error(e.message);
     process.exit(2);
   }
-  const run = convexRun(selector);
   for (const table of ["rooms", "workers"]) console.log(JSON.stringify(await migrateTable(run, table)));
 }

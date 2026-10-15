@@ -308,7 +308,7 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
     }),
     state: {
       goal: room.goal,
-      model: room.model,
+      model: validModel(room.model), // an unmigrated room still stores a retired id; show what the coordinator actually sends
       agentCount: roomAgentCount(room),
       profile: roomProfile(room),
       floorOwner: room.floorOwner,

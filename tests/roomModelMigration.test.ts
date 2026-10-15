@@ -183,6 +183,26 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(existsSync(script.convexBin())).toBe(true);
   });
 
+  it("the runbook script refuses an argument list that names no deployment (convex run would default to DEV) and never spawns", async () => {
+    const script = await load("../scripts/migrate-retired-models.mjs");
+    for (const args of [[], ["--typecheck", "disable"], ["--url", "https://x.convex.cloud"], ["--admin-key", "k"], ["--component", "c"]]) {
+      expect(() => script.convexRun(args, "never-spawned.mjs"), args.join(" ")).toThrow(/explicit deployment selector/);
+    }
+    for (const args of [["--prod"], ["--typecheck", "disable", "--prod"], ["--deployment-name", "d"], ["--deployment-name=d"], ["--preview-name", "p"], ["--url", "u", "--admin-key", "k"]]) {
+      expect(() => script.convexRun(args, "never-spawned.mjs"), args.join(" ")).not.toThrow();
+    }
+  });
+
+  it("watchRoom serializes the model the coordinator will send, so an unmigrated room does not show a retired id the picker cannot find", async () => {
+    const view = async (model: string) => {
+      const chain: any = { withIndex: () => chain, order: () => chain, collect: async () => [], take: async () => [] };
+      const ctx = { db: { get: async () => ({ ...baseRoom, model }), query: () => chain }, storage: { getUrl: async () => null } };
+      return (await rooms.watchRoom._handler(ctx, { roomId: "room1" })).state.model;
+    };
+    expect(await view("gpt-4.1-nano")).toBe(DEFAULT_MODEL);
+    expect(await view("gpt-4.1-mini")).toBe("gpt-4.1-mini");
+  });
+
   /** Run the coordinator's real turn for `room` against a fake OpenAI transport; return the bodies it sent. */
   async function turnRequestBodies(room: Row) {
     vi.stubEnv("OPENAI_API_KEY", "test-key");

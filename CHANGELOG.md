@@ -9,16 +9,20 @@ request the coordinator builds from `room.model` (the turn, the human-steer
 interpreter, the planning-worker fallback) resolves it through `validModel`.
 New planning workers also store `validModel(room.model)` at spawn, so a host
 steer in a room that has not been migrated yet does not create a worker that
-sends the retired id. `gpt-5-nano` / `gpt-5-mini` rows are marked "retires
+sends the retired id. `watchRoom` serializes `validModel(room.model)`, so until
+the migration runs the picker and the cost panels show the model the coordinator
+actually sends. `gpt-5-nano` / `gpt-5-mini` rows are marked "retires
 2026-12-11" (in the dropdown options, not only the hover title) and are removed
-in a follow-up PR through the same migration. The three literal `gpt-5.4-mini`
-copies now import `DEFAULT_MODEL`. `scripts/model-eval.mjs` carries
+in a follow-up PR through the same migration. The `gpt-5.4-mini` literals in
+`src/live/pipeline.ts` and `src/providers/openai.ts` now import `DEFAULT_MODEL`. `scripts/model-eval.mjs` carries
 `PRICING_AS_OF` (the date its per-M prices were typed, not re-verified). Spec:
 model-defaults SPEC Part A section A.2 (NodeVoice).
 
 **Planning workers.** Worker rows created BEFORE this change store `gpt-4.1-nano`
-too, and `retryV3Worker` copies the stored model forward, so after 2026-10-23 a
-retry would send the retired id. `rooms:migrateRetiredRoomModels` therefore also
+too, and `retryV3Worker` copies the stored model forward. `runV3Worker` resolves an
+`execution_plan` row through `validModel(worker.model ?? room.model)`, so a retry
+before the migration still requests `gpt-5.4-mini`; the stored rows would
+nonetheless keep the retired id, so `rooms:migrateRetiredRoomModels` also
 pages `workers` (`{"table":"workers"}`): `execution_plan` rows whose model is not
 in `ROUTER_MODELS` become `gpt-5.4-mini` and get an audit row (`workerId` set).
 `web_research` rows are never touched, so the `OPENAI_WEB_MODEL` caller argument
@@ -26,8 +30,17 @@ is preserved. Pages are 6 rows (`MIGRATION_PAGE_SIZE`): a room's `goal` has no l
 cap, so a page of 1 MiB documents read twice (page, then `patch`) must stay under
 Convex's 16 MiB per-mutation read limit and 8 MiB write limit. After the deploy run
 `node scripts/migrate-retired-models.mjs --prod`, which walks every page of both tables
-(a bare `npx convex run` targets the DEV deployment, so the script refuses to run with no
-selector); run it again and expect `migrated: 0` for both tables.
+(a bare `npx convex run` targets the DEV deployment, so the script refuses to spawn unless
+the arguments name a deployment: `--prod`, `--deployment-name`, `--preview-name`, or `--url`
+with `--admin-key`); run it again and expect `migrated: 0` for both tables. BEFORE the removing
+deploy, record the running production rooms (`npx convex data rooms --prod --limit 1000`,
+keep those with `running: true`; SPEC A.2.5: live rooms are checked before removal).
+
+**Pricing sources (SPEC A.0.6).** The voice/Realtime unit prices at
+`README.md:1206-1209` (`gpt-realtime`, `gpt-4o-mini-tts`, `whisper-1`,
+`gpt-4o-mini-transcribe`) are as of 2026-07-04: typed in commit `40cd6b6`, the same
+day as the router prices, and not re-read from the vendor since. They are not router
+ids and the repo has no second source, so no agreement test covers them.
 
 **Pricing agreement (SPEC A.0.6).** `ROUTER_PRICING_AS_OF` (2026-07-04) dates the
 `expectedCostUsd` figures; a test recomputes every recorded call's cost from the
@@ -36,7 +49,7 @@ eval script's per-M table and checks it against `docs/model-eval-results.json` a
 `scripts/generate-chart.mjs` DATA rows (both frozen, read-only) and checks each
 against `byModel.costPerTurn` at the 2 significant figures they print.
 
-**Validation:** `tests/roomModelMigration.test.ts` (19 tests) fails on the
+**Validation:** `tests/roomModelMigration.test.ts` (22 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,
 planning worker spawned through the real steer path). `completeV3Worker` no
