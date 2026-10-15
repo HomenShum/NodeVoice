@@ -2,9 +2,10 @@
 // totals. The deployment is never defaulted: `convex run` targets the DEV deployment unless told
 // otherwise, so pass an explicit selector (--prod, --deployment-name, --preview-name, or --url with
 // --admin-key); any other argument list is refused before spawning, e.g.  node scripts/migrate-retired-models.mjs --prod
-// Run it after the deploy, then run it again: the second run must report migrated: 0 for both
+// It also refuses to run while CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN is visible (env, .env.local, .env), because the
+// CLI then silently ignores --prod and targets the key's deployment. Run it after the deploy, then run it again: the second run must report migrated: 0 for both
 // tables (that is the exhaustive stale-row check; `convex data` only lists the newest 100 rows).
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
@@ -48,12 +49,37 @@ export function assertDeploymentSelector(args) {
   }
 }
 
-export function convexRun(selector, cli = convexBin()) {
+/**
+ * The Convex CLI reads CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN from the environment, `.env.local` and `.env` (the
+ * same sources, in the cwd) and, when it finds one, IGNORES --prod / --deployment-name / --preview-name and runs against
+ * the key's deployment (stderr warning only, exit 0). So a flag selector cannot be trusted while a key is visible:
+ * refuse instead of migrating, and proving clean, the wrong deployment. `--url` + `--admin-key` skips the key lookup.
+ */
+export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process.env } = {}) {
+  if (selector.some((a) => a === "--url" || a.startsWith("--url=")) && selector.some((a) => a === "--admin-key" || a.startsWith("--admin-key="))) return;
+  const names = ["CONVEX_DEPLOY_KEY", "CONVEX_DEPLOYMENT_TOKEN"];
+  const where = names.filter((n) => env[n]).map((n) => `${n} in the environment`);
+  for (const file of [".env.local", ".env"]) {
+    const path = join(cwd, file);
+    if (!existsSync(path)) continue;
+    const text = readFileSync(path, "utf8");
+    for (const n of names) if (new RegExp(String.raw`^\s*(export\s+)?${n}\s*=\s*\S`, "m").test(text)) where.push(`${n} in ${file}`);
+  }
+  if (where.length) {
+    throw new Error(`Refusing to run: ${where.join(", ")}. The Convex CLI would ignore the deployment flag and migrate the key's deployment instead. Unset/remove it, or select the deployment with --url <url> --admin-key <key>.`);
+  }
+}
+
+export function convexRun(selector, cli = convexBin(), { cwd = process.cwd(), env = process.env } = {}) {
   assertDeploymentSelector(selector);
+  assertNoDeployKey(selector, { cwd, env });
   return (args) => {
-    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8" });
+    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8", cwd, env });
     if (r.error) throw r.error;
     if (r.status !== 0) throw new Error(`convex run failed (exit ${r.status}): ${r.stderr}`);
+    // Backstop for any other way the CLI swaps the target: it only warns on stderr and exits 0.
+    if (/Ignoring `--prod`/.test(r.stderr)) throw new Error(`convex run ignored the deployment selector, so nothing here can be trusted: ${r.stderr}`);
+    if (r.stderr) process.stderr.write(r.stderr);
     return parseRunOutput(r.stdout);
   };
 }

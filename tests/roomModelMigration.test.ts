@@ -172,11 +172,11 @@ describe("retired router model: gpt-4.1-nano", () => {
       'console.log(JSON.stringify({ migrated: 0, isDone: true, continueCursor: "", argv: a, parsed: JSON.parse(a.at(-1)) }, null, 2));',
     ].join("\n"));
     try {
-      const out = script.convexRun(["--prod"], stub)({ table: "rooms", cursor: null });
+      const out = script.convexRun(["--prod"], stub, { cwd: dir, env: {} })({ table: "rooms", cursor: null });
       expect(out.argv.slice(0, 3)).toEqual(["run", "--prod", "rooms:migrateRetiredRoomModels"]);
       expect(out.argv[3]).toBe('{"table":"rooms","cursor":null}');
       expect(out.parsed).toEqual({ table: "rooms", cursor: null });
-      expect(() => script.convexRun(["--prod"], join(dir, "missing.mjs"))({ table: "rooms", cursor: null })).toThrow(/convex run failed/);
+      expect(() => script.convexRun(["--prod"], join(dir, "missing.mjs"), { cwd: dir, env: {} })({ table: "rooms", cursor: null })).toThrow(/convex run failed/);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -188,8 +188,44 @@ describe("retired router model: gpt-4.1-nano", () => {
     for (const args of [[], ["--typecheck", "disable"], ["--url", "https://x.convex.cloud"], ["--admin-key", "k"], ["--component", "c"]]) {
       expect(() => script.convexRun(args, "never-spawned.mjs"), args.join(" ")).toThrow(/explicit deployment selector/);
     }
+    const clean = { cwd: tmpdir(), env: {} };
     for (const args of [["--prod"], ["--typecheck", "disable", "--prod"], ["--deployment-name", "d"], ["--deployment-name=d"], ["--preview-name", "p"], ["--url", "u", "--admin-key", "k"]]) {
-      expect(() => script.convexRun(args, "never-spawned.mjs"), args.join(" ")).not.toThrow();
+      expect(() => script.convexRun(args, "never-spawned.mjs", clean), args.join(" ")).not.toThrow();
+    }
+  });
+
+  it("the runbook script refuses a flag selector while a deploy key is visible (the CLI would ignore --prod and migrate the key's deployment) and surfaces the CLI's stderr", async () => {
+    const script = await load("../scripts/migrate-retired-models.mjs");
+    const dir = mkdtempSync(join(tmpdir(), "nv-convex-key-"));
+    const stub = join(dir, "stub-cli.mjs");
+    const ok = 'console.log(JSON.stringify({ migrated: 0, isDone: true, continueCursor: "" }));';
+    try {
+      // key in the process env, in .env.local, in .env: each refuses before spawning
+      expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k" } })).toThrow(/CONVEX_DEPLOY_KEY in the environment/);
+      expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOYMENT_TOKEN: "t" } })).toThrow(/CONVEX_DEPLOYMENT_TOKEN in the environment/);
+      writeFileSync(join(dir, ".env.local"), "CONVEX_DEPLOYMENT=dev:x\nexport CONVEX_DEPLOY_KEY=dev:x|k\n");
+      expect(() => script.convexRun(["--deployment-name", "d"], "never-spawned.mjs", { cwd: dir, env: {} })).toThrow(/CONVEX_DEPLOY_KEY in \.env\.local/);
+      rmSync(join(dir, ".env.local"));
+      writeFileSync(join(dir, ".env"), "CONVEX_DEPLOYMENT_TOKEN=abc\n");
+      expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: {} })).toThrow(/CONVEX_DEPLOYMENT_TOKEN in \.env\b/);
+      // an empty or commented-out key does not count, and --url + --admin-key does not read a deploy key at all
+      writeFileSync(join(dir, ".env"), "# CONVEX_DEPLOY_KEY=x\nCONVEX_DEPLOY_KEY=\n");
+      expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "" } })).not.toThrow();
+      expect(() => script.convexRun(["--url", "u", "--admin-key", "k"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k" } })).not.toThrow();
+      // backstop: the CLI's own "Ignoring `--prod`" warning (exit 0) must fail the run, not pass as success
+      writeFileSync(stub, `console.error("Ignoring \`--prod\`, \`--preview-name\`, or \`--deployment-name\` flags and using deployment from CONVEX_DEPLOY_KEY"); ${ok}`);
+      expect(() => script.convexRun(["--prod"], stub, { cwd: dir, env: {} })({ table: "rooms", cursor: null })).toThrow(/ignored the deployment selector/);
+      // any other stderr is shown, not swallowed
+      writeFileSync(stub, `console.error("some other warning"); ${ok}`);
+      const write = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+      try {
+        expect(script.convexRun(["--prod"], stub, { cwd: dir, env: {} })({ table: "rooms", cursor: null }).migrated).toBe(0);
+        expect(write).toHaveBeenCalledWith(expect.stringContaining("some other warning"));
+      } finally {
+        write.mockRestore();
+      }
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
     }
   });
 
