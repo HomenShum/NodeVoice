@@ -211,6 +211,21 @@ describe("retired router model: gpt-4.1-nano", () => {
       // an empty or commented-out key does not count, and --url + --admin-key does not read a deploy key at all
       writeFileSync(join(dir, ".env"), "# CONVEX_DEPLOY_KEY=x\nCONVEX_DEPLOY_KEY=\n");
       expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "" } })).not.toThrow();
+      // dotenv@16.6.1 reads these as empty too (checked against its LINE grammar), so none may block the runbook, wherever the line sits
+      for (const body of ['CONVEX_DEPLOY_KEY=""\n', "CONVEX_DEPLOY_KEY=\nCONVEX_DEPLOYMENT=prod:x\n", "CONVEX_DEPLOY_KEY= # none\nOTHER=1\n", "CONVEX_DEPLOY_KEY=''\nCONVEX_DEPLOYMENT_TOKEN=\n"]) {
+        for (const file of [".env.local", ".env"]) {
+          writeFileSync(join(dir, file), body);
+          expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: {} }), file + ": " + JSON.stringify(body)).not.toThrow();
+          rmSync(join(dir, file));
+        }
+      }
+      // a later non-empty line still counts (the last one wins in dotenv), and so does a quoted value
+      for (const body of ["CONVEX_DEPLOY_KEY=\nCONVEX_DEPLOY_KEY=dev:x|k\n", 'CONVEX_DEPLOY_KEY="dev:x|k" # c\n']) {
+        writeFileSync(join(dir, ".env"), body);
+        expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: {} }), JSON.stringify(body)).toThrow(/CONVEX_DEPLOY_KEY in \.env\b/);
+        rmSync(join(dir, ".env"));
+      }
+      writeFileSync(join(dir, ".env"), "# CONVEX_DEPLOY_KEY=x\nCONVEX_DEPLOY_KEY=\n");
       expect(() => script.convexRun(["--url", "u", "--admin-key", "k"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k" } })).not.toThrow();
       // --env-file (either spelling) is a deploy-key source the CLI obeys: refuse before the CLI is spawned, even with a key inside it
       const ran = join(dir, "stub-ran");

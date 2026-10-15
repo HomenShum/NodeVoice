@@ -34,8 +34,10 @@ Convex's 16 MiB per-mutation read limit and 8 MiB write limit. After the deploy 
 the arguments name a deployment: `--prod`, `--deployment-name`, `--preview-name`, or `--url`
 with `--admin-key`; it also refuses while `CONVEX_DEPLOY_KEY` / `CONVEX_DEPLOYMENT_TOKEN` is set in the environment,
 `.env.local` or `.env` (`KEY=v` and dotenv's `KEY: v`) and refuses `--env-file` (it can carry a key), because the Convex CLI then ignores `--prod` and migrates the key's deployment; whatever that preflight misses, the CLI is spawned with both variables set to `""`, which dotenv never overrides and the CLI reads as unset, so a file key cannot take effect; it also fails on the CLI's "Ignoring `--prod`" warning); run it again and expect `migrated: 0` for both tables. BEFORE the removing
-deploy, record the running production rooms (`npx convex data rooms --prod --limit 1000`,
-keep those with `running: true`; SPEC A.2.5: live rooms are checked before removal).
+deploy, record the running production rooms (`npx convex data rooms --prod --format jsonl --limit 100000`,
+keep the lines with `"running":true`; SPEC A.2.5: live rooms are checked before removal). `convex data` lists only the newest `--limit`
+rooms, rooms are never deleted, and `jsonl` prints no truncation warning, so if the number of lines returned equals the limit
+the list is cut off: raise `--limit` until it returns fewer lines than that. (Do not use the default `pretty` format: it cuts lines to the terminal width and can hide the `running` column.)
 
 **Pricing sources (SPEC A.0.6).** The voice/Realtime unit prices at
 `README.md:1206-1209` (`gpt-realtime`, `gpt-4o-mini-tts`, `whisper-1`,

@@ -49,13 +49,28 @@ export function assertDeploymentSelector(args) {
   }
 }
 
+// The Convex CLI's bundled dotenv@16.6.1 parse (cli.bundle.cjs, require_main), copied so the preflight sees the values the CLI
+// would see: an empty value (K=, K="", K= # note) is unset, and a later line for the same key wins.
+const DOTENV_LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/gm;
+function dotenvParse(src) {
+  const obj = {};
+  for (const m of src.replace(/\r\n?/gm, "\n").matchAll(DOTENV_LINE)) {
+    let value = (m[2] || "").trim();
+    const quote = value[0];
+    value = value.replace(/^(['"`])([\s\S]*)\1$/gm, "$2");
+    if (quote === '"') value = value.replace(/\\n/g, "\n").replace(/\\r/g, "\r");
+    obj[m[1]] = value;
+  }
+  return obj;
+}
+
 /**
  * The Convex CLI reads CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN from the environment, `.env.local` and `.env` (the
  * same sources, in the cwd) and, when it finds one, IGNORES --prod / --deployment-name / --preview-name and runs against
  * the key's deployment (stderr warning only, exit 0). So a flag selector cannot be trusted while a key is visible:
  * refuse instead of migrating, and proving clean, the wrong deployment. `--url` + `--admin-key` skips the key lookup.
- * The file scan below only mirrors the CLI's dotenv line grammar (`KEY=v`, `KEY: v`, optional `export`) to fail fast with a
- * readable message; convexRun's blanked child env is what actually keeps a key the scan misses from taking effect.
+ * The file scan below runs the CLI's own dotenv line grammar (`KEY=v`, `KEY: v`, optional `export`) and flags only non-empty
+ * values, to fail fast with a readable message; convexRun's blanked child env is what actually keeps a key the scan misses from taking effect.
  */
 export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process.env } = {}) {
   // `--env-file <file>` is a fourth key source the CLI reads (and obeys) before any selector; it is not inspected here, so refuse it.
@@ -69,7 +84,8 @@ export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process
     const path = join(cwd, file);
     if (!existsSync(path)) continue;
     const text = readFileSync(path, "utf8");
-    for (const n of names) if (new RegExp(String.raw`^\s*(export\s+)?${n}(?:\s*=|:\s)\s*\S`, "m").test(text)) where.push(`${n} in ${file}`);
+    const parsed = dotenvParse(text);
+    for (const n of names) if (parsed[n]) where.push(`${n} in ${file}`);
   }
   if (where.length) {
     throw new Error(`Refusing to run: ${where.join(", ")}. The Convex CLI would ignore the deployment flag and migrate the key's deployment instead. Unset/remove it, or select the deployment with --url <url> --admin-key <key>.`);
