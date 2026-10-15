@@ -12,7 +12,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { generateAgentTurn, interpretHumanSteer, synthesizeSpeech, transcribeAudio, DEFAULT_LLM_MODEL, type AgentVoice } from "./pipeline.js";
-import { ROUTER_MODELS } from "../core/routerModels.js";
+import { ROUTER_MODELS, UnknownModelError, requestedModel } from "../core/routerModels.js";
 import { BODY_TOO_LARGE, MAX_BODY_BYTES } from "../core/requestBody.js";
 import {
   CAPABILITY_PROFILES,
@@ -25,10 +25,6 @@ import {
   type HumanSteeringIntent,
   type CountTask,
 } from "../core/steering.js";
-
-function validModel(m?: string): string {
-  return m && ROUTER_MODELS.some((x) => x.id === m) ? m : DEFAULT_LLM_MODEL;
-}
 
 import {
   DEFAULT_GOAL,
@@ -205,7 +201,7 @@ function createRoom(goal: string, model?: string, isPrivate?: boolean, profileIn
     lastActivity: Date.now(),
     state: {
       goal: initialGoal,
-      model: validModel(model),
+      model: requestedModel(model, DEFAULT_LLM_MODEL),
       agentCount,
       profile,
       private: isPrivate === true,
@@ -698,7 +694,14 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
   // POST /live/rooms
   if (method === "POST" && path === "/live/rooms") {
     const body = await readJson<{ goal?: string; model?: string; private?: boolean; profile?: string; agentCount?: number }>(req);
-    const room = createRoom((body.goal ?? "").trim(), body.model, body.private === true, body.profile, body.agentCount);
+    let room: Room;
+    try {
+      room = createRoom((body.goal ?? "").trim(), body.model, body.private === true, body.profile, body.agentCount);
+    } catch (err) {
+      if (!(err instanceof UnknownModelError)) throw err;
+      json(res, 400, { ok: false, error: err.message });
+      return true;
+    }
     json(res, 200, { ok: true, roomId: room.id, room: publicRoom(room) });
     return true;
   }
@@ -843,7 +846,13 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
   // POST /live/rooms/:id/model  { model }
   if (method === "POST" && sub === "model") {
     const body = await readJson<{ model?: string }>(req);
-    room.state.model = validModel(body.model);
+    try {
+      room.state.model = requestedModel(body.model, DEFAULT_LLM_MODEL);
+    } catch (err) {
+      if (!(err instanceof UnknownModelError)) throw err;
+      json(res, 400, { ok: false, error: err.message });
+      return true;
+    }
     broadcastState(room);
     json(res, 200, { ok: true, room: publicRoom(room) });
     return true;

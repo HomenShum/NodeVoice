@@ -47,7 +47,7 @@
     },
     {
       "file": "src/live/roomServer.ts",
-      "line": 247,
+      "line": 243,
       "anchor": "function pushTrace",
       "description": "**Where to look when a room misbehaves.** Every state change appends a trace entry. The State drawer in the live room renders these with timestamps next to the raw reducer JSON — start there, not in the transcript."
     },

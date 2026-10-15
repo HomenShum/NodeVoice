@@ -101,7 +101,7 @@ finding 2.
    `src/core/requestBody.ts:18 export const MAX_BODY_BYTES`, 20 MB, and it is
    imported by both readers rather than written down twice, because a cap that
    exists twice drifts. The readers are
-   `src/live/roomServer.ts:683 export async function readJson` for the Node
+   `src/live/roomServer.ts:679 export async function readJson` for the Node
    server's `node:http` stream, and
    `src/core/requestBody.ts:84 export async function readJsonRequest` for the
    web `Request` the Convex HTTP router hands its actions. Every POST route in

@@ -16,6 +16,7 @@ import {
   slotForIndex,
   validAgentCount,
   validModel,
+  requestedModel,
   validProfile,
   profileUsesRoomState,
   profileUsesAgentOs,
@@ -676,6 +677,7 @@ export const createRoom = mutation({
   args: { goal: v.optional(v.string()), model: v.optional(v.string()), private: v.optional(v.boolean()), profile: v.optional(v.string()), agentCount: v.optional(v.number()) },
   handler: async (ctx, args) => {
     const now = Date.now();
+    const model = requestedModel(args.model); // throws on an unknown id; absent keeps DEFAULT_MODEL
     const goal = (args.goal ?? "").trim() || DEFAULT_GOAL;
     const profile = validProfile(args.profile);
     const agentCount = validAgentCount(args.agentCount);
@@ -689,7 +691,7 @@ export const createRoom = mutation({
     }
     const roomId = await ctx.db.insert("rooms", {
       goal,
-      model: validModel(args.model),
+      model: model,
       agentCount,
       profile,
       code,
@@ -719,7 +721,7 @@ export const createRoom = mutation({
       createdAt: now,
     });
     if (profileUsesAgentOs(profile)) {
-      await ensureInitialAgentOsGoal(ctx, roomId, { goal, model: validModel(args.model) });
+      await ensureInitialAgentOsGoal(ctx, roomId, { goal, model });
     }
     return roomId;
   },
@@ -797,7 +799,7 @@ export const setGoal = mutation({
 export const setModel = mutation({
   args: { roomId: v.id("rooms"), model: v.string() },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.roomId, { model: validModel(args.model), updatedAt: Date.now() });
+    await ctx.db.patch(args.roomId, { model: requestedModel(args.model), updatedAt: Date.now() });
   },
 });
 
