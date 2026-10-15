@@ -54,6 +54,8 @@ export function assertDeploymentSelector(args) {
  * same sources, in the cwd) and, when it finds one, IGNORES --prod / --deployment-name / --preview-name and runs against
  * the key's deployment (stderr warning only, exit 0). So a flag selector cannot be trusted while a key is visible:
  * refuse instead of migrating, and proving clean, the wrong deployment. `--url` + `--admin-key` skips the key lookup.
+ * The file scan below only mirrors the CLI's dotenv line grammar (`KEY=v`, `KEY: v`, optional `export`) to fail fast with a
+ * readable message; convexRun's blanked child env is what actually keeps a key the scan misses from taking effect.
  */
 export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process.env } = {}) {
   // `--env-file <file>` is a fourth key source the CLI reads (and obeys) before any selector; it is not inspected here, so refuse it.
@@ -67,7 +69,7 @@ export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process
     const path = join(cwd, file);
     if (!existsSync(path)) continue;
     const text = readFileSync(path, "utf8");
-    for (const n of names) if (new RegExp(String.raw`^\s*(export\s+)?${n}\s*=\s*\S`, "m").test(text)) where.push(`${n} in ${file}`);
+    for (const n of names) if (new RegExp(String.raw`^\s*(export\s+)?${n}(?:\s*=|:\s)\s*\S`, "m").test(text)) where.push(`${n} in ${file}`);
   }
   if (where.length) {
     throw new Error(`Refusing to run: ${where.join(", ")}. The Convex CLI would ignore the deployment flag and migrate the key's deployment instead. Unset/remove it, or select the deployment with --url <url> --admin-key <key>.`);
@@ -78,7 +80,10 @@ export function convexRun(selector, cli = convexBin(), { cwd = process.cwd(), en
   assertDeploymentSelector(selector);
   assertNoDeployKey(selector, { cwd, env });
   return (args) => {
-    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8", cwd, env });
+    // The CLI loads .env.local/.env with dotenv, which never overrides a variable that already exists, and treats "" as unset:
+    // blanking both here shadows any file key whatever its syntax, so the preflight above is a fail-fast message, not the guarantee.
+    const childEnv = { ...env, CONVEX_DEPLOY_KEY: "", CONVEX_DEPLOYMENT_TOKEN: "" };
+    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8", cwd, env: childEnv });
     if (r.error) throw r.error;
     if (r.status !== 0) throw new Error(`convex run failed (exit ${r.status}): ${r.stderr}`);
     // Backstop for any other way the CLI swaps the target: it only warns on stderr and exits 0.

@@ -33,7 +33,7 @@ Convex's 16 MiB per-mutation read limit and 8 MiB write limit. After the deploy 
 (a bare `npx convex run` targets the DEV deployment, so the script refuses to spawn unless
 the arguments name a deployment: `--prod`, `--deployment-name`, `--preview-name`, or `--url`
 with `--admin-key`; it also refuses while `CONVEX_DEPLOY_KEY` / `CONVEX_DEPLOYMENT_TOKEN` is set in the environment,
-`.env.local` or `.env`, and refuses `--env-file` (it can carry a key), because the Convex CLI then ignores `--prod` and migrates the key's deployment, and it fails on the CLI's "Ignoring `--prod`" warning); run it again and expect `migrated: 0` for both tables. BEFORE the removing
+`.env.local` or `.env` (`KEY=v` and dotenv's `KEY: v`) and refuses `--env-file` (it can carry a key), because the Convex CLI then ignores `--prod` and migrates the key's deployment; whatever that preflight misses, the CLI is spawned with both variables set to `""`, which dotenv never overrides and the CLI reads as unset, so a file key cannot take effect; it also fails on the CLI's "Ignoring `--prod`" warning); run it again and expect `migrated: 0` for both tables. BEFORE the removing
 deploy, record the running production rooms (`npx convex data rooms --prod --limit 1000`,
 keep those with `running: true`; SPEC A.2.5: live rooms are checked before removal).
 

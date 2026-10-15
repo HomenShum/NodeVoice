@@ -220,6 +220,17 @@ describe("retired router model: gpt-4.1-nano", () => {
         expect(() => script.convexRun(["--prod", ...flags], stub, { cwd: dir, env: {} }), flags.join(" ")).toThrow(/--env-file/);
       }
       expect(existsSync(ran)).toBe(false);
+      // dotenv also reads `KEY: value` (Convex CLI 1.42.1 LINE grammar): refuse it in both files, and the CLI must never run
+      for (const file of [".env.local", ".env"]) {
+        writeFileSync(join(dir, file), "CONVEX_DEPLOY_KEY: dev:other|k\n");
+        expect(() => script.convexRun(["--prod"], stub, { cwd: dir, env: {} }), file).toThrow(new RegExp(`CONVEX_DEPLOY_KEY in \\${file}`));
+        rmSync(join(dir, file));
+      }
+      expect(existsSync(ran)).toBe(false);
+      // whatever the preflight misses, the child env blanks both key variables (dotenv never overrides an existing var, "" reads as unset)
+      writeFileSync(stub, `console.log(JSON.stringify({ migrated: 0, isDone: true, continueCursor: JSON.stringify([process.env.CONVEX_DEPLOY_KEY, process.env.CONVEX_DEPLOYMENT_TOKEN]) }));`);
+      const seen = script.convexRun(["--url", "u", "--admin-key", "k"], stub, { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k", CONVEX_DEPLOYMENT_TOKEN: "t" } })({ table: "rooms", cursor: null });
+      expect(seen.continueCursor).toBe('["",""]');
       // backstop: the CLI's own "Ignoring `--prod`" warning (exit 0) must fail the run, not pass as success
       writeFileSync(stub, `console.error("Ignoring \`--prod\`, \`--preview-name\`, or \`--deployment-name\` flags and using deployment from CONVEX_DEPLOY_KEY"); ${ok}`);
       expect(() => script.convexRun(["--prod"], stub, { cwd: dir, env: {} })({ table: "rooms", cursor: null })).toThrow(/ignored the deployment selector/);
