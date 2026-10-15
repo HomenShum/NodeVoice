@@ -504,6 +504,10 @@ async function runOneTurn(room: Room, slot: Slot, token?: number): Promise<Agent
     countTask,
   });
 
+  if (token !== undefined && (room.loopToken !== token || !room.state.running)) {
+    return { done: false, text: turn.text, committed: false, reason: "stale token / paused" };
+  }
+
   let audioId: string | undefined;
   try {
     const audio = await synthesizeSpeech(turn.text, agent.voice);
