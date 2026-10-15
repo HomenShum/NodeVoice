@@ -2,7 +2,7 @@
 // totals. The deployment is never defaulted: `convex run` targets the DEV deployment unless told
 // otherwise, so pass an explicit selector (--prod, --deployment-name, --preview-name, or --url with
 // --admin-key); any other argument list is refused before spawning, e.g.  node scripts/migrate-retired-models.mjs --prod
-// It also refuses to run while CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN is visible (env, .env.local, .env), because the
+// It also refuses --env-file, and refuses to run while CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN is visible (env, .env.local, .env), because the
 // CLI then silently ignores --prod and targets the key's deployment. Run it after the deploy, then run it again: the second run must report migrated: 0 for both
 // tables (that is the exhaustive stale-row check; `convex data` only lists the newest 100 rows).
 import { existsSync, readFileSync } from "node:fs";
@@ -56,6 +56,10 @@ export function assertDeploymentSelector(args) {
  * refuse instead of migrating, and proving clean, the wrong deployment. `--url` + `--admin-key` skips the key lookup.
  */
 export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process.env } = {}) {
+  // `--env-file <file>` is a fourth key source the CLI reads (and obeys) before any selector; it is not inspected here, so refuse it.
+  if (selector.some((a) => a === "--env-file" || a.startsWith("--env-file="))) {
+    throw new Error("Refusing to run: --env-file can carry a CONVEX_DEPLOY_KEY that makes the CLI ignore the deployment flag and migrate the key's deployment. Drop it and select the deployment with --prod / --deployment-name / --preview-name, or --url <url> --admin-key <key>.");
+  }
   if (selector.some((a) => a === "--url" || a.startsWith("--url=")) && selector.some((a) => a === "--admin-key" || a.startsWith("--admin-key="))) return;
   const names = ["CONVEX_DEPLOY_KEY", "CONVEX_DEPLOYMENT_TOKEN"];
   const where = names.filter((n) => env[n]).map((n) => `${n} in the environment`);

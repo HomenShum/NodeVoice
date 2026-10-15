@@ -212,6 +212,14 @@ describe("retired router model: gpt-4.1-nano", () => {
       writeFileSync(join(dir, ".env"), "# CONVEX_DEPLOY_KEY=x\nCONVEX_DEPLOY_KEY=\n");
       expect(() => script.convexRun(["--prod"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "" } })).not.toThrow();
       expect(() => script.convexRun(["--url", "u", "--admin-key", "k"], "never-spawned.mjs", { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k" } })).not.toThrow();
+      // --env-file (either spelling) is a deploy-key source the CLI obeys: refuse before the CLI is spawned, even with a key inside it
+      const ran = join(dir, "stub-ran");
+      writeFileSync(stub, `import { writeFileSync } from "node:fs"; writeFileSync(${JSON.stringify(ran)}, "x"); ${ok}`);
+      writeFileSync(join(dir, "release.env"), "CONVEX_DEPLOY_KEY=prod:other|k\n");
+      for (const flags of [["--env-file", join(dir, "release.env")], [`--env-file=${join(dir, "release.env")}`]]) {
+        expect(() => script.convexRun(["--prod", ...flags], stub, { cwd: dir, env: {} }), flags.join(" ")).toThrow(/--env-file/);
+      }
+      expect(existsSync(ran)).toBe(false);
       // backstop: the CLI's own "Ignoring `--prod`" warning (exit 0) must fail the run, not pass as success
       writeFileSync(stub, `console.error("Ignoring \`--prod\`, \`--preview-name\`, or \`--deployment-name\` flags and using deployment from CONVEX_DEPLOY_KEY"); ${ok}`);
       expect(() => script.convexRun(["--prod"], stub, { cwd: dir, env: {} })({ table: "rooms", cursor: null })).toThrow(/ignored the deployment selector/);
