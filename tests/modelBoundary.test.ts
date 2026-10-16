@@ -14,8 +14,14 @@ import { DEFAULT_MODEL, ROUTER_MODELS } from "../src/core/routerModels.js";
 // convex/*.ts is type-checked by `npm run check:convex`; load by non-literal specifier as the other tests do.
 const load = (path: string) => import(/* @vite-ignore */ path);
 const rooms = await load("../convex/rooms.ts");
+const http = (await load("../convex/http.ts")).default;
 
-const REFUSED = ["some-model:free", "nvidia/nemotron-3-super-120b-a12b:free", "not-a-model", "gpt-4.1-nano", "GPT-5.4-MINI", " gpt-5.4-mini"];
+// Only undefined and "" mean "no preference". Falsy and non-string JSON values are refusals too: `0`, `false`
+// and `null` used to take the fallback branch, and `123`, `{}` and `true` made the error constructor itself throw.
+const REFUSED: unknown[] = [
+  "some-model:free", "nvidia/nemotron-3-super-120b-a12b:free", "not-a-model", "gpt-4.1-nano", "GPT-5.4-MINI", " gpt-5.4-mini",
+  0, false, null, 123, {}, true,
+];
 const ROUTER_IDS = ROUTER_MODELS.map((m) => m.id);
 
 /** Records every write; the room row it inserts is what later coordinator turns read `model` from. */
@@ -114,5 +120,38 @@ describe("local Node server boundary: POST /live/rooms and POST /live/rooms/:id/
     const reset = await post(`/live/rooms/${a.body.roomId}/model`, { model: "" });
     expect(reset.status).toBe(200);
     expect(reset.body.room.state.model).toBe(b.body.room.state.model);
+  });
+});
+
+describe("hosted Convex HTTP routes: POST /live/rooms and POST /live/rooms/:id/model", () => {
+  /** Runs the registered httpAction with a recording ctx; `mutations` is every write it attempted. */
+  async function call(path: string, body: unknown) {
+    const mutations: Record<string, any>[] = [];
+    const ctx = { runMutation: async (_fn: unknown, args: Record<string, any>) => (mutations.push(args), "room1"), runQuery: async () => ({ state: {} }) };
+    const [handler] = http.lookup(path, "POST");
+    const res: Response = await handler._handler(ctx, new Request("http://convex.test" + path, { method: "POST", body: JSON.stringify(body) }));
+    return { res, mutations, body: (await res.json()) as any };
+  }
+
+  it.each(REFUSED)("refuses %j with 400 and CORS headers at both routes, and writes nothing", async (model) => {
+    for (const path of ["/live/rooms", "/live/rooms/room1/model"]) {
+      const { res, mutations, body } = await call(path, { goal: "count to 3", model });
+      expect(res.status).toBe(400);
+      expect(res.headers.get("access-control-allow-origin")).toBe("*");
+      expect(body.ok).toBe(false);
+      expect(body.error).toMatch(/unknown model id/);
+      expect(mutations).toEqual([]);
+    }
+  });
+
+  it("absent or empty model reaches the mutation as the default; a router id is passed exactly as asked", async () => {
+    for (const path of ["/live/rooms", "/live/rooms/room1/model"]) {
+      for (const [sent, stored] of [[undefined, DEFAULT_MODEL], ["", DEFAULT_MODEL], ["gpt-5-mini", "gpt-5-mini"]] as const) {
+        const { res, mutations } = await call(path, { model: sent });
+        expect(res.status).toBe(200);
+        expect(mutations).toHaveLength(1);
+        expect(mutations[0]!.model).toBe(stored);
+      }
+    }
   });
 });

@@ -188,7 +188,7 @@ function profileLabel(profile: CapabilityProfile): string {
   return p ? `${p.shortLabel} ${p.label}` : profile;
 }
 
-function createRoom(goal: string, model?: string, isPrivate?: boolean, profileInput?: string, agentCountInput?: number): Room {
+function createRoom(goal: string, model?: unknown, isPrivate?: boolean, profileInput?: string, agentCountInput?: number): Room {
   evictIfNeeded();
   const id = shortId();
   const initialGoal = goal || DEFAULT_GOAL;
@@ -693,7 +693,7 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
 
   // POST /live/rooms
   if (method === "POST" && path === "/live/rooms") {
-    const body = await readJson<{ goal?: string; model?: string; private?: boolean; profile?: string; agentCount?: number }>(req);
+    const body = await readJson<{ goal?: string; model?: unknown; private?: boolean; profile?: string; agentCount?: number }>(req);
     let room: Room;
     try {
       room = createRoom((body.goal ?? "").trim(), body.model, body.private === true, body.profile, body.agentCount);
@@ -845,7 +845,7 @@ export async function handleLive(req: IncomingMessage, res: ServerResponse, path
 
   // POST /live/rooms/:id/model  { model }
   if (method === "POST" && sub === "model") {
-    const body = await readJson<{ model?: string }>(req);
+    const body = await readJson<{ model?: unknown }>(req);
     try {
       room.state.model = requestedModel(body.model, DEFAULT_LLM_MODEL);
     } catch (err) {
