@@ -1,4 +1,5 @@
 import { isNextGenModel } from "../live/pipeline.js";
+import { DEFAULT_MODEL } from "../core/routerModels.js";
 
 export type OpenAIChatMessage = {
   role: "system" | "user" | "assistant";
@@ -10,14 +11,11 @@ export type OpenAIChatOptions = {
   timeoutMs?: number;
 };
 
-/** Repo-measured coordinator default (see src/live/pipeline.ts model notes). */
-const FALLBACK_OPENAI_MODEL = "gpt-5.4-mini";
-
 export function getOpenAIModelName(override?: string): string {
   const trimmedOverride = override?.trim();
   if (trimmedOverride) return trimmedOverride;
   const envModel = process.env.OPENAI_MODEL?.trim();
-  return envModel || FALLBACK_OPENAI_MODEL;
+  return envModel || DEFAULT_MODEL;
 }
 
 /** Server-side only: the key is read from process.env and never leaves the server. */

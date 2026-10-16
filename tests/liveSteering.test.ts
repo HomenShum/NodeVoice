@@ -207,7 +207,7 @@ describe("live room steering", () => {
 
   it("exposes router cost and latency estimates for the live UI", () => {
     for (const models of [convexSteering.ROUTER_MODELS, ROUTER_MODELS]) {
-      expect(models).toHaveLength(6);
+      expect(models).toHaveLength(5); // was 6: gpt-4.1-nano removed, OpenAI retires it 2026-10-23 (platform.openai.com deprecations page)
       for (const model of models) {
         expect(model.expectedLatencyMs, model.id).toBeGreaterThan(0);
         expect(model.expectedCostUsd, model.id).toBeGreaterThan(0);

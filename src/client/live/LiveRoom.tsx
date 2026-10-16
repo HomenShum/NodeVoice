@@ -1054,7 +1054,7 @@ function V3WorkPanel({
   );
 }
 
-function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
+export function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
   const room = rm.room!;
   const cur = room.models.find((m) => m.id === room.state.model);
   return (
@@ -1070,7 +1070,7 @@ function ModelSelect({ rm }: { rm: ReturnType<typeof useRoom> }) {
       >
         {room.models.map((m) => (
           <option key={m.id} value={m.id}>
-            {m.label} - {m.tier} - {formatDurationMs(m.expectedLatencyMs)} - {formatExpectedCost(m.expectedCostUsd)}
+            {[m.label, m.tier, formatDurationMs(m.expectedLatencyMs), formatExpectedCost(m.expectedCostUsd), /retires \d{4}-\d{2}-\d{2}/.exec(m.note)?.[0]].filter(Boolean).join(" - ")}
           </option>
         ))}
       </select>

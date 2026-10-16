@@ -2,7 +2,7 @@
 import { v } from "convex/values";
 import { internalAction, action } from "./_generated/server";
 import { internal, api } from "./_generated/api";
-import { agentForSlot, nextSlot, estimateSpeechMs, deriveHumanSteeringIntentFallback, validProfile, coerceCountTurn, type CountTask, type Slot } from "./shared";
+import { agentForSlot, nextSlot, estimateSpeechMs, deriveHumanSteeringIntentFallback, validProfile, validModel, coerceCountTurn, type CountTask, type Slot } from "./shared";
 import {
   generateAgentTurn,
   interpretHumanSteer as interpretHumanSteerWithModel,
@@ -18,7 +18,7 @@ import type { Id } from "./_generated/dataModel";
  * The commit re-validates floor/token server-side (the LLM+TTS work here is
  * seconds long and non-transactional) and reports whether it landed.
  */
-async function produceTurn(
+export async function produceTurn(
   ctx: any,
   roomId: Id<"rooms">,
   room: any,
@@ -38,7 +38,7 @@ async function produceTurn(
     ? coerceCountTurn({ text: String(countTask.next), speechAct: "task_action", done: countTask.next >= countTask.target }, countTask)
     : await generateAgentTurn({
         goal: room.goal,
-        model: room.model,
+        model: validModel(room.model), // stale stored ids (retired models) fall back to DEFAULT_MODEL
         profile: validProfile(room.profile),
         persona: agent.persona,
         selfName: agent.name,
@@ -124,7 +124,7 @@ export const interpretHumanSteer = internalAction({
       intent = await interpretHumanSteerWithModel({
         text: args.text,
         currentGoal: room.goal,
-        model: room.model,
+        model: validModel(room.model),
         profile: validProfile(room.profile),
         transcript,
       });
@@ -191,7 +191,7 @@ export const runV3Worker = internalAction({
       const output =
         worker.kind === "web_research"
           ? await runWebResearchWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model })
-          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: worker.model ?? room.model });
+          : await runPlanningWorker({ goal: goal.title, task: taskTitle, roomGoal: room.goal, model: validModel(worker.model ?? room.model) }); // execution_plan models only ever come from validModel(room.model) (rooms.ts spawn/retry), so a stale stored id falls back to DEFAULT_MODEL here too; web_research above is untouched
 
       await ctx.runMutation(internal.rooms.completeV3Worker, {
         workerId: args.workerId,

@@ -7,6 +7,7 @@ import {
   activeSlots,
   CAPABILITY_PROFILES,
   ROUTER_MODELS,
+  DEFAULT_MODEL,
   DEFAULT_GOAL,
   agentIndexFromSlot,
   isAgentSlot,
@@ -176,7 +177,7 @@ async function spawnAgentOsGoal(
       ? [{ kind: "deterministic_count", title: "Prepare exact count sequence", model: undefined as string | undefined }]
       : [
           { kind: "web_research", title: "Research current external context", model: "gpt-4.1-mini" },
-          { kind: "execution_plan", title: "Draft execution plan", model: room.model },
+          { kind: "execution_plan", title: "Draft execution plan", model: validModel(room.model) },
         ];
   for (const spec of workerSpecs) {
     const budgetBlocked = workersUsed >= policy.budgetMaxWorkers;
@@ -307,7 +308,7 @@ async function serializeRoom(ctx: QueryCtx, roomId: Id<"rooms">) {
     }),
     state: {
       goal: room.goal,
-      model: room.model,
+      model: validModel(room.model), // an unmigrated room still stores a retired id; show what the coordinator actually sends
       agentCount: roomAgentCount(room),
       profile: roomProfile(room),
       floorOwner: room.floorOwner,
@@ -417,6 +418,64 @@ export const getV3WorkerRaw = internalQuery({
   },
 });
 
+/**
+ * Page size. Convex caps a mutation at 16 MiB read and 16 MiB written, and a document at 1 MiB
+ * (docs.convex.dev/production/state/limits, read 2026-10-16);
+ * `goal` has no length cap, so a room can be ~1 MiB. Each stale document is read twice (the page,
+ * then `patch`) and written once: 6 x 1 MiB x 2 = 12 MiB read, 6 MiB written, with room left for
+ * the audit inserts. Do not raise this without re-deriving that bound. (maximumBytesRead is not
+ * used: a byte-limited page can come back incomplete with pageStatus SplitRequired, and this
+ * migration must never skip rows.)
+ */
+export const MIGRATION_PAGE_SIZE = 6;
+
+/**
+ * Rewrite stored model ids that are no longer in ROUTER_MODELS (a retired id such as
+ * gpt-4.1-nano, OpenAI 2026-10-23) to DEFAULT_MODEL and record {roomId, [workerId], from, to, at}.
+ * `validModel` only runs on writes, so without this a stale value reaches OpenAI as-is.
+ *
+ * Two tables hold such a value: `rooms.model`, and `workers.model` on `execution_plan` rows
+ * (spawnAgentOsGoal stores the room's model there and retryV3Worker copies it forward, so a
+ * retry of a pre-change planning worker would otherwise resend the retired id). `web_research`
+ * workers are left alone: their model is the OPENAI_WEB_MODEL caller argument, not a router row.
+ *
+ * Paged, and run against the PRODUCTION deployment once AFTER the deploy that removes the row:
+ * `node scripts/migrate-retired-models.mjs --prod` walks every page of both tables (a bare
+ * `npx convex run` targets the dev deployment). Run it a second time: it must report
+ * `migrated: 0` for both tables. Until the rooms pass finishes, the coordinator read-side
+ * guard (validModel) covers unmigrated rooms.
+ */
+export async function retireRoomModels(ctx: MutationCtx, cursor: string | null) {
+  const page = await ctx.db.query("rooms").paginate({ numItems: MIGRATION_PAGE_SIZE, cursor });
+  let migrated = 0;
+  for (const room of page.page) {
+    if (ROUTER_MODELS.some((m) => m.id === room.model)) continue;
+    const from = room.model;
+    await ctx.db.patch(room._id, { model: DEFAULT_MODEL });
+    await ctx.db.insert("roomModelMigrations", { roomId: room._id, from, to: DEFAULT_MODEL, at: Date.now() });
+    migrated += 1;
+  }
+  return { migrated, isDone: page.isDone, continueCursor: page.continueCursor };
+}
+
+export async function retireWorkerModels(ctx: MutationCtx, cursor: string | null) {
+  const page = await ctx.db.query("workers").paginate({ numItems: MIGRATION_PAGE_SIZE, cursor });
+  let migrated = 0;
+  for (const worker of page.page) {
+    const from = worker.model;
+    if (worker.kind !== "execution_plan" || !from || ROUTER_MODELS.some((m) => m.id === from)) continue;
+    await ctx.db.patch(worker._id, { model: DEFAULT_MODEL });
+    await ctx.db.insert("roomModelMigrations", { roomId: worker.roomId, workerId: worker._id, from, to: DEFAULT_MODEL, at: Date.now() });
+    migrated += 1;
+  }
+  return { migrated, isDone: page.isDone, continueCursor: page.continueCursor };
+}
+
+export const migrateRetiredRoomModels = internalMutation({
+  args: { table: v.optional(v.union(v.literal("rooms"), v.literal("workers"))), cursor: v.optional(v.union(v.string(), v.null())) },
+  handler: (ctx, args) => (args.table === "workers" ? retireWorkerModels : retireRoomModels)(ctx, args.cursor ?? null),
+});
+
 export const insertTraceInternal = internalMutation({
   args: { roomId: v.id("rooms"), kind: v.string(), summary: v.string(), payload: v.any() },
   handler: async (ctx, args) => {
@@ -479,7 +538,9 @@ export const completeV3Worker = internalMutation({
     await ctx.db.patch(args.workerId, {
       status: "completed",
       summary: args.summary.slice(0, 500),
-      ...(args.model ? { model: args.model } : {}),
+      // An in-flight planning call echoes the id it was started with. If the worker migration ran meanwhile,
+      // writing a retired id back would undo it and retryV3Worker would copy it. web_research rows keep the echo.
+      ...(args.model && (worker.kind !== "execution_plan" || ROUTER_MODELS.some((m) => m.id === args.model)) ? { model: args.model } : {}),
       completedAt: now,
       updatedAt: now,
     });
