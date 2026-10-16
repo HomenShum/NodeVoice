@@ -85,18 +85,11 @@ finding 2.
 3. **The server owns the floor.** `scheduleNextSpeaker` decides who is next, not
    the agents. This is what stops the acknowledgement loop.
 4. **Untrusted input is narrowed at the boundary.** `validProfile`,
-   `validAgentCount`, `validCountTarget`, `validTurns` and the
+   `validModel`, `validAgentCount`, `validCountTarget`, `validTurns` and the
    `source` narrowing in
    `src/server.ts:78 const source: ComparisonSource` each map anything
    unrecognised onto a safe default rather
-   than passing it through. The model id is the exception, because a silent default
-   there is a paid model: `requestedModel` (`src/core/routerModels.ts`) takes raw request
-   JSON, keeps the default only for an absent or `""` value, passes a router id, and
-   throws `UnknownModelError` for anything else (including `0`, `false`, `null`, numbers
-   and objects). `createRoom` / `setModel` call it, and both local routes and both hosted
-   Convex routes (`convex/http.ts`) turn the throw into a 400. `validModel` still maps an
-   unrecognised id onto `DEFAULT_MODEL`, but only for values already stored
-   (a retired id on an existing room). The two count fields are narrowed at the seam every
+   than passing it through. The two count fields are narrowed at the seam every
    caller shares rather than in each route: `validTurns` bounds a run by
    `MAX_RUN_TURNS`, the cap the live room already used, and `validCountTarget`
    bounds `task.target` by `MAX_COUNT_TARGET` inside
@@ -108,14 +101,14 @@ finding 2.
    `src/core/requestBody.ts:18 export const MAX_BODY_BYTES`, 20 MB, and it is
    imported by both readers rather than written down twice, because a cap that
    exists twice drifts. The readers are
-   `src/live/roomServer.ts:679 export async function readJson` for the Node
+   `src/live/roomServer.ts:683 export async function readJson` for the Node
    server's `node:http` stream, and
    `src/core/requestBody.ts:84 export async function readJsonRequest` for the
    web `Request` the Convex HTTP router hands its actions. Every POST route in
    both servers goes through one of them: the Node routes via `readJson`, and
    all four Convex registrations via the single
    `convex/http.ts:37 async function body` helper (plus
-   `convex/http.ts:65 async function binaryBody` for the one audio route that
+   `convex/http.ts:49 async function binaryBody` for the one audio route that
    takes bytes rather than JSON). They are two readers because a socket and a
    web stream refuse differently — over the cap the Node reader answers 413
    within `DRAIN_GRACE_MS` whether or not the client ever finishes uploading,

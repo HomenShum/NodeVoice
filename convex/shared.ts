@@ -34,7 +34,7 @@ export {
 } from "../src/core/agents.js";
 export type { Slot } from "../src/core/agents.js";
 
-export { ROUTER_MODELS, DEFAULT_MODEL, validModel, requestedModel, UnknownModelError } from "../src/core/routerModels.js";
+export { ROUTER_MODELS, DEFAULT_MODEL, validModel } from "../src/core/routerModels.js";
 
 export {
   CAPABILITY_PROFILES,

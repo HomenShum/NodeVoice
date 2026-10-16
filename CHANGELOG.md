@@ -52,16 +52,6 @@ eval script's per-M table and checks it against `docs/model-eval-results.json` a
 `scripts/generate-chart.mjs` DATA rows (both frozen, read-only) and checks each
 against `byModel.costPerTurn` at the 2 significant figures they print.
 
-**Public API change.** An explicit model id that is not in `ROUTER_MODELS` is now an
-error instead of a silent default. `createRoom` and `setModel` (Convex mutations) throw
-`UnknownModelError`, and `POST /live/rooms` and `POST /live/rooms/:id/model` answer 400
-`{ ok: false, error }` on both the local Node server and the hosted Convex routes
-(`convex/http.ts`, with CORS headers). Only an absent value or `""` keeps the default;
-`0`, `false`, `null`, numbers, objects and unknown strings (including a retired
-`gpt-4.1-nano`) are refused. Before, they were stored as `DEFAULT_MODEL` or, for a
-non-string, answered 500. Stored ids still fall back through `validModel` on read.
-Pinned by `tests/modelBoundary.test.ts`.
-
 **Validation:** `tests/roomModelMigration.test.ts` (23 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,

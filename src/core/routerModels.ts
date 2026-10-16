@@ -29,23 +29,3 @@ export const DEFAULT_MODEL = "gpt-5.4-mini";
 export function validModel(m?: string): string {
   return m && ROUTER_MODELS.some((x) => x.id === m) ? m : DEFAULT_MODEL;
 }
-
-export class UnknownModelError extends Error {
-  constructor(id: string) {
-    super(`unknown model id: ${JSON.stringify(id.slice(0, 80))}`);
-    this.name = "UnknownModelError";
-  }
-}
-
-/**
- * Public-input boundary (createRoom / setModel). `m` is raw request JSON, so it is `unknown`: only
- * `undefined` and `""` keep `fallback`; a router id passes; anything else (0, false, null, a number,
- * an object, an unknown string) throws, so a request for a free-looking or unknown id never becomes
- * a paid default. Stored values go through `validModel` instead (a retired id there falls back, it
- * does not throw).
- */
-export function requestedModel(m?: unknown, fallback: string = DEFAULT_MODEL): string {
-  if (m === undefined || m === "") return fallback;
-  if (typeof m === "string" && ROUTER_MODELS.some((x) => x.id === m)) return m;
-  throw new UnknownModelError(String(m));
-}

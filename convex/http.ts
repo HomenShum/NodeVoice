@@ -2,7 +2,7 @@ import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
 import { api } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
-import { BODY_TOO_LARGE, UnknownModelError, readBoundedBody, readJsonRequest, requestedModel, validCountTarget, validTurns } from "./shared";
+import { BODY_TOO_LARGE, readBoundedBody, readJsonRequest, validCountTarget, validTurns } from "./shared";
 
 /**
  * HTTP bridge: mirrors the Node server's /live/* API so the existing frontend
@@ -42,22 +42,6 @@ async function body<T>(req: Request): Promise<T | Response> {
     return message === BODY_TOO_LARGE
       ? json({ ok: false, error: BODY_TOO_LARGE }, 413)
       : json({ ok: false, error: message.slice(0, 200) }, 400);
-  }
-}
-
-/**
- * `model` arrives as raw JSON on two routes. `requestedModel` is the one rule (absent or "" keeps the
- * default, a router id passes, anything else throws); here its throw becomes the same 400 the Node
- * server returns, with CORS headers, instead of a Convex 500 (create) or a 502 (rooms POST catch-all).
- * It runs in the httpAction, not by catching what `ctx.runMutation` rethrows: an error's class is not
- * something to rely on across that call. The mutations still enforce the rule for client callers.
- */
-function modelOrRefusal(raw: unknown): string | Response {
-  try {
-    return requestedModel(raw);
-  } catch (error) {
-    if (error instanceof UnknownModelError) return json({ ok: false, error: error.message }, 400);
-    throw error;
   }
 }
 
@@ -249,16 +233,14 @@ const nodeAgentRun = httpAction(async () =>
 );
 
 const create = httpAction(async (ctx, req) => {
-  const parsed = await body<{ goal?: string; model?: unknown; private?: boolean; profile?: string; agentCount?: number }>(req);
+  const parsed = await body<{ goal?: string; model?: string; private?: boolean; profile?: string; agentCount?: number }>(req);
   if (parsed instanceof Response) return parsed;
-  // goal/profile/agentCount are narrowed by `api.rooms.createRoom`
-  // (validProfile / validAgentCount) — the seam every caller of the room, HTTP or
-  // Convex client, already shares. `model` is checked here as well so a refusal is a 400.
-  const model = modelOrRefusal(parsed.model);
-  if (model instanceof Response) return model;
+  // goal/model/profile/agentCount are narrowed by `api.rooms.createRoom`
+  // (validProfile / validModel / validAgentCount) — the seam every caller of
+  // the room, HTTP or Convex client, already shares.
   const roomId = await ctx.runMutation(api.rooms.createRoom, {
     goal: parsed.goal,
-    model,
+    model: parsed.model,
     private: parsed.private === true,
     profile: parsed.profile,
     agentCount: parsed.agentCount,
@@ -302,11 +284,9 @@ const roomsPost = httpAction(async (ctx, req) => {
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "model") {
-      const b = await body<{ model?: unknown }>(req);
+      const b = await body<{ model?: string }>(req);
       if (b instanceof Response) return b;
-      const model = modelOrRefusal(b.model);
-      if (model instanceof Response) return model;
-      await ctx.runMutation(api.rooms.setModel, { roomId: id, model });
+      await ctx.runMutation(api.rooms.setModel, { roomId: id, model: b.model ?? "" });
       return json({ ok: true, room: await ctx.runQuery(api.rooms.watchRoom, { roomId: id }) });
     }
     if (sub === "profile") {
