@@ -419,7 +419,8 @@ export const getV3WorkerRaw = internalQuery({
 });
 
 /**
- * Page size. Convex caps a mutation at 16 MiB read and 8 MiB written, and a document at 1 MiB;
+ * Page size. Convex caps a mutation at 16 MiB read and 16 MiB written, and a document at 1 MiB
+ * (docs.convex.dev/production/state/limits, read 2026-10-16);
  * `goal` has no length cap, so a room can be ~1 MiB. Each stale document is read twice (the page,
  * then `patch`) and written once: 6 x 1 MiB x 2 = 12 MiB read, 6 MiB written, with room left for
  * the audit inserts. Do not raise this without re-deriving that bound. (maximumBytesRead is not

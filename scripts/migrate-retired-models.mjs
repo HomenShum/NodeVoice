@@ -5,6 +5,7 @@
 // It also refuses --env-file, and refuses to run while CONVEX_DEPLOY_KEY / CONVEX_DEPLOYMENT_TOKEN is visible (env, .env.local, .env), because the
 // CLI then silently ignores --prod and targets the key's deployment. Run it after the deploy, then run it again: the second run must report migrated: 0 for both
 // tables (that is the exhaustive stale-row check; `convex data` only lists the newest 100 rows).
+// `--live-rooms <selector>` is runbook step 1: it lists the running rooms through the same guards, because `convex data` also obeys a visible deploy key.
 import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
@@ -92,31 +93,55 @@ export function assertNoDeployKey(selector, { cwd = process.cwd(), env = process
   }
 }
 
-export function convexRun(selector, cli = convexBin(), { cwd = process.cwd(), env = process.env } = {}) {
+/** Guards every spawn the same way: a named deployment, no visible deploy key, blanked key env, and a fail on the CLI's "Ignoring" warning. Returns exec(argv) -> stdout. */
+function convexExec(selector, cli, { cwd, env }) {
   assertDeploymentSelector(selector);
   assertNoDeployKey(selector, { cwd, env });
-  return (args) => {
+  return (argv) => {
     // The CLI loads .env.local/.env with dotenv, which never overrides a variable that already exists, and treats "" as unset:
     // blanking both here shadows any file key whatever its syntax, so the preflight above is a fail-fast message, not the guarantee.
     const childEnv = { ...env, CONVEX_DEPLOY_KEY: "", CONVEX_DEPLOYMENT_TOKEN: "" };
-    const r = spawnSync(process.execPath, [cli, "run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)], { encoding: "utf8", cwd, env: childEnv });
+    const r = spawnSync(process.execPath, [cli, ...argv], { encoding: "utf8", cwd, env: childEnv, maxBuffer: 1 << 30 });
     if (r.error) throw r.error;
-    if (r.status !== 0) throw new Error(`convex run failed (exit ${r.status}): ${r.stderr}`);
+    if (r.status !== 0) throw new Error(`convex ${argv[0]} failed (exit ${r.status}): ${r.stderr}`);
     // Backstop for any other way the CLI swaps the target: it only warns on stderr and exits 0.
-    if (/Ignoring `--prod`/.test(r.stderr)) throw new Error(`convex run ignored the deployment selector, so nothing here can be trusted: ${r.stderr}`);
+    if (/Ignoring `--prod`/.test(r.stderr)) throw new Error(`convex ${argv[0]} ignored the deployment selector, so nothing here can be trusted: ${r.stderr}`);
     if (r.stderr) process.stderr.write(r.stderr);
-    return parseRunOutput(r.stdout);
+    return r.stdout;
   };
 }
 
+export function convexRun(selector, cli = convexBin(), { cwd = process.cwd(), env = process.env } = {}) {
+  const exec = convexExec(selector, cli, { cwd, env });
+  return (args) => parseRunOutput(exec(["run", ...selector, "rooms:migrateRetiredRoomModels", JSON.stringify(args)]));
+}
+
+/**
+ * Runbook step 1 (SPEC A.2.5, live rooms are checked before removal): the rooms with `running: true`. It goes through the same
+ * guards as convexRun because `convex data` shares the CLI's deployment selection, so a visible deploy key would otherwise make it
+ * list ANOTHER deployment's rooms. `convex data` keeps only the newest `limit` rooms and `jsonl` prints no truncation warning,
+ * so a result that fills the limit is refused: raise the limit.
+ */
+export function liveRooms(selector, cli = convexBin(), { cwd = process.cwd(), env = process.env, limit = 100000 } = {}) {
+  const exec = convexExec(selector, cli, { cwd, env });
+  const lines = exec(["data", "rooms", ...selector, "--format", "jsonl", "--limit", String(limit)]).split("\n").filter((l) => l.trim());
+  if (lines.length >= limit) throw new Error(`convex data returned ${lines.length} rooms, the --limit: the list may be cut off. Raise the limit.`);
+  return lines.map((l) => JSON.parse(l)).filter((room) => room.running === true);
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
-  const selector = process.argv.slice(2);
-  let run;
+  const live = process.argv[2] === "--live-rooms";
+  const selector = process.argv.slice(live ? 3 : 2);
   try {
-    run = convexRun(selector);
+    if (live) {
+      const running = liveRooms(selector);
+      console.log(JSON.stringify({ running: running.length, codes: running.map((r) => r.code ?? r._id) }));
+    } else {
+      const run = convexRun(selector);
+      for (const table of ["rooms", "workers"]) console.log(JSON.stringify(await migrateTable(run, table)));
+    }
   } catch (e) {
     console.error(e.message);
     process.exit(2);
   }
-  for (const table of ["rooms", "workers"]) console.log(JSON.stringify(await migrateTable(run, table)));
 }

@@ -28,16 +28,17 @@ in `ROUTER_MODELS` become `gpt-5.4-mini` and get an audit row (`workerId` set).
 `web_research` rows are never touched, so the `OPENAI_WEB_MODEL` caller argument
 is preserved. Pages are 6 rows (`MIGRATION_PAGE_SIZE`): a room's `goal` has no length
 cap, so a page of 1 MiB documents read twice (page, then `patch`) must stay under
-Convex's 16 MiB per-mutation read limit and 8 MiB write limit. After the deploy run
+Convex's 16 MiB per-mutation read limit and 16 MiB write limit (the test also holds writes under a stricter 8 MiB margin). After the deploy run
 `node scripts/migrate-retired-models.mjs --prod`, which walks every page of both tables
 (a bare `npx convex run` targets the DEV deployment, so the script refuses to spawn unless
 the arguments name a deployment: `--prod`, `--deployment-name`, `--preview-name`, or `--url`
 with `--admin-key`; it also refuses while `CONVEX_DEPLOY_KEY` / `CONVEX_DEPLOYMENT_TOKEN` is set in the environment,
 `.env.local` or `.env` (`KEY=v` and dotenv's `KEY: v`) and refuses `--env-file` (it can carry a key), because the Convex CLI then ignores `--prod` and migrates the key's deployment; whatever that preflight misses, the CLI is spawned with both variables set to `""`, which dotenv never overrides and the CLI reads as unset, so a file key cannot take effect; it also fails on the CLI's "Ignoring `--prod`" warning); run it again and expect `migrated: 0` for both tables. BEFORE the removing
-deploy, record the running production rooms (`npx convex data rooms --prod --format jsonl --limit 100000`,
-keep the lines with `"running":true`; SPEC A.2.5: live rooms are checked before removal). `convex data` lists only the newest `--limit`
-rooms, rooms are never deleted, and `jsonl` prints no truncation warning, so if the number of lines returned equals the limit
-the list is cut off: raise `--limit` until it returns fewer lines than that. (Do not use the default `pretty` format: it cuts lines to the terminal width and can hide the `running` column.)
+deploy, record the running production rooms with `node scripts/migrate-retired-models.mjs --live-rooms --prod`
+(SPEC A.2.5: live rooms are checked before removal). It runs `convex data rooms --format jsonl --limit 100000` through the same
+guards as the migration (`convex data` shares the CLI's deployment selection, so a visible deploy key would otherwise make it list another
+deployment's rooms) and prints the count and codes of the `"running":true` rooms. `convex data` lists only the newest `--limit`
+rooms, rooms are never deleted, and `jsonl` prints no truncation warning, so the script refuses a result that fills the limit.
 
 **Pricing sources (SPEC A.0.6).** The voice/Realtime unit prices at
 `README.md:1206-1209` (`gpt-realtime`, `gpt-4o-mini-tts`, `whisper-1`,

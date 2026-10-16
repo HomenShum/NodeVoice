@@ -1,4 +1,4 @@
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createElement } from "react";
@@ -32,7 +32,8 @@ const MIB = 1024 * 1024;
 function fakeMutationCtx(roomRows: Row[], workerRows: Row[] = []) {
   const patches: { id: string; fields: Row }[] = [];
   const inserted: { table: string; doc: Row }[] = [];
-  // Convex's per-mutation limits (docs.convex.dev/production/state/limits): 16 MiB read, 8 MiB written.
+  // Convex's per-mutation limits (docs.convex.dev/production/state/limits, read 2026-10-16): 16 MiB read, 16 MiB written.
+  // The write cap below is a deliberate stricter margin (8 MiB, half the vendor limit), not the vendor figure: the page size must pass under either.
   // A row's `bytes` is its document size; paginate reads it, patch re-reads and rewrites it.
   const txn = { read: 0, written: 0 };
   const spend = (kind: "read" | "written", n: number, max: number) => {
@@ -122,7 +123,7 @@ describe("retired router model: gpt-4.1-nano", () => {
       let pages = 0;
       for (;;) {
         txn.read = txn.written = 0; // a fresh transaction per call
-        const out: { migrated: number; isDone: boolean; continueCursor: string } = await retire(ctx, cursor); // throws if the page exceeded 16 MiB read / 8 MiB written
+        const out: { migrated: number; isDone: boolean; continueCursor: string } = await retire(ctx, cursor); // throws if the page exceeded 16 MiB read / the 8 MiB written test margin
         expect(out.migrated, `${table} page ${pages}`).toBeLessThanOrEqual(rooms.MIGRATION_PAGE_SIZE);
         migrated += out.migrated;
         pages += 1;
@@ -136,7 +137,7 @@ describe("retired router model: gpt-4.1-nano", () => {
     expect(workerRows.every((r) => r.model === DEFAULT_MODEL)).toBe(true);
   });
 
-  it("the page-size bound is derived from the Convex limits: pageSize x 1 MiB x 2 reads < 16 MiB and pageSize x 1 MiB writes < 8 MiB", () => {
+  it("the page-size bound is derived from the Convex limits: pageSize x 1 MiB x 2 reads < 16 MiB and pageSize x 1 MiB writes < the 8 MiB test margin (vendor limit 16 MiB)", () => {
     expect(rooms.MIGRATION_PAGE_SIZE * MIB * 2).toBeLessThan(16 * MIB);
     expect(rooms.MIGRATION_PAGE_SIZE * MIB).toBeLessThan(8 * MIB);
   });
@@ -258,6 +259,36 @@ describe("retired router model: gpt-4.1-nano", () => {
       } finally {
         write.mockRestore();
       }
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("runbook step 1 (--live-rooms) goes through the same guards as the migration: no deploy key, named deployment, blanked child env, jsonl at the limit is refused", async () => {
+    const script = await load("../scripts/migrate-retired-models.mjs");
+    const dir = mkdtempSync(join(tmpdir(), "nv-convex-live-"));
+    const stub = join(dir, "stub-cli.mjs");
+    const ran = join(dir, "stub-ran");
+    const rows = [{ _id: "a", code: "AAAA", running: true }, { _id: "b", code: "BBBB", running: false }, { _id: "c", code: "CCCC", running: true }];
+    try {
+      writeFileSync(stub, `import { writeFileSync } from "node:fs"; writeFileSync(${JSON.stringify(ran)}, JSON.stringify(process.argv.slice(2)) + JSON.stringify([process.env.CONVEX_DEPLOY_KEY, process.env.CONVEX_DEPLOYMENT_TOKEN])); console.log(${JSON.stringify(rows.map((r) => JSON.stringify(r)).join("\n"))});`);
+      // a key in the env or a dotenv file, --env-file, or no named deployment: refused before the CLI is spawned (it would list another deployment's rooms)
+      expect(() => script.liveRooms([], stub, { cwd: dir, env: {} })).toThrow(/explicit deployment selector/);
+      expect(() => script.liveRooms(["--prod"], stub, { cwd: dir, env: { CONVEX_DEPLOY_KEY: "dev:x|k" } })).toThrow(/CONVEX_DEPLOY_KEY in the environment/);
+      writeFileSync(join(dir, ".env.local"), "CONVEX_DEPLOY_KEY=dev:x|k\n");
+      expect(() => script.liveRooms(["--prod"], stub, { cwd: dir, env: {} })).toThrow(/CONVEX_DEPLOY_KEY in \.env\.local/);
+      rmSync(join(dir, ".env.local"));
+      expect(() => script.liveRooms(["--prod", "--env-file", "x.env"], stub, { cwd: dir, env: {} })).toThrow(/--env-file/);
+      expect(existsSync(ran)).toBe(false);
+      // clean: only the running rooms come back, the CLI got `data rooms --prod --format jsonl --limit 100000`, and both key variables were blanked
+      const running = script.liveRooms(["--prod"], stub, { cwd: dir, env: { CONVEX_DEPLOY_KEY: "" } });
+      expect(running.map((r: { code: string }) => r.code)).toEqual(["AAAA", "CCCC"]);
+      expect(readFileSync(ran, "utf8")).toBe('["data","rooms","--prod","--format","jsonl","--limit","100000"]["",""]');
+      // a result that fills the limit may be cut off (jsonl prints no warning): refuse it
+      expect(() => script.liveRooms(["--prod"], stub, { cwd: dir, env: {}, limit: 3 })).toThrow(/may be cut off/);
+      // the CLI's own "Ignoring `--prod`" warning (exit 0) fails the run
+      writeFileSync(stub, `console.error("Ignoring \`--prod\`, \`--preview-name\`, or \`--deployment-name\` flags and using deployment from CONVEX_DEPLOY_KEY"); console.log("");`);
+      expect(() => script.liveRooms(["--prod"], stub, { cwd: dir, env: {} })).toThrow(/ignored the deployment selector/);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
