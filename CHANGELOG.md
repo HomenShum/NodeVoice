@@ -53,7 +53,7 @@ eval script's per-M table and checks it against `docs/model-eval-results.json` a
 `scripts/generate-chart.mjs` DATA rows (both frozen, read-only) and checks each
 against `byModel.costPerTurn` at the 2 significant figures they print.
 
-**Validation:** `tests/roomModelMigration.test.ts` (23 tests) fails on the
+**Validation:** `tests/roomModelMigration.test.ts` (24 tests) fails on the
 previous code (request carried `gpt-4.1-nano`) and passes now, with one
 request-shape test per changed coordinator role (turn, steer interpreter,
 planning worker spawned through the real steer path). `completeV3Worker` no
